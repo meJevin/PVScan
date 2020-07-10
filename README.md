@@ -1,2 +1,0 @@
-# PVScan
- PVScan application
