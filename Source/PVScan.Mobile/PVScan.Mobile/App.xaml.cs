@@ -9,8 +9,6 @@ namespace PVScan.Mobile
         public App()
         {
             InitializeComponent();
-
-            MainPage = new MainPage();
         }
 
         protected override void OnStart()
