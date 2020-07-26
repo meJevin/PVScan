@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PVScan.Web.API.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,20 @@ namespace PVScan.Web.API.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AppDbContext _dbContext;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+
+        public HomeController(
+            AppDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
+        {
+            _dbContext = dbContext;
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -22,29 +38,64 @@ namespace PVScan.Web.API.Controllers
             return View();
         }
 
-        public IActionResult Authenticate()
+        public IActionResult Login()
         {
-            var grandmaClaims = new List<Claim>()
+            return View();
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string username, string password)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            if (user == null)
             {
-                new Claim(ClaimTypes.Name, "Michael"),
-                new Claim(ClaimTypes.Email, "mejevin@gmail.com"),
-                new Claim("dick.size", "0.3cm"),
-            };
+                return BadRequest("No user with this username");
+            }
 
-            var licenseClaims = new List<Claim>()
+            // Sign in
+            var signInResult = await _signInManager.PasswordSignInAsync(user, password, true, false);
+
+            if (!signInResult.Succeeded)
             {
-                new Claim(ClaimTypes.Name, "Michael Naifield"),
-                new Claim("height", "103cm"),
-            };
-
-            var grandmaIdentity = new ClaimsIdentity(grandmaClaims, "Grandma Identity");
-            var licenseIdentity = new ClaimsIdentity(grandmaClaims, "License Identity");
-
-            var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity, licenseIdentity });
-
-            HttpContext.SignInAsync(userPrincipal);
+                return BadRequest("Could not sign in");
+            }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(string username, string password)
+        {
+            var user = new IdentityUser() { UserName = username, Email = "", };
+
+            var createUserResult = await _userManager.CreateAsync(user, password);
+
+            if (!createUserResult.Succeeded)
+            {
+                return BadRequest("Could not create user");
+            }
+
+            var signInResult = await _signInManager.PasswordSignInAsync(user, password, true, false);
+
+            if (!signInResult.Succeeded)
+            {
+                return BadRequest("Could not sign in");
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToActionPermanent("Index");
         }
     }
 }
