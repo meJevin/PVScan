@@ -40,10 +40,9 @@ namespace PVScan.EntityFramework.Services
 
         public async Task<IEnumerable<Barcode>> GetBarcodesForUser(User user)
         {
-            var result = await context.Barcodes
+            var result = context.Barcodes
                 .Include(b => b.ScannedBy)
-                .Where(b => b.ScannedBy.Email == user.Email)
-                .ToListAsync();
+                .Where(b => b.ScannedBy.Email == user.Email);
             
             return result;
         }

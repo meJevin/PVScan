@@ -101,5 +101,33 @@ namespace PVScan.EntityFramework.Tests.Services
             Assert.Equal(3, result.Count());
             Assert.All(result, (b) => { Assert.Equal(u1.Email, b.ScannedBy.Email); });
         }
+
+        [Fact]
+        public async Task Getting_Barcodes_For_Nonexistent_User_Returns_Nothing()
+        {
+            // Arrange
+            User u1 = new User()
+            {
+                Email = "test@mail.com",
+                Username = "bob",
+            };
+
+            Barcode b1 = new Barcode() { ScannedBy = u1 };
+            Barcode b2 = new Barcode() { ScannedBy = u1 };
+            Barcode b3 = new Barcode() { ScannedBy = u1 };
+
+            _db.Add(b1);
+            _db.Add(b2);
+            _db.Add(b3);
+            _db.Attach(u1); // Because we don't want our user to be put into DB
+            _db.SaveChanges();
+
+            EFBarcodeService target = new EFBarcodeService(_db);
+
+            // Act + Assert
+            var result = await target.GetBarcodesForUser(u1);
+
+            Assert.Empty(result);
+        }
     }
 }
