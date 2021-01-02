@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PVScan.API.Models.Requests;
+using PVScan.API.Services;
+using PVScan.Domain.Models;
 using PVScan.Domain.Services;
 using System;
 using System.Collections.Generic;
@@ -14,7 +17,7 @@ namespace PVScan.API.Controllers
     {
         readonly IBarcodeService barcodeService;
 
-        public BarcodeController(IBarcodeService barcodeService)
+        public BarcodeController(IBarcodeService barcodeService, IFileStorage fileStorage)
         {
             this.barcodeService = barcodeService;
         }
