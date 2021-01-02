@@ -33,6 +33,6 @@ namespace PVScan.Domain.Models
         /// </summary>
         public Coordinate Location { get; set; }
 
-        public User ScannedBy { get; set; }
+        public int UserId { get; set; }
     }
 }

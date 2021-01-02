@@ -20,15 +20,10 @@ namespace PVScan.EntityFramework.Services
 
         public async Task<Barcode> Create(Barcode barcode)
         {
-            if (barcode.ScannedBy == null)
-            {
-                throw new Exception("Can not create barcode without a user!");
-            }
-
-            var foundUser = await context.Users.FindAsync(barcode.ScannedBy.Id);
+            var foundUser = await context.Users.FindAsync(barcode.UserId);
             if (foundUser == null)
             {
-                throw new Exception("Can not find user with ID " + barcode.ScannedBy.Id);
+                throw new Exception("Can not find user with ID " + barcode.UserId);
             }
 
             context.Barcodes.Add(barcode);
@@ -40,9 +35,7 @@ namespace PVScan.EntityFramework.Services
 
         public async Task<IEnumerable<Barcode>> GetBarcodesForUser(User user)
         {
-            var result = context.Barcodes
-                .Include(b => b.ScannedBy)
-                .Where(b => b.ScannedBy.Email == user.Email);
+            var result = context.Barcodes.Where(b => b.UserId == user.Id);
             
             return result;
         }

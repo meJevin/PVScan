@@ -20,9 +20,10 @@ namespace PVScan.EntityFramework.Tests.Services
                 Email = "test@mail.com",
                 Username = "bob",
             };
-            Barcode b1 = new Barcode() { ScannedBy = u1 };
             _db.Add(u1);
             _db.SaveChanges();
+
+            Barcode b1 = new Barcode() { UserId = u1.Id };
 
             EFBarcodeService target = new EFBarcodeService(_db);
 
@@ -30,7 +31,7 @@ namespace PVScan.EntityFramework.Tests.Services
             var result = await target.Create(b1);
 
             // Assert
-            Assert.Equal(result.ScannedBy.Email, u1.Email);
+            Assert.Equal(result.UserId, u1.Id);
         }
 
         [Fact]
@@ -42,27 +43,7 @@ namespace PVScan.EntityFramework.Tests.Services
                 Email = "test@mail.com",
                 Username = "bob",
             };
-            Barcode b1 = new Barcode() { ScannedBy = u1 };
-
-            EFBarcodeService target = new EFBarcodeService(_db);
-
-            // Act + Assert
-            await Assert.ThrowsAsync<Exception>(async () => {
-                var result = await target.Create(b1);
-            });
-            Assert.Equal(0, _db.Barcodes.Count());
-        }
-
-        [Fact]
-        public async Task Creating_Barcode_With_Null_User_Throws_Exception()
-        {
-            // Arrange
-            User u1 = new User()
-            {
-                Email = "test@mail.com",
-                Username = "bob",
-            };
-            Barcode b1 = new Barcode() { ScannedBy = null };
+            Barcode b1 = new Barcode() { UserId = 666 };
 
             EFBarcodeService target = new EFBarcodeService(_db);
 
@@ -83,10 +64,11 @@ namespace PVScan.EntityFramework.Tests.Services
                 Username = "bob",
             };
             _db.Add(u1);
+            _db.SaveChanges();
 
-            Barcode b1 = new Barcode() { ScannedBy = u1 };
-            Barcode b2 = new Barcode() { ScannedBy = u1 };
-            Barcode b3 = new Barcode() { ScannedBy = u1 };
+            Barcode b1 = new Barcode() { UserId = u1.Id };
+            Barcode b2 = new Barcode() { UserId = u1.Id };
+            Barcode b3 = new Barcode() { UserId = u1.Id };
 
             _db.Add(b1);
             _db.Add(b2);
@@ -99,7 +81,7 @@ namespace PVScan.EntityFramework.Tests.Services
             var result = await target.GetBarcodesForUser(u1);
 
             Assert.Equal(3, result.Count());
-            Assert.All(result, (b) => { Assert.Equal(u1.Email, b.ScannedBy.Email); });
+            Assert.All(result, (b) => { Assert.Equal(u1.Id, b.UserId); });
         }
 
         [Fact]
@@ -112,9 +94,9 @@ namespace PVScan.EntityFramework.Tests.Services
                 Username = "bob",
             };
 
-            Barcode b1 = new Barcode() { ScannedBy = u1 };
-            Barcode b2 = new Barcode() { ScannedBy = u1 };
-            Barcode b3 = new Barcode() { ScannedBy = u1 };
+            Barcode b1 = new Barcode() { UserId = u1.Id };
+            Barcode b2 = new Barcode() { UserId = u1.Id };
+            Barcode b3 = new Barcode() { UserId = u1.Id };
 
             _db.Add(b1);
             _db.Add(b2);

@@ -39,28 +39,28 @@ namespace PVScan.EntityFramework
                 context.Barcodes.Add(new Barcode()
                 {
                     Format = BarcodeFormat.QR_CODE,
-                    ScannedBy = user1,
+                    UserId = 1,
                 });
                 context.Barcodes.Add(new Barcode()
                 {
                     Format = BarcodeFormat.AZTEC,
-                    ScannedBy = user1,
+                    UserId = 1,
                 });
                 context.Barcodes.Add(new Barcode()
                 {
                     Format = BarcodeFormat.QR_CODE,
-                    ScannedBy = user1,
+                    UserId = 1,
                 });
 
                 context.Barcodes.Add(new Barcode()
                 {
                     Format = BarcodeFormat.DATA_MATRIX,
-                    ScannedBy = user2,
+                    UserId = 2,
                 });
                 context.Barcodes.Add(new Barcode()
                 {
                     Format = BarcodeFormat.CODE_39,
-                    ScannedBy = user2,
+                    UserId = 2,
                 });
 
                 await context.SaveChangesAsync();
