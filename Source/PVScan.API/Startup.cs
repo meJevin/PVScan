@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PVScan.Domain.Services;
 using PVScan.EntityFramework;
+using PVScan.EntityFramework.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +33,12 @@ namespace PVScan.API
                     o.MigrationsAssembly(typeof(PVScanDbContext).Assembly.FullName);
                 });
             });
+
+            services.AddControllers();
+
+            services.AddTransient<IBarcodeService, EFBarcodeService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -45,6 +50,7 @@ namespace PVScan.API
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
             });
         }
     }
