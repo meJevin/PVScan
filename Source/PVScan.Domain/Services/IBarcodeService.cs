@@ -10,6 +10,6 @@ namespace PVScan.Domain.Services
     {
         Task<Barcode> Create(Barcode barcode);
 
-        Task<ICollection<Barcode>> GetBarcodesForUser(User user);
+        Task<IEnumerable<Barcode>> GetBarcodesForUser(User user);
     }
 }
