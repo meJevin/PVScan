@@ -74,7 +74,7 @@ namespace PVScan.EntityFramework.Tests.Services
         }
 
         [Fact]
-        public async Task Can_Get_User_Barcodes()
+        public async Task Can_Get_Barcodes_For_Existing_User()
         {
             // Arrange
             User u1 = new User()
