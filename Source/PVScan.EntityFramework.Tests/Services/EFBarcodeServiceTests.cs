@@ -13,7 +13,7 @@ namespace PVScan.EntityFramework.Tests.Services
     public class EFBarcodeServiceTests : EFTest
     {
         [Fact]
-        public async Task Can_Create_Barcode_Made_By_Existing_User()
+        public async Task Can_Create_Barcode_With_Existing_User()
         {
             // Arrange
             User u1 = new User() {
@@ -38,11 +38,6 @@ namespace PVScan.EntityFramework.Tests.Services
         public async Task Creating_Barcode_With_Nonexistent_User_Throws_Exception()
         {
             // Arrange
-            User u1 = new User()
-            {
-                Email = "test@mail.com",
-                Username = "bob",
-            };
             Barcode b1 = new Barcode() { UserId = 666 };
 
             EFBarcodeService target = new EFBarcodeService(_db);
@@ -82,34 +77,6 @@ namespace PVScan.EntityFramework.Tests.Services
 
             Assert.Equal(3, result.Count());
             Assert.All(result, (b) => { Assert.Equal(u1.Id, b.UserId); });
-        }
-
-        [Fact]
-        public async Task Getting_Barcodes_For_Nonexistent_User_Returns_Nothing()
-        {
-            // Arrange
-            User u1 = new User()
-            {
-                Email = "test@mail.com",
-                Username = "bob",
-            };
-
-            Barcode b1 = new Barcode() { UserId = u1.Id };
-            Barcode b2 = new Barcode() { UserId = u1.Id };
-            Barcode b3 = new Barcode() { UserId = u1.Id };
-
-            _db.Add(b1);
-            _db.Add(b2);
-            _db.Add(b3);
-            _db.Attach(u1); // Because we don't want our user to be put into DB
-            _db.SaveChanges();
-
-            EFBarcodeService target = new EFBarcodeService(_db);
-
-            // Act + Assert
-            var result = await target.GetBarcodesForUser(u1);
-
-            Assert.Empty(result);
         }
     }
 }
