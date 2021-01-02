@@ -25,4 +25,18 @@ namespace PVScan.EntityFramework
         public DbSet<Barcode> Barcodes { get; set; }
         public DbSet<User> Users { get; set; }
     }
+
+    public static class PVScanDbContextFactory
+    {
+        public static PVScanDbContext Create(Action<DbContextOptionsBuilder<PVScanDbContext>> config)
+        {
+            var builder = new DbContextOptionsBuilder<PVScanDbContext>();
+
+            config(builder);
+
+            var options = builder.Options;
+
+            return new PVScanDbContext(options);
+        }
+    }
 }
