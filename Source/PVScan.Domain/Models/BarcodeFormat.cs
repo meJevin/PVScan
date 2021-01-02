@@ -73,12 +73,6 @@ namespace PVScan.Domain.Models
         UPC_E = 32768,
         //
         // Summary:
-        //     UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF
-        //     | RSS_14 | RSS_EXPANDED without MSI (to many false-positives) and IMB (not enough
-        //     tested, and it looks more like a 2D)
-        All_1D = 61918,
-        //
-        // Summary:
         //     UPC/EAN extension format. Not a stand-alone format.
         UPC_EAN_EXTENSION = 65536,
         //

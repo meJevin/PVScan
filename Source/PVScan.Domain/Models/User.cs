@@ -4,6 +4,9 @@ using System.Text;
 
 namespace PVScan.Domain.Models
 {
+    /// <summary>
+    /// Ppp user 
+    /// </summary>
     public class User
     {
         public string Email { get; set; }
