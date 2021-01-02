@@ -22,7 +22,13 @@ namespace PVScan.EntityFramework.Services
         {
             if (barcode.ScannedBy == null)
             {
-                throw new ArgumentNullException("Can not create barcode without a user!");
+                throw new Exception("Can not create barcode without a user!");
+            }
+
+            var foundUser = await context.Users.FindAsync(barcode.ScannedBy.Email);
+            if (foundUser == null)
+            {
+                throw new Exception("Can not find user with email " + barcode.ScannedBy.Email);
             }
 
             context.Barcodes.Add(barcode);

@@ -12,9 +12,11 @@ namespace PVScan.EntityFramework.Tests.Base
 
         public EFTest()
         {
+            // New DB for each test
             _db = PVScanDbContextFactory.Create(options =>
             {
-                options.UseInMemoryDatabase("TestDB");
+                options.UseInMemoryDatabase(Guid.NewGuid().ToString())
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
         }
 
