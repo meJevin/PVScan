@@ -21,7 +21,8 @@ namespace PVScan.EntityFramework.Tests.Services
                 Username = "bob",
             };
             Barcode b1 = new Barcode() { ScannedBy = u1 };
-            _db.Users.Add(u1);
+            _db.Add(u1);
+            _db.SaveChanges();
 
             EFBarcodeService target = new EFBarcodeService(_db);
 
@@ -72,5 +73,33 @@ namespace PVScan.EntityFramework.Tests.Services
             Assert.Equal(0, _db.Barcodes.Count());
         }
 
+        [Fact]
+        public async Task Can_Get_User_Barcodes()
+        {
+            // Arrange
+            User u1 = new User()
+            {
+                Email = "test@mail.com",
+                Username = "bob",
+            };
+            _db.Add(u1);
+
+            Barcode b1 = new Barcode() { ScannedBy = u1 };
+            Barcode b2 = new Barcode() { ScannedBy = u1 };
+            Barcode b3 = new Barcode() { ScannedBy = u1 };
+
+            _db.Add(b1);
+            _db.Add(b2);
+            _db.Add(b3);
+            _db.SaveChanges();
+
+            EFBarcodeService target = new EFBarcodeService(_db);
+
+            // Act + Assert
+            var result = await target.GetBarcodesForUser(u1);
+
+            Assert.Equal(3, result.Count());
+            Assert.All(result, (b) => { Assert.Equal(u1.Email, b.ScannedBy.Email); });
+        }
     }
 }
