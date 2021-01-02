@@ -20,6 +20,7 @@ namespace PVScan.EntityFramework
 
             modelBuilder.Entity<Barcode>().HasKey(b => b.Id);
             modelBuilder.Entity<Barcode>().HasOne(b => b.ScannedBy).WithMany(u => u.Barcodes);
+            modelBuilder.Entity<Barcode>().OwnsOne(b => b.Location);
         }
 
         public DbSet<Barcode> Barcodes { get; set; }
