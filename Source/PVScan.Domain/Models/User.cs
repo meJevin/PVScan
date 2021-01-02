@@ -6,8 +6,10 @@ namespace PVScan.Domain.Models
 {
     public class User
     {
-        public string Email;
+        public string Email { get; set; }
 
-        public string Username;
+        public string Username { get; set; }
+
+        public ICollection<Barcode> Barcodes { get; set; }
     }
 }

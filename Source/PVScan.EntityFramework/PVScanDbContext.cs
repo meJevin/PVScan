@@ -13,6 +13,15 @@ namespace PVScan.EntityFramework
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Primary key as email
+            modelBuilder.Entity<User>().HasKey(u => u.Email);
+
+            modelBuilder.Entity<Barcode>().HasKey(b => b.Id);
+            modelBuilder.Entity<Barcode>().HasOne(b => b.ScannedBy).WithMany(u => u.Barcodes);
+        }
+
         public DbSet<Barcode> Barcodes { get; set; }
         public DbSet<User> Users { get; set; }
     }
