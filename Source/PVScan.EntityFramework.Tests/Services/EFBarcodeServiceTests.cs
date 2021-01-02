@@ -12,7 +12,7 @@ namespace PVScan.EntityFramework.Tests.Services
     public class EFBarcodeServiceTests : EFTest
     {
         [Fact]
-        public async Task Can_Add_Barcode()
+        public async Task Can_Create_Barcode_Made_By_Existing_User()
         {
             // Arrange
             User u1 = new User()

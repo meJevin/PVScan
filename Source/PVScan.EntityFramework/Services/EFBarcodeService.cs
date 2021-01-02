@@ -20,6 +20,11 @@ namespace PVScan.EntityFramework.Services
 
         public async Task<Barcode> Create(Barcode barcode)
         {
+            if (barcode.ScannedBy == null)
+            {
+                throw new ArgumentNullException("Can not create barcode without a user!");
+            }
+
             context.Barcodes.Add(barcode);
 
             await context.SaveChangesAsync();
