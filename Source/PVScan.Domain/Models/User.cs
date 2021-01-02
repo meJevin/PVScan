@@ -9,7 +9,5 @@ namespace PVScan.Domain.Models
         public string Email;
 
         public string Username;
-
-        public ICollection<Barcode> ScannedBarcodes;
     }
 }

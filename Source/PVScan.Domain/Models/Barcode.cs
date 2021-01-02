@@ -32,5 +32,7 @@ namespace PVScan.Domain.Models
         /// Where the barcode has been scanned
         /// </summary>
         public Coordinate Location { get; set; }
+
+        public User ScannedBy { get; set; }
     }
 }

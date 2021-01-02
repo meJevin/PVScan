@@ -9,5 +9,7 @@ namespace PVScan.Domain.Services
     public interface IBarcodeService
     {
         Task<Barcode> Create(Barcode barcode);
+
+        Task<ICollection<Barcode>> GetBarcodesForUser(User user);
     }
 }
