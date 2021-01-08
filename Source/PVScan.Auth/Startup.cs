@@ -29,26 +29,9 @@ namespace PVScan.Auth
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var migrationsAssembly = typeof(PVScanDbContext).GetTypeInfo().Assembly.GetName().Name;
-            var migrationsAssemblyIS4 = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            var connectionString = Configuration["DBConnection"];
-
-            services.AddDbContext<PVScanDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
-            });
+            ConfigureDbContext(services);
 
             services.AddControllersWithViews();
-
-            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
-            {
-                config.Password.RequiredLength = 4;
-                config.Password.RequireDigit = false;
-                config.Password.RequireNonAlphanumeric = false;
-                config.Password.RequireUppercase = false;
-            })
-                .AddEntityFrameworkStores<PVScanDbContext>()
-                .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(config =>
             {
@@ -56,6 +39,41 @@ namespace PVScan.Auth
                 config.LoginPath = "/Auth/Login";
                 config.LogoutPath = "/Auth/Logout";
             });
+
+            ConfigureIdentityServer(services);
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            InitializeDatabase(app);
+
+            app.UseDeveloperExceptionPage();
+
+            app.UseRouting();
+
+            app.UseIdentityServer();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
+        }
+
+        private void ConfigureDbContext(IServiceCollection services)
+        {
+            var connectionString = Configuration["DBConnection"];
+            var migrationsAssembly = typeof(PVScanDbContext).GetTypeInfo().Assembly.GetName().Name;
+
+            services.AddDbContext<PVScanDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+            });
+        }
+
+        private void ConfigureIdentityServer(IServiceCollection services)
+        {
+            var connectionString = Configuration["DBConnection"];
+            var migrationsAssemblyIS4 = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddIdentityServer()
                 .AddAspNetIdentity<ApplicationUser>()
@@ -75,27 +93,16 @@ namespace PVScan.Auth
                     cfg.TokenCleanupInterval = 30;
                 })
                 .AddDeveloperSigningCredential();
-        }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            InitializeDatabase(app);
-
-            app.UseDeveloperExceptionPage();
-
-            app.UseRouting();
-
-            app.UseIdentityServer();
-
-            app.UseCookiePolicy(new CookiePolicyOptions()
+            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
             {
-                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax
-            });
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+                config.Password.RequiredLength = 4;
+                config.Password.RequireDigit = false;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireUppercase = false;
+            })
+                .AddEntityFrameworkStores<PVScanDbContext>()
+                .AddDefaultTokenProviders();
         }
 
         private void InitializeDatabase(IApplicationBuilder app)
