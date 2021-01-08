@@ -20,7 +20,7 @@ namespace PVScan.Auth
         public static IEnumerable<ApiScope> ApiScopes =>
             new List<ApiScope>
             {
-                new ApiScope("api1", "My API")
+                new ApiScope("PVScan.API", "Main PVScan API")
             };
 
         public static IEnumerable<Client> Clients =>
@@ -34,7 +34,7 @@ namespace PVScan.Auth
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     // scopes that client has access to
-                    AllowedScopes = { "api1" }
+                    AllowedScopes = { "PVScan.API" }
                 },
                 
                 // interactive ASP.NET Core MVC client
@@ -55,7 +55,7 @@ namespace PVScan.Auth
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "api1"
+                        "PVScan.API"
                     }
                 }
             };

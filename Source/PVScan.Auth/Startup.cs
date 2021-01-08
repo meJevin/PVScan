@@ -51,21 +51,15 @@ namespace PVScan.Auth
                 .AddInMemoryClients(Config.Clients)
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddDeveloperSigningCredential();
-
-            services.AddAuthentication();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseDeveloperExceptionPage();
 
             app.UseRouting();
 
             app.UseIdentityServer();
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
