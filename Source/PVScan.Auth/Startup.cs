@@ -33,28 +33,32 @@ namespace PVScan.Auth
             var migrationsAssemblyIS4 = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
             var connectionString = Configuration["DBConnection"];
 
-            services.AddControllers();
-
             services.AddDbContext<PVScanDbContext>(options =>
             {
                 options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
             });
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddControllersWithViews();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                config.Password.RequiredLength = 4;
+                config.Password.RequireDigit = false;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireUppercase = false;
+            })
                 .AddEntityFrameworkStores<PVScanDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddIdentityServer(options =>
+            services.ConfigureApplicationCookie(config =>
             {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
+                config.Cookie.Name = "PVScan.Auth.Cookie";
+                config.LoginPath = "/Auth/Login";
+                config.LogoutPath = "/Auth/Logout";
+            });
 
-                options.EmitStaticAudienceClaim = true;
-            })
+            services.AddIdentityServer()
                 .AddAspNetIdentity<ApplicationUser>()
-                .AddTestUsers(Config.Users)
                 .AddConfigurationStore(cfg =>
                 {
                     cfg.ConfigureDbContext = builder =>
@@ -83,14 +87,14 @@ namespace PVScan.Auth
 
             app.UseIdentityServer();
 
-            app.UseCors(cfg =>
+            app.UseCookiePolicy(new CookiePolicyOptions()
             {
-                cfg.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax
             });
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
             });
         }
 
@@ -99,6 +103,7 @@ namespace PVScan.Auth
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+                serviceScope.ServiceProvider.GetRequiredService<PVScanDbContext>().Database.Migrate();
 
                 var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
                 context.Database.Migrate();

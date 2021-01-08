@@ -1,9 +1,11 @@
-﻿using IdentityServer4;
+﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace PVScan.Auth
@@ -13,12 +15,29 @@ namespace PVScan.Auth
         public static List<TestUser> Users =>
             new List<TestUser>
             {
-                new TestUser()
+                new TestUser
                 {
-                    Username = "test1",
-                    Password = "test1Pass",
-                    IsActive = true,
-                    ProviderName = "Michael",
+                    SubjectId = "fec0a4d6-5830-4eb8-8024-272bd5d6d2bb",
+                    Username = "Jon",
+                    Password = "jon123",
+                    Claims = new List<Claim>
+                    {
+                        new Claim("given_name", "Jon"),
+                        new Claim("family_name", "Doe"),
+                        //new Claim("role", "Administrator"),
+                    }
+                },
+                new TestUser
+                {
+                    SubjectId = "c3b7f625-c07f-4d7d-9be1-ddff8ff93b4d",
+                    Username = "Steve",
+                    Password = "steve123",
+                    Claims = new List<Claim>
+                    {
+                        new Claim("given_name", "Steve"),
+                        new Claim("family_name", "Smith"),
+                        //new Claim("role", "Tour Manager"),
+                    }
                 }
             };
 
@@ -39,18 +58,24 @@ namespace PVScan.Auth
         public static IEnumerable<Client> Clients =>
             new List<Client>
             {
-                // machine to machine clientnew Client
-                new Client
-                {
-                    ClientId = "client",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
+                new Client {
+                    ClientId = "PVScan.Auth.WPF",
 
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
 
-                    AllowedScopes = new List<string>
-                    {
-                        "PVScan.API"
-                    }
+                    RedirectUris = { "http://localhost/PVScan.Auth.WPF" },
+                    AllowedCorsOrigins = { "http://localhost" },
+
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "PVScan.API",
+                    },
+
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
                 }
             };
     }

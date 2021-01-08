@@ -8,22 +8,19 @@ using System.Threading.Tasks;
 
 namespace PVScan.API.Controllers
 {
-    [ApiController]
     [Route("[controller]/[action]")]
-    public class TestController : ControllerBase
+    public class TestController : Controller
     {
         public TestController()
         {
         }
 
-        [HttpGet]
         public string NotSecret()
         {
             return "Hi";
         }
 
-        [HttpGet]
-        [Authorize("Default")]
+        [Authorize]
         public string Secret()
         {
             return "Nigga";
