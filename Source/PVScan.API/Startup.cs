@@ -28,31 +28,7 @@ namespace PVScan.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "PVScan.API", Version = "v1" });
-            //
-            //    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-            //    {
-            //        Type = SecuritySchemeType.OAuth2,
-            //        Flows = new OpenApiOAuthFlows
-            //        {
-            //            ClientCredentials = new OpenApiOAuthFlow
-            //            {
-            //                AuthorizationUrl = new Uri("https://localhost:44398/connect/authorize"),
-            //                TokenUrl = new Uri("https://localhost:44398/connect/token"),
-            //                Scopes = new Dictionary<string, string>
-            //                {
-            //                    {"PVScan.API", "Main PVScan API"}
-            //                },
-            //            },
-            //        }
-            //    });
-            //
-            //    c.OperationFilter<AuthorizeCheckOperationFilter>();
-            //});
 
-            // accepts any access token issued by identity server
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
@@ -65,17 +41,7 @@ namespace PVScan.API
                     };
                 });
 
-            // adds an authorization policy to make sure the token is for scope 'api1'
-            //services.AddAuthentication();
-            //
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("Default", policy =>
-            //    {
-            //        policy.RequireAuthenticatedUser();
-            //        policy.RequireClaim("scope", "PVScan.API");
-            //    });
-            //});
+            // Todo: narrow down to clients
             services.AddCors(confg =>
                 confg.AddPolicy("AllowAll",
                     p => p.AllowAnyOrigin()
@@ -85,16 +51,6 @@ namespace PVScan.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.UseDeveloperExceptionPage();
-            //app.UseSwagger();
-            //app.UseSwaggerUI(c =>
-            //{
-            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PVScan.API v1");
-            //
-            //    c.OAuthClientId("client");
-            //    c.OAuthAppName("Demo API - Swagger");
-            //    c.OAuthUsePkce();
-            //});
             app.UseCors("AllowAll");
 
             app.UseRouting();
