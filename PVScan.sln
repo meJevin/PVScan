@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Domain", "Source\PVS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Domain.Tests", "Tests\PVScan.Domain.Tests\PVScan.Domain.Tests.csproj", "{288615B1-CA50-421C-9E74-99D0DCD982C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Auth", "Source\PVScan.Auth\PVScan.Auth.csproj", "{3D3EF1A2-47F5-4D1E-9B6E-63F0531861F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Database", "Source\PVScan.Database\PVScan.Database.csproj", "{61CF048A-2A65-4463-9A94-8C02C4129E6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{288615B1-CA50-421C-9E74-99D0DCD982C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{288615B1-CA50-421C-9E74-99D0DCD982C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{288615B1-CA50-421C-9E74-99D0DCD982C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D3EF1A2-47F5-4D1E-9B6E-63F0531861F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D3EF1A2-47F5-4D1E-9B6E-63F0531861F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D3EF1A2-47F5-4D1E-9B6E-63F0531861F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D3EF1A2-47F5-4D1E-9B6E-63F0531861F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61CF048A-2A65-4463-9A94-8C02C4129E6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61CF048A-2A65-4463-9A94-8C02C4129E6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61CF048A-2A65-4463-9A94-8C02C4129E6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61CF048A-2A65-4463-9A94-8C02C4129E6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +44,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4C5DA684-0E4D-45CB-99BC-738F2AECD0BF} = {346F18F4-95AD-40C4-9414-4E2BB424B049}
 		{288615B1-CA50-421C-9E74-99D0DCD982C4} = {3232D081-A6E0-4887-83BF-6052EAD2C674}
+		{3D3EF1A2-47F5-4D1E-9B6E-63F0531861F3} = {346F18F4-95AD-40C4-9414-4E2BB424B049}
+		{61CF048A-2A65-4463-9A94-8C02C4129E6B} = {346F18F4-95AD-40C4-9414-4E2BB424B049}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {337E4D59-CBC6-4B7E-9A85-C01BB1CFED63}
