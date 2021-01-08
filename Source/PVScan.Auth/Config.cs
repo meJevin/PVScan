@@ -1,5 +1,6 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
+using IdentityServer4.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,18 @@ namespace PVScan.Auth
 {
     public static class Config
     {
+        public static List<TestUser> Users =>
+            new List<TestUser>
+            {
+                new TestUser()
+                {
+                    Username = "test1",
+                    Password = "test1Pass",
+                    IsActive = true,
+                    ProviderName = "Michael",
+                }
+            };
+
         public static IEnumerable<IdentityResource> IdentityResources =>
             new List<IdentityResource>
             {
