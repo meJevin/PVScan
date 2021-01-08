@@ -19,4 +19,8 @@
     <ProjectReference Include="..\PVScan.Database\PVScan.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>

@@ -63,6 +63,7 @@ namespace PVScan.Auth
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
             });
         }
     }

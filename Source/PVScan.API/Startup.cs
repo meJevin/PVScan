@@ -83,7 +83,7 @@ namespace PVScan.API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "PVScan.API v1");
 
-                c.OAuthClientId("demo_api_swagger");
+                c.OAuthClientId("client");
                 c.OAuthAppName("Demo API - Swagger");
                 c.OAuthUsePkce();
             });

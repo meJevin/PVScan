@@ -26,30 +26,18 @@ namespace PVScan.Auth
         public static IEnumerable<Client> Clients =>
             new List<Client>
             {
-                // machine to machine client
+                // machine to machine clientnew Client
                 new Client
                 {
                     ClientId = "client",
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    // scopes that client has access to
-                    AllowedScopes = { "PVScan.API" }
-                },
-                
-                // interactive ASP.NET Core MVC client
-                new Client
-                {
-                    ClientId = "mvc",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
                     AllowedGrantTypes = GrantTypes.Code,
                     
                     // where to redirect to after login
-                    RedirectUris = { "https://localhost:5002/signin-oidc" },
+                    RedirectUris = { "https://localhost:44356/swagger/oauth2-redirect.html" },
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {
