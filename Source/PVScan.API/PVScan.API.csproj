@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\PVScan.Database\PVScan.Database.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using PVScan.Database.Extensions;
 
 namespace PVScan.Auth
 {
@@ -27,11 +28,15 @@ namespace PVScan.Auth
             Configuration = configuration;
         }
 
+        // WOW WTF THE ORDER MATTERS OK
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureDbContext(services);
+            var connectionString = Configuration["DBConnection"];
+            services.AddPVScanDatabase(connectionString);
 
             services.AddControllersWithViews();
+
+            ConfigureIdentityServer(services, connectionString);
 
             services.ConfigureApplicationCookie(config =>
             {
@@ -39,8 +44,6 @@ namespace PVScan.Auth
                 config.LoginPath = "/Auth/Login";
                 config.LogoutPath = "/Auth/Logout";
             });
-
-            ConfigureIdentityServer(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,40 +62,9 @@ namespace PVScan.Auth
             });
         }
 
-        private void ConfigureDbContext(IServiceCollection services)
+        private void ConfigureIdentityServer(IServiceCollection services, string connectionString)
         {
-            var connectionString = Configuration["DBConnection"];
-            var migrationsAssembly = typeof(PVScanDbContext).GetTypeInfo().Assembly.GetName().Name;
-
-            services.AddDbContext<PVScanDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
-            });
-        }
-
-        private void ConfigureIdentityServer(IServiceCollection services)
-        {
-            var connectionString = Configuration["DBConnection"];
-            var migrationsAssemblyIS4 = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
-            services.AddIdentityServer()
-                .AddAspNetIdentity<ApplicationUser>()
-                .AddConfigurationStore(cfg =>
-                {
-                    cfg.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString, sql =>
-                            sql.MigrationsAssembly(migrationsAssemblyIS4));
-                })
-                .AddOperationalStore(cfg =>
-                {
-                    cfg.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString, sql =>
-                            sql.MigrationsAssembly(migrationsAssemblyIS4));
-
-                    cfg.EnableTokenCleanup = true;
-                    cfg.TokenCleanupInterval = 30;
-                })
-                .AddDeveloperSigningCredential();
+            var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddIdentity<ApplicationUser, IdentityRole>(config =>
             {
@@ -103,6 +75,25 @@ namespace PVScan.Auth
             })
                 .AddEntityFrameworkStores<PVScanDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddIdentityServer()
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddConfigurationStore(cfg =>
+                {
+                    cfg.ConfigureDbContext = builder =>
+                        builder.UseSqlServer(connectionString, sql =>
+                            sql.MigrationsAssembly(migrationAssembly));
+                })
+                .AddOperationalStore(cfg =>
+                {
+                    cfg.ConfigureDbContext = builder =>
+                        builder.UseSqlServer(connectionString, sql =>
+                            sql.MigrationsAssembly(migrationAssembly));
+
+                    cfg.EnableTokenCleanup = true;
+                    cfg.TokenCleanupInterval = 30;
+                })
+                .AddDeveloperSigningCredential();
         }
 
         private void InitializeDatabase(IApplicationBuilder app)

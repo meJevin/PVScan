@@ -66,7 +66,7 @@ namespace PVScan.Auth.Controllers
 
             }
 
-            return View();
+            return View(vm);
         }
 
         [HttpGet]
