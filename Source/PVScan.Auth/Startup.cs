@@ -61,6 +61,11 @@ namespace PVScan.Auth
 
             app.UseIdentityServer();
 
+            app.UseCors(cfg =>
+            {
+                cfg.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

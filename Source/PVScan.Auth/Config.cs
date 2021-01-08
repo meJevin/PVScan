@@ -32,17 +32,10 @@ namespace PVScan.Auth
                     ClientId = "client",
                     ClientSecrets = { new Secret("secret".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.Code,
-                    
-                    // where to redirect to after login
-                    RedirectUris = { "https://localhost:44356/swagger/oauth2-redirect.html" },
-
-                    // where to redirect to after logout
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
 
                     AllowedScopes = new List<string>
                     {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
                         "PVScan.API"
                     }
                 }

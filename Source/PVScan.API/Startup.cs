@@ -37,15 +37,15 @@ namespace PVScan.API
                     Type = SecuritySchemeType.OAuth2,
                     Flows = new OpenApiOAuthFlows
                     {
-                        AuthorizationCode = new OpenApiOAuthFlow
+                        ClientCredentials = new OpenApiOAuthFlow
                         {
                             AuthorizationUrl = new Uri("https://localhost:44398/connect/authorize"),
                             TokenUrl = new Uri("https://localhost:44398/connect/token"),
                             Scopes = new Dictionary<string, string>
                             {
                                 {"PVScan.API", "Main PVScan API"}
-                            }
-                        }
+                            },
+                        },
                     }
                 });
 
