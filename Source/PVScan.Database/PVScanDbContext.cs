@@ -23,5 +23,6 @@ namespace PVScan.Database
         }
 
         public DbSet<Barcode> Barcodes { get; set; }
+        public DbSet<UserInfo> UserInfos { get; set; }
     }
 }
