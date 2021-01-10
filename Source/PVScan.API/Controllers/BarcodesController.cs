@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PVScan.API.Controllers.Base;
+using PVScan.API.Services.Interfaces;
 using PVScan.API.ViewModels.Barcodes;
 using PVScan.Database;
 using PVScan.Domain.Entities;
@@ -17,16 +19,19 @@ namespace PVScan.API.Controllers
     public class BarcodesController : APIBaseController
     {
         PVScanDbContext _context;
+        IExperienceCalculator _expCalc;
 
-        public BarcodesController(PVScanDbContext context)
+        public BarcodesController(PVScanDbContext context, IExperienceCalculator expCalc)
         {
             _context = context;
+            _expCalc = expCalc;
         }
 
         [HttpPost]
         [Route("scanned")]
-        public async Task<IActionResult> Scanned(ScannedViewModel data)
+        public async Task<IActionResult> Scanned(ScannedRequestViewModel data)
         {
+            // Create barcode
             var barcodeScanned = new Barcode()
             {
                 Format = data.Format,
@@ -35,10 +40,29 @@ namespace PVScan.API.Controllers
                 UserId = UserId,
             };
 
+            // Add it to DB
             await _context.Barcodes.AddAsync(barcodeScanned);
             await _context.SaveChangesAsync();
 
-            return Created("", barcodeScanned);
+            // Calculate experience added
+            var userInfo = await _context.UserInfos
+                .Where(u => u.UserId == UserId)
+                .FirstOrDefaultAsync();
+
+            var experienceGained = _expCalc.GetExperienceForBarcode(userInfo);
+
+            // Add it to user info and save
+            userInfo.Experience += experienceGained;
+            await _context.SaveChangesAsync();
+
+            // Form response and send back
+            ScannedResponseViewModel response = new ScannedResponseViewModel()
+            {
+                ExperienceGained = experienceGained,
+                Barcode = barcodeScanned,
+            };
+
+            return Ok(response);
         }
     }
 }
