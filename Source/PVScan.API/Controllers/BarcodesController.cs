@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PVScan.API.Controllers.Base;
 using PVScan.API.ViewModels.Barcodes;
 using PVScan.Database;
 using PVScan.Domain.Entities;
@@ -13,7 +14,7 @@ namespace PVScan.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class BarcodesController : ControllerBase
+    public class BarcodesController : PVScanBaseController
     {
         PVScanDbContext _context;
 
@@ -31,7 +32,7 @@ namespace PVScan.API.Controllers
                 Format = data.Format,
                 ScanLocation = new Coordinate() { Latitude = data.Latitude, Longitude = data.Longitude },
                 Text = data.Text,
-                UserId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value,
+                UserId = UserId,
             };
 
             await _context.Barcodes.AddAsync(barcodeScanned);

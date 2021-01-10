@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PVScan.API.Controllers.Base;
 using PVScan.API.ViewModels.Users;
 using PVScan.Database;
 using PVScan.Domain.Entities;
@@ -14,7 +15,7 @@ namespace PVScan.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : PVScanBaseController
     {
         PVScanDbContext _context;
 
@@ -25,10 +26,26 @@ namespace PVScan.API.Controllers
 
         [HttpGet]
         [Route("info")]
-        public async Task<IActionResult> Info(InfoViewModel data)
+        public async Task<IActionResult> Info(GetInfoViewModel data)
         {
             var userInfo = await _context.UserInfos
-                .Where(u => u.UserId == data.UserId)
+                .Where(u => u.UserId == UserId)
+                .FirstOrDefaultAsync();
+
+            if (userInfo == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(userInfo);
+        }
+
+        [HttpPut]
+        [Route("info")]
+        public async Task<IActionResult> Info(ChangeInfoViewModel data)
+        {
+            var userInfo = await _context.UserInfos
+                .Where(u => u.UserId == UserId)
                 .FirstOrDefaultAsync();
 
             if (userInfo == null)
