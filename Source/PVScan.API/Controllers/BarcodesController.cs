@@ -38,7 +38,7 @@ namespace PVScan.API.Controllers
             await _context.Barcodes.AddAsync(barcodeScanned);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Created("", barcodeScanned);
         }
     }
 }
