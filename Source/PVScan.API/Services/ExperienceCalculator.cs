@@ -30,7 +30,7 @@ namespace PVScan.API.Services
 
             for (int i = 1; i < level; ++i)
             {
-                result += 100 * i;
+                result += 100 * (i+1);
             }
             
             return result;
