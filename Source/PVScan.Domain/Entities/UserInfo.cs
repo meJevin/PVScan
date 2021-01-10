@@ -6,6 +6,7 @@ namespace PVScan.Domain.Entities
 {
     public class UserInfo
     {
+        public int Id { get; set; }
         public int BarcodesScanned { get; set; }
         public int BarcodeFormatsScanned { get; set; }
         public string VKLink { get; set; }
