@@ -14,7 +14,7 @@ namespace PVScan.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class BarcodesController : PVScanBaseController
+    public class BarcodesController : APIBaseController
     {
         PVScanDbContext _context;
 

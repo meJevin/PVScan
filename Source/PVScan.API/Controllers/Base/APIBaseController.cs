@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PVScan.API.Controllers.Base
 {
     [ApiController]
-    public class PVScanBaseController : ControllerBase
+    public class APIBaseController : ControllerBase
     {
         protected string UserId =>
             HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)

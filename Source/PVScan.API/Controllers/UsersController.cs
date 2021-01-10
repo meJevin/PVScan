@@ -15,7 +15,7 @@ namespace PVScan.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class UsersController : PVScanBaseController
+    public class UsersController : APIBaseController
     {
         PVScanDbContext _context;
 
