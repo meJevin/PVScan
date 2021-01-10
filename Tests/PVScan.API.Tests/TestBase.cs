@@ -27,7 +27,6 @@ namespace PVScan.API.Tests
                 .Options;
 
             _context = new PVScanDbContext(options);
-            _context.Database.EnsureCreated();
 
             _mockControlerContext = new ControllerContext();
             _mockControlerContext.HttpContext = new DefaultHttpContext();
