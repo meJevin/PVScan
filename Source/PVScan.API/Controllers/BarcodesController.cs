@@ -51,15 +51,34 @@ namespace PVScan.API.Controllers
 
             var experienceGained = _expCalc.GetExperienceForBarcode(userInfo);
 
-            // Add it to user info and save
+            // Add it to user info and check for levelup
             userInfo.Experience += experienceGained;
+
+            var experienceNextLevel = _expCalc.GetRequiredLevelExperience(userInfo.Level);
+            double expLeft = userInfo.Experience;
+            int lvlsGained = 0;
+            while (expLeft >= experienceNextLevel)
+            {
+                // Level up
+                expLeft -= experienceNextLevel;
+                
+                ++userInfo.Level;
+                ++lvlsGained;
+
+                experienceNextLevel = _expCalc.GetRequiredLevelExperience(userInfo.Level);
+            }
+            userInfo.Experience = expLeft;
+
             await _context.SaveChangesAsync();
 
             // Form response and send back
             ScannedResponseViewModel response = new ScannedResponseViewModel()
             {
                 ExperienceGained = experienceGained,
+                LevelsGained = lvlsGained,
                 Barcode = barcodeScanned,
+                UserExperience = userInfo.Experience,
+                UserLevel = userInfo.Level
             };
 
             return Ok(response);
