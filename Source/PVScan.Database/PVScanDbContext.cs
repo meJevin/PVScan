@@ -20,8 +20,11 @@ namespace PVScan.Database
             base.OnModelCreating(builder);
 
             builder.Entity<Barcode>().OwnsOne(b => b.ScanLocation);
+
+            builder.Entity<UserInfo>().Property(u => u.Level).HasDefaultValue(1);
         }
 
         public DbSet<Barcode> Barcodes { get; set; }
+        public DbSet<UserInfo> UserInfos { get; set; }
     }
 }

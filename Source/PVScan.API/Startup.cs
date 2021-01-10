@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PVScan.Database.Extensions;
+using PVScan.API.Services.Interfaces;
+using PVScan.API.Services;
 
 namespace PVScan.API
 {
@@ -58,6 +60,8 @@ namespace PVScan.API
                         .AllowAnyHeader()));
 
             services.AddPVScanDatabase(Configuration["DBConnection"]);
+
+            services.AddTransient<IExperienceCalculator, ExperienceCalculator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

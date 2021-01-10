@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PVScan.Database;
 
 namespace PVScan.Database.Migrations
 {
     [DbContext(typeof(PVScanDbContext))]
-    partial class PVScanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210110115508_AddUserInfos")]
+    partial class AddUserInfos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,16 +251,8 @@ namespace PVScan.Database.Migrations
                     b.Property<int>("BarcodesScanned")
                         .HasColumnType("int");
 
-                    b.Property<double>("Experience")
-                        .HasColumnType("float");
-
                     b.Property<string>("IGLink")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Level")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");

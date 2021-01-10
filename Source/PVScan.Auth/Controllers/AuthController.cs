@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PVScan.Auth.ViewModels;
+using PVScan.Database;
 using PVScan.Database.Identity;
+using PVScan.Domain.Entities;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -13,15 +15,18 @@ namespace PVScan.Auth.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IIdentityServerInteractionService _interactionService;
+        private readonly PVScanDbContext _context;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IIdentityServerInteractionService interactionService)
+            IIdentityServerInteractionService interactionService,
+            PVScanDbContext context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _interactionService = interactionService;
+            _context = context;
         }
 
         [HttpGet]
@@ -86,6 +91,13 @@ namespace PVScan.Auth.Controllers
             var user = new ApplicationUser() { UserName = vm.Username };
             var result = await _userManager.CreateAsync(user, vm.Password);
 
+            var userInfo = new UserInfo()
+            {
+                UserId = user.Id,
+            };
+            await _context.UserInfos.AddAsync(userInfo);
+            await _context.SaveChangesAsync();
+
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
@@ -144,6 +156,13 @@ namespace PVScan.Auth.Controllers
             }
 
             result = await _userManager.AddLoginAsync(user, info);
+
+            var userInfo = new UserInfo()
+            {
+                UserId = user.Id,
+            };
+            await _context.UserInfos.AddAsync(userInfo);
+            await _context.SaveChangesAsync();
 
             if (!result.Succeeded)
             {
