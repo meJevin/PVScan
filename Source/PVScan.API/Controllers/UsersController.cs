@@ -53,6 +53,11 @@ namespace PVScan.API.Controllers
                 return NotFound();
             }
 
+            userInfo.IGLink = data.IGLink;
+            userInfo.VKLink = data.VKLink;
+
+            await _context.SaveChangesAsync();
+
             return Ok(userInfo);
         }
     }
