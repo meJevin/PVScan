@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace PVScan.Auth.Data.Migrations.IdentityServer.ConfigurationDb
+namespace PVScan.Database.Migrations.IdentityServer.ConfigurationDb
 {
-    public partial class InitialIdentityServerConfigurationDbMigration : Migration
+    public partial class Configuration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
