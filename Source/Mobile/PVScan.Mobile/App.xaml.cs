@@ -1,5 +1,4 @@
-﻿using PVScan.Mobile.Services;
-using PVScan.Mobile.Views;
+﻿using PVScan.Mobile.Views;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,7 +12,6 @@ namespace PVScan.Mobile
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
 
