@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace PVScan.Auth.Data.Migrations.IdentityServer.PersistedGrantDb
+namespace PVScan.Database.Migrations.IdentityServer.PersistedGrantDb
 {
-    public partial class InitialIdentityServerPersistedGrantDbMigration : Migration
+    public partial class PersistedGrant : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

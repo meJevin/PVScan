@@ -39,8 +39,8 @@ namespace PVScan.API
 
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
+                        // Because I use ApiScopes and not ApiResources
                         ValidateAudience = false,
-                        ValidateIssuer = false,
                     };
                 });
 
@@ -59,7 +59,9 @@ namespace PVScan.API
                         .AllowAnyMethod()
                         .AllowAnyHeader()));
 
-            services.AddPVScanDatabase(Configuration["DBConnection"]);
+            var connectionString = Configuration["DBConnection"];
+
+            services.AddPVScanDatabase(connectionString);
 
             services.AddTransient<IExperienceCalculator, ExperienceCalculator>();
         }

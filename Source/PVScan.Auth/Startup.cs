@@ -33,10 +33,9 @@ namespace PVScan.Auth
         {
             var connectionString = Configuration["DBConnection"];
             services.AddPVScanDatabase(connectionString);
+            services.ConfigureIdentityServer(connectionString);
 
             services.AddControllersWithViews();
-
-            ConfigureIdentityServer(services, connectionString);
 
             services.ConfigureApplicationCookie(config =>
             {
@@ -48,6 +47,10 @@ namespace PVScan.Auth
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.EnsurePVScanDatabaseTablesCreated();
+            app.EnsureIdentityServerDatabaseTablesCreated();
+
+            // Todo: remove this and place info from config to secrets
             InitializeDatabase(app);
 
             app.UseDeveloperExceptionPage();
@@ -62,74 +65,37 @@ namespace PVScan.Auth
             });
         }
 
-        private void ConfigureIdentityServer(IServiceCollection services, string connectionString)
-        {
-            var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
-            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
-            {
-                config.Password.RequiredLength = 4;
-                config.Password.RequireDigit = false;
-                config.Password.RequireNonAlphanumeric = false;
-                config.Password.RequireUppercase = false;
-            })
-                .AddEntityFrameworkStores<PVScanDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddIdentityServer()
-                .AddAspNetIdentity<ApplicationUser>()
-                .AddConfigurationStore(cfg =>
-                {
-                    cfg.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString, sql =>
-                            sql.MigrationsAssembly(migrationAssembly));
-                })
-                .AddOperationalStore(cfg =>
-                {
-                    cfg.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString, sql =>
-                            sql.MigrationsAssembly(migrationAssembly));
-
-                    cfg.EnableTokenCleanup = true;
-                    cfg.TokenCleanupInterval = 30;
-                })
-                .AddDeveloperSigningCredential();
-        }
-
         private void InitializeDatabase(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-                serviceScope.ServiceProvider.GetRequiredService<PVScanDbContext>().Database.Migrate();
+                var configurationContext = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
-                var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                context.Database.Migrate();
-                if (!context.Clients.Any())
+                if (!configurationContext.Clients.Any())
                 {
                     foreach (var client in Config.Clients)
                     {
-                        context.Clients.Add(client.ToEntity());
+                        configurationContext.Clients.Add(client.ToEntity());
                     }
-                    context.SaveChanges();
+                    configurationContext.SaveChanges();
                 }
 
-                if (!context.IdentityResources.Any())
+                if (!configurationContext.IdentityResources.Any())
                 {
                     foreach (var resource in Config.IdentityResources)
                     {
-                        context.IdentityResources.Add(resource.ToEntity());
+                        configurationContext.IdentityResources.Add(resource.ToEntity());
                     }
-                    context.SaveChanges();
+                    configurationContext.SaveChanges();
                 }
 
-                if (!context.ApiScopes.Any())
+                if (!configurationContext.ApiScopes.Any())
                 {
                     foreach (var resource in Config.ApiScopes)
                     {
-                        context.ApiScopes.Add(resource.ToEntity());
+                        configurationContext.ApiScopes.Add(resource.ToEntity());
                     }
-                    context.SaveChanges();
+                    configurationContext.SaveChanges();
                 }
             }
         }

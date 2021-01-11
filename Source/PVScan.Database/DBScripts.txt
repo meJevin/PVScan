@@ -1,0 +1,4 @@
+﻿dotnet ef database update --startup-project ..\PVScan.Auth --context PersistedGrantDbContext
+dotnet ef database update --startup-project ..\PVScan.Auth --context ConfigurationDbContext
+
+dotnet ef database update --startup-project ..\PVScan.Auth --context PVScanDbContext
