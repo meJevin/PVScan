@@ -131,7 +131,7 @@ namespace PVScan.Auth.Controllers
                 return Redirect(returnUrl);
             }
 
-            var username = info.Principal.FindFirst(ClaimTypes.Name.Replace(" ", "_")).Value;
+            var username = info.Principal.FindFirst(ClaimTypes.Name).Value.Replace(" ", "_");
             return View("ExternalRegister", new ExternalRegisterViewModel
             {
                 Username = username,

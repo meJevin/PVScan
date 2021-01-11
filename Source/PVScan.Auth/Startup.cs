@@ -43,6 +43,15 @@ namespace PVScan.Auth
                 config.LoginPath = "/Auth/Login";
                 config.LogoutPath = "/Auth/Logout";
             });
+
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                IConfigurationSection googleAuthNSection =
+                    Configuration.GetSection("Authentication:Google");
+
+                options.ClientId = googleAuthNSection["ClientId"];
+                options.ClientSecret = googleAuthNSection["ClientSecret"];
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
