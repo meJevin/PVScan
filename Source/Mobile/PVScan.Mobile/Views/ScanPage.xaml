@@ -1,17 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PVScan.Mobile.Views.AboutPage"
+             x:Class="PVScan.Mobile.Views.ScanPage"
              xmlns:vm="clr-namespace:PVScan.Mobile.ViewModels">
-    
+
     <ContentPage.BindingContext>
-        <vm:AboutViewModel />
+        <vm:ScanPageViewModel />
     </ContentPage.BindingContext>
-    
+
     <Grid>
         <Label TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center">
-            About Page 1
+            Scan Page
         </Label>
     </Grid>
-
 </ContentPage>
