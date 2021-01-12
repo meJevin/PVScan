@@ -106,32 +106,12 @@
 
     </ContentPage.Resources>
     <NavigationPage.TitleView>
-        <Grid
-            ColumnDefinitions="44,*,44,44">
-            <ImageButton
-                HorizontalOptions="Center"
-                BackgroundColor="Transparent"
-                Source="{AppThemeBinding
-                Light={FontImage FontFamily=FontAwesome, 
-                    Glyph={x:Static theme:IconFont.Cat},
-                    Color=Black,
-                    Size=18},
-                Dark={FontImage FontFamily=FontAwesome, 
-                    Glyph={x:Static theme:IconFont.Cat},
-                    Color=White,
-                    Size=18}
-                }" />
-            <Label
-                Text="PVSCan"
-                TextTransform="Uppercase"
-                HorizontalOptions="Center"
-                Grid.ColumnSpan="4"
-                VerticalOptions="Center" />
+        <Grid>
             <ImageButton
                 Grid.Column="3"
                 VerticalOptions="Center"
-                HorizontalOptions="Center"
-                BackgroundColor="Transparent"
+                HorizontalOptions="End"
+                Padding="20, 0"
                 Source="{AppThemeBinding
                   Light={FontImage FontFamily=FontAwesome, 
                     Glyph={x:Static theme:IconFont.Lightbulb},
@@ -192,7 +172,7 @@
                 <toolkit:TabViewItem.Icon>
                     <FontImageSource
                         FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.ShoppingBag}"
+                        Glyph="{x:Static theme:IconFont.Qrcode}"
                         Color="{AppThemeBinding Dark={StaticResource NeutralLighter}, Light={StaticResource White}}" />
                 </toolkit:TabViewItem.Icon>
                 <views:AboutPage/>
