@@ -128,55 +128,6 @@
     <Grid>
         <toolkit:TabView IsSwipeEnabled="False"
             Style="{StaticResource CustomTabStyle}">
-            <!-- HOME TAB -->
-            <toolkit:TabViewItem
-                ControlTemplate="{StaticResource TabItemTemplate}"
-                Style="{StaticResource TabItemStyle}">
-                <toolkit:TabViewItem.Icon>
-                    <FontImageSource
-                        FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Home}"
-                        Color="{AppThemeBinding Dark={StaticResource NeutralDark}, Light={StaticResource TabIconColor}}" />
-                </toolkit:TabViewItem.Icon>
-                <toolkit:TabViewItem.IconSelected>
-                    <FontImageSource
-                        FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Home}"
-                        Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource TabSelectedIconColor}}" />
-                </toolkit:TabViewItem.IconSelected>
-                <views:AboutPage />
-            </toolkit:TabViewItem>
-            <!-- FAVOURITE TAB -->
-            <toolkit:TabViewItem
-                ControlTemplate="{StaticResource TabItemTemplate}"
-                Style="{StaticResource TabItemStyle}">
-                <toolkit:TabViewItem.Icon>
-                    <FontImageSource
-                        FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Heart}"
-                        Color="{AppThemeBinding Dark={StaticResource NeutralDark}, Light={StaticResource TabIconColor}}" />
-                </toolkit:TabViewItem.Icon>
-                <toolkit:TabViewItem.IconSelected>
-                    <FontImageSource
-                        FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Heart}"
-                        Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource TabSelectedIconColor}}" />
-                </toolkit:TabViewItem.IconSelected>
-                <views:AboutPage />
-            </toolkit:TabViewItem>
-            <!-- BASKET TAB -->
-            <toolkit:TabViewItem
-                TabTapped="TabViewItem_TabTapped"
-                ControlTemplate="{StaticResource BasketTabItemTemplate}"
-                Style="{StaticResource TabItemStyle}">
-                <toolkit:TabViewItem.Icon>
-                    <FontImageSource
-                        FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Qrcode}"
-                        Color="{AppThemeBinding Dark={StaticResource NeutralLighter}, Light={StaticResource White}}" />
-                </toolkit:TabViewItem.Icon>
-                <views:AboutPage/>
-            </toolkit:TabViewItem>
             <!-- SETTINGS TAB -->
             <toolkit:TabViewItem
                 ControlTemplate="{StaticResource TabItemTemplate}"
@@ -195,6 +146,20 @@
                 </toolkit:TabViewItem.IconSelected>
                 <views:AboutPage />
             </toolkit:TabViewItem>
+            
+            <!-- SCAN TAB -->
+            <toolkit:TabViewItem
+                TabTapped="TabViewItem_TabTapped"
+                ControlTemplate="{StaticResource BasketTabItemTemplate}"
+                Style="{StaticResource TabItemStyle}">
+                <toolkit:TabViewItem.Icon>
+                    <FontImageSource
+                        FontFamily="FontAwesome"
+                        Glyph="{x:Static theme:IconFont.Qrcode}"
+                        Color="{AppThemeBinding Dark={StaticResource NeutralLighter}, Light={StaticResource White}}" />
+                </toolkit:TabViewItem.Icon>
+            </toolkit:TabViewItem>
+            
             <!-- PROFILE TAB -->
             <toolkit:TabViewItem
                 ControlTemplate="{StaticResource TabItemTemplate}"

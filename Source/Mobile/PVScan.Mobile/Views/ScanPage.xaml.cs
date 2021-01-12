@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Xamarin.Forms.Xaml;
 using ZXing.Mobile;
 
@@ -15,20 +18,28 @@ namespace PVScan.Mobile.Views
         public ScanPage()
         {
             InitializeComponent();
+
+            PropertyChanged += ContentPageBase_PropertyChanged;
         }
 
-        protected override async void OnAppearing()
+        private void ContentPageBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "SafeAreaInsets")
+            {
+                MainContainer.Margin = On<iOS>().SafeAreaInsets();
+            }
+        }
+
+        protected override void OnAppearing()
         {
             ScannerView.IsAnalyzing = true;
             ScannerView.IsScanning = true;
-            ScannerView.ToggleTorch();
         }
 
         protected override void OnDisappearing()
         {
             ScannerView.IsAnalyzing = false;
             ScannerView.IsScanning = false;
-            ScannerView.ToggleTorch();
         }
 
         private void ScannerView_OnScanResult(ZXing.Result result)
