@@ -5,7 +5,7 @@ using Xamarin.Forms.Xaml;
 
 namespace PVScan.Mobile.Views
 {
-    public partial class AboutPage : ContentPage
+    public partial class AboutPage : ContentView
     {
         public AboutPage()
         {
