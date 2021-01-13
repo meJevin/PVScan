@@ -9,9 +9,9 @@ using Xamarin.Forms.Xaml;
 
 namespace PVScan.Mobile.Views
 {
-    public partial class SettingsPage : ContentView
+    public partial class ProfilePage : ContentView
     {
-        public SettingsPage()
+        public ProfilePage()
         {
             InitializeComponent();
         }
