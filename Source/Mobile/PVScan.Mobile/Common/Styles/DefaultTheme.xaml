@@ -33,7 +33,7 @@
     <Color x:Key="BackgroundColorDark">#2c2c2c</Color>
     <Color x:Key="BackgroundColorDarker">#212121</Color>
     <Color x:Key="BackgroundColorLight">#f6f6f6</Color>
-    <Color x:Key="BackgroundColorLighter">#fafafa</Color>
+    <Color x:Key="BackgroundColorLighter">#ededed</Color>
     <Color x:Key="TextPrimaryColor_Dark">#FFFFFF</Color>
     <Color x:Key="TextPrimaryColor_Light">#323130</Color>
     <Color x:Key="TextSecondaryColor_Dark">#FFFFFF</Color>

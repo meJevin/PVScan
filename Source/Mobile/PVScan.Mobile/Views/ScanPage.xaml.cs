@@ -10,32 +10,50 @@ using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Xamarin.Forms.Xaml;
 using ZXing.Mobile;
+using ZXing.Net.Mobile.Forms;
 
 namespace PVScan.Mobile.Views
 {
     public partial class ScanPage : ContentPage
     {
+        ZXingScannerView ScannerView;
+
         public ScanPage()
         {
             InitializeComponent();
 
-            PropertyChanged += ContentPageBase_PropertyChanged;
-        }
+            ScannerView = new ZXingScannerView()
+            {
+                Options = new MobileBarcodeScanningOptions()
+                {
+                    TryHarder = true,
+                    AutoRotate = true,
+                    PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE, ZXing.BarcodeFormat.All_1D },
+                    CameraResolutionSelector = (res) =>
+                    {
+                        return res.Last();
+                    },
+                },
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                AutomationId = "zxingScannerView",
+            };
 
-        private void ContentPageBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
+            ScannerView.OnScanResult += ScannerView_OnScanResult;
+
+            MainContainer.Children.Add(ScannerView);
         }
 
         protected override void OnAppearing()
         {
-            ScannerView.IsAnalyzing = true;
             ScannerView.IsScanning = true;
+            ScannerView.IsAnalyzing = true;
         }
 
         protected override void OnDisappearing()
         {
-            ScannerView.IsAnalyzing = false;
             ScannerView.IsScanning = false;
+            ScannerView.IsAnalyzing = false;
         }
 
         private void ScannerView_OnScanResult(ZXing.Result result)

@@ -14,6 +14,8 @@ namespace PVScan.Mobile.Views
         public MainPage()
         {
             InitializeComponent();
+
+            OnAppThemeButtonClicked(null, null);
         }
 
         void OnAppThemeButtonClicked(object sender, System.EventArgs e)
