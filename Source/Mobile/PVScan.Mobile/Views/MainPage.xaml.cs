@@ -15,6 +15,7 @@ namespace PVScan.Mobile.Views
         {
             InitializeComponent();
         }
+
         void OnAppThemeButtonClicked(object sender, System.EventArgs e)
         {
             Application.Current.UserAppTheme = (Application.Current.UserAppTheme == OSAppTheme.Dark)

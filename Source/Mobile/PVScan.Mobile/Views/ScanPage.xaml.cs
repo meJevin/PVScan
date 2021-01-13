@@ -24,10 +24,6 @@ namespace PVScan.Mobile.Views
 
         private void ContentPageBase_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "SafeAreaInsets")
-            {
-                MainContainer.Margin = On<iOS>().SafeAreaInsets();
-            }
         }
 
         protected override void OnAppearing()

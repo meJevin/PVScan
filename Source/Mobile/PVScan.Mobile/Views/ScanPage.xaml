@@ -4,31 +4,10 @@
              x:Class="PVScan.Mobile.Views.ScanPage"
              xmlns:vm="clr-namespace:PVScan.Mobile.ViewModels" 
              xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
-             xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
-             NavigationPage.HasNavigationBar="False">
+             xmlns:theme="clr-namespace:PVScan.Mobile.Styles">
     <Grid>
         <zxing:ZXingScannerView x:Name="ScannerView"
                                 HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                                 OnScanResult="ScannerView_OnScanResult"/>
-
-        <Grid x:Name="MainContainer">
-            <!-- BACK -->
-            <ImageButton
-                Margin="{OnPlatform Android='35,25,0,0', Default='35,0,0,0'}"
-                HorizontalOptions="Start"
-                VerticalOptions="Start"
-                BackgroundColor="Transparent"
-                Source="{AppThemeBinding
-                  Light={FontImage FontFamily=FontAwesome, 
-                    Glyph={x:Static theme:IconFont.ArrowLeft},
-                    Color=Black,
-                    Size=18},
-                  Dark={FontImage FontFamily=FontAwesome, 
-                    Glyph={x:Static theme:IconFont.ArrowLeft},
-                    Color=White,
-                    Size=18}
-                }"
-                Clicked="ImageButton_Clicked" />
-        </Grid>
     </Grid>
 </ContentPage>

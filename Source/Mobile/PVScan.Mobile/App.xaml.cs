@@ -15,7 +15,7 @@ namespace PVScan.Mobile
             InitializeComponent();
 
             var navigationPage = new Xamarin.Forms.NavigationPage(new MainPage());
-            navigationPage.On<iOS>().SetHideNavigationBarSeparator(true);
+            navigationPage.On<iOS>().SetHideNavigationBarSeparator(false);
 
             MainPage = navigationPage;
         }

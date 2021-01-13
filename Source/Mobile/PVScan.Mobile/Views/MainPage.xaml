@@ -107,8 +107,19 @@
     </ContentPage.Resources>
     <NavigationPage.TitleView>
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Label VerticalTextAlignment="Center" 
+                   HorizontalTextAlignment="Center"
+                   Grid.ColumnSpan="2">
+                PVScan
+            </Label>
+            
             <ImageButton
-                Grid.Column="3"
+                Grid.Column="1"
                 VerticalOptions="Center"
                 HorizontalOptions="End"
                 Padding="20, 0"
@@ -128,6 +139,39 @@
     <Grid>
         <toolkit:TabView IsSwipeEnabled="False"
             Style="{StaticResource CustomTabStyle}">
+            <!-- USER TAB -->
+            <toolkit:TabViewItem
+                ControlTemplate="{StaticResource TabItemTemplate}"
+                Style="{StaticResource TabItemStyle}">
+                <toolkit:TabViewItem.Icon>
+                    <FontImageSource
+                        FontFamily="FontAwesome"
+                        Glyph="{x:Static theme:IconFont.User}"
+                        Color="{AppThemeBinding Dark={StaticResource NeutralDark}, Light={StaticResource TabIconColor}}" />
+                </toolkit:TabViewItem.Icon>
+                <toolkit:TabViewItem.IconSelected>
+                    <FontImageSource
+                        FontFamily="FontAwesome"
+                        Glyph="{x:Static theme:IconFont.User}"
+                        Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource TabSelectedIconColor}}" />
+                </toolkit:TabViewItem.IconSelected>
+                
+                <views:UserPage />
+            </toolkit:TabViewItem>
+            
+            <!-- SCAN TAB -->
+            <toolkit:TabViewItem
+                TabTapped="TabViewItem_TabTapped"
+                ControlTemplate="{StaticResource BasketTabItemTemplate}"
+                Style="{StaticResource TabItemStyle}">
+                <toolkit:TabViewItem.Icon>
+                    <FontImageSource
+                        FontFamily="FontAwesome"
+                        Glyph="{x:Static theme:IconFont.Qrcode}"
+                        Color="{AppThemeBinding Dark={StaticResource NeutralLighter}, Light={StaticResource White}}" />
+                </toolkit:TabViewItem.Icon>
+            </toolkit:TabViewItem>
+            
             <!-- SETTINGS TAB -->
             <toolkit:TabViewItem
                 ControlTemplate="{StaticResource TabItemTemplate}"
@@ -144,39 +188,8 @@
                         Glyph="{x:Static theme:IconFont.Cog}"
                         Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource TabSelectedIconColor}}" />
                 </toolkit:TabViewItem.IconSelected>
-                <views:AboutPage />
-            </toolkit:TabViewItem>
-            
-            <!-- SCAN TAB -->
-            <toolkit:TabViewItem
-                TabTapped="TabViewItem_TabTapped"
-                ControlTemplate="{StaticResource BasketTabItemTemplate}"
-                Style="{StaticResource TabItemStyle}">
-                <toolkit:TabViewItem.Icon>
-                    <FontImageSource
-                        FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Qrcode}"
-                        Color="{AppThemeBinding Dark={StaticResource NeutralLighter}, Light={StaticResource White}}" />
-                </toolkit:TabViewItem.Icon>
-            </toolkit:TabViewItem>
-            
-            <!-- PROFILE TAB -->
-            <toolkit:TabViewItem
-                ControlTemplate="{StaticResource TabItemTemplate}"
-                Style="{StaticResource TabItemStyle}">
-                <toolkit:TabViewItem.Icon>
-                    <FontImageSource
-                        FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.User}"
-                        Color="{AppThemeBinding Dark={StaticResource NeutralDark}, Light={StaticResource TabIconColor}}" />
-                </toolkit:TabViewItem.Icon>
-                <toolkit:TabViewItem.IconSelected>
-                    <FontImageSource
-                        FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.User}"
-                        Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource TabSelectedIconColor}}" />
-                </toolkit:TabViewItem.IconSelected>
-                <views:AboutPage />
+                
+                <views:SettingsPage />
             </toolkit:TabViewItem>
         </toolkit:TabView>
     </Grid>
