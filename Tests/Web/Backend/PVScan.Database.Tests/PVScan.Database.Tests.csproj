@@ -19,8 +19,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Source\PVScan.Database\PVScan.Database.csproj" />
-  </ItemGroup>
-
 </Project>

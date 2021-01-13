@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -23,8 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Source\PVScan.Auth\PVScan.Auth.csproj" />
-    <ProjectReference Include="..\..\Source\PVScan.Database\PVScan.Database.csproj" />
+    <ProjectReference Include="..\..\..\..\Source\Web\Backend\PVScan.API\PVScan.API.csproj" />
   </ItemGroup>
 
 </Project>
