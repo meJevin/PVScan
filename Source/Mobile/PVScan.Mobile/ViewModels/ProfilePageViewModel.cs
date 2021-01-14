@@ -41,7 +41,7 @@ namespace PVScan.Mobile.ViewModels
             {
                 try
                 {
-                    var _result = await _client.LoginAsync(new LoginRequest());
+                    var _result = await _client.LoginAsync(new LoginRequest() { BrowserDisplayMode = DisplayMode.Hidden });
 
                     if (_result.IsError)
                     {
@@ -53,7 +53,7 @@ namespace PVScan.Mobile.ViewModels
                     _httpClient.DefaultRequestHeaders.Authorization
                         = new AuthenticationHeaderValue("Bearer", _result?.AccessToken ?? string.Empty);
 
-                    HttpResponseMessage response = await _httpClient.GetAsync("api/v1/users/info");
+                    HttpResponseMessage response = await _httpClient.GetAsync("api/v1/users/current");
                     string content = await response.Content.ReadAsStringAsync();
 
                     Console.WriteLine("Hi, your name is: " + _result.User.Identity.Name);
@@ -72,6 +72,7 @@ namespace PVScan.Mobile.ViewModels
         {
             WebAuthenticatorResult authResult =
                     await WebAuthenticator.AuthenticateAsync(new Uri(options.StartUrl), new Uri(IdentityServerConfiguration.RedirectUri));
+
             return new BrowserResult()
             {
                 Response = ParseAuthenticatorResult(authResult)

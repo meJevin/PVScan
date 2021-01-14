@@ -25,8 +25,8 @@ namespace PVScan.API.Tests.Controllers
             _context.SaveChanges();
 
             // Act
-            var result = (await controller.Info(new GetInfoViewModel() { }) as ObjectResult);
-            var resultObject = result.Value as UserInfo;
+            var result = (await controller.Current()) as ObjectResult;
+            var resultObject = result.Value as CurrentResponseViewModel;
 
             // Assert
             Assert.NotNull(resultObject);
@@ -47,7 +47,7 @@ namespace PVScan.API.Tests.Controllers
             _context.SaveChanges();
 
             // Act
-            var result = (await controller.Info(new ChangeInfoViewModel() { IGLink = "test" }) as ObjectResult);
+            var result = (await controller.Change(new ChangeRequestViewModel() { IGLink = "test" }) as ObjectResult);
             var resultObject = result.Value as UserInfo;
 
             // Assert
