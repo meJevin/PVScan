@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdentityModel.OidcClient" Version="3.1.2" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.0.1" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.1874" />  
@@ -34,7 +35,6 @@
   
   <ItemGroup>
     <Folder Include="Common\Assets\" />
-    <Folder Include="Services\Identity\" />
   </ItemGroup>
   
   <ItemGroup>
