@@ -34,8 +34,7 @@
   
   <ItemGroup>
     <Folder Include="Common\Assets\" />
-    <Folder Include="Services\" />
-    <Folder Include="ViewModels\" />
+    <Folder Include="Services\Identity\" />
   </ItemGroup>
   
   <ItemGroup>
