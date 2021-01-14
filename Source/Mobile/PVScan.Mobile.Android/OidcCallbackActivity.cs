@@ -11,28 +11,28 @@ using System.Text;
 
 namespace PVScan.Mobile.Droid
 {
-    [Activity(Label = "OidcCallbackActivity")]
-    [IntentFilter(new[] { Intent.ActionView },
-               Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
-               DataScheme = "pvscan")]
-    // DataHost = "callback")]
-    public class OidcCallbackActivity : Activity
-    {
-        public static event Action<string> Callbacks;
-
-        public OidcCallbackActivity()
-        {
-        }
-
-        protected override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-
-            Callbacks?.Invoke(Intent.DataString);
-
-            Finish();
-
-            StartActivity(typeof(MainActivity));
-        }
-    }
+    //[Activity(Label = "OidcCallbackActivity")]
+    //[IntentFilter(new[] { Intent.ActionView },
+    //           Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
+    //           DataScheme = "pvscan")]
+    //// DataHost = "callback")]
+    //public class OidcCallbackActivity : Activity
+    //{
+    //    public static event Action<string> Callbacks;
+    //
+    //    public OidcCallbackActivity()
+    //    {
+    //    }
+    //
+    //    protected override void OnCreate(Bundle savedInstanceState)
+    //    {
+    //        base.OnCreate(savedInstanceState);
+    //
+    //        Callbacks?.Invoke(Intent.DataString);
+    //
+    //        Finish();
+    //
+    //        StartActivity(typeof(MainActivity));
+    //    }
+    //}
 }

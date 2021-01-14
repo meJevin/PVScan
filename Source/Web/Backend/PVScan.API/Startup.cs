@@ -41,7 +41,11 @@ namespace PVScan.API
                     {
                         // Because I use ApiScopes and not ApiResources
                         ValidateAudience = false,
+                        ValidateIssuer = false,
                     };
+                    
+                    // Todo: production code must use HTTPS
+                    options.RequireHttpsMetadata = false;
                 });
 
             services.AddAuthentication();
