@@ -18,8 +18,6 @@ namespace PVScan.Mobile.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            DependencyService.Register<ChromeCustomTabsBrowser>();
-
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 

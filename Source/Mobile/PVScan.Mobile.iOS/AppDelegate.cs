@@ -27,8 +27,6 @@ namespace PVScan.Mobile.iOS
             global::Xamarin.Forms.Forms.Init();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
 
-            DependencyService.Register<ASWebAuthenticationSessionBrowser>();
-
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

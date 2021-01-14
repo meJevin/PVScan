@@ -79,9 +79,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChromeCustomTabsBrowser.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="OidcCallbackActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

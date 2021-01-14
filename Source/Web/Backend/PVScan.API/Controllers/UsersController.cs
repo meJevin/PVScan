@@ -26,7 +26,7 @@ namespace PVScan.API.Controllers
 
         [HttpGet]
         [Route("info")]
-        public async Task<IActionResult> Info(GetInfoViewModel data)
+        public async Task<IActionResult> Info()
         {
             var userInfo = await _context.UserInfos
                 .Where(u => u.UserId == UserId)
