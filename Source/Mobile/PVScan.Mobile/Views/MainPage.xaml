@@ -112,7 +112,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Label VerticalTextAlignment="Center" 
+            <Label VerticalTextAlignment="Center"
                    HorizontalTextAlignment="Center"
                    Grid.ColumnSpan="2">
                 PVScan
@@ -142,6 +142,7 @@
             Style="{StaticResource CustomTabStyle}">
             <!-- History TAB -->
             <toolkit:TabViewItem
+                TabTapped="HistoryTabItem_TabTapped"
                 ControlTemplate="{StaticResource TabItemTemplate}"
                 Style="{StaticResource TabItemStyle}">
                 <toolkit:TabViewItem.Icon>
@@ -157,7 +158,7 @@
                         Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource TabSelectedIconColor}}" />
                 </toolkit:TabViewItem.IconSelected>
                 
-                <views:HistoryPage />
+                <views:HistoryPage x:Name="HistoryPage"/>
             </toolkit:TabViewItem>
             
             <!-- SCAN TAB -->

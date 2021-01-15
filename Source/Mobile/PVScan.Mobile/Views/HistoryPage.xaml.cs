@@ -15,5 +15,10 @@ namespace PVScan.Mobile.Views
         {
             InitializeComponent();
         }
+
+        public async Task Initialize()
+        {
+            return;
+        }
     }
 }

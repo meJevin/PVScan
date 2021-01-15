@@ -3,10 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PVScan.Mobile.Views.SignUpPage">
     <StackLayout VerticalOptions="Center" Margin="20, 0, 20, 0">
-        <Entry Placeholder="Login" HeightRequest="45" HorizontalTextAlignment="Center">
+        <Entry Placeholder="Login" HeightRequest="45" HorizontalTextAlignment="Center"
+               IsSpellCheckEnabled="False">
 
         </Entry>
-        <Entry Placeholder="Password" HeightRequest="45" IsPassword="True" HorizontalTextAlignment="Center">
+        <Entry Placeholder="Email" HeightRequest="45" HorizontalTextAlignment="Center"
+               IsSpellCheckEnabled="False"
+               Keyboard="Email">
+
+        </Entry>
+        <Entry Placeholder="Password" HeightRequest="45" IsPassword="True" HorizontalTextAlignment="Center"
+               IsSpellCheckEnabled="False">
 
         </Entry>
 

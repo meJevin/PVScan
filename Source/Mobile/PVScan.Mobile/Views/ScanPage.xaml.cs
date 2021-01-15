@@ -16,8 +16,6 @@ namespace PVScan.Mobile.Views
 {
     public partial class ScanPage : ContentPage
     {
-        ZXingScannerView ScannerView;
-
         public ScanPage()
         {
             InitializeComponent();
@@ -40,8 +38,6 @@ namespace PVScan.Mobile.Views
             };
 
             ScannerView.OnScanResult += ScannerView_OnScanResult;
-
-            MainContainer.Children.Add(ScannerView);
         }
 
         protected override void OnAppearing()
@@ -70,7 +66,7 @@ namespace PVScan.Mobile.Views
             });
         }
 
-        private async void ImageButton_Clicked(object sender, EventArgs e)
+        private async void CancelButton_Clicked(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
         }

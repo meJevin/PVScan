@@ -5,7 +5,15 @@
              xmlns:vm="clr-namespace:PVScan.Mobile.ViewModels" 
              xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
              xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
+             NavigationPage.HasNavigationBar="False"
              >
-    <Grid x:Name="MainContainer">
+    <Grid RowDefinitions="*,*,*">
+        <zxing:ZXingScannerView x:Name="ScannerView" OnScanResult="ScannerView_OnScanResult" Grid.RowSpan="3"/>
+
+        <Button Text="Cancel" Grid.Row="2"
+                VerticalOptions="Center" HorizontalOptions="Center"
+                Clicked="CancelButton_Clicked">
+            
+        </Button>
     </Grid>
 </ContentPage>
