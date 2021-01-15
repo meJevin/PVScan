@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PVScan.Mobile.Views.SignUpPage">
+    <StackLayout VerticalOptions="Center" Margin="20, 0, 20, 0">
+        <Entry Placeholder="Login" HeightRequest="45" HorizontalTextAlignment="Center">
+
+        </Entry>
+        <Entry Placeholder="Password" HeightRequest="45" IsPassword="True" HorizontalTextAlignment="Center">
+
+        </Entry>
+
+        <Button Margin="0,20,0,0" Text="Sign up" CornerRadius="10" HeightRequest="50" Style="{StaticResource PrimaryButton}">
+        </Button>
+
+        <Button Text="Back" TextColor="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" HeightRequest="40" HorizontalOptions="Center"
+                    BackgroundColor="Transparent" Clicked="BackClicked_Handler">
+        </Button>
+    </StackLayout>
+</ContentView>

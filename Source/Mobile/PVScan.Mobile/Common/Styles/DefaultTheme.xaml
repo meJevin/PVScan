@@ -294,8 +294,7 @@
     <Style TargetType="Button">
         <Setter Property="BackgroundColor" Value="{StaticResource White}" />
         <Setter Property="TextColor" Value="{StaticResource NeutralPrimary}" />
-        <Setter Property="BorderColor" Value="{StaticResource NeutralSecondaryAlt}"/>
-        <Setter Property="BorderWidth" Value="1"/>
+        <Setter Property="BorderColor" Value="Transparent"/>
 
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>

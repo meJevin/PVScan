@@ -25,7 +25,7 @@ namespace PVScan.Mobile.Views
                 : OSAppTheme.Dark;
         }
 
-        private async void TabViewItem_TabTapped(object sender, TabTappedEventArgs e)
+        private async void ScanTabItem_TabTapped(object sender, TabTappedEventArgs e)
         {
             if (sender is TabViewItem tabViewItem)
             {
@@ -37,6 +37,11 @@ namespace PVScan.Mobile.Views
             }
 
             await Navigation.PushAsync(new ScanPage(), true);
+        }
+
+        private async void ProfileTabItem_TabTapped(object sender, TabTappedEventArgs e)
+        {
+            await ProfilePage.Initialize();
         }
     }
 }

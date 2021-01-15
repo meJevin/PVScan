@@ -123,6 +123,7 @@
                 VerticalOptions="Center"
                 HorizontalOptions="End"
                 Padding="20, 0"
+                BackgroundColor="Transparent"
                 Source="{AppThemeBinding
                   Light={FontImage FontFamily=FontAwesome, 
                     Glyph={x:Static theme:IconFont.Lightbulb},
@@ -161,7 +162,7 @@
             
             <!-- SCAN TAB -->
             <toolkit:TabViewItem
-                TabTapped="TabViewItem_TabTapped"
+                TabTapped="ScanTabItem_TabTapped"
                 ControlTemplate="{StaticResource BasketTabItemTemplate}"
                 Style="{StaticResource TabItemStyle}">
                 <toolkit:TabViewItem.Icon>
@@ -175,7 +176,8 @@
             <!-- Profile TAB -->
             <toolkit:TabViewItem
                 ControlTemplate="{StaticResource TabItemTemplate}"
-                Style="{StaticResource TabItemStyle}">
+                Style="{StaticResource TabItemStyle}"
+                TabTapped="ProfileTabItem_TabTapped">
                 <toolkit:TabViewItem.Icon>
                     <FontImageSource
                         FontFamily="FontAwesome"
@@ -189,7 +191,7 @@
                         Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource TabSelectedIconColor}}" />
                 </toolkit:TabViewItem.IconSelected>
                 
-                <views:ProfilePage />
+                <views:ProfilePage x:Name="ProfilePage"/>
             </toolkit:TabViewItem>
         </toolkit:TabView>
     </Grid>

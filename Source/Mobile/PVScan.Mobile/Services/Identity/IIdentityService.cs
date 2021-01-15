@@ -9,12 +9,12 @@ namespace PVScan.Mobile.Services.Identity
 {
     public interface IIdentityService
     {
-        Task<LoginResult> LoginAsync();
+        Task LoginAsync(string username, string password);
 
-        Task<LogoutResult> LogoutAsync();
+        Task LogoutAsync();
+
+        Task SignUpAsync(string userName, string password);
 
         bool IsLoggedIn { get; }
-
-        OidcClient Client { get; }
     }
 }
