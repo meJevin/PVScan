@@ -138,7 +138,7 @@
         </Grid>
     </NavigationPage.TitleView>
     <Grid>
-        <toolkit:TabView IsSwipeEnabled="False"
+        <toolkit:TabView IsSwipeEnabled="False" IsTabTransitionEnabled="False"
             Style="{StaticResource CustomTabStyle}">
             <!-- History TAB -->
             <toolkit:TabViewItem
@@ -172,6 +172,15 @@
                         Glyph="{x:Static theme:IconFont.Qrcode}"
                         Color="{AppThemeBinding Dark={StaticResource NeutralLighter}, Light={StaticResource White}}" />
                 </toolkit:TabViewItem.Icon>
+
+                <toolkit:TabViewItem.IconSelected>
+                    <FontImageSource
+                        FontFamily="FontAwesome"
+                        Glyph="{x:Static theme:IconFont.Qrcode}"
+                        Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource ThemeDark}}" />
+                </toolkit:TabViewItem.IconSelected>
+                
+                <views:ScanPage x:Name="ScanPage"/>
             </toolkit:TabViewItem>
             
             <!-- Profile TAB -->

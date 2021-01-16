@@ -11,7 +11,8 @@
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.0.1" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.1874" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.6.0" />  
-    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="3.0.0-beta5" />
+    <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />  
+    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>

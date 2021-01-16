@@ -34,21 +34,32 @@ namespace PVScan.Mobile.Views
                 return;
             }
 
+            if (_currentTabView?.Content == ScanPage)
+            {
+                await ScanPage.Uninitialize();
+            }
+
             _currentTabView = sender as TabViewItem;
 
             await HistoryPage.Initialize();
         }
 
         private async void ScanTabItem_TabTapped(object sender, TabTappedEventArgs e)
-        { 
-            var item = sender as TabViewItem;
-            // Tap animation
-            var tabViewOriginalScale = item.Scale;
-            await item.ScaleTo(tabViewOriginalScale - 0.1, 50, Easing.Linear);
-            await Task.Delay(100);
-            await item.ScaleTo(tabViewOriginalScale, 50, Easing.Linear);
+        {
+            if (_currentTabView == sender)
+            {
+                return;
+            }
 
-            await Navigation.PushAsync(new ScanPage(), true);
+            _currentTabView = sender as TabViewItem;
+
+            // Tap animation
+            var tabViewOriginalScale = _currentTabView.Scale;
+            await _currentTabView.ScaleTo(tabViewOriginalScale - 0.1, 50, Easing.Linear);
+            await Task.Delay(100);
+            await _currentTabView.ScaleTo(tabViewOriginalScale, 50, Easing.Linear);
+
+            await ScanPage.Initialize();
         }
 
         private async void ProfileTabItem_TabTapped(object sender, TabTappedEventArgs e)
@@ -56,6 +67,11 @@ namespace PVScan.Mobile.Views
             if (_currentTabView == sender)
             {
                 return;
+            }
+
+            if (_currentTabView?.Content == ScanPage)
+            {
+                await ScanPage.Uninitialize();
             }
 
             _currentTabView = sender as TabViewItem;

@@ -12,7 +12,7 @@ namespace PVScan.Mobile.Views
     public partial class ProfilePage : ContentView
     {
         uint _animSpeed = 250;
-        double _transY = 200;
+        double _transY = 150;
 
         public ProfilePage()
         {
@@ -25,13 +25,13 @@ namespace PVScan.Mobile.Views
             SignUpPage.TranslationY = _transY;
             SignUpPage.Opacity = 0;
             SignUpPage.IsVisible = false;
+
             LoginPage.TranslationY = _transY;
             LoginPage.Opacity = 0;
-            SignUpPage.IsVisible = false;
+            LoginPage.IsVisible = true;
 
             _ = LoginPage.TranslateTo(0, 0, _animSpeed, Easing.CubicOut);
             await LoginPage.FadeTo(1, _animSpeed, Easing.CubicOut);
-            LoginPage.IsVisible = true;
         }
 
         private async void LoginPage_SignUpClicked(object sender, EventArgs e)
