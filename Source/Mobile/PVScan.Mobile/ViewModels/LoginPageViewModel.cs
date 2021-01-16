@@ -30,7 +30,7 @@ namespace PVScan.Mobile.ViewModels
                 var token = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest()
                 {
                     Address = discoveryDocument.TokenEndpoint,
-                    ClientId = "PVScan.Auth.Mobile",
+                    ClientId = IdentityServerConfiguration.ClientId,
                     GrantType = GrantTypes.Password,
                     Scope = "openid profile PVScan.API",
                     Password = Password,
