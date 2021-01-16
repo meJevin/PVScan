@@ -5,6 +5,7 @@ using PVScan.Auth.ViewModels;
 using PVScan.Database;
 using PVScan.Database.Identity;
 using PVScan.Domain.Entities;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -88,7 +89,7 @@ namespace PVScan.Auth.Controllers
                 return View(vm);
             }
 
-            var user = new ApplicationUser() { UserName = vm.Username };
+            var user = new ApplicationUser() { UserName = vm.Username, Email = vm.Email };
             var result = await _userManager.CreateAsync(user, vm.Password);
 
             var userInfo = new UserInfo()
@@ -102,10 +103,17 @@ namespace PVScan.Auth.Controllers
             {
                 await _signInManager.SignInAsync(user, false);
 
-                return Redirect(vm.ReturnUrl);
+                if (vm.ReturnUrl != null)
+                {
+                    return Redirect(vm.ReturnUrl);
+                }
+                else
+                {
+                    return Ok();
+                }
             }
 
-            return View();
+            return BadRequest(result.Errors.ToList().Select(e => e.Description));
         }
 
         public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)

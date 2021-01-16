@@ -80,7 +80,7 @@ namespace PVScan.Auth
                 new Client {
                     ClientId = "PVScan.Auth.Mobile",
 
-                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     RequirePkce = true,
                     RequireClientSecret = false,
 
