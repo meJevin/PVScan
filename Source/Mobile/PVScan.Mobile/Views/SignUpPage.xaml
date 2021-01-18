@@ -7,28 +7,42 @@
     <ContentView.BindingContext>
         <viewmodels:SignUpPageViewModel/>
     </ContentView.BindingContext>
-    
-    <StackLayout VerticalOptions="Center" Margin="20, 0, 20, 0">
-        <Entry Placeholder="Login" HeightRequest="45"
+
+    <Grid Margin="20, 0, 20, 0">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Label x:Name="SignUpMessageLabel" Opacity="0"
+               VerticalOptions="Center" HorizontalOptions="Center">
+            
+        </Label>
+        
+        <StackLayout Grid.RowSpan="3"
+            VerticalOptions="Center">
+            <Entry Placeholder="Login" HeightRequest="45"
                IsSpellCheckEnabled="False" Text="{Binding Login}">
 
-        </Entry>
-        <Entry Placeholder="Email" HeightRequest="45"
+            </Entry>
+            <Entry Placeholder="Email" HeightRequest="45"
                IsSpellCheckEnabled="False"
                Keyboard="Email" Text="{Binding Email}">
 
-        </Entry>
-        <Entry Placeholder="Password" HeightRequest="45" IsPassword="True"
+            </Entry>
+            <Entry Placeholder="Password" HeightRequest="45" IsPassword="True"
                IsSpellCheckEnabled="False" Text="{Binding Password}">
 
-        </Entry>
+            </Entry>
 
-        <Button Margin="0,20,0,0" Text="Sign up" CornerRadius="10" HeightRequest="50" Style="{StaticResource PrimaryButton}"
+            <Button Margin="0,20,0,0" Text="Sign up" CornerRadius="10" HeightRequest="50" Style="{StaticResource PrimaryButton}"
                 Command="{Binding SignUpCommand}">
-        </Button>
+            </Button>
 
-        <Button Text="Back" TextColor="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" HeightRequest="40" HorizontalOptions="Center"
+            <Button Text="Back" TextColor="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" HeightRequest="40" HorizontalOptions="Center"
                     BackgroundColor="Transparent" Clicked="BackClicked_Handler">
-        </Button>
-    </StackLayout>
+            </Button>
+        </StackLayout>
+    </Grid>
 </ContentView>

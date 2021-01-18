@@ -1,9 +1,6 @@
 ﻿using MvvmHelpers;
 using PVScan.Mobile.Services.Identity;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+using PVScan.Mobile.ViewModels.Messages;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -11,30 +8,30 @@ namespace PVScan.Mobile.ViewModels
 {
     public class SignUpPageViewModel : BaseViewModel
     {
+        readonly IIdentityService identityService;
+
         public SignUpPageViewModel()
         {
+            identityService = new IdentityService();
+
             SignUpCommand = new Command(async () =>
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri(IdentityServerConfiguration.Authority);
+                var result = await identityService.SignUpAsync(Login, Password, Email);
 
-                var content = new FormUrlEncodedContent(new Dictionary<string, string> 
+                if (result)
                 {
-                    { "Username", Login },
-                    { "Password", Password },
-                    { "Email", Email },
-                });
-
-                var result = await httpClient.PostAsync("/Auth/Register", content);
-
-                if (result.IsSuccessStatusCode 
-                    || result.StatusCode == System.Net.HttpStatusCode.Redirect)
-                {
-                    // Success
+                    MessagingCenter.Send(this, nameof(SuccessfulSignUpMessage), new SuccessfulSignUpMessage()
+                    {
+                        Message = "You've successfuly signed up!",
+                    });
                 }
                 else
                 {
-                    // Error
+                    MessagingCenter.Send(this, nameof(FailedSignUpMessage), new FailedSignUpMessage()
+                    {
+                        // Todo: add error messsage from server
+                        Message = "Could not sign up!",
+                    });
                 }
             });
         }

@@ -1,50 +1,20 @@
-﻿using IdentityModel.Client;
-using MvvmHelpers;
+﻿using MvvmHelpers;
 using PVScan.Mobile.Services.Identity;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
-using static IdentityModel.OidcConstants;
 
 namespace PVScan.Mobile.ViewModels
 {
     public class LoginPageViewModel : BaseViewModel
     {
+        readonly IIdentityService identityService;
+
         public LoginPageViewModel()
         {
+            identityService = new IdentityService();
+
             LoginCommand = new Command(async () =>
             {
-                HttpClient httpClient = new HttpClient();
-
-                // Todo: enable https in production
-                DiscoveryDocumentResponse discoveryDocument = 
-                    await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest() 
-                    {
-                        Address = IdentityServerConfiguration.Authority,
-                        Policy = { RequireHttps = false },
-                    });
-
-                var token = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest()
-                {
-                    Address = discoveryDocument.TokenEndpoint,
-                    ClientId = IdentityServerConfiguration.ClientId,
-                    GrantType = GrantTypes.Password,
-                    Scope = "openid profile PVScan.API",
-                    Password = Password,
-                    UserName = Login,
-                });
-
-                if (token.AccessToken != null)
-                {
-                    // Success
-                }
-                else
-                {
-
-                }
             });
         }
 
