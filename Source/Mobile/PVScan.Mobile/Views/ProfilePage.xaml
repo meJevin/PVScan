@@ -17,5 +17,6 @@
     <Grid x:Name="MainContainer">
         <views:LoginPage x:Name="LoginPage" SignUpClicked="LoginPage_SignUpClicked"/>
         <views:SignUpPage x:Name="SignUpPage" BackClicked="SignUpPage_BackClicked"/>
+        <views:LoggedInPage x:Name="LoggedInPage"/>
     </Grid>
 </ContentView>

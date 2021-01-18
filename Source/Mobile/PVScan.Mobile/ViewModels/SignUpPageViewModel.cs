@@ -12,7 +12,7 @@ namespace PVScan.Mobile.ViewModels
 
         public SignUpPageViewModel()
         {
-            identityService = new IdentityService();
+            identityService = IdentityService.Instance;
 
             SignUpCommand = new Command(async () =>
             {

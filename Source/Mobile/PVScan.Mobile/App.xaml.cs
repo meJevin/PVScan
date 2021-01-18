@@ -1,4 +1,5 @@
-﻿using PVScan.Mobile.Views;
+﻿using PVScan.Mobile.Services.Identity;
+using PVScan.Mobile.Views;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
@@ -20,8 +21,9 @@ namespace PVScan.Mobile
             MainPage = navigationPage;
         }
 
-        protected override void OnStart()
+        protected override async void OnStart()
         {
+            await IdentityService.Instance.Initialize();
         }
 
         protected override void OnSleep()

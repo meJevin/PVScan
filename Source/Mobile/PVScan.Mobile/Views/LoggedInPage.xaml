@@ -1,10 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
              x:Class="PVScan.Mobile.Views.LoggedInPage">
-  <ContentView.Content>
-      <StackLayout>
-          <Label Text="Hello Xamarin.Forms!" />
-      </StackLayout>
-  </ContentView.Content>
+
+    <ContentView.BindingContext>
+        <viewmodels:LoggedInPageViewModel/>
+    </ContentView.BindingContext>
+    
+    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+        <Label Text="LOGGED IN PAGE"/>
+
+        <Button Text="Log out" Command="{Binding LogoutCommand}"/>
+    </StackLayout>
 </ContentView>
