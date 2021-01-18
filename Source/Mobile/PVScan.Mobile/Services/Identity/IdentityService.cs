@@ -45,6 +45,20 @@ namespace PVScan.Mobile.Services.Identity
             }
         }
 
+        private static readonly Lazy<IIdentityService> _instance 
+            = new Lazy<IIdentityService>(() => new IdentityService());
+        public static IIdentityService Instance
+        {
+            get
+            {
+                return _instance.Value;
+            }
+        }
+
+        private IdentityService()
+        {
+        }
+
         public async Task Initialize()
         {
             // Check auth token in storage and check it's validity
@@ -77,6 +91,11 @@ namespace PVScan.Mobile.Services.Identity
 
         public async Task<bool> LoginAsync(string username, string password)
         {
+            if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password))
+            {
+                return false;
+            }
+
             // Login via token endpoint using password flow
             HttpClient httpClient = new HttpClient();
 
@@ -124,6 +143,29 @@ namespace PVScan.Mobile.Services.Identity
         public async Task<bool> LogoutAsync()
         {
             // Logout via logout endpoint and clear local storage
+            HttpClient httpClient = new HttpClient();
+
+            DiscoveryDocumentResponse discoveryDocument =
+                await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
+                {
+                    Address = IdentityServerConfiguration.Authority,
+                    Policy = { RequireHttps = false },
+                });
+
+            // Todo: this for some reason can not find token on IS4 auth server but logout still happens
+            var revoke = await httpClient.RevokeTokenAsync(new TokenRevocationRequest()
+            {
+                Address = discoveryDocument.RevocationEndpoint,
+                ClientId = IdentityServerConfiguration.ClientId,
+                Token = _accessToken,
+                TokenTypeHint = TokenTypes.AccessToken,
+            });
+
+            if (revoke.IsError)
+            {
+                return false;
+            }
+
             _accessToken = null;
             _currentUserInfo = null;
 
