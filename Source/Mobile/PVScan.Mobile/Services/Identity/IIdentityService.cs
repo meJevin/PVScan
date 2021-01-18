@@ -7,14 +7,19 @@ using System.Threading.Tasks;
 
 namespace PVScan.Mobile.Services.Identity
 {
+    // Todo: remake this to support errors reported from backend about different failures
     public interface IIdentityService
     {
-        Task LoginAsync(string username, string password);
+        Task Initialize();
 
-        Task LogoutAsync();
+        Task<bool> LoginAsync(string username, string password);
 
-        Task SignUpAsync(string userName, string password);
+        Task<bool> LogoutAsync();
 
-        bool IsLoggedIn { get; }
+        Task<bool> SignUpAsync(string username, string password, string email);
+
+        UserInfo CurrentUserInfo { get; }
+
+        string AccessToken { get; }
     }
 }
