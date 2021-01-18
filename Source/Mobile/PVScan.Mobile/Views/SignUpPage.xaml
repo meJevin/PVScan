@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+             x:Class="PVScan.Mobile.Views.SignUpPage">
+
+    <ContentView.BindingContext>
+        <viewmodels:SignUpPageViewModel/>
+    </ContentView.BindingContext>
+
+    <Grid Margin="20, 0, 20, 0">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Label x:Name="SignUpMessageLabel" Opacity="0"
+               VerticalOptions="Center" HorizontalOptions="Center">
+            
+        </Label>
+        
+        <StackLayout Grid.RowSpan="3"
+            VerticalOptions="Center">
+            <Entry Placeholder="Login" HeightRequest="45"
+               IsSpellCheckEnabled="False" Text="{Binding Login}">
+
+            </Entry>
+            <Entry Placeholder="Email" HeightRequest="45"
+               IsSpellCheckEnabled="False"
+               Keyboard="Email" Text="{Binding Email}">
+
+            </Entry>
+            <Entry Placeholder="Password" HeightRequest="45" IsPassword="True"
+               IsSpellCheckEnabled="False" Text="{Binding Password}">
+
+            </Entry>
+
+            <Button Margin="0,20,0,0" Text="Sign up" CornerRadius="10" HeightRequest="50" Style="{StaticResource PrimaryButton}"
+                Command="{Binding SignUpCommand}">
+            </Button>
+
+            <Button Text="Back" TextColor="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" HeightRequest="40" HorizontalOptions="Center"
+                    BackgroundColor="Transparent" Clicked="BackClicked_Handler">
+            </Button>
+        </StackLayout>
+    </Grid>
+</ContentView>

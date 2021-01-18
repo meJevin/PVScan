@@ -9,11 +9,16 @@ using Xamarin.Forms.Xaml;
 
 namespace PVScan.Mobile.Views
 {
-    public partial class SettingsPage : ContentView
+    public partial class HistoryPage : ContentView
     {
-        public SettingsPage()
+        public HistoryPage()
         {
             InitializeComponent();
+        }
+
+        public async Task Initialize()
+        {
+            return;
         }
     }
 }

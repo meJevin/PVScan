@@ -42,6 +42,7 @@ namespace PVScan.Auth
                 config.Cookie.Name = "PVScan.Auth.Cookie";
                 config.LoginPath = "/Auth/Login";
                 config.LogoutPath = "/Auth/Logout";
+                config.Cookie.SameSite = SameSiteMode.Lax;
             });
 
             services.AddAuthentication().AddGoogle(options =>

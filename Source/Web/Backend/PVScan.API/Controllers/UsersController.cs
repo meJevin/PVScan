@@ -25,8 +25,8 @@ namespace PVScan.API.Controllers
         }
 
         [HttpGet]
-        [Route("info")]
-        public async Task<IActionResult> Info(GetInfoViewModel data)
+        [Route("current")]
+        public async Task<IActionResult> Current()
         {
             var userInfo = await _context.UserInfos
                 .Where(u => u.UserId == UserId)
@@ -37,12 +37,20 @@ namespace PVScan.API.Controllers
                 return NotFound();
             }
 
-            return Ok(userInfo);
+            return Ok(new CurrentResponseViewModel() 
+            {
+                BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
+                BarcodesScanned = userInfo.BarcodesScanned,
+                Experience = userInfo.Experience,
+                Level = userInfo.Level,
+                IGLink = userInfo.IGLink,
+                VKLink = userInfo.VKLink,
+            });
         }
 
-        [HttpPut]
-        [Route("info")]
-        public async Task<IActionResult> Info(ChangeInfoViewModel data)
+        [HttpPost]
+        [Route("change")]
+        public async Task<IActionResult> Change(ChangeRequestViewModel data)
         {
             var userInfo = await _context.UserInfos
                 .Where(u => u.UserId == UserId)

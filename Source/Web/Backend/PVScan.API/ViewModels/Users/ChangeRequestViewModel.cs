@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace PVScan.API.ViewModels.Users
 {
-    public class GetInfoViewModel
+    public class ChangeRequestViewModel
     {
+        public string VKLink { get; set; }
+        public string IGLink { get; set; }
     }
 }

@@ -112,7 +112,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Label VerticalTextAlignment="Center" 
+            <Label VerticalTextAlignment="Center"
                    HorizontalTextAlignment="Center"
                    Grid.ColumnSpan="2">
                 PVScan
@@ -123,6 +123,7 @@
                 VerticalOptions="Center"
                 HorizontalOptions="End"
                 Padding="20, 0"
+                BackgroundColor="Transparent"
                 Source="{AppThemeBinding
                   Light={FontImage FontFamily=FontAwesome, 
                     Glyph={x:Static theme:IconFont.Lightbulb},
@@ -137,31 +138,32 @@
         </Grid>
     </NavigationPage.TitleView>
     <Grid>
-        <toolkit:TabView IsSwipeEnabled="False"
+        <toolkit:TabView IsSwipeEnabled="False" IsTabTransitionEnabled="False"
             Style="{StaticResource CustomTabStyle}">
-            <!-- USER TAB -->
+            <!-- History TAB -->
             <toolkit:TabViewItem
+                TabTapped="HistoryTabItem_TabTapped"
                 ControlTemplate="{StaticResource TabItemTemplate}"
                 Style="{StaticResource TabItemStyle}">
                 <toolkit:TabViewItem.Icon>
                     <FontImageSource
                         FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.User}"
+                        Glyph="{x:Static theme:IconFont.History}"
                         Color="{AppThemeBinding Dark={StaticResource NeutralDark}, Light={StaticResource TabIconColor}}" />
                 </toolkit:TabViewItem.Icon>
                 <toolkit:TabViewItem.IconSelected>
                     <FontImageSource
                         FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.User}"
+                        Glyph="{x:Static theme:IconFont.History}"
                         Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource TabSelectedIconColor}}" />
                 </toolkit:TabViewItem.IconSelected>
                 
-                <views:UserPage />
+                <views:HistoryPage x:Name="HistoryPage"/>
             </toolkit:TabViewItem>
             
             <!-- SCAN TAB -->
             <toolkit:TabViewItem
-                TabTapped="TabViewItem_TabTapped"
+                TabTapped="ScanTabItem_TabTapped"
                 ControlTemplate="{StaticResource BasketTabItemTemplate}"
                 Style="{StaticResource TabItemStyle}">
                 <toolkit:TabViewItem.Icon>
@@ -170,26 +172,36 @@
                         Glyph="{x:Static theme:IconFont.Qrcode}"
                         Color="{AppThemeBinding Dark={StaticResource NeutralLighter}, Light={StaticResource White}}" />
                 </toolkit:TabViewItem.Icon>
+
+                <toolkit:TabViewItem.IconSelected>
+                    <FontImageSource
+                        FontFamily="FontAwesome"
+                        Glyph="{x:Static theme:IconFont.Qrcode}"
+                        Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource ThemeDark}}" />
+                </toolkit:TabViewItem.IconSelected>
+                
+                <views:ScanPage x:Name="ScanPage"/>
             </toolkit:TabViewItem>
             
-            <!-- SETTINGS TAB -->
+            <!-- Profile TAB -->
             <toolkit:TabViewItem
                 ControlTemplate="{StaticResource TabItemTemplate}"
-                Style="{StaticResource TabItemStyle}">
+                Style="{StaticResource TabItemStyle}"
+                TabTapped="ProfileTabItem_TabTapped">
                 <toolkit:TabViewItem.Icon>
                     <FontImageSource
                         FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Cog}"
+                        Glyph="{x:Static theme:IconFont.User}"
                         Color="{AppThemeBinding Dark={StaticResource NeutralDark}, Light={StaticResource TabIconColor}}" />
                 </toolkit:TabViewItem.Icon>
                 <toolkit:TabViewItem.IconSelected>
                     <FontImageSource
                         FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Cog}"
+                        Glyph="{x:Static theme:IconFont.User}"
                         Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource TabSelectedIconColor}}" />
                 </toolkit:TabViewItem.IconSelected>
                 
-                <views:SettingsPage />
+                <views:ProfilePage x:Name="ProfilePage"/>
             </toolkit:TabViewItem>
         </toolkit:TabView>
     </Grid>

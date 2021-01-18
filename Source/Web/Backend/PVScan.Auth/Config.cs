@@ -76,6 +76,24 @@ namespace PVScan.Auth
 
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = false,
+                },
+                new Client {
+                    ClientId = "PVScan.Auth.Mobile",
+
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+
+                    RedirectUris = { "pvscan://callback" },
+
+                    AllowedScopes = {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "PVScan.API",
+                    },
+
+                    AllowAccessTokensViaBrowser = true,
+                    RequireConsent = false,
                 }
             };
     }

@@ -9,9 +9,10 @@ using Xamarin.Forms.Xaml;
 
 namespace PVScan.Mobile.Views
 {
-    public partial class UserPage : ContentView
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class LoggedInPage : ContentView
     {
-        public UserPage()
+        public LoggedInPage()
         {
             InitializeComponent();
         }

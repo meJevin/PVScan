@@ -9,12 +9,13 @@ using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Xamarin.Forms.Xaml;
+using ZXing;
 using ZXing.Mobile;
 using ZXing.Net.Mobile.Forms;
 
 namespace PVScan.Mobile.Views
 {
-    public partial class ScanPage : ContentPage
+    public partial class ScanPage : ContentView
     {
         ZXingScannerView ScannerView;
 
@@ -44,35 +45,27 @@ namespace PVScan.Mobile.Views
             MainContainer.Children.Add(ScannerView);
         }
 
-        protected override void OnAppearing()
+        public async Task Initialize()
         {
-            ScannerView.IsScanning = true;
             ScannerView.IsAnalyzing = true;
+            ScannerView.IsScanning = true;
         }
 
-        protected override void OnDisappearing()
+        public async Task Uninitialize()
         {
-            ScannerView.IsScanning = false;
             ScannerView.IsAnalyzing = false;
+            ScannerView.IsScanning = false;
         }
 
-        private void ScannerView_OnScanResult(ZXing.Result result)
+        private async void ScannerView_OnScanResult(ZXing.Result result)
         {
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                // Stop analysis until we navigate away so we don't keep reading barcodes
-                ScannerView.IsAnalyzing = false;
+            // Stop analysis until we navigate away so we don't keep reading barcodes
+            ScannerView.IsAnalyzing = false;
 
-                // Show an alert
-                await DisplayAlert("Scanned Barcode", result.Text, "OK");
+            // Show an alert
+            Console.WriteLine($"\n\nSCANNED: {result.Text} {Enum.GetName(typeof(BarcodeFormat), result.BarcodeFormat)}");
 
-                ScannerView.IsAnalyzing = true;
-            });
-        }
-
-        private async void ImageButton_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PopAsync();
+            ScannerView.IsAnalyzing = true;
         }
     }
 }
