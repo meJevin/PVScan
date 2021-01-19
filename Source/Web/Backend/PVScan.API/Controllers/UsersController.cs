@@ -62,7 +62,7 @@ namespace PVScan.API.Controllers
                 .Where(u => u.UserId == UserId)
                 .FirstOrDefaultAsync();
 
-            if (userInfo == null || aspUser == null)
+            if (userInfo == null)
             {
                 return NotFound();
             }
