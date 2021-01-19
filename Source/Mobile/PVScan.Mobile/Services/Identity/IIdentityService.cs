@@ -18,8 +18,6 @@ namespace PVScan.Mobile.Services.Identity
 
         Task<bool> SignUpAsync(string username, string password, string email);
 
-        UserInfo CurrentUserInfo { get; }
-
         string AccessToken { get; }
     }
 }

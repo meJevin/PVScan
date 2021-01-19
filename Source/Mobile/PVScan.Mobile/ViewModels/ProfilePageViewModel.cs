@@ -28,7 +28,7 @@ namespace PVScan.Mobile.ViewModels
         {
             get
             {
-                return identityService.CurrentUserInfo != null;
+                return identityService.AccessToken != null;
             }
         }
     }

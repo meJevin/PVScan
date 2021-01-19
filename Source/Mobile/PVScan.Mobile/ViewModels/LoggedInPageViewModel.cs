@@ -6,6 +6,7 @@ using PVScan.Mobile.ViewModels.Messages;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -47,33 +48,40 @@ namespace PVScan.Mobile.ViewModels
 
                 var response = await client.PostAsync("api/v1/users/change", content);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    // Good
-                    identityService.CurrentUserInfo.IGLink = UserInfo.IGLink;
-                    identityService.CurrentUserInfo.VKLink = UserInfo.VKLink;
-                }
+                await Initialize();
+            });
 
-                Initialize();
+            RefreshCommand = new Command(async () =>
+            {
+                IsRefreshing = true;
+                OnPropertyChanged(nameof(IsRefreshing));
+
+                await Initialize();
+
+                IsRefreshing = false;
+                OnPropertyChanged(nameof(IsRefreshing));
             });
         }
 
-        public void Initialize()
+        public async Task Initialize()
         {
-            UserInfo = new UserInfo()
-            {
-                Email = identityService.CurrentUserInfo.Email,
-                Username = identityService.CurrentUserInfo.Username,
-                BarcodeFormatsScanned = identityService.CurrentUserInfo.BarcodeFormatsScanned,
-                BarcodesScanned = identityService.CurrentUserInfo.BarcodesScanned,
-                Experience = identityService.CurrentUserInfo.Experience,
-                Level = identityService.CurrentUserInfo.Level,
-                IGLink = identityService.CurrentUserInfo.IGLink,
-                VKLink = identityService.CurrentUserInfo.VKLink,
-            };
+            HttpClient httpClient = HttpClientUtils.APIHttpClientWithToken(identityService.AccessToken);
+            var result = await httpClient.GetAsync("api/v1/users/current");
 
-            OnPropertyChanged("UserInfo");
+            if (!result.IsSuccessStatusCode)
+            {
+                // Send message to UI that there's an error
+                return;
+            }
+
+            var strContent = await result.Content.ReadAsStringAsync();
+
+            UserInfo = JsonConvert.DeserializeObject<UserInfo>(strContent);
+
+            OnPropertyChanged(nameof(UserInfo));
         }
+
+        public bool IsRefreshing { get; set; } = false;
 
         public ICommand RefreshCommand { get; }
 

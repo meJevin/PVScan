@@ -8,61 +8,64 @@
         <viewmodels:LoggedInPageViewModel/>
     </ContentView.BindingContext>
 
-    <ScrollView>
-        <StackLayout HorizontalOptions="Center">
+    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+        <ScrollView>
+            <StackLayout HorizontalOptions="Center">
 
-            <Label Text="Profile" HorizontalOptions="Center" FontSize="24" Margin="10"/>
+                <Label Text="Profile" HorizontalOptions="Center" FontSize="24" Margin="10"/>
 
-            <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
-                <Label Text="Username" VerticalOptions="Center" FontSize="18"/>
-                <Entry Text="{Binding UserInfo.Username}" Grid.Column="1" 
+                <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
+                    <Label Text="Username" VerticalOptions="Center" FontSize="18"/>
+                    <Entry Text="{Binding UserInfo.Username}" Grid.Column="1" 
                            BackgroundColor="Transparent" IsReadOnly="True"/>
-            </Grid>
+                </Grid>
 
-            <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
-                <Label Text="E-mail address" VerticalOptions="Center" FontSize="18"/>
-                <Entry Text="{Binding UserInfo.Email}" Grid.Column="1" 
+                <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
+                    <Label Text="E-mail address" VerticalOptions="Center" FontSize="18"/>
+                    <Entry Text="{Binding UserInfo.Email}" Grid.Column="1" 
                            BackgroundColor="Transparent" IsReadOnly="True"/>
-            </Grid>
+                </Grid>
 
-            <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
-                <Label Text="VK" VerticalOptions="Center" FontSize="18"/>
-                <Entry Text="{Binding UserInfo.VKLink}" Grid.Column="1" 
+                <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
+                    <Label Text="VK" VerticalOptions="Center" FontSize="18"/>
+                    <Entry Text="{Binding UserInfo.VKLink}" Grid.Column="1" 
                            BackgroundColor="Transparent"/>
-            </Grid>
+                </Grid>
 
-            <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
-                <Label Text="Instagram" VerticalOptions="Center" FontSize="18"/>
-                <Entry Text="{Binding UserInfo.IGLink}" Grid.Column="1" 
+                <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
+                    <Label Text="Instagram" VerticalOptions="Center" FontSize="18"/>
+                    <Entry Text="{Binding UserInfo.IGLink}" Grid.Column="1" 
                            BackgroundColor="Transparent"/>
-            </Grid>
+                </Grid>
 
-            <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
-                <Label Text="Barcodes scanned" VerticalOptions="Center" FontSize="18"/>
-                <Entry Text="{Binding UserInfo.BarcodesScanned}" Grid.Column="1" 
+                <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
+                    <Label Text="Barcodes scanned" VerticalOptions="Center" FontSize="18"/>
+                    <Entry Text="{Binding UserInfo.BarcodesScanned}" Grid.Column="1" 
                            BackgroundColor="Transparent" IsReadOnly="True"/>
-            </Grid>
+                </Grid>
 
-            <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
-                <Label Text="Barcode formats scanned" VerticalOptions="Center" FontSize="18"/>
-                <Entry Text="{Binding UserInfo.BarcodesScanned}" Grid.Column="1" 
+                <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
+                    <Label Text="Barcode formats scanned" VerticalOptions="Center" FontSize="18"/>
+                    <Entry Text="{Binding UserInfo.BarcodesScanned}" Grid.Column="1" 
                            BackgroundColor="Transparent" IsReadOnly="True"/>
-            </Grid>
+                </Grid>
 
-            <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
-                <Label Text="Level" VerticalOptions="Center" FontSize="18"/>
-                <Entry Text="{Binding UserInfo.Level}" Grid.Column="1" 
+                <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
+                    <Label Text="Level" VerticalOptions="Center" FontSize="18"/>
+                    <Entry Text="{Binding UserInfo.Level}" Grid.Column="1" 
                            BackgroundColor="Transparent" IsReadOnly="True"/>
-            </Grid>
+                </Grid>
 
-            <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
-                <Label Text="Experience" VerticalOptions="Center" FontSize="18"/>
-                <Entry Text="{Binding UserInfo.Experience}" Grid.Column="1" 
+                <Grid ColumnDefinitions="Auto,*" Style="{StaticResource LabelEntryGrid}" Padding="15, 5">
+                    <Label Text="Experience" VerticalOptions="Center" FontSize="18"/>
+                    <Entry Text="{Binding UserInfo.Experience}" Grid.Column="1" 
                            BackgroundColor="Transparent" IsReadOnly="True"/>
-            </Grid>
+                </Grid>
 
-            <Button Text="Save" Command="{Binding SaveProfileCommand}" Margin="20,10,20,0" Style="{StaticResource PrimaryButton}"/>
-            <Button Text="Log out" Command="{Binding LogoutCommand}" Margin="20,0,20,40"/>
-        </StackLayout>
-    </ScrollView>
+                <Button Text="Save" Command="{Binding SaveProfileCommand}" Margin="20,10,20,0" Style="{StaticResource PrimaryButton}"
+                        IsEnabled="{Binding Path=!IsRefreshing}"/>
+                <Button Text="Log out" Command="{Binding LogoutCommand}" Margin="20,0,20,40"/>
+            </StackLayout>
+        </ScrollView>
+    </RefreshView>
 </ContentView>
