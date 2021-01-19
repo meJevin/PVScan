@@ -36,6 +36,13 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Can we use your camera</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+	  <key>NSAllowsArbitraryLoads</key>
+      <true/>
+	  <key>NSAllowsLocalNetworking</key>
+	  <true/>
+	</dict>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
