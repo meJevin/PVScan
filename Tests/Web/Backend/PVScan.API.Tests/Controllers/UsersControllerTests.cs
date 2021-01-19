@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PVScan.API.Controllers;
 using PVScan.API.ViewModels.Users;
 using PVScan.Domain.Entities;
@@ -29,7 +30,7 @@ namespace PVScan.API.Tests.Controllers
             var resultObject = result.Value as CurrentResponseViewModel;
 
             // Assert
-            Assert.NotNull(resultObject);
+            Assert.NotNull(result);
             Assert.Equal(10, resultObject.BarcodesScanned);
         }
 
@@ -47,11 +48,11 @@ namespace PVScan.API.Tests.Controllers
             _context.SaveChanges();
 
             // Act
-            var result = (await controller.Change(new ChangeRequestViewModel() { IGLink = "test" }) as ObjectResult);
-            var resultObject = result.Value as UserInfo;
+            var result = (await controller.Change(new ChangeRequestViewModel() { IGLink = "test" }) as OkResult);
+            var resultObject = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserId == MockUserId);
 
             // Assert
-            Assert.NotNull(resultObject);
+            Assert.NotNull(result);
             Assert.Equal("test", resultObject.IGLink);
         }
     }
