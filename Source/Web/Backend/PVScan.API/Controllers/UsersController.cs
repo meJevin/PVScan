@@ -32,7 +32,11 @@ namespace PVScan.API.Controllers
                 .Where(u => u.UserId == UserId)
                 .FirstOrDefaultAsync();
 
-            if (userInfo == null)
+            var aspUser = await _context.Users
+                .Where(u => u.Id == UserId)
+                .FirstOrDefaultAsync();
+
+            if (userInfo == null || aspUser == null)
             {
                 return NotFound();
             }
@@ -45,6 +49,8 @@ namespace PVScan.API.Controllers
                 Level = userInfo.Level,
                 IGLink = userInfo.IGLink,
                 VKLink = userInfo.VKLink,
+                Email = aspUser.Email,
+                Username = aspUser.UserName,
             });
         }
 
@@ -66,7 +72,7 @@ namespace PVScan.API.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(userInfo);
+            return Ok();
         }
     }
 }

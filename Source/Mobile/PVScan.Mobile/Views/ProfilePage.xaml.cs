@@ -58,6 +58,8 @@ namespace PVScan.Mobile.Views
                 // Logged in already, show current profile page
                 LoggedInPage.IsVisible = true;
 
+                (LoggedInPage.BindingContext as LoggedInPageViewModel).Initialize();
+
                 await LoggedInPage.FadeTo(1, _animSpeed, Easing.CubicOut);
             }
             else

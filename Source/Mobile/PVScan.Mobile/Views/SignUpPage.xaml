@@ -36,11 +36,11 @@
 
             </Entry>
 
-            <Button Margin="0,20,0,0" Text="Sign up" CornerRadius="10" HeightRequest="50" Style="{StaticResource PrimaryButton}"
+            <Button Margin="0,20,0,0" Text="Sign up" Style="{StaticResource PrimaryButton}"
                 Command="{Binding SignUpCommand}">
             </Button>
 
-            <Button Text="Back" TextColor="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" HeightRequest="40" HorizontalOptions="Center"
+            <Button Text="Back" TextColor="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" HorizontalOptions="Center"
                     BackgroundColor="Transparent" Clicked="BackClicked_Handler">
             </Button>
         </StackLayout>

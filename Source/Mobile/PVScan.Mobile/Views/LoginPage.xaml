@@ -32,7 +32,7 @@
                     BackgroundColor="Transparent">
             </Button>
 
-            <Button Text="Log in" CornerRadius="10" HeightRequest="50" Style="{StaticResource PrimaryButton}"
+            <Button Text="Log in" Style="{StaticResource PrimaryButton}"
                 Command="{Binding LoginCommand}">
             </Button>
 
@@ -51,7 +51,7 @@
                 </BoxView>
             </Grid>
 
-            <Button Text="Sign up" CornerRadius="10" HeightRequest="50" Clicked="SignUpClicked_Handler">
+            <Button Text="Sign up" Clicked="SignUpClicked_Handler">
 
             </Button>
         </StackLayout>

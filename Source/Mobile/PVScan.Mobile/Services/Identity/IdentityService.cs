@@ -27,15 +27,6 @@ namespace PVScan.Mobile.Services.Identity
 
     public class IdentityService : IIdentityService
     {
-        private UserInfo _currentUserInfo;
-        public UserInfo CurrentUserInfo
-        {
-            get
-            {
-                return _currentUserInfo;
-            }
-        }
-
         private string _accessToken;
         public string AccessToken
         {
@@ -77,16 +68,6 @@ namespace PVScan.Mobile.Services.Identity
                     // User has to login again
                 }
             }
-            else
-            {
-                _currentUserInfo = await GetCurrentUserInfo();
-
-                if (_currentUserInfo == null)
-                {
-                    // Todo: Whoa!! What an error
-                    _accessToken = null;
-                }
-            }
         }
 
         public async Task<bool> LoginAsync(string username, string password)
@@ -124,15 +105,6 @@ namespace PVScan.Mobile.Services.Identity
 
             _accessToken = token.AccessToken;
 
-            _currentUserInfo = await GetCurrentUserInfo();
-
-            if (_currentUserInfo == null)
-            {
-                // Todo: Whoa!! What an error
-                _accessToken = null;
-                return false;
-            }
-
             Preferences.Set("AccessToken", _accessToken);
             Preferences.Set("Username", username);
             Preferences.Set("Password", password);
@@ -167,7 +139,6 @@ namespace PVScan.Mobile.Services.Identity
             }
 
             _accessToken = null;
-            _currentUserInfo = null;
 
             Preferences.Set("AccessToken", null);
             Preferences.Set("Username", null);
@@ -198,21 +169,6 @@ namespace PVScan.Mobile.Services.Identity
             }
 
             return true;
-        }
-
-        private async Task<UserInfo> GetCurrentUserInfo()
-        {
-            HttpClient httpClient = HttpClientUtils.APIHttpClientWithToken(_accessToken);
-            var result = await httpClient.GetAsync("api/v1/users/current");
-
-            if (!result.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            var resultUserInfo = JsonConvert.DeserializeObject<UserInfo>(await result.Content.ReadAsStringAsync());
-
-            return resultUserInfo;
         }
 
         private async Task<bool> ValidateToken(string token)

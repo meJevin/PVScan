@@ -36,6 +36,9 @@ namespace PVScan.API.Tests
                     new Claim(ClaimTypes.Name, MockUserName),
                     new Claim(ClaimTypes.NameIdentifier, MockUserId),
                 }, "mock"));
+
+            _context.Users.Add(new ApplicationUser() { Id = MockUserId });
+            _context.SaveChanges();
         }
 
         public void SeedDatabase()

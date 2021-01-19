@@ -12,5 +12,7 @@ namespace PVScan.Mobile.Models
         public int Level { get; set; }
         public string VKLink { get; set; }
         public string IGLink { get; set; }
+        public string Email { get; set; }
+        public string Username { get; set; }
     }
 }
