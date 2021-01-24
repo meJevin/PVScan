@@ -70,15 +70,15 @@
       <Version>1.6.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.CommunityToolkit">
-      <Version>1.0.1</Version>
+      <Version>1.0.2</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.1874" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.1905" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.0" />
     <PackageReference Include="ZXing.Net.Mobile">
-      <Version>2.4.1</Version>
+      <Version>3.1.0-beta2</Version>
     </PackageReference>
     <PackageReference Include="ZXing.Net.Mobile.Forms">
-      <Version>2.4.1</Version>
+      <Version>3.1.0-beta2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
