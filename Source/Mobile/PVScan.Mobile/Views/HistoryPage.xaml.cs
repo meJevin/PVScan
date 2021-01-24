@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PVScan.Mobile.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace PVScan.Mobile.Views
 
         public async Task Initialize()
         {
-            return;
+            await (BindingContext as HistoryPageViewModel).Initialize();
         }
     }
 }
