@@ -29,11 +29,12 @@ namespace PVScan.Mobile.Views
                 {
                     TryHarder = true,
                     AutoRotate = true,
-                    PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE, ZXing.BarcodeFormat.All_1D },
+                    PossibleFormats = new List<BarcodeFormat> { BarcodeFormat.QR_CODE, BarcodeFormat.All_1D },
                     CameraResolutionSelector = (res) =>
                     {
                         return res.Last();
                     },
+                    
                 },
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
@@ -47,17 +48,17 @@ namespace PVScan.Mobile.Views
 
         public async Task Initialize()
         {
-            ScannerView.IsAnalyzing = true;
             ScannerView.IsScanning = true;
+            ScannerView.IsAnalyzing = true;
         }
 
         public async Task Uninitialize()
         {
-            ScannerView.IsAnalyzing = false;
             ScannerView.IsScanning = false;
+            ScannerView.IsAnalyzing = false;
         }
 
-        private async void ScannerView_OnScanResult(ZXing.Result result)
+        private void ScannerView_OnScanResult(Result result)
         {
             // Stop analysis until we navigate away so we don't keep reading barcodes
             ScannerView.IsAnalyzing = false;
