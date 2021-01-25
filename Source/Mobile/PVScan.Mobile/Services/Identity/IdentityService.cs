@@ -37,7 +37,7 @@ namespace PVScan.Mobile.Services.Identity
         }
 
         private static readonly Lazy<IIdentityService> _instance 
-            = new Lazy<IIdentityService>(() => new IdentityService());
+            = new Lazy<IIdentityService>(() => new MockIdentityService());
         public static IIdentityService Instance
         {
             get
@@ -59,6 +59,9 @@ namespace PVScan.Mobile.Services.Identity
 
             if (!await ValidateToken(_accessToken))
             {
+                _accessToken = null;
+                Preferences.Set("AccessToken", null);
+
                 // Try to make request for another one
                 string prevUsername = Preferences.Get("Username", null);
                 string prevPassword = Preferences.Get("Password", null);
