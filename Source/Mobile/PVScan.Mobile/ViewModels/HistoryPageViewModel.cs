@@ -2,6 +2,7 @@
 using MvvmHelpers;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,36 +23,31 @@ namespace PVScan.Mobile.ViewModels
             Barcodes = new ObservableRangeCollection<Barcode>();
             _context = new PVScanMobileDbContext();
 
-            AddBarcodeCommand = new Command(async () =>
-            {
-                var barcode = new Barcode()
+            MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
+                async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
                 {
-                    Text = "Test",
-                    Format = ZXing.BarcodeFormat.QR_CODE,
-                    ServerSynced = false,
-                    ScanLocation = new Coordinate()
-                    {
-                        Latitude = 30,
-                        Longitude = 50,
-                    },
-                };
-
-                await _context.Barcodes.AddAsync(barcode);
-                await _context.SaveChangesAsync();
-
-                Barcodes.Add(barcode);
-            });
+                    Barcodes.Add(args.ScannedBarcode);
+                });
         }
 
         public async Task Initialize()
         {
-            if (Barcodes.Count != await _context.Barcodes.CountAsync())
+            if (Barcodes.Count != 0)
             {
-                Barcodes.AddRange(await _context.Barcodes.ToListAsync());
+                return;
+            }
+
+            var d1 = DateTime.Now;
+            var dbBarcodes = await _context.Barcodes.ToListAsync();
+            var d2 = DateTime.Now;
+
+            Console.WriteLine("TOOK:" + (d2 - d1).TotalMilliseconds);
+
+            if (dbBarcodes.Count != 0)
+            {
+                Barcodes.AddRange(dbBarcodes);
             }
         }
-
-        public ICommand AddBarcodeCommand { get; }
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
     }

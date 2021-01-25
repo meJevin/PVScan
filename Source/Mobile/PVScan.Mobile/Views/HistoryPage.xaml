@@ -15,12 +15,14 @@
         <CollectionView ItemsSource="{Binding Barcodes}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid BackgroundColor="{StaticResource BackgroundColorDarker}" HeightRequest="65">
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding Id}" TextColor="{StaticResource TextPrimaryColor_Dark}"/>
-                            <Label Text="{Binding Text}" TextColor="{StaticResource TextPrimaryColor_Dark}"/>
+                    <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HeightRequest="65">
+                        <StackLayout Orientation="Horizontal" VerticalOptions="Center" Padding="10, 0">
+                            <Label Text="{Binding Id}"/>
+                            <Label Text="{Binding Text}"/>
+                            <Label Text="{Binding ScanLocation.Latitude}"/>
+                            <Label Text="{Binding ScanLocation.Longitude}"/>
                         </StackLayout>
-                        <BoxView HeightRequest="1" BackgroundColor="{StaticResource BackgroundColorDark}" VerticalOptions="End"/>
+                        <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColorLight}}" VerticalOptions="End"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

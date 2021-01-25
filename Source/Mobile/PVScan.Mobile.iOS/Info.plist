@@ -32,7 +32,9 @@
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Can we use your camera</string>
+	<string>Can we use get access to your camera?</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+	<string>Can we use get access to your location?</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
