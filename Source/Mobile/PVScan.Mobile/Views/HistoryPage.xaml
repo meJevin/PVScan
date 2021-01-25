@@ -15,7 +15,7 @@
         <CollectionView ItemsSource="{Binding Barcodes}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid BackgroundColor="{StaticResource BackgroundColorDarkerer}" HeightRequest="65">
+                    <Grid BackgroundColor="{StaticResource BackgroundColorDarker}" HeightRequest="65">
                         <StackLayout Orientation="Horizontal">
                             <Label Text="{Binding Id}" TextColor="{StaticResource TextPrimaryColor_Dark}"/>
                             <Label Text="{Binding Text}" TextColor="{StaticResource TextPrimaryColor_Dark}"/>
