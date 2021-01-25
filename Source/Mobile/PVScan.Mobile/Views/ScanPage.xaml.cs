@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PVScan.Mobile.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,33 +18,24 @@ namespace PVScan.Mobile.Views
 {
     public partial class ScanPage : ContentView
     {
-        ZXingScannerView ScannerView;
-
         public ScanPage()
         {
             InitializeComponent();
 
-            ScannerView = new ZXingScannerView()
+            ScannerView.Options = new MobileBarcodeScanningOptions()
             {
-                Options = new MobileBarcodeScanningOptions()
+                TryHarder = true,
+                AutoRotate = true,
+                PossibleFormats = new List<BarcodeFormat> { BarcodeFormat.QR_CODE, BarcodeFormat.All_1D },
+                CameraResolutionSelector = (res) =>
                 {
-                    TryHarder = true,
-                    AutoRotate = true,
-                    PossibleFormats = new List<BarcodeFormat> { BarcodeFormat.QR_CODE, BarcodeFormat.All_1D },
-                    CameraResolutionSelector = (res) =>
-                    {
-                        return res.Last();
-                    },
-                    
+                    return res.Last();
                 },
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                AutomationId = "zxingScannerView",
             };
 
             ScannerView.OnScanResult += ScannerView_OnScanResult;
 
-            MainContainer.Children.Add(ScannerView);
+            (BindingContext as ScanPageViewModel).ClearCommand.Execute(null);
         }
 
         public async Task Initialize()
@@ -60,13 +52,7 @@ namespace PVScan.Mobile.Views
 
         private void ScannerView_OnScanResult(Result result)
         {
-            // Stop analysis until we navigate away so we don't keep reading barcodes
-            ScannerView.IsAnalyzing = false;
-
-            // Show an alert
-            Console.WriteLine($"\n\nSCANNED: {result.Text} {Enum.GetName(typeof(BarcodeFormat), result.BarcodeFormat)}");
-
-            ScannerView.IsAnalyzing = true;
+            (BindingContext as ScanPageViewModel).ScanCommand.Execute(result);
         }
     }
 }
