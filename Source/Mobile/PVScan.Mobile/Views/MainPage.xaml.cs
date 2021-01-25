@@ -16,8 +16,6 @@ namespace PVScan.Mobile.Views
         public MainPage()
         {
             InitializeComponent();
-
-            OnAppThemeButtonClicked(null, null);
         }
 
         void OnAppThemeButtonClicked(object sender, System.EventArgs e)
@@ -77,6 +75,13 @@ namespace PVScan.Mobile.Views
             _currentTabView = sender as TabViewItem;
 
             await ProfilePage.Initialize();
+        }
+
+        private async void ContentPage_Appearing(object sender, EventArgs e)
+        {
+            _currentTabView = HistoryPage.Parent as TabViewItem;
+
+            await HistoryPage.Initialize();
         }
     }
 }
