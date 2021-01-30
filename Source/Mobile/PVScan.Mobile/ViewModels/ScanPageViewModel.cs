@@ -83,6 +83,7 @@ namespace PVScan.Mobile.ViewModels
                         Longitude = location.Longitude,
                     },
                     ServerSynced = false,
+                    ScanTime = DateTime.UtcNow,
                 };
 
                 await _context.Barcodes.AddAsync(b);
