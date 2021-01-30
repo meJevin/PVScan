@@ -32,20 +32,31 @@ namespace PVScan.Mobile.ViewModels
                 {
                     Barcodes.Add(args.ScannedBarcode);
                 });
+
+            RefreshCommand = new Command(async () =>
+            {
+                IsRefresing = false;
+                OnPropertyChanged(nameof(IsRefresing));
+
+                Barcodes.Clear();
+
+                var dbBarcodes = await _context.Barcodes.ToListAsync();
+
+                Barcodes.AddRange(dbBarcodes);
+
+                IsRefresing = false;
+                OnPropertyChanged(nameof(IsRefresing));
+            });
         }
 
         public async Task Initialize()
         {
-            if (Barcodes.Count != 0)
+            if (Barcodes.Count != 0 && !IsRefresing)
             {
                 return;
             }
 
-            var d1 = DateTime.Now;
             var dbBarcodes = await _context.Barcodes.ToListAsync();
-            var d2 = DateTime.Now;
-
-            Console.WriteLine("TOOK:" + (d2 - d1).TotalMilliseconds);
 
             if (dbBarcodes.Count != 0)
             {
@@ -54,5 +65,8 @@ namespace PVScan.Mobile.ViewModels
         }
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
+
+        public bool IsRefresing { get; set; }
+        public ICommand RefreshCommand { get; set; }
     }
 }
