@@ -4,6 +4,7 @@ using PVScan.Mobile.Models;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Essentials;
@@ -18,7 +19,9 @@ namespace PVScan.Mobile.ViewModels
 
         public ScanPageViewModel()
         {
-            _context = new PVScanMobileDbContext();
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
+
+            _context = new PVScanMobileDbContext(dbPath);
 
             ScanCommand = new Command(async (object scanResult) =>
             {

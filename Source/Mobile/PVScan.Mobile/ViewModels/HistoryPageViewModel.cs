@@ -7,9 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace PVScan.Mobile.ViewModels
@@ -20,8 +22,10 @@ namespace PVScan.Mobile.ViewModels
 
         public HistoryPageViewModel()
         {
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
+
             Barcodes = new ObservableRangeCollection<Barcode>();
-            _context = new PVScanMobileDbContext();
+            _context = new PVScanMobileDbContext(dbPath);
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
