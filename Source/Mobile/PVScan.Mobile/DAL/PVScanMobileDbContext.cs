@@ -4,23 +4,28 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Xamarin.Essentials;
 
 namespace PVScan.Mobile.DAL
 {
     public class PVScanMobileDbContext : DbContext
     {
+        readonly string dbPath;
+
         public PVScanMobileDbContext()
         {
+        }
+
+        public PVScanMobileDbContext(string dbPath)
+        {
+            this.dbPath = dbPath;
+
             SQLitePCL.Batteries_V2.Init();
 
-            Database.EnsureCreated();
+            Database.Migrate();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
-
             optionsBuilder.UseSqlite($"Filename={dbPath}");
         }
 

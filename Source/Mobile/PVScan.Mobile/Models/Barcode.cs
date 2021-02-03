@@ -12,5 +12,6 @@ namespace PVScan.Mobile.Models
         public string Text { get; set; }
         public Coordinate ScanLocation { get; set; }
         public bool ServerSynced { get; set; }
+        public DateTime ScanTime { get; set; }
     }
 }

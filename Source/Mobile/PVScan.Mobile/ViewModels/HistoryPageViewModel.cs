@@ -7,9 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace PVScan.Mobile.ViewModels
@@ -20,28 +22,41 @@ namespace PVScan.Mobile.ViewModels
 
         public HistoryPageViewModel()
         {
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
+
             Barcodes = new ObservableRangeCollection<Barcode>();
-            _context = new PVScanMobileDbContext();
+            _context = new PVScanMobileDbContext(dbPath);
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
                 {
                     Barcodes.Add(args.ScannedBarcode);
                 });
+
+            RefreshCommand = new Command(async () =>
+            {
+                IsRefresing = false;
+                OnPropertyChanged(nameof(IsRefresing));
+
+                Barcodes.Clear();
+
+                var dbBarcodes = await _context.Barcodes.ToListAsync();
+
+                Barcodes.AddRange(dbBarcodes);
+
+                IsRefresing = false;
+                OnPropertyChanged(nameof(IsRefresing));
+            });
         }
 
         public async Task Initialize()
         {
-            if (Barcodes.Count != 0)
+            if (Barcodes.Count != 0 && !IsRefresing)
             {
                 return;
             }
 
-            var d1 = DateTime.Now;
             var dbBarcodes = await _context.Barcodes.ToListAsync();
-            var d2 = DateTime.Now;
-
-            Console.WriteLine("TOOK:" + (d2 - d1).TotalMilliseconds);
 
             if (dbBarcodes.Count != 0)
             {
@@ -50,5 +65,8 @@ namespace PVScan.Mobile.ViewModels
         }
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
+
+        public bool IsRefresing { get; set; }
+        public ICommand RefreshCommand { get; set; }
     }
 }

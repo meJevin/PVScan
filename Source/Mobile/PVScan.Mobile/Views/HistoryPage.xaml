@@ -12,26 +12,27 @@
     </ContentView.BindingContext>
     
     <Grid>
-        <CollectionView ItemsSource="{Binding Barcodes}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HeightRequest="65">
-                        <StackLayout Orientation="Horizontal" VerticalOptions="Center" Padding="10, 0">
-                            <Label Text="{Binding Id}"/>
-                            <Label Text="{Binding Text}"/>
-                            <Label Text="{Binding ScanLocation.Latitude}"/>
-                            <Label Text="{Binding ScanLocation.Longitude}"/>
-                        </StackLayout>
-                        <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColorLight}}" VerticalOptions="End"/>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-            <CollectionView.EmptyView>
-                <StackLayout>
-                    <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
+        <RefreshView IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding Barcodes}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HeightRequest="65">
+                            <StackLayout Orientation="Horizontal" VerticalOptions="Center" Padding="10, 0">
+                                <Label Text="{Binding Id}"/>
+                                <Label Text="{Binding Text}"/>
+                                <Label Text="{Binding ScanTime}"/>
+                            </StackLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColorLight}}" VerticalOptions="End"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout>
+                        <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
                            Text="No blogs yet"/>
-                </StackLayout>
-            </CollectionView.EmptyView>
-        </CollectionView>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
     </Grid>
 </ContentView>
