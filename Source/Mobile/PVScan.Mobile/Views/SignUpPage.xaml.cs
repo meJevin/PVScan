@@ -1,5 +1,5 @@
 ﻿using PVScan.Mobile.ViewModels;
-using PVScan.Mobile.ViewModels.Messages;
+using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -47,7 +47,6 @@
   
   <ItemGroup>
     <Folder Include="Common\Assets\" />
-    <Folder Include="ViewModels\Messages\Auth\" />
   </ItemGroup>
   
   <ItemGroup>

@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.Services.Identity;
-using PVScan.Mobile.ViewModels.Messages;
+using PVScan.Mobile.ViewModels.Messages.Auth;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;

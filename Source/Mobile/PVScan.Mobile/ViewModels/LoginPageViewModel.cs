@@ -1,6 +1,6 @@
 ﻿using MvvmHelpers;
 using PVScan.Mobile.Services.Identity;
-using PVScan.Mobile.ViewModels.Messages;
+using PVScan.Mobile.ViewModels.Messages.Auth;
 using System.Windows.Input;
 using Xamarin.Forms;
 
