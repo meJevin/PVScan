@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -35,36 +36,40 @@ namespace PVScan.Mobile.ViewModels
 
             RefreshCommand = new Command(async () =>
             {
-                IsRefresing = false;
+                IsRefresing = true;
                 OnPropertyChanged(nameof(IsRefresing));
 
-                Barcodes.Clear();
-
-                var dbBarcodes = await _context.Barcodes.ToListAsync();
-
-                Barcodes.AddRange(dbBarcodes);
+                await LoadBarcodesFromDB();
 
                 IsRefresing = false;
                 OnPropertyChanged(nameof(IsRefresing));
             });
         }
 
-        public async Task Initialize()
+        public async Task LoadBarcodesFromDB()
         {
-            if (Barcodes.Count != 0 && !IsRefresing)
+            if (IsLoading)
             {
                 return;
             }
 
-            var dbBarcodes = await _context.Barcodes.ToListAsync();
+            Barcodes.Clear();
 
-            if (dbBarcodes.Count != 0)
-            {
-                Barcodes.AddRange(dbBarcodes);
-            }
+            IsLoading = true;
+            OnPropertyChanged(nameof(IsLoading));
+
+            await Task.Delay(2500);
+
+            var dbBarcodes = await _context.Barcodes.OrderByDescending(b => b.ScanTime).ToListAsync();
+            Barcodes.AddRange(dbBarcodes);
+
+            IsLoading = false;
+            OnPropertyChanged(nameof(IsLoading));
         }
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
+
+        public bool IsLoading { get; set; }
 
         public bool IsRefresing { get; set; }
         public ICommand RefreshCommand { get; set; }

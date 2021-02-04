@@ -2,7 +2,7 @@
 <ContentView 
     xmlns="http://xamarin.com/schemas/2014/forms" 
             
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels" xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
     x:Class="PVScan.Mobile.Views.HistoryPage"
     
     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
@@ -10,27 +10,59 @@
     <ContentView.BindingContext>
         <viewmodels:HistoryPageViewModel/>
     </ContentView.BindingContext>
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBool"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
     
     <Grid>
         <RefreshView IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding Barcodes}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HeightRequest="65">
-                            <StackLayout Orientation="Horizontal" VerticalOptions="Center" Padding="10, 0">
-                                <Label Text="{Binding Id}"/>
-                                <Label Text="{Binding Text}"/>
-                                <Label Text="{Binding ScanTime}"/>
-                            </StackLayout>
-                            <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColorLight}}" VerticalOptions="End"/>
+                        <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
+                              HeightRequest="65">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Text}"/>
+                                    <Label Text="{Binding ScanTime}" FontSize="12"/>
+                                </StackLayout>
+                            </Grid>
+
+                            <Grid Grid.Column="2" Padding="0, 0, 10, 0">
+                                <Frame VerticalOptions="Center">
+                                    
+                                </Frame>
+                            </Grid>
+                            
+                            <BoxView BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColorLight}}" 
+                                     VerticalOptions="End"
+                                     HeightRequest="1" 
+                                     Grid.ColumnSpan="3"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 <CollectionView.EmptyView>
-                    <StackLayout>
-                        <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
+                    <Grid>
+                        <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InverseBool}}">
+                            <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
                            Text="No blogs yet"/>
-                    </StackLayout>
+                        </StackLayout>
+
+                        <StackLayout IsVisible="{Binding IsLoading}">
+                            <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
+                           Text="Loading..."/>
+                        </StackLayout>
+                    </Grid>
                 </CollectionView.EmptyView>
             </CollectionView>
         </RefreshView>
