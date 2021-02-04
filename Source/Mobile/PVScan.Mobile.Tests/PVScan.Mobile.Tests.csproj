@@ -24,4 +24,9 @@
     <ProjectReference Include="..\PVScan.Mobile\PVScan.Mobile.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

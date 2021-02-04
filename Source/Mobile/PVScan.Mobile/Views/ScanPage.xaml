@@ -26,31 +26,33 @@
             </StackLayout>
         </Grid>
 
-        <Grid x:Name="ScannerViewContainer" IsVisible="{Binding IsCameraAllowed}}">
+        <Grid x:Name="ScannerViewContainer" IsVisible="{Binding IsCameraAllowed}">
             
         </Grid>
 
         <StackLayout Orientation="Vertical" VerticalOptions="Start" 
-                     BackgroundColor="#8000" Padding="10"
+                     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarkSeeThrough}, Light={StaticResource BackgroundColorLightSeeThrough}}" 
+                     Padding="10"
                      x:Name="BarcodeInfoContainer" 
                      PropertyChanged="BarcodeInfoContainer_PropertyChanged">
             <Grid ColumnDefinitions="Auto,*">
                 <Label Text="Last scanned barcode" FontSize="18"/>
 
                 <ImageButton HorizontalOptions="End" Grid.Column="1" Padding="8,0"
-                             Command="{Binding ClearCommand}" IsEnabled="{Binding CanClear, TargetNullValue=False}" BackgroundColor="Transparent">
+                             Command="{Binding ClearCommand}" IsEnabled="{Binding CanClear, TargetNullValue=False}" 
+                             BackgroundColor="Transparent">
                     <ImageButton.Source>
                         <FontImageSource
                             FontFamily="FontAwesome"
                             Glyph="{x:Static theme:IconFont.Times}"
                             Size="22"
-                            Color="White" />
+                            Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" />
                     </ImageButton.Source>
                 </ImageButton>
             </Grid>
 
             <BoxView Grid.Column="2" HeightRequest="1" HorizontalOptions="Fill" VerticalOptions="Center" 
-                         Color="White">
+                         Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}">
 
             </BoxView>
             
