@@ -70,6 +70,7 @@ namespace PVScan.Mobile.ViewModels
         public bool IsLoading { get; set; }
 
         public bool IsRefresing { get; set; }
+
         public ICommand RefreshCommand { get; set; }
     }
 }

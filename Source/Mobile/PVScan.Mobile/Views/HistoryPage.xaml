@@ -2,10 +2,15 @@
 <ContentView 
     xmlns="http://xamarin.com/schemas/2014/forms" 
             
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels" xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles" xmlns:views="clr-namespace:PVScan.Mobile.Views"
     x:Class="PVScan.Mobile.Views.HistoryPage"
     
-    BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
+    BackgroundColor="{AppThemeBinding 
+    Dark={StaticResource BackgroundColorDarker},
+    Light={StaticResource BackgroundColorLighter}}">
 
     <ContentView.BindingContext>
         <viewmodels:HistoryPageViewModel/>
@@ -19,7 +24,7 @@
             <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
         </ResourceDictionary>
     </ContentView.Resources>
-    
+
     <Grid>
         <RefreshView IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding Barcodes}">
@@ -52,7 +57,7 @@
                                            FontSize="Micro"/>
                                 </StackLayout>
                             </Grid>
-                            
+
                             <BoxView BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColorLight}}" 
                                      VerticalOptions="End"
                                      HeightRequest="1" 
@@ -60,6 +65,7 @@
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
+                
                 <CollectionView.EmptyView>
                     <Grid>
                         <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InverseBool}}">
@@ -73,7 +79,42 @@
                         </StackLayout>
                     </Grid>
                 </CollectionView.EmptyView>
+
+                <CollectionView.Header>
+                    <StackLayout Spacing="0">
+                        <Grid ColumnDefinitions="*, 24" Margin="10">
+                            <Entry Placeholder="Search..." Margin="0,0,5,0"/>
+
+                            <ImageButton Grid.Column="1" BackgroundColor="Transparent" Clicked="FilterButton_Clicked">
+                                <ImageButton.Source>
+                                    <FontImageSource
+                                        FontFamily="FontAwesome"
+                                        Glyph="{x:Static theme:IconFont.SlidersH}"
+                                        Color="{AppThemeBinding 
+                                        Dark={StaticResource TextPrimaryColor_Dark},
+                                        Light={StaticResource TextPrimaryColor_Light}}" /> 
+                                </ImageButton.Source>
+                            </ImageButton>
+                        </Grid>
+
+                        <BoxView BackgroundColor="White"
+                            VerticalOptions="Center"
+                            HeightRequest="1"/>
+                    </StackLayout>
+                </CollectionView.Header>
             </CollectionView>
         </RefreshView>
+
+        <BoxView x:Name="Overlay" BackgroundColor="Black">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Overlay_Tapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <views:FilterPage x:Name="FilterPage" VerticalOptions="End">
+            <views:FilterPage.GestureRecognizers>
+                <PanGestureRecognizer PanUpdated="FilterViewPanGesture_PanUpdated"/>
+            </views:FilterPage.GestureRecognizers>
+        </views:FilterPage>
     </Grid>
 </ContentView>
