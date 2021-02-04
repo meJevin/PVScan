@@ -16,6 +16,11 @@ namespace PVScan.Mobile.Views
         public MainPage()
         {
             InitializeComponent();
+
+            MainTabView.SelectedIndex = 1;
+            _currentTabView = ScanPage.Parent as TabViewItem;
+
+            ScanPage.Initialize();
         }
 
         void OnAppThemeButtonClicked(object sender, System.EventArgs e)
@@ -79,9 +84,6 @@ namespace PVScan.Mobile.Views
 
         private async void ContentPage_Appearing(object sender, EventArgs e)
         {
-            _currentTabView = HistoryPage.Parent as TabViewItem;
-
-            await HistoryPage.Initialize();
         }
     }
 }

@@ -141,7 +141,8 @@
     </NavigationPage.TitleView>
     <Grid>
         <toolkit:TabView IsSwipeEnabled="False" IsTabTransitionEnabled="False"
-            Style="{StaticResource CustomTabStyle}">
+                         x:Name="MainTabView"
+                         Style="{StaticResource CustomTabStyle}">
             <!-- History TAB -->
             <toolkit:TabViewItem
                 TabTapped="HistoryTabItem_TabTapped"
