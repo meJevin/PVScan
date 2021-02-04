@@ -14,6 +14,9 @@
     <ContentView.Resources>
         <ResourceDictionary>
             <converters:InverseBoolConverter x:Key="InverseBool"/>
+            <converters:BarcodeFormatImageSourceConverter x:Key="BarcodeFormatImageSource"/>
+            <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
+            <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
         </ResourceDictionary>
     </ContentView.Resources>
     
@@ -33,15 +36,20 @@
 
                             <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
                                 <StackLayout Orientation="Vertical">
-                                    <Label Text="{Binding Text}"/>
-                                    <Label Text="{Binding ScanTime}" FontSize="12"/>
+                                    <Label Text="{Binding Text}" FontSize="16"/>
+                                    <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
+                                           FontSize="12"/>
                                 </StackLayout>
                             </Grid>
 
-                            <Grid Grid.Column="2" Padding="0, 0, 10, 0">
-                                <Frame VerticalOptions="Center">
-                                    
-                                </Frame>
+                            <Grid Grid.Column="2" Margin="10, 0">
+
+                                <StackLayout VerticalOptions="Center" Spacing="0">
+                                    <Image
+                                       Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
+                                    <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
+                                           FontSize="Micro"/>
+                                </StackLayout>
                             </Grid>
                             
                             <BoxView BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColorLight}}" 
@@ -55,7 +63,7 @@
                     <Grid>
                         <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InverseBool}}">
                             <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
-                           Text="No blogs yet"/>
+                           Text="No barcodes yet"/>
                         </StackLayout>
 
                         <StackLayout IsVisible="{Binding IsLoading}">

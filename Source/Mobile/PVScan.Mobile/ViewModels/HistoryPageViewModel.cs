@@ -58,8 +58,6 @@ namespace PVScan.Mobile.ViewModels
             IsLoading = true;
             OnPropertyChanged(nameof(IsLoading));
 
-            await Task.Delay(2500);
-
             var dbBarcodes = await _context.Barcodes.OrderByDescending(b => b.ScanTime).ToListAsync();
             Barcodes.AddRange(dbBarcodes);
 
