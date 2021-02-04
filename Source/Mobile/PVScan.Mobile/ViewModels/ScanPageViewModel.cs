@@ -102,6 +102,16 @@ namespace PVScan.Mobile.ViewModels
 
                 ClearCommand.Execute(null);
             });
+
+            IsCameraAllowed = Permissions.CheckStatusAsync<Permissions.Camera>()
+                .GetAwaiter().GetResult() == PermissionStatus.Granted;
+
+            MessagingCenter.Subscribe(this, nameof(CameraAllowedMessage),
+                async (ApplicationSettingsViewModel v, CameraAllowedMessage args) =>
+                {
+                    IsCameraAllowed = true;
+                    OnPropertyChanged(nameof(IsCameraAllowed));
+                });
         }
 
         private Result LastResult;
@@ -115,6 +125,8 @@ namespace PVScan.Mobile.ViewModels
         public bool CanClear { get; set; }
 
         public bool CanSave { get; set; }
+
+        public bool IsCameraAllowed { get; set; }
 
         public string LastBarcodeText { get; set; }
         public string LastBarcodeType { get; set; }

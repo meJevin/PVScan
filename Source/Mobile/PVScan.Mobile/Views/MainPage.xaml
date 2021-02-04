@@ -12,8 +12,6 @@
              
     ios:NavigationPage.HideNavigationBarSeparator="true"
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
-    
-    Appearing="ContentPage_Appearing"
     >
 
     <ContentPage.Resources>
@@ -109,34 +107,11 @@
     </ContentPage.Resources>
     <NavigationPage.TitleView>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
             <Label VerticalTextAlignment="Center"
                    HorizontalTextAlignment="Center"
                    Grid.ColumnSpan="2">
                 PVScan
             </Label>
-            
-            <ImageButton
-                Grid.Column="1"
-                VerticalOptions="Center"
-                HorizontalOptions="End"
-                Padding="20, 0"
-                BackgroundColor="Transparent"
-                Source="{AppThemeBinding
-                  Light={FontImage FontFamily=FontAwesome, 
-                    Glyph={x:Static theme:IconFont.Lightbulb},
-                    Color=Black,
-                    Size=18},
-                  Dark={FontImage FontFamily=FontAwesome, 
-                    Glyph={x:Static theme:IconFont.Lightbulb},
-                    Color=White,
-                    Size=18}
-                }"
-                Clicked="OnAppThemeButtonClicked" />
         </Grid>
     </NavigationPage.TitleView>
     <Grid>

@@ -51,6 +51,9 @@ namespace PVScan.Mobile.Views
             LoggedInPage.Opacity = 0;
             LoggedInPage.IsVisible = false;
 
+            AppSettingsPage.TranslationX = AppSettingsPage.Width;
+            AppSettingsPage.IsVisible = false;
+
             var vm = BindingContext as ProfilePageViewModel;
 
             if (vm.IsLoggedIn)
@@ -93,6 +96,18 @@ namespace PVScan.Mobile.Views
 
             _ = SignUpPage.TranslateTo(0, _transY, _animSpeed, Easing.CubicOut);
             await SignUpPage.FadeTo(0, _animSpeed, Easing.CubicOut);
+        }
+
+        private async void AppSettingsButtonClicked(object sender, EventArgs e)
+        {
+            AppSettingsPage.IsVisible = true;
+            await AppSettingsPage.TranslateTo(0, 0, _animSpeed, Easing.CubicOut);
+        }
+
+        private async void AppSettingsPage_BackClicked(object sender, EventArgs e)
+        {
+            await AppSettingsPage.TranslateTo(AppSettingsPage.Width, 0, _animSpeed, Easing.CubicOut);
+            AppSettingsPage.IsVisible = false;
         }
     }
 }

@@ -4,15 +4,31 @@
              x:Class="PVScan.Mobile.Views.ScanPage"
              xmlns:vm="clr-namespace:PVScan.Mobile.ViewModels" 
              xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
-             xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
+             xmlns:theme="clr-namespace:PVScan.Mobile.Styles" xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
              BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
              >
     <ContentView.BindingContext>
         <vm:ScanPageViewModel/>
     </ContentView.BindingContext>
 
-    <Grid x:Name="MainContainer">
-        <zxing:ZXingScannerView x:Name="ScannerView"/>
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverBool"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
+    <Grid>
+        <Grid IsVisible="{Binding IsCameraAllowed, Converter={StaticResource InverBool}}">
+            <StackLayout VerticalOptions="Center" Spacing="24">
+                <Label HorizontalOptions="Center">
+                    Allow camera access in settings
+                </Label>
+            </StackLayout>
+        </Grid>
+
+        <Grid x:Name="ScannerViewContainer" IsVisible="{Binding IsCameraAllowed}}">
+            
+        </Grid>
 
         <StackLayout Orientation="Vertical" VerticalOptions="Start" 
                      BackgroundColor="#8000" Padding="10"

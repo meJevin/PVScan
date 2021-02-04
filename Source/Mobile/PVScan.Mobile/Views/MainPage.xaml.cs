@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PVScan.Mobile.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,15 +20,7 @@ namespace PVScan.Mobile.Views
 
             MainTabView.SelectedIndex = 1;
             _currentTabView = ScanPage.Parent as TabViewItem;
-
             ScanPage.Initialize();
-        }
-
-        void OnAppThemeButtonClicked(object sender, System.EventArgs e)
-        {
-            Application.Current.UserAppTheme = (Application.Current.UserAppTheme == OSAppTheme.Dark)
-                ? OSAppTheme.Light
-                : OSAppTheme.Dark;
         }
 
         private async void HistoryTabItem_TabTapped(object sender, TabTappedEventArgs e)
@@ -82,8 +75,5 @@ namespace PVScan.Mobile.Views
             await ProfilePage.Initialize();
         }
 
-        private async void ContentPage_Appearing(object sender, EventArgs e)
-        {
-        }
     }
 }

@@ -47,6 +47,7 @@
                                 <StackLayout VerticalOptions="Center" Spacing="0">
                                     <Image
                                        Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
+
                                     <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
                                            FontSize="Micro"/>
                                 </StackLayout>

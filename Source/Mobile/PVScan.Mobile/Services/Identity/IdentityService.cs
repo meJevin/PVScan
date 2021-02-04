@@ -37,7 +37,7 @@ namespace PVScan.Mobile.Services.Identity
         }
 
         private static readonly Lazy<IIdentityService> _instance 
-            = new Lazy<IIdentityService>(() => new MockIdentityService());
+            = new Lazy<IIdentityService>(() => new IdentityService());
         public static IIdentityService Instance
         {
             get

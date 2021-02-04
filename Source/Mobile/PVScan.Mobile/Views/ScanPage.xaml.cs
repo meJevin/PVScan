@@ -1,4 +1,5 @@
 ﻿using PVScan.Mobile.ViewModels;
+using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -19,22 +20,11 @@ namespace PVScan.Mobile.Views
 {
     public partial class ScanPage : ContentView
     {
+        ZXingScannerView ScannerView;
+
         public ScanPage()
         {
             InitializeComponent();
-
-            ScannerView.Options = new MobileBarcodeScanningOptions()
-            {
-                TryHarder = true,
-                AutoRotate = true,
-                PossibleFormats = new List<BarcodeFormat> { BarcodeFormat.QR_CODE, BarcodeFormat.All_1D },
-                CameraResolutionSelector = (res) =>
-                {
-                    return res.Last();
-                },
-            };
-
-            ScannerView.OnScanResult += ScannerView_OnScanResult;
 
             var vm = (BindingContext as ScanPageViewModel);
 
@@ -43,6 +33,17 @@ namespace PVScan.Mobile.Views
             vm.GotBarcode += (s, e) => { BarcodeAvailable(); };
             vm.Cleared += (s, e) => { BarcodeUnavailable(); };
             vm.Saved += (s, e) => {  };
+
+            if (vm.IsCameraAllowed)
+            {
+                CameraAllowedHandler();
+            }
+
+            MessagingCenter.Subscribe(this, nameof(CameraAllowedMessage),
+                async (ApplicationSettingsViewModel v, CameraAllowedMessage args) =>
+                {
+                    CameraAllowedHandler();
+                });
         }
 
         private void BarcodeAvailable()
@@ -59,14 +60,38 @@ namespace PVScan.Mobile.Views
 
         public async Task Initialize()
         {
+            if (ScannerView == null)
+            {
+                return;
+            }
+
+            ScannerView.IsVisible = true;
             ScannerView.IsScanning = true;
             ScannerView.IsAnalyzing = true;
         }
 
         public async Task Uninitialize()
         {
+            if (ScannerView == null)
+            {
+                return;
+            }
+
             ScannerView.IsScanning = false;
             ScannerView.IsAnalyzing = false;
+        }
+
+        private async Task CameraAllowedHandler()
+        {
+            ScannerView = new ZXingScannerView();
+
+            ScannerView.OnScanResult += ScannerView_OnScanResult;
+
+            ScannerViewContainer.Children.Clear();
+            ScannerViewContainer.Children.Add(ScannerView);
+
+            // For some reason this doesn't work until we switch pages :(
+            await Initialize();
         }
 
         private void ScannerView_OnScanResult(Result result)

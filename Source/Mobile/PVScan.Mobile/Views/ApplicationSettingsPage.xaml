@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+             
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             
+    x:Class="PVScan.Mobile.Views.ApplicationSettingsPage"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels" 
+    xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    
+    BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
+
+    <ContentView.BindingContext>
+        <viewmodels:ApplicationSettingsViewModel/>
+    </ContentView.BindingContext>
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBool"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <Grid>
+        <ImageButton HorizontalOptions="Start" VerticalOptions="Start" Padding="14" BackgroundColor="Transparent"
+                     Clicked="BackButton_Click">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="FontAwesome" Glyph="{x:Static theme:IconFont.ArrowLeft}" Size="26"
+                                 Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
+            </ImageButton.Source>
+        </ImageButton>
+
+        <StackLayout Margin="20, 58, 20, 20" Spacing="12">
+            <StackLayout Orientation="Horizontal">
+                <Label VerticalTextAlignment="Center">
+                    Dark theme
+                </Label>
+                <Switch Toggled="DarkTheme_Toggled" IsToggled="{Binding IsDarkTheme}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label VerticalTextAlignment="Center">
+                    Allow camera
+                </Label>
+                <Switch Toggled="AllowCamera_Toggled" 
+                        IsToggled="{Binding CameraToggleEnabled, Mode=OneTime, Converter={StaticResource InverseBool}}"
+                        IsEnabled="{Binding CameraToggleEnabled}"/>
+            </StackLayout>
+        </StackLayout>
+    </Grid>
+</ContentView>
