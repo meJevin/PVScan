@@ -20,31 +20,32 @@ namespace PVScan.Mobile.Views
         {
             InitializeComponent();
 
-            MessagingCenter.Subscribe(this, nameof(SuccessfulSignUpMessage),
-                async (SignUpPageViewModel sender, SuccessfulSignUpMessage args) =>
-                {
-                    SignUpMessageLabel.Text = args.Message;
+            var vm = (BindingContext as SignUpPageViewModel);
 
-                    // Update UI for successful Sign Up
-                    await SignUpMessageLabel.FadeTo(1);
+            vm.SuccessfulSignUp += Vm_SuccessfulSignUp;
+            vm.FailedSignUp += Vm_FailedSignUp;
+        }
 
-                    await Task.Delay(1500);
+        private async void Vm_FailedSignUp(object sender, SignUpEventArgs e)
+        {
+            SignUpMessageLabel.Text = e.Message;
 
-                    await SignUpMessageLabel.FadeTo(0);
-                });
+            // Update UI for successful Sign Up
 
-            MessagingCenter.Subscribe(this, nameof(FailedSignUpMessage),
-                async (SignUpPageViewModel sender, FailedSignUpMessage args) =>
-                {
-                    SignUpMessageLabel.Text = args.Message;
+            await SignUpMessageLabel.FadeTo(1);
+            await Task.Delay(1500);
+            await SignUpMessageLabel.FadeTo(0);
+        }
 
-                    // Update UI for failed Sign Up
-                    await SignUpMessageLabel.FadeTo(1);
+        private async void Vm_SuccessfulSignUp(object sender, SignUpEventArgs e)
+        {
+            SignUpMessageLabel.Text = e.Message;
 
-                    await Task.Delay(1500);
+            // Update UI for failed Sign Up
 
-                    await SignUpMessageLabel.FadeTo(0);
-                });
+            await SignUpMessageLabel.FadeTo(1);
+            await Task.Delay(1500);
+            await SignUpMessageLabel.FadeTo(0);
         }
 
         private async void BackClicked_Handler(object sender, EventArgs e)

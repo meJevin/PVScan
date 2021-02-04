@@ -1,11 +1,17 @@
 ﻿using MvvmHelpers;
 using PVScan.Mobile.Services.Identity;
 using PVScan.Mobile.ViewModels.Messages.Auth;
+using System;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace PVScan.Mobile.ViewModels
 {
+    public class SignUpEventArgs
+    {
+        public string Message { get; set; }
+    }
+
     public class SignUpPageViewModel : BaseViewModel
     {
         readonly IIdentityService identityService;
@@ -20,23 +26,25 @@ namespace PVScan.Mobile.ViewModels
 
                 if (result)
                 {
-                    MessagingCenter.Send(this, nameof(SuccessfulSignUpMessage), new SuccessfulSignUpMessage()
+                    SuccessfulSignUp?.Invoke(this, new SignUpEventArgs()
                     {
-                        Message = "You've successfuly signed up!",
+                        Message = "You've successfuly signed up",
                     });
                 }
                 else
                 {
-                    MessagingCenter.Send(this, nameof(FailedSignUpMessage), new FailedSignUpMessage()
+                    FailedSignUp?.Invoke(this, new SignUpEventArgs()
                     {
-                        // Todo: add error messsage from server
-                        Message = "Could not sign up!",
+                        Message = "Failed to sign up!",
                     });
                 }
             });
         }
 
-        public ICommand SignUpCommand { get;  }
+        public ICommand SignUpCommand { get; }
+
+        public event EventHandler<SignUpEventArgs> SuccessfulSignUp;
+        public event EventHandler<SignUpEventArgs> FailedSignUp;
 
         public string Login { get; set; }
         public string Email { get; set; }
