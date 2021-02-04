@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,7 +36,25 @@ namespace PVScan.Mobile.Views
 
             ScannerView.OnScanResult += ScannerView_OnScanResult;
 
-            (BindingContext as ScanPageViewModel).ClearCommand.Execute(null);
+            var vm = (BindingContext as ScanPageViewModel);
+
+            vm.ClearCommand.Execute(null);
+
+            vm.GotBarcode += (s, e) => { BarcodeAvailable(); };
+            vm.Cleared += (s, e) => { BarcodeUnavailable(); };
+            vm.Saved += (s, e) => {  };
+        }
+
+        private void BarcodeAvailable()
+        {
+            _ = BarcodeInfoContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
+            _ = SaveButtonContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
+        }
+
+        private void BarcodeUnavailable()
+        {
+            _ = BarcodeInfoContainer.TranslateTo(0, -BarcodeInfoContainer.Height, 250, Easing.CubicOut);
+            _ = SaveButtonContainer.TranslateTo(0, SaveButtonContainer.Height, 250, Easing.CubicOut);
         }
 
         public async Task Initialize()
@@ -54,5 +73,24 @@ namespace PVScan.Mobile.Views
         {
             (BindingContext as ScanPageViewModel).ScanCommand.Execute(result);
         }
+
+        // The only way i found to set their TranslationY on stratup
+        #region Container Initiialization
+        private void BarcodeInfoContainer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Height))
+            {
+                BarcodeInfoContainer.TranslationY = -BarcodeInfoContainer.Height;
+            }
+        }
+
+        private void SaveButtonContainer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Height))
+            {
+                SaveButtonContainer.TranslationY = SaveButtonContainer.Height;
+            }
+        }
+        #endregion
     }
 }

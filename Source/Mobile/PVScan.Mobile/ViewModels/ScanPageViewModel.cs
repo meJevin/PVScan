@@ -28,10 +28,12 @@ namespace PVScan.Mobile.ViewModels
                 LastResult = (scanResult as Result);
 
                 LastBarcodeText = LastResult.Text;
-                LastBarcodeType = Enum.GetName(typeof(BarcodeFormat), LastResult.BarcodeFormat);
+                LastBarcodeType = Enum.GetName(typeof(BarcodeFormat), LastResult.BarcodeFormat).Replace('_', ' ');
 
                 CanClear = true;
                 CanSave = true;
+
+                GotBarcode?.Invoke(this, new EventArgs());
 
                 OnPropertyChanged(nameof(LastBarcodeText));
                 OnPropertyChanged(nameof(LastBarcodeType));
@@ -49,6 +51,8 @@ namespace PVScan.Mobile.ViewModels
                 CanSave = false;
                 CanClear = false;
 
+                Cleared?.Invoke(this, new EventArgs());
+                
                 OnPropertyChanged(nameof(LastBarcodeText));
                 OnPropertyChanged(nameof(LastBarcodeType));
                 OnPropertyChanged(nameof(CanClear));
@@ -57,8 +61,8 @@ namespace PVScan.Mobile.ViewModels
 
             SaveCommand = new Command(async () =>
             {
-                CanClear = true;
-                CanSave = true;
+                CanClear = false;
+                CanSave = false;
 
                 OnPropertyChanged(nameof(CanClear));
                 OnPropertyChanged(nameof(CanSave));
@@ -89,6 +93,8 @@ namespace PVScan.Mobile.ViewModels
                 await _context.Barcodes.AddAsync(b);
                 await _context.SaveChangesAsync();
 
+                Saved?.Invoke(this, new EventArgs());
+
                 MessagingCenter.Send(this, nameof(BarcodeScannedMessage), new BarcodeScannedMessage()
                 {
                     ScannedBarcode = b,
@@ -112,5 +118,9 @@ namespace PVScan.Mobile.ViewModels
 
         public string LastBarcodeText { get; set; }
         public string LastBarcodeType { get; set; }
+
+        public event EventHandler GotBarcode;
+        public event EventHandler Cleared;
+        public event EventHandler Saved;
     }
 }

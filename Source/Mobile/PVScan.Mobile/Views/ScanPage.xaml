@@ -15,7 +15,9 @@
         <zxing:ZXingScannerView x:Name="ScannerView"/>
 
         <StackLayout Orientation="Vertical" VerticalOptions="Start" 
-                     BackgroundColor="#8000" Padding="10">
+                     BackgroundColor="#8000" Padding="10"
+                     x:Name="BarcodeInfoContainer" 
+                     PropertyChanged="BarcodeInfoContainer_PropertyChanged">
             <Grid ColumnDefinitions="Auto,*">
                 <Label Text="Last scanned barcode" FontSize="18"/>
 
@@ -46,7 +48,9 @@
             </Grid>
         </StackLayout>
 
-        <Grid VerticalOptions="End">
+        <Grid VerticalOptions="End"
+              x:Name="SaveButtonContainer"
+              PropertyChanged="SaveButtonContainer_PropertyChanged">
             <Button x:Name="SaveButton" Text="Save" Style="{StaticResource PrimaryButton}" Margin="40,40"
                     IsEnabled="{Binding CanSave, TargetNullValue=False}" Command="{Binding SaveCommand}">
             </Button>
