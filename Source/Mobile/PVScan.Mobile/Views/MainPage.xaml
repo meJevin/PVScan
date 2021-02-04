@@ -80,7 +80,7 @@
                 Value="#979797" />
             <Setter
                 Property="TextColorSelected"
-                Value="#FF0000" />
+                Value="#ff813d" />
             <Setter
                 Property="Scale"
                 Value="0.85" />
@@ -172,15 +172,15 @@
                 <toolkit:TabViewItem.Icon>
                     <FontImageSource
                         FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Qrcode}"
-                        Color="{AppThemeBinding Dark={StaticResource NeutralLighter}, Light={StaticResource White}}" />
+                        Glyph="{x:Static theme:IconFont.Camera}"
+                        Color="{StaticResource NeutralTertiary}" />
                 </toolkit:TabViewItem.Icon>
 
                 <toolkit:TabViewItem.IconSelected>
                     <FontImageSource
                         FontFamily="FontAwesome"
-                        Glyph="{x:Static theme:IconFont.Qrcode}"
-                        Color="{AppThemeBinding Dark={StaticResource ThemeDark}, Light={StaticResource ThemeDark}}" />
+                        Glyph="{x:Static theme:IconFont.Camera}"
+                        Color="{StaticResource NeutralLighter}" />
                 </toolkit:TabViewItem.IconSelected>
                 
                 <views:ScanPage x:Name="ScanPage"/>
