@@ -19,9 +19,17 @@ namespace PVScan.Mobile.Converters
                 FontFamily = "FontAwesome",
                 Glyph = IconFont.Barcode,
             };
-            result.SetOnAppTheme(FontImageSource.ColorProperty,
-                Application.Current.Resources["TextPrimaryColor_Light"],
-                Application.Current.Resources["TextPrimaryColor_Dark"]);
+            
+            try
+            {
+                result.SetOnAppTheme(FontImageSource.ColorProperty,
+                    Application.Current.Resources["TextPrimaryColor_Light"],
+                    Application.Current.Resources["TextPrimaryColor_Dark"]);
+            }
+            catch
+            {
+
+            }
 
             if (format.HasFlag(BarcodeFormat.QR_CODE))
             {

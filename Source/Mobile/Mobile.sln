@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVScan.Mobile.Database", "P
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dummy", "Dummy", "{DD11B35B-CDEE-42F4-A90F-06BF7DD26F71}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Mobile.Tests", "PVScan.Mobile.Tests\PVScan.Mobile.Tests.csproj", "{F2F2063A-9929-44F6-B638-569D01F6AAA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,18 @@ Global
 		{32C3351F-122D-41CB-AD6F-743FD2DD27DA}.Release|iPhone.Build.0 = Release|Any CPU
 		{32C3351F-122D-41CB-AD6F-743FD2DD27DA}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{32C3351F-122D-41CB-AD6F-743FD2DD27DA}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Release|iPhone.Build.0 = Release|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +104,7 @@ Global
 		{A4463B93-9E01-4E58-9F20-3A88FC49EAFB} = {7E82D4B1-86A0-4D33-9FDE-FE3ECDAE55C5}
 		{32C3351F-122D-41CB-AD6F-743FD2DD27DA} = {DD11B35B-CDEE-42F4-A90F-06BF7DD26F71}
 		{DD11B35B-CDEE-42F4-A90F-06BF7DD26F71} = {7E82D4B1-86A0-4D33-9FDE-FE3ECDAE55C5}
+		{F2F2063A-9929-44F6-B638-569D01F6AAA9} = {16C2316E-73D0-49A7-8708-A1B8DD513B0A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1665A41-8376-4D31-B9A0-C0D0AEBBEC39}
