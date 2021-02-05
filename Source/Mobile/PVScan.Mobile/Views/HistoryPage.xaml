@@ -104,7 +104,7 @@
                             </ImageButton>
                         </Grid>
 
-                        <BoxView BackgroundColor="White"
+                        <BoxView BackgroundColor="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"
                             VerticalOptions="Center"
                             HeightRequest="1"/>
                     </StackLayout>

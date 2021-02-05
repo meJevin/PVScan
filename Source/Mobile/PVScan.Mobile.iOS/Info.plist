@@ -29,11 +29,9 @@
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
 	<string>PVScan.Mobile</string>
-	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Can we use get access to your camera?</string>
-  <key>NSLocationWhenInUseUsageDescription</key>
+	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Can we use get access to your location?</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
@@ -59,9 +57,11 @@
 	<string>1.0</string>
 	<key>UIMainStoryboardFile</key>
 	<string>LaunchScreen</string>
-  <key>UIStatusBarStyle</key>
-  <string>UIStatusBarStyleLightContent</string>
-  <key>UIViewControllerBasedStatusBarAppearance</key>
-  <false/>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
 </dict>
 </plist>
