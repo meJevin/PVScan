@@ -25,6 +25,15 @@ namespace PVScan.Mobile.Views
 
             Overlay.Opacity = 0;
             Overlay.InputTransparent = true;
+
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                RefreshView.RefreshColor = Color.Black;
+            }
+            else if (Device.RuntimePlatform == Device.iOS)
+            {
+                RefreshView.SetAppThemeColor(RefreshView.RefreshColorProperty, Color.Black, Color.White);
+            }
         }
 
         public async Task Initialize()
