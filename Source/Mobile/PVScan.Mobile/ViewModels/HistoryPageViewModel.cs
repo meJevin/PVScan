@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -27,46 +28,45 @@ namespace PVScan.Mobile.ViewModels
             Barcodes = new ObservableRangeCollection<Barcode>();
             _context = new PVScanMobileDbContext(dbPath);
 
-            MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
-                async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
-                {
-                    Barcodes.Add(args.ScannedBarcode);
-                });
+            //MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
+            //    async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
+            //    {
+            //        Barcodes.Add(args.ScannedBarcode);
+            //    });
 
             RefreshCommand = new Command(async () =>
             {
-                IsRefresing = false;
-                OnPropertyChanged(nameof(IsRefresing));
+                IsRefresing = true;
 
-                Barcodes.Clear();
-
-                var dbBarcodes = await _context.Barcodes.ToListAsync();
-
-                Barcodes.AddRange(dbBarcodes);
+                await LoadBarcodesFromDB();
 
                 IsRefresing = false;
-                OnPropertyChanged(nameof(IsRefresing));
             });
         }
 
-        public async Task Initialize()
+        public async Task LoadBarcodesFromDB()
         {
-            if (Barcodes.Count != 0 && !IsRefresing)
+            if (IsLoading)
             {
                 return;
             }
 
-            var dbBarcodes = await _context.Barcodes.ToListAsync();
+            Barcodes.Clear();
 
-            if (dbBarcodes.Count != 0)
-            {
-                Barcodes.AddRange(dbBarcodes);
-            }
+            IsLoading = true;
+
+            var dbBarcodes = await _context.Barcodes.OrderByDescending(b => b.ScanTime).ToListAsync();
+            Barcodes.AddRange(dbBarcodes);
+
+            IsLoading = false;
         }
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
 
+        public bool IsLoading { get; set; }
+
         public bool IsRefresing { get; set; }
+
         public ICommand RefreshCommand { get; set; }
     }
 }

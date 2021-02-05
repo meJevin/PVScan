@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PVScan.Mobile.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ using Xamarin.Forms.Xaml;
 
 namespace PVScan.Mobile.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
         TabViewItem _currentTabView = null;
@@ -16,13 +18,10 @@ namespace PVScan.Mobile.Views
         public MainPage()
         {
             InitializeComponent();
-        }
 
-        void OnAppThemeButtonClicked(object sender, System.EventArgs e)
-        {
-            Application.Current.UserAppTheme = (Application.Current.UserAppTheme == OSAppTheme.Dark)
-                ? OSAppTheme.Light
-                : OSAppTheme.Dark;
+            MainTabView.SelectedIndex = 1;
+            _currentTabView = ScanPage.Parent as TabViewItem;
+            ScanPage.Initialize();
         }
 
         private async void HistoryTabItem_TabTapped(object sender, TabTappedEventArgs e)
@@ -54,7 +53,6 @@ namespace PVScan.Mobile.Views
             // Tap animation
             var tabViewOriginalScale = _currentTabView.Scale;
             await _currentTabView.ScaleTo(tabViewOriginalScale - 0.1, 50, Easing.Linear);
-            await Task.Delay(100);
             await _currentTabView.ScaleTo(tabViewOriginalScale, 50, Easing.Linear);
 
             await ScanPage.Initialize();
@@ -77,11 +75,5 @@ namespace PVScan.Mobile.Views
             await ProfilePage.Initialize();
         }
 
-        private async void ContentPage_Appearing(object sender, EventArgs e)
-        {
-            _currentTabView = HistoryPage.Parent as TabViewItem;
-
-            await HistoryPage.Initialize();
-        }
     }
 }

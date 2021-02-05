@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PVScan.Mobile\PVScan.Mobile.csproj" />
+    <ProjectReference Include="..\..\PVScan.Mobile\PVScan.Mobile.csproj" />
   </ItemGroup>
   
 </Project>

@@ -1,5 +1,5 @@
 ﻿using PVScan.Mobile.ViewModels;
-using PVScan.Mobile.ViewModels.Messages;
+using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,18 +20,25 @@ namespace PVScan.Mobile.Views
         {
             InitializeComponent();
 
-            MessagingCenter.Subscribe(this, nameof(FailedLoginMessage),
-                async (LoginPageViewModel sender, FailedLoginMessage args) =>
-                {
-                    LoginMessageLabel.Text = args.Message;
+            var vm = (BindingContext as LoginPageViewModel);
 
-                    // Update UI for successful Sign Up
-                    await LoginMessageLabel.FadeTo(1);
+            vm.SuccessfulLogin += Vm_SuccessfulLogin;
+            vm.FailedLogin += Vm_FailedLogin;
+        }
 
-                    await Task.Delay(1500);
+        private async void Vm_FailedLogin(object sender, LoginEventArgs e)
+        {
+            LoginMessageLabel.Text = e.Message;
 
-                    await LoginMessageLabel.FadeTo(0);
-                });
+            _ = LoginMessageLabel.FadeTo(1);
+
+            await Task.Delay(1500);
+
+            _ = LoginMessageLabel.FadeTo(0);
+        }
+
+        private void Vm_SuccessfulLogin(object sender, LoginEventArgs e)
+        {
         }
 
         private void SignUpClicked_Handler(object sender, EventArgs e)

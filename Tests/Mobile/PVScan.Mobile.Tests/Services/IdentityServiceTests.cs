@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PVScan.Mobile.ViewModels.Messages
+namespace PVScan.Mobile.Tests.Services
 {
-    public class SuccessfulLogoutMessage
+    public class IdentityServiceTests
     {
     }
 }

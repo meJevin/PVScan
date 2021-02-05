@@ -1,6 +1,6 @@
 ﻿namespace PVScan.Mobile.Styles
 {
-    static class IconFont
+    public static class IconFont
     {
         // FontAwesome
         public const string Ad = "\uf641";

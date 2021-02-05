@@ -2,12 +2,15 @@
 <ContentView 
     xmlns="http://xamarin.com/schemas/2014/forms" 
              
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
     x:Class="PVScan.Mobile.Views.ProfilePage"
     
-    xmlns:theme="clr-namespace:PVScan.Mobile.Styles" xmlns:views="clr-namespace:PVScan.Mobile.Views"
+    xmlns:views="clr-namespace:PVScan.Mobile.Views"
     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
     
+    PropertyChanged="ContentView_PropertyChanged"
     >
 
     <ContentView.BindingContext>
@@ -15,8 +18,18 @@
     </ContentView.BindingContext>
 
     <Grid x:Name="MainContainer">
-        <views:LoginPage x:Name="LoginPage" SignUpClicked="LoginPage_SignUpClicked"/>
-        <views:SignUpPage x:Name="SignUpPage" BackClicked="SignUpPage_BackClicked"/>
-        <views:LoggedInPage x:Name="LoggedInPage"/>
+        <views:LoginPage x:Name="LoginPage" SignUpClicked="LoginPage_SignUpClicked" IsVisible="False"/>
+        <views:SignUpPage x:Name="SignUpPage" BackClicked="SignUpPage_BackClicked" IsVisible="False"/>
+        <views:LoggedInPage x:Name="LoggedInPage" IsVisible="False"/>
+        
+        <ImageButton HorizontalOptions="End" VerticalOptions="Start" Padding="14" BackgroundColor="Transparent"
+                     Clicked="AppSettingsButtonClicked">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="FontAwesome" Glyph="{x:Static theme:IconFont.Cog}" Size="26"
+                                 Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" />
+            </ImageButton.Source>
+        </ImageButton>
+        
+        <views:ApplicationSettingsPage x:Name="AppSettingsPage" BackClicked="AppSettingsPage_BackClicked" IsVisible="False"/>
     </Grid>
 </ContentView>

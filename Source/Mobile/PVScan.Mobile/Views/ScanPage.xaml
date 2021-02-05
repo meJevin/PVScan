@@ -4,35 +4,55 @@
              x:Class="PVScan.Mobile.Views.ScanPage"
              xmlns:vm="clr-namespace:PVScan.Mobile.ViewModels" 
              xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
-             xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
+             xmlns:theme="clr-namespace:PVScan.Mobile.Styles" xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
              BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
              >
     <ContentView.BindingContext>
         <vm:ScanPageViewModel/>
     </ContentView.BindingContext>
 
-    <Grid x:Name="MainContainer">
-        <zxing:ZXingScannerView x:Name="ScannerView"/>
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverBool"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
+    <Grid>
+        <Grid IsVisible="{Binding IsCameraAllowed, Converter={StaticResource InverBool}}">
+            <StackLayout VerticalOptions="Center" Spacing="24">
+                <Label HorizontalOptions="Center">
+                    Allow camera access in order to scan
+                </Label>
+                <Button Text="Allow" Command="{Binding AllowCameraCommand}" Style="{StaticResource PrimaryButton}" Margin="20, 0"/>
+            </StackLayout>
+        </Grid>
+
+        <Grid x:Name="ScannerViewContainer" IsVisible="{Binding IsCameraAllowed}">
+        </Grid>
 
         <StackLayout Orientation="Vertical" VerticalOptions="Start" 
-                     BackgroundColor="#8000" Padding="10">
+                     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarkSeeThrough}, Light={StaticResource BackgroundColorLightSeeThrough}}" 
+                     Padding="10"
+                     x:Name="BarcodeInfoContainer" 
+                     PropertyChanged="BarcodeInfoContainer_PropertyChanged">
             <Grid ColumnDefinitions="Auto,*">
                 <Label Text="Last scanned barcode" FontSize="18"/>
 
                 <ImageButton HorizontalOptions="End" Grid.Column="1" Padding="8,0"
-                             Command="{Binding ClearCommand}" IsEnabled="{Binding CanClear, TargetNullValue=False}" BackgroundColor="Transparent">
+                             Command="{Binding ClearCommand}" IsEnabled="{Binding CanClear, TargetNullValue=False}" 
+                             BackgroundColor="Transparent">
                     <ImageButton.Source>
                         <FontImageSource
                             FontFamily="FontAwesome"
                             Glyph="{x:Static theme:IconFont.Times}"
                             Size="22"
-                            Color="White" />
+                            Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" />
                     </ImageButton.Source>
                 </ImageButton>
             </Grid>
 
             <BoxView Grid.Column="2" HeightRequest="1" HorizontalOptions="Fill" VerticalOptions="Center" 
-                         Color="White">
+                         Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}">
 
             </BoxView>
             
@@ -46,7 +66,9 @@
             </Grid>
         </StackLayout>
 
-        <Grid VerticalOptions="End">
+        <Grid VerticalOptions="End"
+              x:Name="SaveButtonContainer"
+              PropertyChanged="SaveButtonContainer_PropertyChanged">
             <Button x:Name="SaveButton" Text="Save" Style="{StaticResource PrimaryButton}" Margin="40,40"
                     IsEnabled="{Binding CanSave, TargetNullValue=False}" Command="{Binding SaveCommand}">
             </Button>

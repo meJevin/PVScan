@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+            
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
+    xmlns:essentials="clr-namespace:Xamarin.Essentials;assembly=Xamarin.Essentials"
+    x:Class="PVScan.Mobile.Views.FilterPage"
+    
+    BackgroundColor="Transparent">
+    <ContentView.Content>
+        <Grid>
+            <Frame BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HasShadow="False" CornerRadius="20">
+                
+            </Frame>
+            <BoxView BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HeightRequest="20" VerticalOptions="End">
+                
+            </BoxView>
+            <Grid Margin="15, 15, 15, 35">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label HorizontalOptions="Center"
+                       FontSize="16"
+                       Margin="0,0,0,5">
+                    Filter Barcodes
+                </Label>
+
+                <BoxView Grid.Row="1" HeightRequest="1" Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" Margin="0,0,0,4"/>
+
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackLayout Margin="0, 10, 0, 0">
+                        <Label FontSize="20">
+                            Date
+                        </Label>
+                        <Label>
+                            From
+                        </Label>
+                        <Entry/>
+                        <Label>
+                            To
+                        </Label>
+                        <Entry/>
+                    </StackLayout>
+
+                    <StackLayout Grid.Row="1" Margin="0, 20, 0, 0">
+                        <Label FontSize="20">
+                            Barcode Format
+                        </Label>
+                        <Entry/>
+                    </StackLayout>
+                </Grid>
+            </Grid>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

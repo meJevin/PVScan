@@ -28,15 +28,12 @@ namespace PVScan.Mobile.ViewModels
                 LastResult = (scanResult as Result);
 
                 LastBarcodeText = LastResult.Text;
-                LastBarcodeType = Enum.GetName(typeof(BarcodeFormat), LastResult.BarcodeFormat);
+                LastBarcodeType = Enum.GetName(typeof(BarcodeFormat), LastResult.BarcodeFormat).Replace('_', ' ');
 
                 CanClear = true;
                 CanSave = true;
 
-                OnPropertyChanged(nameof(LastBarcodeText));
-                OnPropertyChanged(nameof(LastBarcodeType));
-                OnPropertyChanged(nameof(CanClear));
-                OnPropertyChanged(nameof(CanSave));
+                GotBarcode?.Invoke(this, new EventArgs());
             });
 
             ClearCommand = new Command(async () =>
@@ -49,45 +46,46 @@ namespace PVScan.Mobile.ViewModels
                 CanSave = false;
                 CanClear = false;
 
-                OnPropertyChanged(nameof(LastBarcodeText));
-                OnPropertyChanged(nameof(LastBarcodeType));
-                OnPropertyChanged(nameof(CanClear));
-                OnPropertyChanged(nameof(CanSave));
+                Cleared?.Invoke(this, new EventArgs());
             });
 
             SaveCommand = new Command(async () =>
             {
-                CanClear = true;
-                CanSave = true;
+                CanClear = false;
+                CanSave = false;
 
-                OnPropertyChanged(nameof(CanClear));
-                OnPropertyChanged(nameof(CanSave));
-
-                // Save to DB and clear
-                var location = await Geolocation.GetLocationAsync(new GeolocationRequest()
+                Location location = null;
+                try
                 {
-                    DesiredAccuracy = GeolocationAccuracy.Best,
-                    Timeout = TimeSpan.FromSeconds(5),
-                });
-
-                Console.WriteLine(location.ToString());
+                    location = await Geolocation.GetLocationAsync(new GeolocationRequest()
+                    {
+                        DesiredAccuracy = GeolocationAccuracy.Best,
+                        Timeout = TimeSpan.FromSeconds(5),
+                    });
+                }
+                catch (Exception e)
+                {
+                    // Inform user that location could not be fetched
+                }
 
                 // Todo: if user is logged in send this to server and set ServerSynced to true
                 Barcode b = new Barcode()
                 {
                     Format = LastResult.BarcodeFormat,
                     Text = LastResult.Text,
+                    ServerSynced = false,
                     ScanLocation = new Coordinate()
                     {
-                        Latitude = location.Latitude,
-                        Longitude = location.Longitude,
+                        Latitude = location?.Latitude,
+                        Longitude = location?.Longitude,
                     },
-                    ServerSynced = false,
                     ScanTime = DateTime.UtcNow,
                 };
 
                 await _context.Barcodes.AddAsync(b);
                 await _context.SaveChangesAsync();
+
+                Saved?.Invoke(this, new EventArgs());
 
                 MessagingCenter.Send(this, nameof(BarcodeScannedMessage), new BarcodeScannedMessage()
                 {
@@ -96,6 +94,27 @@ namespace PVScan.Mobile.ViewModels
 
                 ClearCommand.Execute(null);
             });
+
+            AllowCameraCommand = new Command(async () =>
+            {
+                var result = await Permissions.RequestAsync<Permissions.Camera>();
+
+                if (result == PermissionStatus.Granted)
+                {
+                    IsCameraAllowed = true;
+
+                    CameraAllowed?.Invoke(this, new EventArgs());
+                }
+            });
+
+            IsCameraAllowed = Permissions.CheckStatusAsync<Permissions.Camera>()
+                .GetAwaiter().GetResult() == PermissionStatus.Granted;
+
+            MessagingCenter.Subscribe(this, nameof(CameraAllowedMessage),
+                async (ApplicationSettingsPageViewModel v, CameraAllowedMessage args) =>
+                {
+                    IsCameraAllowed = true;
+                });
         }
 
         private Result LastResult;
@@ -106,11 +125,20 @@ namespace PVScan.Mobile.ViewModels
         
         public ICommand SaveCommand { get; }
 
+        public ICommand AllowCameraCommand { get; }
+
         public bool CanClear { get; set; }
 
         public bool CanSave { get; set; }
 
+        public bool IsCameraAllowed { get; set; }
+
         public string LastBarcodeText { get; set; }
         public string LastBarcodeType { get; set; }
+
+        public event EventHandler GotBarcode;
+        public event EventHandler Cleared;
+        public event EventHandler Saved;
+        public event EventHandler CameraAllowed;
     }
 }
