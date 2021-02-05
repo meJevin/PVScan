@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PVScan.Mobile.Tests.ViewModels
+namespace PVScan.Mobile.Tests.Services
 {
-    public class LoginViewModelTests
+    public class IdentityServiceTests
     {
     }
 }
