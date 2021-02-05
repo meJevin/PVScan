@@ -12,7 +12,7 @@
     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
 
     <ContentView.BindingContext>
-        <viewmodels:ApplicationSettingsViewModel/>
+        <viewmodels:ApplicationSettingsPageViewModel/>
     </ContentView.BindingContext>
 
     <ContentView.Resources>
