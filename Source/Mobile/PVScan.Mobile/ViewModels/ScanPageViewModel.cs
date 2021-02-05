@@ -95,6 +95,18 @@ namespace PVScan.Mobile.ViewModels
                 ClearCommand.Execute(null);
             });
 
+            AllowCameraCommand = new Command(async () =>
+            {
+                var result = await Permissions.RequestAsync<Permissions.Camera>();
+
+                if (result == PermissionStatus.Granted)
+                {
+                    IsCameraAllowed = true;
+
+                    CameraAllowed?.Invoke(this, new EventArgs());
+                }
+            });
+
             IsCameraAllowed = Permissions.CheckStatusAsync<Permissions.Camera>()
                 .GetAwaiter().GetResult() == PermissionStatus.Granted;
 
@@ -113,6 +125,8 @@ namespace PVScan.Mobile.ViewModels
         
         public ICommand SaveCommand { get; }
 
+        public ICommand AllowCameraCommand { get; }
+
         public bool CanClear { get; set; }
 
         public bool CanSave { get; set; }
@@ -125,5 +139,6 @@ namespace PVScan.Mobile.ViewModels
         public event EventHandler GotBarcode;
         public event EventHandler Cleared;
         public event EventHandler Saved;
+        public event EventHandler CameraAllowed;
     }
 }

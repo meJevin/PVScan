@@ -34,17 +34,27 @@ namespace PVScan.Mobile.Views
             vm.GotBarcode += (s, e) => { BarcodeAvailable(); };
             vm.Cleared += (s, e) => { BarcodeUnavailable(); };
             vm.Saved += (s, e) => {  };
+            vm.CameraAllowed += (s, e) => { CameraAllowedHandler(); };
 
             if (vm.IsCameraAllowed)
             {
-                CameraAllowedHandler();
+                ScannerView = new ZXingScannerView()
+                {
+                    IsAnalyzing = true,
+                    IsScanning = true,
+                };
+
+                ScannerView.OnScanResult += ScannerView_OnScanResult;
+
+                ScannerViewContainer.Children.Clear();
+                ScannerViewContainer.Children.Add(ScannerView);
             }
 
-            MessagingCenter.Subscribe(this, nameof(CameraAllowedMessage),
-                async (ApplicationSettingsPageViewModel v, CameraAllowedMessage args) =>
-                {
-                    CameraAllowedHandler();
-                });
+            //MessagingCenter.Subscribe(this, nameof(CameraAllowedMessage),
+            //    async (ApplicationSettingsPageViewModel v, CameraAllowedMessage args) =>
+            //    {
+            //        CameraAllowedHandler();
+            //    });
         }
 
         private void BarcodeAvailable()
@@ -66,7 +76,6 @@ namespace PVScan.Mobile.Views
                 return;
             }
 
-            ScannerView.IsVisible = true;
             ScannerView.IsScanning = true;
             ScannerView.IsAnalyzing = true;
         }
@@ -84,15 +93,28 @@ namespace PVScan.Mobile.Views
 
         private async Task CameraAllowedHandler()
         {
-            ScannerView = new ZXingScannerView();
+            ScannerView = new ZXingScannerView()
+            {
+                IsAnalyzing = true,
+                IsScanning = true,
+            };
 
             ScannerView.OnScanResult += ScannerView_OnScanResult;
 
             ScannerViewContainer.Children.Clear();
             ScannerViewContainer.Children.Add(ScannerView);
 
-            // For some reason this doesn't work until we switch pages :(
-            await Initialize();
+            // This hack is required unfortunatelly :(
+            _ = Task.Run(async () => 
+            {
+                await Task.Delay(5);
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ScannerViewContainer.Children.Clear();
+                    ScannerViewContainer.Children.Add(ScannerView);
+                });
+            });
         }
 
         private void ScannerView_OnScanResult(Result result)

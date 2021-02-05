@@ -29,27 +29,11 @@ namespace PVScan.Mobile.ViewModels
                 }
             });
 
-            AllowCameraCommand = new Command(async () =>
-            {
-                var result = await Permissions.RequestAsync<Permissions.Camera>();
-
-                if (result == PermissionStatus.Granted)
-                {
-                    MessagingCenter.Send(this, nameof(CameraAllowedMessage), new CameraAllowedMessage());
-                    CameraToggleEnabled = false;
-                }
-            });
-
-            CameraToggleEnabled = !(Permissions.CheckStatusAsync<Permissions.Camera>()
-                .GetAwaiter().GetResult() == PermissionStatus.Granted);
-
             IsDarkTheme = Application.Current.UserAppTheme == OSAppTheme.Dark;
         }
 
         public ICommand SwitchThemeCommand { get; }
-        public ICommand AllowCameraCommand { get; }
 
         public bool IsDarkTheme { get; set; }
-        public bool CameraToggleEnabled { get; set; }
     }
 }

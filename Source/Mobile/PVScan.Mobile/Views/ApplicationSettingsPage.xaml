@@ -37,14 +37,6 @@
                 </Label>
                 <Switch Toggled="DarkTheme_Toggled" IsToggled="{Binding IsDarkTheme}"/>
             </StackLayout>
-            <StackLayout Orientation="Horizontal">
-                <Label VerticalTextAlignment="Center">
-                    Allow camera
-                </Label>
-                <Switch Toggled="AllowCamera_Toggled" 
-                        IsToggled="{Binding CameraToggleEnabled, Mode=OneTime, Converter={StaticResource InverseBool}}"
-                        IsEnabled="{Binding CameraToggleEnabled}"/>
-            </StackLayout>
         </StackLayout>
     </Grid>
 </ContentView>

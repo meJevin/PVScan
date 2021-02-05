@@ -21,13 +21,13 @@
         <Grid IsVisible="{Binding IsCameraAllowed, Converter={StaticResource InverBool}}">
             <StackLayout VerticalOptions="Center" Spacing="24">
                 <Label HorizontalOptions="Center">
-                    Allow camera access in settings
+                    Allow camera access in order to scan
                 </Label>
+                <Button Text="Allow" Command="{Binding AllowCameraCommand}" Style="{StaticResource PrimaryButton}" Margin="20, 0"/>
             </StackLayout>
         </Grid>
 
         <Grid x:Name="ScannerViewContainer" IsVisible="{Binding IsCameraAllowed}">
-            
         </Grid>
 
         <StackLayout Orientation="Vertical" VerticalOptions="Start" 

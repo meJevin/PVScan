@@ -29,16 +29,6 @@ namespace PVScan.Mobile.Views
             BackClicked.Invoke(sender, e);
         }
 
-        private void AllowCamera_Toggled(object sender, ToggledEventArgs e)
-        {
-            if (vm == null)
-            {
-                return;
-            }
-
-            vm.AllowCameraCommand.Execute(null);
-        }
-
         private void DarkTheme_Toggled(object sender, ToggledEventArgs e)
         {
             if (vm == null)
