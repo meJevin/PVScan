@@ -28,7 +28,8 @@
     </ContentView.Resources>
 
     <Grid>
-        <RefreshView IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
+        <RefreshView IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}"
+                     RefreshColor="{AppThemeBinding Dark=White, Light=Black}">
             <CollectionView ItemsSource="{Binding Barcodes}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Barcode">

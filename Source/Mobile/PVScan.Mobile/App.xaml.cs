@@ -11,19 +11,9 @@ namespace PVScan.Mobile
 {
     public partial class App : Xamarin.Forms.Application
     {
-
         public App()
         {
-            var preferencesTheme = Preferences.Get("Theme", "N/A");
-
-            if (preferencesTheme == "N/A")
-            {
-                UserAppTheme = preferencesTheme == "Light" ? OSAppTheme.Light : OSAppTheme.Dark;
-            }
-            else
-            {
-                UserAppTheme = Xamarin.Forms.Application.Current.RequestedTheme;
-            }
+            InitializeTheme();
 
             InitializeComponent();
 
@@ -32,6 +22,25 @@ namespace PVScan.Mobile
             navigationPage.SetOnAppTheme(Xamarin.Forms.NavigationPage.BarTextColorProperty, Color.Black, Color.White);
 
             MainPage = navigationPage;
+        }
+
+        private void InitializeTheme()
+        {
+            var preferencesTheme = Preferences.Get("Theme", "N/A");
+
+            if (preferencesTheme == "N/A")
+            {
+                UserAppTheme = RequestedTheme;
+            }
+            else
+            {
+                UserAppTheme = preferencesTheme == "Light" ? OSAppTheme.Light : OSAppTheme.Dark;
+            }
+
+            RequestedThemeChanged += (s, e) =>
+            {
+                // Respond to user device theme change if option is set?
+            };
         }
 
         protected override async void OnStart()
