@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.Services.Identity;
 using PVScan.Mobile.ViewModels.Messages.Auth;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -12,6 +13,11 @@ using Xamarin.Forms;
 
 namespace PVScan.Mobile.ViewModels
 {
+    public class LogoutEventArgs
+    {
+        public string Message { get; set; }
+    }
+
     public class LoggedInPageViewModel : BaseViewModel
     {
         readonly IIdentityService identityService;
@@ -26,16 +32,15 @@ namespace PVScan.Mobile.ViewModels
 
                 if (result)
                 {
+                    SuccessfulLogout.Invoke(this, new LogoutEventArgs() { });
+
                     MessagingCenter.Send(this, nameof(SuccessfulLogoutMessage), new SuccessfulLogoutMessage()
                     {
                     });
                 }
                 else
                 {
-                    // Todo: handle logout failure
-                    MessagingCenter.Send(this, nameof(FailedLogoutMessage), new FailedLogoutMessage()
-                    {
-                    });
+                    FailedLogout.Invoke(this, new LogoutEventArgs() { });
                 }
             });
 
@@ -88,6 +93,8 @@ namespace PVScan.Mobile.ViewModels
         public ICommand SaveProfileCommand { get; }
         
         public ICommand LogoutCommand { get; }
+        public event EventHandler<LogoutEventArgs> SuccessfulLogout;
+        public event EventHandler<LogoutEventArgs> FailedLogout;
 
         public UserInfo UserInfo { get; set; }
     }

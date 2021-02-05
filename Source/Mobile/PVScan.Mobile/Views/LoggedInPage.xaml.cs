@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PVScan.Mobile.ViewModels;
+using PVScan.Mobile.ViewModels.Messages.Auth;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +17,20 @@ namespace PVScan.Mobile.Views
         public LoggedInPage()
         {
             InitializeComponent();
+
+            var vm = (BindingContext as LoggedInPageViewModel);
+
+            vm.SuccessfulLogout += Vm_SuccessfulLogout;
+            vm.FailedLogout += Vm_FailedLogout;
+        }
+
+        private void Vm_SuccessfulLogout(object sender, LogoutEventArgs e)
+        {
+        }
+
+        private void Vm_FailedLogout(object sender, LogoutEventArgs e)
+        {
+            // Failed to logout
         }
     }
 }

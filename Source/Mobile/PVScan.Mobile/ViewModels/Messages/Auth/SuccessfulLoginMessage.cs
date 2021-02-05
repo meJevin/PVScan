@@ -6,6 +6,5 @@ namespace PVScan.Mobile.ViewModels.Messages.Auth
 {
     public class SuccessfulLoginMessage
     {
-        public string Message { get; set; }
     }
 }

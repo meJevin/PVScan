@@ -14,7 +14,7 @@ namespace PVScan.Mobile.ViewModels
 
     public class SignUpPageViewModel : BaseViewModel
     {
-        readonly IIdentityService identityService;
+        public IIdentityService identityService;
 
         public SignUpPageViewModel()
         {
