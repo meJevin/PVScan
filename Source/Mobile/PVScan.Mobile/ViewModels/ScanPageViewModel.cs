@@ -54,26 +54,31 @@ namespace PVScan.Mobile.ViewModels
                 CanClear = false;
                 CanSave = false;
 
-                // Save to DB and clear
-                var location = await Geolocation.GetLocationAsync(new GeolocationRequest()
+                Location location = null;
+                try
                 {
-                    DesiredAccuracy = GeolocationAccuracy.Best,
-                    Timeout = TimeSpan.FromSeconds(5),
-                });
-
-                Console.WriteLine(location.ToString());
+                    location = await Geolocation.GetLocationAsync(new GeolocationRequest()
+                    {
+                        DesiredAccuracy = GeolocationAccuracy.Best,
+                        Timeout = TimeSpan.FromSeconds(5),
+                    });
+                }
+                catch (Exception e)
+                {
+                    // Inform user that location could not be fetched
+                }
 
                 // Todo: if user is logged in send this to server and set ServerSynced to true
                 Barcode b = new Barcode()
                 {
                     Format = LastResult.BarcodeFormat,
                     Text = LastResult.Text,
+                    ServerSynced = false,
                     ScanLocation = new Coordinate()
                     {
-                        Latitude = location.Latitude,
-                        Longitude = location.Longitude,
+                        Latitude = location?.Latitude,
+                        Longitude = location?.Longitude,
                     },
-                    ServerSynced = false,
                     ScanTime = DateTime.UtcNow,
                 };
 
