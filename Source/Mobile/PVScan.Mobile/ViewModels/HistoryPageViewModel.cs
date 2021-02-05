@@ -37,12 +37,10 @@ namespace PVScan.Mobile.ViewModels
             RefreshCommand = new Command(async () =>
             {
                 IsRefresing = true;
-                OnPropertyChanged(nameof(IsRefresing));
 
                 await LoadBarcodesFromDB();
 
                 IsRefresing = false;
-                OnPropertyChanged(nameof(IsRefresing));
             });
         }
 
@@ -56,13 +54,11 @@ namespace PVScan.Mobile.ViewModels
             Barcodes.Clear();
 
             IsLoading = true;
-            OnPropertyChanged(nameof(IsLoading));
 
             var dbBarcodes = await _context.Barcodes.OrderByDescending(b => b.ScanTime).ToListAsync();
             Barcodes.AddRange(dbBarcodes);
 
             IsLoading = false;
-            OnPropertyChanged(nameof(IsLoading));
         }
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }

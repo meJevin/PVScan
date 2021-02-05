@@ -37,8 +37,6 @@ namespace PVScan.Mobile.ViewModels
                 {
                     MessagingCenter.Send(this, nameof(CameraAllowedMessage), new CameraAllowedMessage());
                     CameraToggleEnabled = false;
-
-                    OnPropertyChanged(nameof(CameraToggleEnabled));
                 }
             });
 

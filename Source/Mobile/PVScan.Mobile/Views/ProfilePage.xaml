@@ -9,6 +9,8 @@
     
     xmlns:views="clr-namespace:PVScan.Mobile.Views"
     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
+    
+    PropertyChanged="ContentView_PropertyChanged"
     >
 
     <ContentView.BindingContext>
@@ -16,9 +18,9 @@
     </ContentView.BindingContext>
 
     <Grid x:Name="MainContainer">
-        <views:LoginPage x:Name="LoginPage" SignUpClicked="LoginPage_SignUpClicked"/>
-        <views:SignUpPage x:Name="SignUpPage" BackClicked="SignUpPage_BackClicked"/>
-        <views:LoggedInPage x:Name="LoggedInPage"/>
+        <views:LoginPage x:Name="LoginPage" SignUpClicked="LoginPage_SignUpClicked" IsVisible="False"/>
+        <views:SignUpPage x:Name="SignUpPage" BackClicked="SignUpPage_BackClicked" IsVisible="False"/>
+        <views:LoggedInPage x:Name="LoggedInPage" IsVisible="False"/>
         
         <ImageButton HorizontalOptions="End" VerticalOptions="Start" Padding="14" BackgroundColor="Transparent"
                      Clicked="AppSettingsButtonClicked">
@@ -28,6 +30,6 @@
             </ImageButton.Source>
         </ImageButton>
         
-        <views:ApplicationSettingsPage x:Name="AppSettingsPage" BackClicked="AppSettingsPage_BackClicked"/>
+        <views:ApplicationSettingsPage x:Name="AppSettingsPage" BackClicked="AppSettingsPage_BackClicked" IsVisible="False"/>
     </Grid>
 </ContentView>

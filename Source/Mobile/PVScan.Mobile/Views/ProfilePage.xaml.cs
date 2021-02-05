@@ -3,7 +3,9 @@ using PVScan.Mobile.ViewModels;
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,20 +42,6 @@ namespace PVScan.Mobile.Views
         // Init pages and stuff
         public async Task Initialize()
         {
-            SignUpPage.TranslationY = _transY;
-            SignUpPage.Opacity = 0;
-            SignUpPage.IsVisible = false;
-
-            LoginPage.TranslationY = _transY;
-            LoginPage.Opacity = 0;
-            LoginPage.IsVisible = false;
-
-            LoggedInPage.Opacity = 0;
-            LoggedInPage.IsVisible = false;
-
-            AppSettingsPage.TranslationX = AppSettingsPage.Width;
-            AppSettingsPage.IsVisible = false;
-
             var vm = BindingContext as ProfilePageViewModel;
 
             if (vm.IsLoggedIn)
@@ -67,10 +55,24 @@ namespace PVScan.Mobile.Views
             }
             else
             {
-                LoginPage.IsVisible = true;
+                if (LoginPage.IsVisible == false && SignUpPage.IsVisible == false)
+                {
+                    SignUpPage.TranslationY = _transY;
+                    SignUpPage.Opacity = 0;
+                    SignUpPage.IsVisible = false;
 
-                _ = LoginPage.TranslateTo(0, 0, _animSpeed, Easing.CubicOut);
-                await LoginPage.FadeTo(1, _animSpeed, Easing.CubicOut);
+                    LoginPage.TranslationY = _transY;
+                    LoginPage.Opacity = 0;
+                    LoginPage.IsVisible = false;
+
+                    LoggedInPage.Opacity = 0;
+                    LoggedInPage.IsVisible = false;
+
+                    LoginPage.IsVisible = true;
+
+                    _ = LoginPage.TranslateTo(0, 0, _animSpeed, Easing.CubicOut);
+                    await LoginPage.FadeTo(1, _animSpeed, Easing.CubicOut);
+                }
             }
         }
 
@@ -108,6 +110,14 @@ namespace PVScan.Mobile.Views
         {
             await AppSettingsPage.TranslateTo(AppSettingsPage.Width, 0, _animSpeed, Easing.CubicOut);
             AppSettingsPage.IsVisible = false;
+        }
+
+        private void ContentView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Width))
+            {
+                AppSettingsPage.TranslationX = Width;
+            }
         }
     }
 }

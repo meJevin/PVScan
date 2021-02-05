@@ -59,12 +59,10 @@ namespace PVScan.Mobile.ViewModels
             RefreshCommand = new Command(async () =>
             {
                 IsRefreshing = true;
-                OnPropertyChanged(nameof(IsRefreshing));
 
                 await Initialize();
 
                 IsRefreshing = false;
-                OnPropertyChanged(nameof(IsRefreshing));
             });
         }
 
@@ -82,11 +80,9 @@ namespace PVScan.Mobile.ViewModels
             var strContent = await result.Content.ReadAsStringAsync();
 
             UserInfo = JsonConvert.DeserializeObject<UserInfo>(strContent);
-
-            OnPropertyChanged(nameof(UserInfo));
         }
 
-        public bool IsRefreshing { get; set; } = false;
+        public bool IsRefreshing { get; set; }
 
         public ICommand RefreshCommand { get; }
 

@@ -34,11 +34,6 @@ namespace PVScan.Mobile.ViewModels
                 CanSave = true;
 
                 GotBarcode?.Invoke(this, new EventArgs());
-
-                OnPropertyChanged(nameof(LastBarcodeText));
-                OnPropertyChanged(nameof(LastBarcodeType));
-                OnPropertyChanged(nameof(CanClear));
-                OnPropertyChanged(nameof(CanSave));
             });
 
             ClearCommand = new Command(async () =>
@@ -52,20 +47,12 @@ namespace PVScan.Mobile.ViewModels
                 CanClear = false;
 
                 Cleared?.Invoke(this, new EventArgs());
-                
-                OnPropertyChanged(nameof(LastBarcodeText));
-                OnPropertyChanged(nameof(LastBarcodeType));
-                OnPropertyChanged(nameof(CanClear));
-                OnPropertyChanged(nameof(CanSave));
             });
 
             SaveCommand = new Command(async () =>
             {
                 CanClear = false;
                 CanSave = false;
-
-                OnPropertyChanged(nameof(CanClear));
-                OnPropertyChanged(nameof(CanSave));
 
                 // Save to DB and clear
                 var location = await Geolocation.GetLocationAsync(new GeolocationRequest()
@@ -110,7 +97,6 @@ namespace PVScan.Mobile.ViewModels
                 async (ApplicationSettingsPageViewModel v, CameraAllowedMessage args) =>
                 {
                     IsCameraAllowed = true;
-                    OnPropertyChanged(nameof(IsCameraAllowed));
                 });
         }
 

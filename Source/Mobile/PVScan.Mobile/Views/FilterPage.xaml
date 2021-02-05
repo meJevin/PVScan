@@ -9,10 +9,16 @@
     xmlns:essentials="clr-namespace:Xamarin.Essentials;assembly=Xamarin.Essentials"
     x:Class="PVScan.Mobile.Views.FilterPage"
     
-    BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
+    BackgroundColor="Transparent">
     <ContentView.Content>
-        <Grid Margin="15, 15, 15, 35">
-            <Grid>
+        <Grid>
+            <Frame BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HasShadow="False" CornerRadius="20">
+                
+            </Frame>
+            <BoxView BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HeightRequest="20" VerticalOptions="End">
+                
+            </BoxView>
+            <Grid Margin="15, 15, 15, 35">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -27,44 +33,33 @@
 
                 <BoxView Grid.Row="1" HeightRequest="1" Color="Black" Margin="0,0,0,4"/>
 
-                <ScrollView Grid.Row="2" VerticalScrollBarVisibility="Never">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                        <StackLayout>
-                            <Label FontSize="20">
-                                Date
-                            </Label>
-                            <Label>
-                                From
-                            </Label>
-                            <Entry/>
-                            <Label>
-                                To
-                            </Label>
-                            <Entry/>
-                        </StackLayout>
+                    <StackLayout>
+                        <Label FontSize="20">
+                            Date
+                        </Label>
+                        <Label>
+                            From
+                        </Label>
+                        <Entry/>
+                        <Label>
+                            To
+                        </Label>
+                        <Entry/>
+                    </StackLayout>
 
-                        <StackLayout Grid.Row="1">
-                            <Label FontSize="20">
-                                Barcode Format
-                            </Label>
-                            <Entry/>
-                        </StackLayout>
-
-                        <StackLayout Grid.Row="2">
-                            <Label FontSize="20">
-                                Location
-                            </Label>
-                            <Grid HeightRequest="300" BackgroundColor="Red">
-                            </Grid>
-                        </StackLayout>
-                    </Grid>
-                </ScrollView>
+                    <StackLayout Grid.Row="1">
+                        <Label FontSize="20">
+                            Barcode Format
+                        </Label>
+                        <Entry/>
+                    </StackLayout>
+                </Grid>
             </Grid>
         </Grid>
     </ContentView.Content>
