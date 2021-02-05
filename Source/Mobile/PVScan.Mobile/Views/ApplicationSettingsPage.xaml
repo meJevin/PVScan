@@ -37,6 +37,9 @@
                 </Label>
                 <Switch Toggled="DarkTheme_Toggled" IsToggled="{Binding IsDarkTheme}"/>
             </StackLayout>
+            <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked" Text="Add 1"/>
+            <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked_1"  Text="Add 10"/>
+            <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked_2" Text="Add 100"/>
         </StackLayout>
     </Grid>
 </ContentView>

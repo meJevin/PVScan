@@ -34,20 +34,32 @@ namespace PVScan.Mobile.Views
 
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
         {
-            double newTranslationY = FilterPage.TranslationY;
-            double newOverlayOpacity = OverlayMaxOpacity - ((newTranslationY / FilterPageHeight) * OverlayMaxOpacity);
-
             if (e.StatusType == GestureStatus.Running)
             {
-                newTranslationY += e.TotalY;
+                double newTranslationY = FilterPage.TranslationY;
+
+                // Because xamarin :L
+                // The interesting thing is that values are actually the same, but android does something weird and we actually have to add, IDK
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    newTranslationY += e.TotalY;
+                }
+                else if (Device.RuntimePlatform == Device.iOS)
+                {
+                    newTranslationY = e.TotalY;
+                }
 
                 if (newTranslationY < 1)
                 {
                     newTranslationY = 1;
                 }
 
+                double newOverlayOpacity = OverlayMaxOpacity - ((newTranslationY / FilterPageHeight) * OverlayMaxOpacity);
+
                 FilterPage.TranslationY = newTranslationY;
                 Overlay.Opacity = newOverlayOpacity;
+
+                Console.WriteLine($"\nTOTAL_T, NEW_TRANS_Y: {e.TotalY}, {newTranslationY}");
             }
             else if (e.StatusType == GestureStatus.Completed)
             {

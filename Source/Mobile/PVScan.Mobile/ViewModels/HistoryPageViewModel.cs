@@ -28,11 +28,11 @@ namespace PVScan.Mobile.ViewModels
             Barcodes = new ObservableRangeCollection<Barcode>();
             _context = new PVScanMobileDbContext(dbPath);
 
-            MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
-                async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
-                {
-                    Barcodes.Add(args.ScannedBarcode);
-                });
+            //MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
+            //    async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
+            //    {
+            //        Barcodes.Add(args.ScannedBarcode);
+            //    });
 
             RefreshCommand = new Command(async () =>
             {

@@ -14,12 +14,22 @@ namespace PVScan.Mobile
 
         public App()
         {
-            UserAppTheme = Preferences.Get("Theme", "Light") == "Light" ? OSAppTheme.Light : OSAppTheme.Dark;
+            var preferencesTheme = Preferences.Get("Theme", "N/A");
+
+            if (preferencesTheme == "N/A")
+            {
+                UserAppTheme = preferencesTheme == "Light" ? OSAppTheme.Light : OSAppTheme.Dark;
+            }
+            else
+            {
+                UserAppTheme = Xamarin.Forms.Application.Current.RequestedTheme;
+            }
 
             InitializeComponent();
 
             var navigationPage = new Xamarin.Forms.NavigationPage(new MainPage());
             navigationPage.On<iOS>().SetHideNavigationBarSeparator(false);
+            navigationPage.SetOnAppTheme(Xamarin.Forms.NavigationPage.BarTextColorProperty, Color.Black, Color.White);
 
             MainPage = navigationPage;
         }

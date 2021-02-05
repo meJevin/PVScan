@@ -53,7 +53,6 @@ namespace PVScan.Mobile.Views
             // Tap animation
             var tabViewOriginalScale = _currentTabView.Scale;
             await _currentTabView.ScaleTo(tabViewOriginalScale - 0.1, 50, Easing.Linear);
-            await Task.Delay(100);
             await _currentTabView.ScaleTo(tabViewOriginalScale, 50, Easing.Linear);
 
             await ScanPage.Initialize();
