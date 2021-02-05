@@ -41,7 +41,7 @@ namespace PVScan.Mobile.Views
             }
 
             MessagingCenter.Subscribe(this, nameof(CameraAllowedMessage),
-                async (ApplicationSettingsViewModel v, CameraAllowedMessage args) =>
+                async (ApplicationSettingsPageViewModel v, CameraAllowedMessage args) =>
                 {
                     CameraAllowedHandler();
                 });

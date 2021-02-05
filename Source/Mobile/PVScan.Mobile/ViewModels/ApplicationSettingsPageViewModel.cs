@@ -9,9 +9,9 @@ using Xamarin.Forms;
 
 namespace PVScan.Mobile.ViewModels
 {
-    public class ApplicationSettingsViewModel : BaseViewModel
+    public class ApplicationSettingsPageViewModel : BaseViewModel
     {
-        public ApplicationSettingsViewModel()
+        public ApplicationSettingsPageViewModel()
         {
             SwitchThemeCommand = new Command(async () =>
             {

@@ -107,7 +107,7 @@ namespace PVScan.Mobile.ViewModels
                 .GetAwaiter().GetResult() == PermissionStatus.Granted;
 
             MessagingCenter.Subscribe(this, nameof(CameraAllowedMessage),
-                async (ApplicationSettingsViewModel v, CameraAllowedMessage args) =>
+                async (ApplicationSettingsPageViewModel v, CameraAllowedMessage args) =>
                 {
                     IsCameraAllowed = true;
                     OnPropertyChanged(nameof(IsCameraAllowed));

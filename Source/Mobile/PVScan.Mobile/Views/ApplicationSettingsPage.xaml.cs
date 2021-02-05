@@ -15,13 +15,13 @@ namespace PVScan.Mobile.Views
     {
         public event EventHandler BackClicked;
 
-        ApplicationSettingsViewModel vm;
+        ApplicationSettingsPageViewModel vm;
 
         public ApplicationSettingsPage()
         {
             InitializeComponent();
 
-            vm = BindingContext as ApplicationSettingsViewModel;
+            vm = BindingContext as ApplicationSettingsPageViewModel;
         }
 
         private void BackButton_Click(object sender, EventArgs e)
