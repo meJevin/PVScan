@@ -10,6 +10,7 @@ using Xamarin.Forms.Xaml;
 
 namespace PVScan.Mobile.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HistoryPage : ContentView
     {
         double FilterPageHeight = 425;

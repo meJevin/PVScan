@@ -5,7 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
     xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
-    xmlns:theme="clr-namespace:PVScan.Mobile.Styles" xmlns:views="clr-namespace:PVScan.Mobile.Views"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
+    xmlns:views="clr-namespace:PVScan.Mobile.Views"
+    xmlns:models="clr-namespace:PVScan.Mobile.Models"
     x:Class="PVScan.Mobile.Views.HistoryPage"
     
     BackgroundColor="{AppThemeBinding 
@@ -29,19 +31,19 @@
         <RefreshView IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
             <CollectionView ItemsSource="{Binding Barcodes}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="models:Barcode">
                         <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
                               HeightRequest="65">
 
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
                                 <StackLayout Orientation="Vertical">
-                                    <Label Text="{Binding Text}" FontSize="16"/>
+                                    <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
                                     <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
                                            FontSize="12"/>
                                 </StackLayout>

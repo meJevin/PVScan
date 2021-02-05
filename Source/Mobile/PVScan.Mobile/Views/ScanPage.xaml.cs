@@ -18,6 +18,7 @@ using ZXing.Net.Mobile.Forms;
 
 namespace PVScan.Mobile.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ScanPage : ContentView
     {
         ZXingScannerView ScannerView;
