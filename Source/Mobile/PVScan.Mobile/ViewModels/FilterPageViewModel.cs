@@ -29,8 +29,18 @@ namespace PVScan.Mobile.ViewModels
             SelectedBarcodeFormats = new ObservableRangeCollection<object>();
 
             // Init min max dates from current DB
-            var minDate = _context.Barcodes.Min(b => b.ScanTime);
-            var maxDate = _context.Barcodes.Max(b => b.ScanTime);
+            DateTime minDate = DateTime.MinValue;
+            DateTime maxDate = DateTime.MaxValue;
+            
+            try
+            {
+                minDate = _context.Barcodes.Min(b => b.ScanTime);
+                maxDate = _context.Barcodes.Max(b => b.ScanTime);
+            }
+            catch (Exception ex)
+            {
+                // If no barcodes
+            }
 
             FromDate = minDate;
             ToDate = maxDate;
