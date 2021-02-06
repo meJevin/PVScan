@@ -10,6 +10,8 @@
     xmlns:models="clr-namespace:PVScan.Mobile.Models"
     x:Class="PVScan.Mobile.Views.HistoryPage"
     
+    PropertyChanged="ContentView_PropertyChanged"
+
     BackgroundColor="{AppThemeBinding 
     Dark={StaticResource BackgroundColorDarker},
     Light={StaticResource BackgroundColorLighter}}">
@@ -32,7 +34,9 @@
             <CollectionView ItemsSource="{Binding Barcodes}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Barcode">
-                        <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
+                        <Grid BackgroundColor="{AppThemeBinding 
+                            Dark={StaticResource BackgroundColorDarker},
+                            Light={StaticResource BackgroundColorLighter}}"
                               HeightRequest="65">
 
                             <Grid.ColumnDefinitions>
@@ -74,7 +78,7 @@
                         Light={StaticResource BackgroundColorLighter}}">
                         <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InverseBool}}">
                             <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
-                           Text="No barcodes yet"/>
+                           Text="No barcodes"/>
                         </StackLayout>
 
                         <StackLayout IsVisible="{Binding IsLoading}">

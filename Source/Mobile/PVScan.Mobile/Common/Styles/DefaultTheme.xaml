@@ -377,6 +377,12 @@
         <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
     </Style>
 
+    <Style TargetType="DatePicker">
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light={StaticResource BackgroundColorLight}}"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
+    </Style>
+    
     <!-- SWITCH -->
     <Style TargetType="Switch">
         <Setter Property="HorizontalOptions" Value="Start"/>

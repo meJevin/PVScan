@@ -2,6 +2,7 @@
 using MvvmHelpers;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.ViewModels.Messages.Filtering;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,18 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using ZXing;
 
 namespace PVScan.Mobile.ViewModels
 {
+    public class Filter
+    {
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+
+        public IEnumerable<BarcodeFormat> BarcodeFormats { get; set; }
+    }
+
     public class HistoryPageViewModel : BaseViewModel
     {
         readonly PVScanMobileDbContext _context;
@@ -24,15 +34,23 @@ namespace PVScan.Mobile.ViewModels
         public HistoryPageViewModel()
         {
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
+            _context = new PVScanMobileDbContext(dbPath);
 
             Barcodes = new ObservableRangeCollection<Barcode>();
-            _context = new PVScanMobileDbContext(dbPath);
 
             //MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
             //    async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
             //    {
             //        Barcodes.Add(args.ScannedBarcode);
             //    });
+
+            MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
+                async (FilterPageViewModel vm, FilterAppliedMessage args) =>
+                {
+                    CurrentFilter = args.NewFilter;
+
+                    await LoadBarcodesFromDB();
+                });
 
             RefreshCommand = new Command(async () =>
             {
@@ -55,11 +73,29 @@ namespace PVScan.Mobile.ViewModels
 
             IsLoading = true;
 
-            var dbBarcodes = await _context.Barcodes.OrderByDescending(b => b.ScanTime).ToListAsync();
+            var dbBarcodes = _context.Barcodes.AsQueryable();
+
+            if (CurrentFilter != null)
+            {
+                dbBarcodes = dbBarcodes
+                    .Where(b => b.ScanTime >= CurrentFilter.FromDate)
+                    .Where(b => b.ScanTime <= CurrentFilter.ToDate);
+
+                if (CurrentFilter.BarcodeFormats.Any())
+                {
+                    dbBarcodes = dbBarcodes
+                        .Where(b => CurrentFilter.BarcodeFormats.Contains(b.Format));
+                }
+            }
+
+            dbBarcodes = dbBarcodes.OrderByDescending(b => b.ScanTime);
+
             Barcodes.AddRange(dbBarcodes);
 
             IsLoading = false;
         }
+
+        private Filter CurrentFilter { get; set; }
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
 

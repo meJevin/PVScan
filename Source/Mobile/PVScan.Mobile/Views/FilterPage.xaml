@@ -7,15 +7,33 @@
     xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
     xmlns:essentials="clr-namespace:Xamarin.Essentials;assembly=Xamarin.Essentials"
+    xmlns:zxing="clr-namespace:ZXing;assembly=zxing.portable"
     x:Class="PVScan.Mobile.Views.FilterPage"
     
     BackgroundColor="Transparent">
+
+    <ContentView.BindingContext>
+        <viewmodels:FilterPageViewModel/>
+    </ContentView.BindingContext>
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
     <ContentView.Content>
         <Grid>
-            <Frame BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HasShadow="False" CornerRadius="20">
+            <Frame BackgroundColor="{AppThemeBinding 
+                Dark={StaticResource BackgroundColorDarker},
+                Light={StaticResource BackgroundColorLighter}}"
+                   HasShadow="False" CornerRadius="20">
                 
             </Frame>
-            <BoxView BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}" HeightRequest="20" VerticalOptions="End">
+            <BoxView BackgroundColor="{AppThemeBinding 
+                Dark={StaticResource BackgroundColorDarker},
+                Light={StaticResource BackgroundColorLighter}}" 
+                     HeightRequest="20" VerticalOptions="End">
                 
             </BoxView>
             <Grid Margin="15, 15, 15, 35">
@@ -25,41 +43,64 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Label HorizontalOptions="Center"
+                <StackLayout Spacing="15">
+                    <Frame HasShadow="False" 
+                           BackgroundColor="{AppThemeBinding 
+                    Dark={StaticResource TextPrimaryColor_Dark}, 
+                    Light={StaticResource TextPrimaryColor_Light}}"
+                           WidthRequest="45"
+                           HeightRequest="6"
+                           Padding="0" 
+                           HorizontalOptions="Center"
+                           CornerRadius="12"/>
+
+                    <Label HorizontalOptions="Center"
                        FontSize="16"
                        Margin="0,0,0,5">
-                    Filter Barcodes
-                </Label>
+                        Filter Barcodes
+                    </Label>
+                </StackLayout>
 
-                <BoxView Grid.Row="1" HeightRequest="1" Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" Margin="0,0,0,4"/>
+                <BoxView Grid.Row="1" HeightRequest="1" Color="{AppThemeBinding 
+                    Dark={StaticResource TextPrimaryColor_Dark}, 
+                    Light={StaticResource TextPrimaryColor_Light}}" 
+                         Margin="0,0,0,4"/>
 
-                <Grid Grid.Row="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                <CollectionView Grid.Row="2"
+                                ItemsSource="{Binding AvailableBarcodeFormats}" 
+                                SelectionMode="Multiple"
+                                SelectedItems="{Binding SelectedBarcodeFormats}">
+                    <CollectionView.ItemTemplate x:DataType="zxing:BarcodeFormat">
+                        <DataTemplate x:DataType="zxing:BarcodeFormat">
+                            <Grid x:DataType="zxing:BarcodeFormat" Padding="5, 10">
+                                <Label Text="{Binding ., Converter={StaticResource BarcodeFormatString}}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
 
-                    <StackLayout Margin="0, 10, 0, 0">
-                        <Label FontSize="20">
-                            Date
-                        </Label>
-                        <Label>
-                            From
-                        </Label>
-                        <Entry/>
-                        <Label>
-                            To
-                        </Label>
-                        <Entry/>
-                    </StackLayout>
+                    <CollectionView.Header>
+                        <StackLayout>
+                            <Button Text="Apply" Style="{StaticResource PrimaryButton}" Margin="0, 10"
+                                    Command="{Binding ApplyFilterCommand}"/>
 
-                    <StackLayout Grid.Row="1" Margin="0, 20, 0, 0">
-                        <Label FontSize="20">
-                            Barcode Format
-                        </Label>
-                        <Entry/>
-                    </StackLayout>
-                </Grid>
+                            <Label FontSize="20">
+                                Date
+                            </Label>
+                            <Label>
+                                From
+                            </Label>
+                            <DatePicker Date="{Binding FromDate}"/>
+                            <Label>
+                                To
+                            </Label>
+                            <DatePicker Date="{Binding ToDate}"/>
+
+                            <Label FontSize="20" Margin="0, 10, 0, 0">
+                                Barcode Formats
+                            </Label>
+                        </StackLayout>
+                    </CollectionView.Header>
+                </CollectionView>
             </Grid>
         </Grid>
     </ContentView.Content>
