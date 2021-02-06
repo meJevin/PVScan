@@ -1,6 +1,8 @@
 ﻿using PVScan.Mobile.ViewModels;
+using PVScan.Mobile.ViewModels.Messages.Filtering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,15 +15,12 @@ namespace PVScan.Mobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HistoryPage : ContentView
     {
-        double FilterPageHeight = 425;
+        double FilterPageHeight;
         double OverlayMaxOpacity = 0.65;
 
         public HistoryPage()
         {
             InitializeComponent();
-
-            FilterPage.HeightRequest = FilterPageHeight;
-            FilterPage.TranslationY = FilterPageHeight;
 
             Overlay.Opacity = 0;
             Overlay.InputTransparent = true;
@@ -34,6 +33,12 @@ namespace PVScan.Mobile.Views
             {
                 RefreshView.SetAppThemeColor(RefreshView.RefreshColorProperty, Color.Black, Color.White);
             }
+
+            MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
+                async (FilterPageViewModel vm, FilterAppliedMessage args) =>
+                {
+                    await HideFilterView();
+                });
         }
 
         public async Task Initialize()
@@ -105,6 +110,17 @@ namespace PVScan.Mobile.Views
             Overlay.InputTransparent = false;
             _ = Overlay.FadeTo(OverlayMaxOpacity, 250, Easing.CubicOut);
             await FilterPage.TranslateTo(0, 1, 250, Easing.CubicOut);
+        }
+
+        private void ContentView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Height))
+            {
+                FilterPageHeight = Height - 50;
+
+                FilterPage.HeightRequest = FilterPageHeight;
+                FilterPage.TranslationY = FilterPageHeight;
+            }
         }
     }
 }
