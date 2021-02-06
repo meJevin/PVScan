@@ -74,6 +74,17 @@
                         <DataTemplate x:DataType="zxing:BarcodeFormat">
                             <Grid x:DataType="zxing:BarcodeFormat" Padding="5, 10">
                                 <Label Text="{Binding ., Converter={StaticResource BarcodeFormatString}}"/>
+
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualState Name="Normal" />
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="{StaticResource ThemePrimary}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
