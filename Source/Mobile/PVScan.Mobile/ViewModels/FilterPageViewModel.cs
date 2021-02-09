@@ -28,22 +28,7 @@ namespace PVScan.Mobile.ViewModels
 
             SelectedBarcodeFormats = new ObservableRangeCollection<object>();
 
-            // Init min max dates from current DB
-            DateTime minDate = DateTime.MinValue;
-            DateTime maxDate = DateTime.MaxValue;
-            
-            try
-            {
-                minDate = _context.Barcodes.Min(b => b.ScanTime);
-                maxDate = _context.Barcodes.Max(b => b.ScanTime);
-            }
-            catch (Exception ex)
-            {
-                // If no barcodes
-            }
-
-            FromDate = minDate;
-            ToDate = maxDate;
+            ResetFilter();
 
             ApplyFilterCommand = new Command(() => 
             {
@@ -57,6 +42,28 @@ namespace PVScan.Mobile.ViewModels
                     }
                 });
             });
+        }
+
+        public void ResetFilter()
+        {
+            // Init min max dates from current DB
+            DateTime minDate = DateTime.MinValue;
+            DateTime maxDate = DateTime.MaxValue;
+
+            try
+            {
+                minDate = _context.Barcodes.Min(b => b.ScanTime);
+                maxDate = _context.Barcodes.Max(b => b.ScanTime);
+            }
+            catch (Exception ex)
+            {
+                // If no barcodes
+            }
+
+            FromDate = minDate;
+            ToDate = maxDate;
+
+            SelectedBarcodeFormats.Clear();
         }
 
         public ICommand ApplyFilterCommand { get; }

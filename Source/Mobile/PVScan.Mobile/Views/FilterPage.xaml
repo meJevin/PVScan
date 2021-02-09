@@ -72,15 +72,60 @@
                                 SelectedItems="{Binding SelectedBarcodeFormats}">
                     <CollectionView.ItemTemplate x:DataType="zxing:BarcodeFormat">
                         <DataTemplate x:DataType="zxing:BarcodeFormat">
-                            <Grid x:DataType="zxing:BarcodeFormat" Padding="5, 10">
-                                <Label Text="{Binding ., Converter={StaticResource BarcodeFormatString}}"/>
+                            <Grid x:DataType="zxing:BarcodeFormat" Padding="0, 10">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Image>
+                                    <Image.Source>
+                                        <FontImageSource x:Name="CheckIcon"
+                                            FontFamily="FontAwesome"
+                                            Color="{AppThemeBinding 
+                                            Dark={StaticResource TextPrimaryColor_Light},
+                                            Light={StaticResource TextPrimaryColor_Dark}}"
+                                            Size="16">
+                                            
+                                        </FontImageSource>
+                                    </Image.Source>
+                                </Image>
+                                
+                                <Label x:Name="FormatLabel"
+                                    Grid.Column="1" Text="{Binding ., Converter={StaticResource BarcodeFormatString}}"
+                                       FontAttributes="Bold"/>
 
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
-                                        <VisualState Name="Normal" />
+                                        <VisualState Name="Normal">
+                                            <VisualState.Setters>
+                                                <Setter TargetName="CheckIcon"
+                                                        Property="FontImageSource.Glyph" 
+                                                        Value="{x:Static theme:IconFont.Square}"/>
+                                                <Setter TargetName="CheckIcon"
+                                                        Property="FontImageSource.Color" 
+                                                        Value="{AppThemeBinding 
+                                                        Dark={StaticResource TextPrimaryColor_Light},
+                                                        Light={StaticResource TextPrimaryColor_Dark}}"/>    
+                                                <Setter TargetName="FormatLabel"
+                                                        Property="Label.TextColor"
+                                                        Value="{AppThemeBinding 
+                                                        Dark={StaticResource TextPrimaryColor_Dark},
+                                                        Light={StaticResource TextPrimaryColor_Light}}"/>        
+                                            </VisualState.Setters>
+                                        </VisualState>
                                         <VisualState Name="Selected">
                                             <VisualState.Setters>
-                                                <Setter Property="BackgroundColor" Value="{StaticResource ThemePrimary}" />
+                                                <Setter TargetName="CheckIcon"
+                                                        Property="FontImageSource.Glyph" 
+                                                        Value="{x:Static theme:IconFont.Check}"/>
+                                                <Setter TargetName="CheckIcon"
+                                                        Property="FontImageSource.Color" 
+                                                        Value="White"/>
+                                                <Setter TargetName="FormatLabel"
+                                                        Property="Label.TextColor"
+                                                        Value="White"/>
                                             </VisualState.Setters>
                                         </VisualState>
                                     </VisualStateGroup>
