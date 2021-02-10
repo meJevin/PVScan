@@ -11,6 +11,10 @@ namespace PVScan.Mobile.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+            {
+                return null;
+            }
             BarcodeFormat format = (BarcodeFormat)value;
 
             return Enum.GetName(typeof(BarcodeFormat), format).Replace('_', ' ');
