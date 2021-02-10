@@ -7,7 +7,6 @@
     xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
     xmlns:essentials="clr-namespace:Xamarin.Essentials;assembly=Xamarin.Essentials"
-    xmlns:zxing="clr-namespace:ZXing;assembly=zxing.portable"
     x:Class="PVScan.Mobile.Views.FilterPage"
     
     BackgroundColor="Transparent">
@@ -70,9 +69,9 @@
                                 ItemsSource="{Binding AvailableBarcodeFormats}" 
                                 SelectionMode="Multiple"
                                 SelectedItems="{Binding SelectedBarcodeFormats}">
-                    <CollectionView.ItemTemplate x:DataType="zxing:BarcodeFormat">
-                        <DataTemplate x:DataType="zxing:BarcodeFormat">
-                            <Grid x:DataType="zxing:BarcodeFormat" Padding="0, 10">
+                    <CollectionView.ItemTemplate x:DataType="viewmodels:ZxingBarcodeFormat">
+                        <DataTemplate>
+                            <Grid Padding="0, 10">
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20"/>
@@ -93,7 +92,7 @@
                                 </Image>
                                 
                                 <Label x:Name="FormatLabel"
-                                    Grid.Column="1" Text="{Binding ., Converter={StaticResource BarcodeFormatString}}"
+                                    Grid.Column="1" Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
                                        FontAttributes="Bold"/>
 
                                 <VisualStateManager.VisualStateGroups>
@@ -112,7 +111,9 @@
                                                         Property="Label.TextColor"
                                                         Value="{AppThemeBinding 
                                                         Dark={StaticResource TextPrimaryColor_Dark},
-                                                        Light={StaticResource TextPrimaryColor_Light}}"/>        
+                                                        Light={StaticResource TextPrimaryColor_Light}}"/>
+                                                <Setter Property="BackgroundColor"
+                                                        Value="Transparent"/>
                                             </VisualState.Setters>
                                         </VisualState>
                                         <VisualState Name="Selected">
@@ -126,6 +127,14 @@
                                                 <Setter TargetName="FormatLabel"
                                                         Property="Label.TextColor"
                                                         Value="White"/>
+                                                <Setter Property="BackgroundColor"
+                                                        Value="{StaticResource ThemePrimary}"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState Name="Focused">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor"
+                                                        Value="Transparent"/>
                                             </VisualState.Setters>
                                         </VisualState>
                                     </VisualStateGroup>

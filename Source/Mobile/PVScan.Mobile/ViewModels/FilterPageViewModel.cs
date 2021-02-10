@@ -13,6 +13,12 @@ using ZXing;
 
 namespace PVScan.Mobile.ViewModels
 {
+    // Because selection in collection view on iOS doesn't like value types, we need to wrap BarcodeFormat enum in a class
+    public class ZxingBarcodeFormat
+    {
+        public BarcodeFormat Format { get; set; }
+    }
+
     public class FilterPageViewModel : BaseViewModel
     {
         readonly PVScanMobileDbContext _context;
@@ -23,8 +29,11 @@ namespace PVScan.Mobile.ViewModels
             _context = new PVScanMobileDbContext(dbPath);
 
             // Init barcode formats
-            AvailableBarcodeFormats = new ObservableRangeCollection<BarcodeFormat>();
-            AvailableBarcodeFormats.AddRange(Enum.GetValues(typeof(BarcodeFormat)).OfType<BarcodeFormat>());
+            AvailableBarcodeFormats = new ObservableRangeCollection<ZxingBarcodeFormat>();
+            AvailableBarcodeFormats
+                .AddRange(Enum.GetValues(typeof(BarcodeFormat))
+                    .OfType<BarcodeFormat>()
+                    .Select(v => new ZxingBarcodeFormat() { Format = v }));
 
             SelectedBarcodeFormats = new ObservableRangeCollection<object>();
 
@@ -36,7 +45,7 @@ namespace PVScan.Mobile.ViewModels
                 {
                     NewFilter = new Filter()
                     {
-                        BarcodeFormats = SelectedBarcodeFormats.Select(o => (BarcodeFormat)o),
+                        BarcodeFormats = SelectedBarcodeFormats.Select(o => ((ZxingBarcodeFormat)o).Format),
                         FromDate = FromDate,
                         ToDate = ToDate,
                     }
@@ -68,7 +77,7 @@ namespace PVScan.Mobile.ViewModels
 
         public ICommand ApplyFilterCommand { get; }
 
-        public ObservableRangeCollection<BarcodeFormat> AvailableBarcodeFormats { get; set; }
+        public ObservableRangeCollection<ZxingBarcodeFormat> AvailableBarcodeFormats { get; set; }
         public ObservableRangeCollection<object> SelectedBarcodeFormats { get; set; }
 
         public DateTime FromDate { get; set; }
