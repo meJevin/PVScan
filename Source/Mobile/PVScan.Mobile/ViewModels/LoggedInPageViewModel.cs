@@ -1,7 +1,8 @@
 ﻿using MvvmHelpers;
 using Newtonsoft.Json;
 using PVScan.Mobile.Models;
-using PVScan.Mobile.Services.Identity;
+using PVScan.Mobile.Services;
+using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Collections.Generic;
@@ -20,15 +21,15 @@ namespace PVScan.Mobile.ViewModels
 
     public class LoggedInPageViewModel : BaseViewModel
     {
-        readonly IIdentityService identityService;
+        public IIdentityService IdentityService { get; set; }
 
         public LoggedInPageViewModel()
         {
-            identityService = IdentityService.Instance;
+            IdentityService = Resolver.Resolve<IIdentityService>();
 
             LogoutCommand = new Command(async () =>
             {
-                var result = await identityService.LogoutAsync();
+                var result = await IdentityService.LogoutAsync();
 
                 if (result)
                 {
@@ -47,7 +48,7 @@ namespace PVScan.Mobile.ViewModels
             SaveProfileCommand = new Command(async () =>
             {
                 // Update profile
-                var client = HttpClientUtils.APIHttpClientWithToken(identityService.AccessToken);
+                var client = HttpClientUtils.APIHttpClientWithToken(IdentityService.AccessToken);
 
                 var content = new StringContent(JsonConvert.SerializeObject(UserInfo), Encoding.UTF8, "application/json");
 
@@ -68,7 +69,7 @@ namespace PVScan.Mobile.ViewModels
 
         public async Task Initialize()
         {
-            HttpClient httpClient = HttpClientUtils.APIHttpClientWithToken(identityService.AccessToken);
+            HttpClient httpClient = HttpClientUtils.APIHttpClientWithToken(IdentityService.AccessToken);
             var result = await httpClient.GetAsync("api/v1/users/current");
 
             if (!result.IsSuccessStatusCode)

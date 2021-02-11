@@ -1,5 +1,5 @@
 ﻿using MvvmHelpers;
-using PVScan.Mobile.Services.Identity;
+using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Windows.Input;
@@ -14,15 +14,15 @@ namespace PVScan.Mobile.ViewModels
 
     public class LoginPageViewModel : BaseViewModel
     {
-        public IIdentityService identityService;
+        public IIdentityService IdentityService { get; set; }
 
         public LoginPageViewModel()
         {
-            identityService = IdentityService.Instance;
+            IdentityService = Resolver.Resolve<IIdentityService>();
 
             LoginCommand = new Command(async () =>
             {
-                var result = await identityService.LoginAsync(Login, Password);
+                var result = await IdentityService.LoginAsync(Login, Password);
 
                 if (result)
                 {

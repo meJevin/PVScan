@@ -9,7 +9,6 @@ using Android.OS;
 using Xamarin.Forms;
 using System.Net;
 using Plugin.CurrentActivity;
-using PVScan.Mobile.Services.Identity;
 
 namespace PVScan.Mobile.Droid
 {
@@ -52,6 +51,7 @@ namespace PVScan.Mobile.Droid
         }
     }
 
+    /* Auth code flow
     [Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop)]
     [IntentFilter(new[] { Android.Content.Intent.ActionView },
         Categories = new[] { Android.Content.Intent.CategoryDefault, Android.Content.Intent.CategoryBrowsable },
@@ -59,4 +59,5 @@ namespace PVScan.Mobile.Droid
     public class WebAuthenticationCallbackActivity : Xamarin.Essentials.WebAuthenticatorCallbackActivity
     {
     }
+    */
 }

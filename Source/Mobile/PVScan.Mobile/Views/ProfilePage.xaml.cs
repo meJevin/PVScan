@@ -1,5 +1,4 @@
-﻿using PVScan.Mobile.Services.Identity;
-using PVScan.Mobile.ViewModels;
+﻿using PVScan.Mobile.ViewModels;
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Collections.Generic;
@@ -48,6 +47,16 @@ namespace PVScan.Mobile.Views
             {
                 // Logged in already, show current profile page
                 LoggedInPage.IsVisible = true;
+                LoggedInPage.Opacity = 0;
+
+                SignUpPage.TranslationY = _transY;
+                SignUpPage.Opacity = 0;
+                SignUpPage.IsVisible = false;
+
+                LoginPage.TranslationY = _transY;
+                LoginPage.Opacity = 0;
+                LoginPage.IsVisible = false;
+
 
                 await (LoggedInPage.BindingContext as LoggedInPageViewModel).Initialize();
 

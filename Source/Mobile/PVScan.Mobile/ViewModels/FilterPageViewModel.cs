@@ -14,9 +14,24 @@ using ZXing;
 namespace PVScan.Mobile.ViewModels
 {
     // Because selection in collection view on iOS doesn't like value types, we need to wrap BarcodeFormat enum in a class
-    public class ZxingBarcodeFormat
+    public class ZXingBarcodeFormat
     {
         public BarcodeFormat Format { get; set; }
+    }
+
+    // Read above
+    public class LastTimeSpan
+    {
+        public LastTimeType Type { get; set; }
+    }
+
+    // Enum for filter page to filter by last day/week/month/year
+    public enum LastTimeType
+    {
+        Day,
+        Week,
+        Month,
+        Year,
     }
 
     public class FilterPageViewModel : BaseViewModel
@@ -28,32 +43,73 @@ namespace PVScan.Mobile.ViewModels
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
             _context = new PVScanMobileDbContext(dbPath);
 
-            // Init barcode formats
-            AvailableBarcodeFormats = new ObservableRangeCollection<ZxingBarcodeFormat>();
-            AvailableBarcodeFormats
-                .AddRange(Enum.GetValues(typeof(BarcodeFormat))
-                    .OfType<BarcodeFormat>()
-                    .Select(v => new ZxingBarcodeFormat() { Format = v }));
+            InitBarcodeFormats();
 
-            SelectedBarcodeFormats = new ObservableRangeCollection<object>();
+            InitLastTimeSpans();
 
             ResetFilter();
 
-            ApplyFilterCommand = new Command(() => 
+            ApplyFilterCommand = new Command(() =>
             {
+                var newFilter = new Filter()
+                {
+                    BarcodeFormats = SelectedBarcodeFormats.Select(o => ((ZXingBarcodeFormat)o).Format),
+                };
+
+                if (DateFilterTypeIndex == 1)
+                {
+                    newFilter.FromDate = FromDate;
+                    newFilter.ToDate = ToDate.AddDays(1);
+                }
+                else if (DateFilterTypeIndex == 0)
+                {
+                    newFilter.LastType = SelectedLastTimeSpan?.Type;
+                }
+
                 MessagingCenter.Send(this, nameof(FilterAppliedMessage), new FilterAppliedMessage()
                 {
-                    NewFilter = new Filter()
-                    {
-                        BarcodeFormats = SelectedBarcodeFormats.Select(o => ((ZxingBarcodeFormat)o).Format),
-                        FromDate = FromDate,
-                        ToDate = ToDate,
-                    }
+                    NewFilter = newFilter,
                 });
+            });
+
+            ResetDateFilterCommand = new Command(() =>
+            {
+                ResetDate();
+            });
+
+            ResetBarcodeFormatsCommand = new Command(() =>
+            {
+                ResetBarcodeFormats();
             });
         }
 
-        public void ResetFilter()
+        private void InitBarcodeFormats()
+        {
+            AvailableBarcodeFormats = new ObservableRangeCollection<ZXingBarcodeFormat>();
+            AvailableBarcodeFormats
+                .AddRange(Enum.GetValues(typeof(BarcodeFormat))
+                    .OfType<BarcodeFormat>()
+                    .Select(v => new ZXingBarcodeFormat() { Format = v }));
+
+            SelectedBarcodeFormats = new ObservableRangeCollection<object>();
+        }
+
+        private void InitLastTimeSpans()
+        {
+            AvailableLastTimeSpans = new ObservableRangeCollection<LastTimeSpan>();
+            AvailableLastTimeSpans
+                .AddRange(Enum.GetValues(typeof(LastTimeType))
+                    .OfType<LastTimeType>()
+                    .Select(v => new LastTimeSpan() { Type = v }));
+        }
+
+        private void ResetFilter()
+        {
+            ResetDate();
+            ResetBarcodeFormats();
+        }
+
+        private void ResetDate()
         {
             // Init min max dates from current DB
             DateTime minDate = DateTime.MinValue;
@@ -72,15 +128,28 @@ namespace PVScan.Mobile.ViewModels
             FromDate = minDate;
             ToDate = maxDate;
 
+            SelectedLastTimeSpan = null;
+        }
+
+        private void ResetBarcodeFormats()
+        {
             SelectedBarcodeFormats.Clear();
         }
 
+        public int DateFilterTypeIndex { get; set; }
+
         public ICommand ApplyFilterCommand { get; }
 
-        public ObservableRangeCollection<ZxingBarcodeFormat> AvailableBarcodeFormats { get; set; }
+        public ObservableRangeCollection<ZXingBarcodeFormat> AvailableBarcodeFormats { get; set; }
         public ObservableRangeCollection<object> SelectedBarcodeFormats { get; set; }
+
+        public ObservableRangeCollection<LastTimeSpan> AvailableLastTimeSpans { get; set; }
+        public LastTimeSpan SelectedLastTimeSpan { get; set; }
 
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+
+        public ICommand ResetDateFilterCommand { get; }
+        public ICommand ResetBarcodeFormatsCommand { get; }
     }
 }

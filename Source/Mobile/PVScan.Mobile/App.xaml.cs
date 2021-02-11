@@ -1,4 +1,5 @@
-﻿using PVScan.Mobile.Services.Identity;
+﻿using Autofac;
+using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.Views;
 using System;
 using Xamarin.Essentials;
@@ -13,11 +14,15 @@ namespace PVScan.Mobile
     {
         public App()
         {
+            // Init DI
+            Bootstrapper.Initialize();
+
             InitializeTheme();
 
             InitializeComponent();
 
             var navigationPage = new Xamarin.Forms.NavigationPage(new MainPage());
+
             navigationPage.On<iOS>().SetHideNavigationBarSeparator(false);
             navigationPage.SetOnAppTheme(Xamarin.Forms.NavigationPage.BarTextColorProperty, Color.Black, Color.White);
 
@@ -45,7 +50,10 @@ namespace PVScan.Mobile
 
         protected override async void OnStart()
         {
-            await IdentityService.Instance.Initialize();
+            using var scope = Resolver.Container.BeginLifetimeScope();
+
+            var identity = scope.Resolve<IIdentityService>();
+            await identity.Initialize();
         }
 
         protected override void OnSleep()

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PVScan.Mobile.Services.Identity
+namespace PVScan.Mobile.Services.Interfaces
 {
     // Todo: remake this to support errors reported from backend about different failures
     public interface IIdentityService

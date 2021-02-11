@@ -1,6 +1,7 @@
 ﻿using IdentityModel.Client;
 using Newtonsoft.Json;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using static IdentityModel.OidcConstants;
 
-namespace PVScan.Mobile.Services.Identity
+namespace PVScan.Mobile.Services
 {
     // Todo: this doesn't belong here
     public static class HttpClientUtils
@@ -19,7 +20,7 @@ namespace PVScan.Mobile.Services.Identity
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            client.BaseAddress = new Uri(IdentityServerConfiguration.API);
+            client.BaseAddress = new Uri(API.BaseAddress);
 
             return client;
         }
@@ -34,20 +35,6 @@ namespace PVScan.Mobile.Services.Identity
             {
                 return _accessToken;
             }
-        }
-
-        private static readonly Lazy<IIdentityService> _instance 
-            = new Lazy<IIdentityService>(() => new IdentityService());
-        public static IIdentityService Instance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
-
-        private IdentityService()
-        {
         }
 
         public async Task Initialize()
@@ -87,14 +74,14 @@ namespace PVScan.Mobile.Services.Identity
             DiscoveryDocumentResponse discoveryDocument =
                 await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
                 {
-                    Address = IdentityServerConfiguration.Authority,
+                    Address = Auth.Authority,
                     Policy = { RequireHttps = false },
                 });
 
             var token = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest()
             {
                 Address = discoveryDocument.TokenEndpoint,
-                ClientId = IdentityServerConfiguration.ClientId,
+                ClientId = Auth.ClientId,
                 GrantType = GrantTypes.Password,
                 Scope = "openid profile PVScan.API",
                 Password = password,
@@ -123,7 +110,7 @@ namespace PVScan.Mobile.Services.Identity
             DiscoveryDocumentResponse discoveryDocument =
                 await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
                 {
-                    Address = IdentityServerConfiguration.Authority,
+                    Address = Auth.Authority,
                     Policy = { RequireHttps = false },
                 });
 
@@ -131,7 +118,7 @@ namespace PVScan.Mobile.Services.Identity
             var revoke = await httpClient.RevokeTokenAsync(new TokenRevocationRequest()
             {
                 Address = discoveryDocument.RevocationEndpoint,
-                ClientId = IdentityServerConfiguration.ClientId,
+                ClientId = Auth.ClientId,
                 Token = _accessToken,
                 TokenTypeHint = TokenTypes.AccessToken,
             });
@@ -155,7 +142,7 @@ namespace PVScan.Mobile.Services.Identity
             // Sign up using register endpoint
 
             HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(IdentityServerConfiguration.Authority);
+            httpClient.BaseAddress = new Uri(Auth.Authority);
 
             var content = new FormUrlEncodedContent(new Dictionary<string, string>
                 {

@@ -1,7 +1,7 @@
 ﻿using IdentityModel.OidcClient;
 using IdentityModel.OidcClient.Browser;
 using MvvmHelpers;
-using PVScan.Mobile.Services.Identity;
+using PVScan.Mobile.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -17,18 +17,18 @@ namespace PVScan.Mobile.ViewModels
 {
     public class ProfilePageViewModel : BaseViewModel
     {
-        IIdentityService identityService;
+        public IIdentityService IdentityService { get; set; }
 
         public ProfilePageViewModel()
         {
-            identityService = IdentityService.Instance;
+            IdentityService = Resolver.Resolve<IIdentityService>();
         }
 
         public bool IsLoggedIn
         {
             get
             {
-                return identityService.AccessToken != null;
+                return IdentityService.AccessToken != null;
             }
         }
     }
