@@ -21,8 +21,10 @@ namespace PVScan.Mobile.ViewModels
 {
     public class Filter
     {
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+
+        public LastTimeType? LastType { get; set; } 
 
         public IEnumerable<BarcodeFormat> BarcodeFormats { get; set; }
     }
@@ -77,9 +79,38 @@ namespace PVScan.Mobile.ViewModels
 
             if (CurrentFilter != null)
             {
-                dbBarcodes = dbBarcodes
-                    .Where(b => b.ScanTime >= CurrentFilter.FromDate)
-                    .Where(b => b.ScanTime <= CurrentFilter.ToDate);
+                if (CurrentFilter.FromDate != null && CurrentFilter.ToDate != null)
+                {
+                    dbBarcodes = dbBarcodes
+                        .Where(b => b.ScanTime >= CurrentFilter.FromDate)
+                        .Where(b => b.ScanTime < CurrentFilter.ToDate);
+                }
+                else if (CurrentFilter.LastType != null)
+                {
+                    DateTime to = DateTime.Today.AddDays(1);
+                    DateTime from = DateTime.Today;
+
+                    if (CurrentFilter.LastType == LastTimeType.Day)
+                    {
+                        from = from.AddDays(-1);
+                    }
+                    else if (CurrentFilter.LastType == LastTimeType.Week)
+                    {
+                        from = from.AddDays(-7);
+                    }
+                    else if (CurrentFilter.LastType == LastTimeType.Month)
+                    {
+                        from = from.AddMonths(-1);
+                    }
+                    else if (CurrentFilter.LastType == LastTimeType.Year)
+                    {
+                        from = from.AddYears(-1);
+                    }
+
+                    dbBarcodes = dbBarcodes
+                        .Where(b => b.ScanTime >= from)
+                        .Where(b => b.ScanTime < to);
+                }
 
                 if (CurrentFilter.BarcodeFormats.Any())
                 {
