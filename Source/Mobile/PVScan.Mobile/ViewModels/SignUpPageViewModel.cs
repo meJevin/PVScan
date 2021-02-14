@@ -14,11 +14,11 @@ namespace PVScan.Mobile.ViewModels
 
     public class SignUpPageViewModel : BaseViewModel
     {
-        public IIdentityService IdentityService { get; set; }
+        readonly IIdentityService IdentityService;
 
-        public SignUpPageViewModel()
+        public SignUpPageViewModel(IIdentityService identityService)
         {
-            IdentityService = Resolver.Resolve<IIdentityService>();
+            IdentityService = identityService;
 
             SignUpCommand = new Command(async () =>
             {

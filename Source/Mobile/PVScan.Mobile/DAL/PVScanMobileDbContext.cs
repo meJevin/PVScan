@@ -9,16 +9,8 @@ namespace PVScan.Mobile.DAL
 {
     public class PVScanMobileDbContext : DbContext
     {
-        readonly string dbPath;
-
         public PVScanMobileDbContext()
         {
-        }
-
-        public PVScanMobileDbContext(string dbPath)
-        {
-            this.dbPath = dbPath;
-
             SQLitePCL.Batteries_V2.Init();
 
             Database.Migrate();
@@ -26,7 +18,7 @@ namespace PVScan.Mobile.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"Filename={dbPath}");
+            optionsBuilder.UseSqlite($"Filename={DataAccss.DatabasePath}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

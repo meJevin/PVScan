@@ -17,11 +17,11 @@ namespace PVScan.Mobile.ViewModels
 {
     public class ProfilePageViewModel : BaseViewModel
     {
-        public IIdentityService IdentityService { get; set; }
+        readonly IIdentityService IdentityService;
 
-        public ProfilePageViewModel()
+        public ProfilePageViewModel(IIdentityService identityService)
         {
-            IdentityService = Resolver.Resolve<IIdentityService>();
+            IdentityService = identityService;
         }
 
         public bool IsLoggedIn

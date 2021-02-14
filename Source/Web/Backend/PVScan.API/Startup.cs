@@ -35,7 +35,7 @@ namespace PVScan.API
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = "http://192.168.1.74:1488/";
+                    options.Authority = "https://localhost:1488/";
 
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {

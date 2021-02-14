@@ -11,11 +11,10 @@
     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
     
     PropertyChanged="ContentView_PropertyChanged"
+    
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    di:ViewModelLocator.AutoWireViewModel="True"
     >
-
-    <ContentView.BindingContext>
-        <viewmodels:ProfilePageViewModel/>
-    </ContentView.BindingContext>
 
     <Grid x:Name="MainContainer">
         <views:LoginPage x:Name="LoginPage" SignUpClicked="LoginPage_SignUpClicked" IsVisible="False"/>

@@ -6,10 +6,9 @@
              xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
              xmlns:theme="clr-namespace:PVScan.Mobile.Styles" xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
              BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    di:ViewModelLocator.AutoWireViewModel="True"
              >
-    <ContentView.BindingContext>
-        <vm:ScanPageViewModel/>
-    </ContentView.BindingContext>
 
     <ContentView.Resources>
         <ResourceDictionary>

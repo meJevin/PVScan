@@ -1,11 +1,13 @@
 ﻿using MvvmHelpers;
 using PVScan.Mobile.DAL;
+using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Filtering;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -36,18 +38,17 @@ namespace PVScan.Mobile.ViewModels
 
     public class FilterPageViewModel : BaseViewModel
     {
-        readonly PVScanMobileDbContext _context;
+        readonly IBarcodesRepository BarcodesRepository;
 
-        public FilterPageViewModel()
+        public FilterPageViewModel(IBarcodesRepository barcodesRepository)
         {
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
-            _context = new PVScanMobileDbContext(dbPath);
+            BarcodesRepository = barcodesRepository;
 
             InitBarcodeFormats();
-
             InitLastTimeSpans();
 
-            ResetFilter();
+            // hmmmm
+            ResetFilter().GetAwaiter().GetResult();
 
             ApplyFilterCommand = new Command(() =>
             {
@@ -72,9 +73,9 @@ namespace PVScan.Mobile.ViewModels
                 });
             });
 
-            ResetDateFilterCommand = new Command(() =>
+            ResetDateFilterCommand = new Command(async () =>
             {
-                ResetDate();
+                await ResetDate();
             });
 
             ResetBarcodeFormatsCommand = new Command(() =>
@@ -103,22 +104,24 @@ namespace PVScan.Mobile.ViewModels
                     .Select(v => new LastTimeSpan() { Type = v }));
         }
 
-        private void ResetFilter()
+        private async Task ResetFilter()
         {
-            ResetDate();
+            await ResetDate();
             ResetBarcodeFormats();
         }
 
-        private void ResetDate()
+        private async Task ResetDate()
         {
             // Init min max dates from current DB
             DateTime minDate = DateTime.MinValue;
             DateTime maxDate = DateTime.MaxValue;
 
+            var barcodes = await BarcodesRepository.GetAll();
+
             try
             {
-                minDate = _context.Barcodes.Min(b => b.ScanTime);
-                maxDate = _context.Barcodes.Max(b => b.ScanTime);
+                minDate = barcodes.Min(b => b.ScanTime);
+                maxDate = barcodes.Max(b => b.ScanTime);
             }
             catch (Exception ex)
             {

@@ -10,11 +10,10 @@
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Class="PVScan.Mobile.Views.FilterPage"
     
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    di:ViewModelLocator.AutoWireViewModel="True"
+    
     BackgroundColor="Transparent">
-
-    <ContentView.BindingContext>
-        <viewmodels:FilterPageViewModel/>
-    </ContentView.BindingContext>
 
     <ContentView.Resources>
         <ResourceDictionary>

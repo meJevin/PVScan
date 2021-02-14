@@ -1,6 +1,9 @@
 ﻿using Autofac;
+using MvvmHelpers;
+using PVScan.Mobile.DAL;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
+using PVScan.Mobile.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,10 +16,24 @@ namespace PVScan.Mobile
         {
             var containerBuilder = new ContainerBuilder();
 
-            // Register IdentityService singleton
+            // DbContext from EF Core
+            containerBuilder.RegisterType<PVScanMobileDbContext>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+
+            // IdentityService singleton
             containerBuilder.RegisterType<IdentityService>()
                 .As<IIdentityService>()
                 .SingleInstance();
+
+            containerBuilder.RegisterType<BarcodesRepository>()
+                .As<IBarcodesRepository>()
+                .InstancePerLifetimeScope();
+
+            containerBuilder.RegisterType<MainPage>();
+
+            containerBuilder.RegisterAssemblyTypes(typeof(App).Assembly).
+                Where(t => t.IsSubclassOf(typeof(BaseViewModel)));
 
             var container = containerBuilder.Build();
             Resolver.Initialize(container);

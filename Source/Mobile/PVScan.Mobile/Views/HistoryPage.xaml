@@ -10,15 +10,14 @@
     xmlns:models="clr-namespace:PVScan.Mobile.Models"
     x:Class="PVScan.Mobile.Views.HistoryPage"
     
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    di:ViewModelLocator.AutoWireViewModel="True"
+    
     PropertyChanged="ContentView_PropertyChanged"
 
     BackgroundColor="{AppThemeBinding 
     Dark={StaticResource BackgroundColorDarker},
     Light={StaticResource BackgroundColorLighter}}">
-
-    <ContentView.BindingContext>
-        <viewmodels:HistoryPageViewModel/>
-    </ContentView.BindingContext>
 
     <ContentView.Resources>
         <ResourceDictionary>

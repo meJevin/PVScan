@@ -2,6 +2,8 @@
 using MvvmHelpers;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Services;
+using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Filtering;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
@@ -31,12 +33,11 @@ namespace PVScan.Mobile.ViewModels
 
     public class HistoryPageViewModel : BaseViewModel
     {
-        readonly PVScanMobileDbContext _context;
+        readonly IBarcodesRepository BarcodesRepository;
 
-        public HistoryPageViewModel()
+        public HistoryPageViewModel(IBarcodesRepository barcodesRepository)
         {
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
-            _context = new PVScanMobileDbContext(dbPath);
+            BarcodesRepository = barcodesRepository;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
 
@@ -75,53 +76,22 @@ namespace PVScan.Mobile.ViewModels
 
             IsLoading = true;
 
-            var dbBarcodes = _context.Barcodes.AsQueryable();
-
             if (CurrentFilter != null)
             {
-                if (CurrentFilter.FromDate != null && CurrentFilter.ToDate != null)
-                {
-                    dbBarcodes = dbBarcodes
-                        .Where(b => b.ScanTime >= CurrentFilter.FromDate)
-                        .Where(b => b.ScanTime < CurrentFilter.ToDate);
-                }
-                else if (CurrentFilter.LastType != null)
-                {
-                    DateTime to = DateTime.Today.AddDays(1);
-                    DateTime from = DateTime.Today;
-
-                    if (CurrentFilter.LastType == LastTimeType.Day)
-                    {
-                        from = from.AddDays(-1);
-                    }
-                    else if (CurrentFilter.LastType == LastTimeType.Week)
-                    {
-                        from = from.AddDays(-7);
-                    }
-                    else if (CurrentFilter.LastType == LastTimeType.Month)
-                    {
-                        from = from.AddMonths(-1);
-                    }
-                    else if (CurrentFilter.LastType == LastTimeType.Year)
-                    {
-                        from = from.AddYears(-1);
-                    }
-
-                    dbBarcodes = dbBarcodes
-                        .Where(b => b.ScanTime >= from)
-                        .Where(b => b.ScanTime < to);
-                }
-
-                if (CurrentFilter.BarcodeFormats.Any())
-                {
-                    dbBarcodes = dbBarcodes
-                        .Where(b => CurrentFilter.BarcodeFormats.Contains(b.Format));
-                }
             }
 
-            dbBarcodes = dbBarcodes.OrderByDescending(b => b.ScanTime);
+            IEnumerable<Barcode> dbBarcodes = null;
 
-            Barcodes.AddRange(dbBarcodes);
+            if (CurrentFilter == null)
+            {
+                dbBarcodes = await BarcodesRepository.GetAll();
+            }
+            else
+            {
+                dbBarcodes = await BarcodesRepository.GetAllFiltered(CurrentFilter);
+            }
+
+            Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
 
             IsLoading = false;
         }
