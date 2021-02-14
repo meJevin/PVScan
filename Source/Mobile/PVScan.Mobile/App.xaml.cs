@@ -31,15 +31,18 @@ namespace PVScan.Mobile
 
         private void InitializeTheme()
         {
-            var preferencesTheme = Preferences.Get("Theme", "N/A");
+            using var scope = Resolver.Container.BeginLifetimeScope();
+            var kvp = scope.Resolve<IPersistentKVP>();
+            string themeSelected = kvp.Get(StorageKeys.Theme, null);
 
-            if (preferencesTheme == "N/A")
+            if (themeSelected == null)
             {
+                // User hasn't changed the app theme yet, use system theme.
                 UserAppTheme = RequestedTheme;
             }
             else
             {
-                UserAppTheme = preferencesTheme == "Light" ? OSAppTheme.Light : OSAppTheme.Dark;
+                UserAppTheme = themeSelected == "Light" ? OSAppTheme.Light : OSAppTheme.Dark;
             }
 
             RequestedThemeChanged += (s, e) =>

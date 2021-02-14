@@ -26,14 +26,22 @@ namespace PVScan.Mobile
                 .As<IIdentityService>()
                 .SingleInstance();
 
+            // Barcodes repository
             containerBuilder.RegisterType<BarcodesRepository>()
                 .As<IBarcodesRepository>()
                 .InstancePerLifetimeScope();
 
+            // Main page
             containerBuilder.RegisterType<MainPage>();
 
+            // All VMs
             containerBuilder.RegisterAssemblyTypes(typeof(App).Assembly).
                 Where(t => t.IsSubclassOf(typeof(BaseViewModel)));
+
+            // KVP
+            containerBuilder.RegisterType<PreferencesPersistentKVP>()
+                .As<IPersistentKVP>()
+                .InstancePerLifetimeScope();
 
             var container = containerBuilder.Build();
             Resolver.Initialize(container);
