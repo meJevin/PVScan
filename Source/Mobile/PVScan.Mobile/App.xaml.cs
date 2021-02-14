@@ -33,9 +33,9 @@ namespace PVScan.Mobile
         {
             using var scope = Resolver.Container.BeginLifetimeScope();
             var kvp = scope.Resolve<IPersistentKVP>();
-            string themeSelected = kvp.Get(StorageKeys.Theme, "N/A");
+            string themeSelected = kvp.Get(StorageKeys.Theme, null);
 
-            if (themeSelected == "N/A")
+            if (themeSelected == null)
             {
                 // User hasn't changed the app theme yet, use system theme.
                 UserAppTheme = RequestedTheme;
