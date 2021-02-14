@@ -1,4 +1,5 @@
 ﻿using MvvmHelpers;
+using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
@@ -11,21 +12,25 @@ namespace PVScan.Mobile.ViewModels
 {
     public class ApplicationSettingsPageViewModel : BaseViewModel
     {
-        public ApplicationSettingsPageViewModel()
+        readonly IPersistentKVP KVP;
+
+        public ApplicationSettingsPageViewModel(IPersistentKVP kvp)
         {
+            KVP = kvp;
+
             SwitchThemeCommand = new Command(async () =>
             {
                 if (IsDarkTheme)
                 {
                     Application.Current.UserAppTheme = OSAppTheme.Dark;
 
-                    Preferences.Set("Theme", "Dark");
+                    KVP.Set("Theme", "Dark");
                 }
                 else
                 {
                     Application.Current.UserAppTheme = OSAppTheme.Light;
-                 
-                    Preferences.Set("Theme", "Light");
+
+                    KVP.Set("Theme", "Light");
                 }
             });
 
