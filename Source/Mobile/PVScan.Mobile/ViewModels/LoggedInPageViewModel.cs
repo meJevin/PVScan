@@ -22,10 +22,12 @@ namespace PVScan.Mobile.ViewModels
     public class LoggedInPageViewModel : BaseViewModel
     {
         readonly IIdentityService IdentityService;
+        readonly IHttpClientFactory HttpFactory;
 
-        public LoggedInPageViewModel(IIdentityService identityService)
+        public LoggedInPageViewModel(IIdentityService identityService, IHttpClientFactory httpFactory)
         {
             IdentityService = identityService;
+            HttpFactory = httpFactory;
 
             LogoutCommand = new Command(async () =>
             {
@@ -48,7 +50,7 @@ namespace PVScan.Mobile.ViewModels
             SaveProfileCommand = new Command(async () =>
             {
                 // Update profile
-                var client = HttpClientFactory.APIWithToken(IdentityService.AccessToken);
+                var client = HttpFactory.ForAPI(IdentityService.AccessToken);
 
                 var content = new StringContent(JsonConvert.SerializeObject(UserInfo), Encoding.UTF8, "application/json");
 
@@ -69,7 +71,7 @@ namespace PVScan.Mobile.ViewModels
 
         public async Task Initialize()
         {
-            HttpClient httpClient = HttpClientFactory.APIWithToken(IdentityService.AccessToken);
+            HttpClient httpClient = HttpFactory.ForAPI(IdentityService.AccessToken);
             var result = await httpClient.GetAsync("api/v1/users/current");
 
             if (!result.IsSuccessStatusCode)

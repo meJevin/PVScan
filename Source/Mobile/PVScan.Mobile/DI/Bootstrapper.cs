@@ -43,6 +43,17 @@ namespace PVScan.Mobile
                 .As<IPersistentKVP>()
                 .InstancePerLifetimeScope();
 
+            // Http factory
+#if DEBUG
+            containerBuilder.RegisterType<DebugCertHttpClientFactory>()
+                .As<IHttpClientFactory>()
+                .InstancePerLifetimeScope();
+#else
+            containerBuilder.RegisterType<HttpClientFactory>()
+                .As<IHttpClientFactory>()
+                .InstancePerLifetimeScope();
+#endif
+
             var container = containerBuilder.Build();
             Resolver.Initialize(container);
         }

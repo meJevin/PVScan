@@ -13,47 +13,15 @@ using static IdentityModel.OidcConstants;
 
 namespace PVScan.Mobile.Services
 {
-    // Todo: this doesn't belong here
-    public static class HttpClientFactory
-    {
-        private static HttpClientHandler sslIgnoreHandler;
-        static HttpClientFactory()
-        {
-            sslIgnoreHandler = new HttpClientHandler();
-            sslIgnoreHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
-            {
-                if (cert.Issuer.Equals("CN=localhost"))
-                    return true;
-                return errors == System.Net.Security.SslPolicyErrors.None;
-            };
-        }
-
-        public static HttpClient APIWithToken(string token)
-        {
-            HttpClient client = Default();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            client.BaseAddress = new Uri(API.BaseAddress);
-
-            return client;
-        }
-
-        public static HttpClient Default()
-        {
-#if DEBUG
-            return new HttpClient(sslIgnoreHandler);
-#else
-            return new HttpClient();
-#endif
-        }
-    }
-
     public class IdentityService : IIdentityService
     {
         readonly IPersistentKVP KVP;
+        readonly IHttpClientFactory HttpFactory;
 
-        public IdentityService(IPersistentKVP kvp)
+        public IdentityService(IPersistentKVP kvp, IHttpClientFactory httpFactory)
         {
             KVP = kvp;
+            HttpFactory = httpFactory;
         }
 
         private string _accessToken;
@@ -64,7 +32,6 @@ namespace PVScan.Mobile.Services
                 return _accessToken;
             }
         }
-
 
         public async Task Initialize()
         {
@@ -97,7 +64,7 @@ namespace PVScan.Mobile.Services
             }
 
             // Login via token endpoint using password flow
-            HttpClient httpClient = HttpClientFactory.Default();
+            HttpClient httpClient = HttpFactory.Default();
 
             // Todo: enable https in production
             DiscoveryDocumentResponse discoveryDocument =
@@ -134,7 +101,7 @@ namespace PVScan.Mobile.Services
         public async Task<bool> LogoutAsync()
         {
             // Logout via logout endpoint and clear local storage
-            HttpClient httpClient = HttpClientFactory.Default();
+            HttpClient httpClient = HttpFactory.Default();
 
             DiscoveryDocumentResponse discoveryDocument =
                 await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
@@ -170,7 +137,7 @@ namespace PVScan.Mobile.Services
         {
             // Sign up using register endpoint
 
-            HttpClient httpClient = HttpClientFactory.Default();
+            HttpClient httpClient = HttpFactory.Default();
             httpClient.BaseAddress = new Uri(Auth.Authority);
 
             var content = new FormUrlEncodedContent(new Dictionary<string, string>
@@ -198,7 +165,7 @@ namespace PVScan.Mobile.Services
             }
 
             // Make a test request to the backend
-            HttpClient httpClient = HttpClientFactory.APIWithToken(token);
+            HttpClient httpClient = HttpFactory.ForAPI(token);
             var result = await httpClient.GetAsync("api/v1/users/current");
 
             if (!result.IsSuccessStatusCode)
