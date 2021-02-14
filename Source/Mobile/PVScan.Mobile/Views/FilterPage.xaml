@@ -15,10 +15,6 @@
     
     BackgroundColor="Transparent">
 
-    <ContentView.BindingContext>
-        <viewmodels:FilterPageViewModel/>
-    </ContentView.BindingContext>
-
     <ContentView.Resources>
         <ResourceDictionary>
             <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>

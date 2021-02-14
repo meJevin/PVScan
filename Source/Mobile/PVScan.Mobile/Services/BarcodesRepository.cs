@@ -12,11 +12,11 @@ namespace PVScan.Mobile.Services
 {
     public class BarcodesRepository : IBarcodesRepository
     {
-        private readonly PVScanMobileDbContext _context;
+        readonly PVScanMobileDbContext _context;
 
-        public BarcodesRepository()
+        public BarcodesRepository(PVScanMobileDbContext ctx)
         {
-            _context = Resolver.Resolve<PVScanMobileDbContext>();
+            _context = ctx;
         }
 
         public async Task Delete(Barcode barcode)

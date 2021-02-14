@@ -33,11 +33,11 @@ namespace PVScan.Mobile.ViewModels
 
     public class HistoryPageViewModel : BaseViewModel
     {
-        public IBarcodesRepository BarcodesRepository;
+        readonly IBarcodesRepository BarcodesRepository;
 
-        public HistoryPageViewModel()
+        public HistoryPageViewModel(IBarcodesRepository barcodesRepository)
         {
-            BarcodesRepository = Resolver.Resolve<IBarcodesRepository>();
+            BarcodesRepository = barcodesRepository;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
 

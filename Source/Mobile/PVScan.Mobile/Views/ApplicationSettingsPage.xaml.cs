@@ -21,17 +21,13 @@ namespace PVScan.Mobile.Views
     {
         public event EventHandler BackClicked;
 
-        ApplicationSettingsPageViewModel VM;
-
-        IBarcodesRepository BarcodesRepository;
+        readonly IBarcodesRepository BarcodesRepository;
 
         public ApplicationSettingsPage()
         {
             BarcodesRepository = Resolver.Resolve<IBarcodesRepository>();
 
             InitializeComponent();
-
-            VM = BindingContext as ApplicationSettingsPageViewModel;
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -41,14 +37,10 @@ namespace PVScan.Mobile.Views
 
         private void DarkTheme_Toggled(object sender, ToggledEventArgs e)
         {
-            if (VM == null)
-            {
-                return;
-            }
-
-            VM.SwitchThemeCommand.Execute(null);
+            (BindingContext as ApplicationSettingsPageViewModel).SwitchThemeCommand.Execute(null);
         }
 
+        #region DEBUG STUFF
         private void GenerateBarcode()
         {
             Array values = Enum.GetValues(typeof(BarcodeFormat)).OfType<BarcodeFormat>().Where(f => { return (int)f <= 2048; }).ToArray();
@@ -94,5 +86,6 @@ namespace PVScan.Mobile.Views
                 GenerateBarcode();
             }
         }
+        #endregion
     }
 }

@@ -21,11 +21,11 @@ namespace PVScan.Mobile.ViewModels
 
     public class LoggedInPageViewModel : BaseViewModel
     {
-        public IIdentityService IdentityService { get; set; }
+        readonly IIdentityService IdentityService;
 
-        public LoggedInPageViewModel()
+        public LoggedInPageViewModel(IIdentityService identityService)
         {
-            IdentityService = Resolver.Resolve<IIdentityService>();
+            IdentityService = identityService;
 
             LogoutCommand = new Command(async () =>
             {

@@ -16,11 +16,11 @@ namespace PVScan.Mobile.ViewModels
 {
     public class ScanPageViewModel : BaseViewModel
     {
-        IBarcodesRepository BarcodesRepository;
+        readonly IBarcodesRepository BarcodesRepository;
 
-        public ScanPageViewModel()
+        public ScanPageViewModel(IBarcodesRepository barcodesRepository)
         {
-            BarcodesRepository = Resolver.Resolve<IBarcodesRepository>();
+            BarcodesRepository = barcodesRepository;
 
             ScanCommand = new Command(async (object scanResult) =>
             {

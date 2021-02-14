@@ -38,16 +38,16 @@ namespace PVScan.Mobile.ViewModels
 
     public class FilterPageViewModel : BaseViewModel
     {
-        public IBarcodesRepository BarcodesRepository;
+        readonly IBarcodesRepository BarcodesRepository;
 
-        public FilterPageViewModel()
+        public FilterPageViewModel(IBarcodesRepository barcodesRepository)
         {
-            BarcodesRepository = Resolver.Resolve<IBarcodesRepository>();
+            BarcodesRepository = barcodesRepository;
 
             InitBarcodeFormats();
             InitLastTimeSpans();
 
-            // :L
+            // hmmmm
             ResetFilter().GetAwaiter().GetResult();
 
             ApplyFilterCommand = new Command(() =>
