@@ -49,6 +49,13 @@ namespace PVScan.Mobile.Services
 
     public class IdentityService : IIdentityService
     {
+        readonly IPersistentKVP KVP;
+
+        public IdentityService(IPersistentKVP kvp)
+        {
+            KVP = kvp;
+        }
+
         private string _accessToken;
         public string AccessToken
         {
@@ -58,21 +65,22 @@ namespace PVScan.Mobile.Services
             }
         }
 
+
         public async Task Initialize()
         {
             // Check auth token in storage and check it's validity
 
             // Todo: change to secure storage
-            _accessToken = Preferences.Get("AccessToken", null);
+            _accessToken = KVP.Get("AccessToken", null);
 
             if (!await ValidateToken(_accessToken))
             {
                 _accessToken = null;
-                Preferences.Set("AccessToken", null);
+                KVP.Set("AccessToken", null);
 
                 // Try to make request for another one
-                string prevUsername = Preferences.Get("Username", null);
-                string prevPassword = Preferences.Get("Password", null);
+                string prevUsername = KVP.Get("Username", null);
+                string prevPassword = KVP.Get("Password", null);
 
                 if (!await LoginAsync(prevUsername, prevPassword))
                 {
@@ -116,9 +124,9 @@ namespace PVScan.Mobile.Services
 
             _accessToken = token.AccessToken;
 
-            Preferences.Set("AccessToken", _accessToken);
-            Preferences.Set("Username", username);
-            Preferences.Set("Password", password);
+            KVP.Set("AccessToken", _accessToken);
+            KVP.Set("Username", username);
+            KVP.Set("Password", password);
 
             return true;
         }
@@ -151,9 +159,9 @@ namespace PVScan.Mobile.Services
 
             _accessToken = null;
 
-            Preferences.Set("AccessToken", null);
-            Preferences.Set("Username", null);
-            Preferences.Set("Password", null);
+            KVP.Set("AccessToken", null);
+            KVP.Set("Username", null);
+            KVP.Set("Password", null);
 
             return true;
         }

@@ -29,4 +29,15 @@ namespace PVScan.Mobile
             }
         }
     }
+
+
+    public static class StorageKeys
+    {
+        public static string AccessToken = "AccessToken";
+
+        public static string Username = "Username";
+        public static string Password = "Password";
+
+        public static string Theme = "Theme";
+    }
 }
