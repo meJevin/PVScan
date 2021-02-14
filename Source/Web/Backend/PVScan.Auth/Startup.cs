@@ -45,14 +45,7 @@ namespace PVScan.Auth
                 config.Cookie.SameSite = SameSiteMode.Lax;
             });
 
-            services.AddAuthentication().AddGoogle(options =>
-            {
-                IConfigurationSection googleAuthNSection =
-                    Configuration.GetSection("Authentication:Google");
-
-                options.ClientId = googleAuthNSection["ClientId"];
-                options.ClientSecret = googleAuthNSection["ClientSecret"];
-            });
+            services.AddAuthentication();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
