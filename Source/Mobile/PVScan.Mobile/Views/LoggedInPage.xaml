@@ -2,11 +2,9 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
-             x:Class="PVScan.Mobile.Views.LoggedInPage">
-
-    <ContentView.BindingContext>
-        <viewmodels:LoggedInPageViewModel/>
-    </ContentView.BindingContext>
+             x:Class="PVScan.Mobile.Views.LoggedInPage"
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    di:ViewModelLocator.AutoWireViewModel="True">
 
     <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
         <ScrollView>

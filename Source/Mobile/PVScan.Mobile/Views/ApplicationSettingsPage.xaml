@@ -9,12 +9,11 @@
     xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels" 
     xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
     
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    di:ViewModelLocator.AutoWireViewModel="True"
+    
     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
-
-    <ContentView.BindingContext>
-        <viewmodels:ApplicationSettingsPageViewModel/>
-    </ContentView.BindingContext>
-
+    
     <ContentView.Resources>
         <ResourceDictionary>
             <converters:InverseBoolConverter x:Key="InverseBool"/>

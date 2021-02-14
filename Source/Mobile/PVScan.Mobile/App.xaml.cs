@@ -21,7 +21,7 @@ namespace PVScan.Mobile
 
             InitializeComponent();
 
-            var navigationPage = new Xamarin.Forms.NavigationPage(new MainPage());
+            var navigationPage = new Xamarin.Forms.NavigationPage(Resolver.Resolve<MainPage>());
 
             navigationPage.On<iOS>().SetHideNavigationBarSeparator(false);
             navigationPage.SetOnAppTheme(Xamarin.Forms.NavigationPage.BarTextColorProperty, Color.Black, Color.White);

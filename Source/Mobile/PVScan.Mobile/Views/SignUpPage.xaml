@@ -2,11 +2,9 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
-             x:Class="PVScan.Mobile.Views.SignUpPage">
-
-    <ContentView.BindingContext>
-        <viewmodels:SignUpPageViewModel/>
-    </ContentView.BindingContext>
+             x:Class="PVScan.Mobile.Views.SignUpPage"
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    di:ViewModelLocator.AutoWireViewModel="True">
 
     <Grid Margin="20, 0, 20, 0">
         <Grid.RowDefinitions>
