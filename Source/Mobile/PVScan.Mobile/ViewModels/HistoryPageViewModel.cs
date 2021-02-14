@@ -90,7 +90,8 @@ namespace PVScan.Mobile.ViewModels
             {
                 dbBarcodes = await BarcodesRepository.GetAllFiltered(CurrentFilter);
             }
-            Barcodes.AddRange(dbBarcodes);
+
+            Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
 
             IsLoading = false;
         }
