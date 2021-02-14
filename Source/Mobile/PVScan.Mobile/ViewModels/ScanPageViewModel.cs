@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,11 @@ namespace PVScan.Mobile.ViewModels
 {
     public class ScanPageViewModel : BaseViewModel
     {
-        readonly PVScanMobileDbContext _context;
+        IBarcodesRepository BarcodesRepository;
 
         public ScanPageViewModel()
         {
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
-
-            _context = new PVScanMobileDbContext(dbPath);
+            BarcodesRepository = Resolver.Resolve<IBarcodesRepository>();
 
             ScanCommand = new Command(async (object scanResult) =>
             {
@@ -82,8 +81,7 @@ namespace PVScan.Mobile.ViewModels
                     ScanTime = DateTime.UtcNow,
                 };
 
-                await _context.Barcodes.AddAsync(b);
-                await _context.SaveChangesAsync();
+                b = await BarcodesRepository.Save(b);
 
                 Saved?.Invoke(this, new EventArgs());
 

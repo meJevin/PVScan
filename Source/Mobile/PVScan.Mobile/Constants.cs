@@ -18,4 +18,15 @@ namespace PVScan.Mobile
         // Todo: this doesn't belong here
         public static string BaseAddress = DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:1337" : "https://localhost:1337";
     }
+
+    public static class DataAccss
+    {
+        public static string DatabasePath
+        {
+            get
+            {
+                return System.IO.Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
+            }
+        }
+    }
 }

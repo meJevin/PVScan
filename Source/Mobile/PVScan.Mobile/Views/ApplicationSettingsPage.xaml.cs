@@ -1,5 +1,6 @@
 ﻿using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
@@ -20,17 +21,17 @@ namespace PVScan.Mobile.Views
     {
         public event EventHandler BackClicked;
 
-        ApplicationSettingsPageViewModel vm;
+        ApplicationSettingsPageViewModel VM;
 
-        private readonly PVScanMobileDbContext ctx;
+        IBarcodesRepository BarcodesRepository;
+
         public ApplicationSettingsPage()
         {
+            BarcodesRepository = Resolver.Resolve<IBarcodesRepository>();
+
             InitializeComponent();
 
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
-            ctx = new PVScanMobileDbContext(dbPath);
-
-            vm = BindingContext as ApplicationSettingsPageViewModel;
+            VM = BindingContext as ApplicationSettingsPageViewModel;
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -40,12 +41,12 @@ namespace PVScan.Mobile.Views
 
         private void DarkTheme_Toggled(object sender, ToggledEventArgs e)
         {
-            if (vm == null)
+            if (VM == null)
             {
                 return;
             }
 
-            vm.SwitchThemeCommand.Execute(null);
+            VM.SwitchThemeCommand.Execute(null);
         }
 
         private void GenerateBarcode()
@@ -70,8 +71,7 @@ namespace PVScan.Mobile.Views
                 Text = Guid.NewGuid().ToString(),
             };
 
-            ctx.Barcodes.Add(b);
-            ctx.SaveChanges();
+            BarcodesRepository.Save(b);
         }
 
         private void Button_Clicked(object sender, EventArgs e)
