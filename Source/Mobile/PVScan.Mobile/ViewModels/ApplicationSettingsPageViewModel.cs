@@ -24,13 +24,13 @@ namespace PVScan.Mobile.ViewModels
                 {
                     Application.Current.UserAppTheme = OSAppTheme.Dark;
 
-                    KVP.Set("Theme", "Dark");
+                    KVP.Set(StorageKeys.Theme, "Dark");
                 }
                 else
                 {
                     Application.Current.UserAppTheme = OSAppTheme.Light;
 
-                    KVP.Set("Theme", "Light");
+                    KVP.Set(StorageKeys.Theme, "Light");
                 }
             });
 
