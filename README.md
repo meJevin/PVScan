@@ -22,7 +22,7 @@ Web client is implemented via React
 ## Desktop
 Desktop client is implemented via WPF
 
-# Backend
+# Back-end
 Backend which supports an optional creation of user profile to sync barcodes across devices is implemented via ASP.NET
 
 ## Authorization server
