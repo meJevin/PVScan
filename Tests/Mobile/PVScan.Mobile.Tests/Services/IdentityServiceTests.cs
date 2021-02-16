@@ -18,6 +18,9 @@ namespace PVScan.Mobile.Tests.Services
     {
         private readonly string ValidToken = "VALID_ACCESS_TOKEN";
 
+        private readonly string ValidUsername = "Username1";
+        private readonly string ValidPassword = "Password1";
+
         public IdentityServiceTests()
         {
         }
@@ -76,7 +79,7 @@ namespace PVScan.Mobile.Tests.Services
         }
 
         [Fact]
-        public async Task Can_Initialize_With_Invalid_Access_Token_In_Storage()
+        public async Task Can_Initialize_With_Invalid_Access_Token_And_No_User_Credentials_In_Storage()
         {
             // Arrange
             var KVPMock = new InMemoryKVP();
@@ -114,6 +117,136 @@ namespace PVScan.Mobile.Tests.Services
                 var client = new HttpClient(handlerMock.Object);
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", storageAccessToken);
+                client.BaseAddress = new Uri(API.BaseAddress);
+
+                return client;
+            });
+
+            var identityService = new IdentityService(KVPMock, factoryMock.Object);
+
+            // Act
+            await identityService.Initialize();
+
+            // Assert
+            Assert.Null(identityService.AccessToken);
+            Assert.Null(KVPMock.Get(StorageKeys.AccessToken, null));
+        }
+
+        [Fact]
+        public async Task Can_Initialize_With_Invalid_Access_Token_And_Valid_User_Credentials_In_Storage()
+        {
+            // Arrange
+            var KVPMock = new InMemoryKVP();
+            var factoryMock = new Mock<IHttpClientFactory>();
+            var handlerMock = new Mock<HttpMessageHandler>();
+
+            KVPMock.Set(StorageKeys.AccessToken, Guid.NewGuid().ToString());
+            KVPMock.Set(StorageKeys.Username, ValidUsername);
+            KVPMock.Set(StorageKeys.Password, ValidPassword);
+
+            string storageAccessToken = KVPMock.Get(StorageKeys.AccessToken, null);
+
+            factoryMock.Setup(m => m.ForAPI(It.IsAny<string>())).Returns(() =>
+            {
+                handlerMock
+                    .Protected()
+                    .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                    .ReturnsAsync(new HttpResponseMessage()
+                    {
+                        StatusCode = System.Net.HttpStatusCode.Unauthorized
+                    });
+
+                var client = new HttpClient(handlerMock.Object);
+
+                client.BaseAddress = new Uri(API.BaseAddress);
+
+                return client;
+            });
+
+            factoryMock.Setup(m => m.Default()).Returns(() =>
+            {
+                handlerMock
+                    .Protected()
+                    .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.Is<HttpRequestMessage>(r =>
+                    r.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains($"username={ValidUsername}") &&
+                    r.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains($"password={ValidPassword}")),
+                    ItExpr.IsAny<CancellationToken>())
+                    .ReturnsAsync(new HttpResponseMessage()
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Content = new StringContent("{access_token: \"" + ValidToken + "\"}")
+                    });
+
+                var client = new HttpClient(handlerMock.Object);
+
+                client.BaseAddress = new Uri(API.BaseAddress);
+
+                return client;
+            });
+
+            var identityService = new IdentityService(KVPMock, factoryMock.Object);
+
+            // Act
+            await identityService.Initialize();
+
+            // Assert
+            Assert.Equal(ValidToken, identityService.AccessToken);
+            Assert.Equal(ValidToken, KVPMock.Get(StorageKeys.AccessToken, null));
+        }
+
+        [Fact]
+        public async Task Can_Initialize_With_Invalid_Access_Token_And_Invalid_User_Credentials_In_Storage()
+        {
+            // Arrange
+            var KVPMock = new InMemoryKVP();
+            var factoryMock = new Mock<IHttpClientFactory>();
+            var handlerMock = new Mock<HttpMessageHandler>();
+
+            KVPMock.Set(StorageKeys.AccessToken, Guid.NewGuid().ToString());
+            KVPMock.Set(StorageKeys.Username, Guid.NewGuid().ToString());
+            KVPMock.Set(StorageKeys.Password, Guid.NewGuid().ToString());
+
+            string storageAccessToken = KVPMock.Get(StorageKeys.AccessToken, null);
+
+            factoryMock.Setup(m => m.ForAPI(It.IsAny<string>())).Returns(() =>
+            {
+                handlerMock
+                    .Protected()
+                    .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                    .ReturnsAsync(new HttpResponseMessage()
+                    {
+                        StatusCode = System.Net.HttpStatusCode.Unauthorized
+                    });
+
+                var client = new HttpClient(handlerMock.Object);
+
+                client.BaseAddress = new Uri(API.BaseAddress);
+
+                return client;
+            });
+
+            factoryMock.Setup(m => m.Default()).Returns(() =>
+            {
+                handlerMock
+                    .Protected()
+                    .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.Is<HttpRequestMessage>(r =>
+                    r.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains($"username={ValidUsername}") &&
+                    r.Content.ReadAsStringAsync().GetAwaiter().GetResult().Contains($"password={ValidPassword}")),
+                    ItExpr.IsAny<CancellationToken>())
+                    .ReturnsAsync(new HttpResponseMessage()
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Content = new StringContent("{access_token: \"" + ValidToken + "\"}")
+                    });
+
+                var client = new HttpClient(handlerMock.Object);
+
                 client.BaseAddress = new Uri(API.BaseAddress);
 
                 return client;
