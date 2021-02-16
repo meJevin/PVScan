@@ -12,6 +12,7 @@ namespace PVScan.Mobile.ViewModels
         public string Message { get; set; }
     }
 
+    // Todo: add existing user check
     public class SignUpPageViewModel : BaseViewModel
     {
         readonly IIdentityService IdentityService;
@@ -22,6 +23,16 @@ namespace PVScan.Mobile.ViewModels
 
             SignUpCommand = new Command(async () =>
             {
+                if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Email))
+                {
+                    FailedSignUp?.Invoke(this, new SignUpEventArgs()
+                    {
+                        Message = "Please fill in all fields!",
+                    });
+
+                    return;
+                }
+
                 var result = await IdentityService.SignUpAsync(Login, Password, Email);
 
                 if (result)
