@@ -61,9 +61,8 @@ namespace PVScan.Mobile.Tests.ViewModels
 
         [Theory]
         [InlineData("Somethin", "Something")]
-        [InlineData("Somethin   ", "   Something")]
-        [InlineData("Somethin1231", "Something5436 ")]
-        [InlineData("Som   et657567hin", "Somet    h53456ing")]
+        [InlineData("Somethin1231", "Something5436")]
+        [InlineData("Somet657567hin", "Someth53456ing")]
         public void Can_Not_Login_With_Invalid_Credentials(string login, string password)
         {
             // Arrange
@@ -79,14 +78,14 @@ namespace PVScan.Mobile.Tests.ViewModels
             vm.LoginCommand.Execute(null);
 
             // Assert
-            mockIdentityService.Verify(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            mockIdentityService.Verify(m => m.LoginAsync(login, password), Times.Once);
             Assert.False(loggedIn);
         }
 
         [Theory]
         [InlineData("", "")]
-        [InlineData("", null)]
         [InlineData(null, "")]
+        [InlineData("", null)]
         [InlineData(null, null)]
         public void Login_With_Empty_Credentials_Authentication_Not_Requested(string login, string password)
         {
@@ -100,7 +99,7 @@ namespace PVScan.Mobile.Tests.ViewModels
             vm.LoginCommand.Execute(null);
 
             // Assert
-            mockIdentityService.Verify(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mockIdentityService.Verify(m => m.LoginAsync(login, password), Times.Never);
         }
     }
 }
