@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.EntityFrameworkCore;
 using MvvmHelpers;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Services;
@@ -17,7 +18,13 @@ namespace PVScan.Mobile
             var containerBuilder = new ContainerBuilder();
 
             // DbContext from EF Core
-            containerBuilder.RegisterType<PVScanMobileDbContext>()
+            containerBuilder.Register(ctx =>
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<PVScanMobileDbContext>();
+                optionsBuilder.UseSqlite($"Filename={DataAccss.DatabasePath}");
+
+                return new PVScanMobileDbContext(optionsBuilder.Options);
+            })
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
