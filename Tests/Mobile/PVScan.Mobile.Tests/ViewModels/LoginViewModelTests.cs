@@ -68,12 +68,12 @@ namespace PVScan.Mobile.Tests.ViewModels
         {
             // Arrange
             LoginPageViewModel vm = new LoginPageViewModel(mockIdentityService.Object);
-            bool loggedIn = false;
+            bool loggedIn = true;
 
             vm.Login = login;
             vm.Password = password;
 
-            vm.SuccessfulLogin += (s, a) => { loggedIn = true; };
+            vm.FailedLogin += (s, a) => { loggedIn = false; };
 
             // Act
             vm.LoginCommand.Execute(null);
@@ -101,11 +101,6 @@ namespace PVScan.Mobile.Tests.ViewModels
 
             // Assert
             mockIdentityService.Verify(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-        }
-
-        public void Invalid_Credentials_Error_Message_Recieved()
-        {
-
         }
     }
 }
