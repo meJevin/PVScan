@@ -22,6 +22,16 @@ namespace PVScan.Mobile.ViewModels
 
             LoginCommand = new Command(async () =>
             {
+                if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password))
+                {
+                    FailedLogin?.Invoke(this, new LoginEventArgs()
+                    {
+                        Message = "Please fill in all fields!",
+                    });
+
+                    return;
+                }
+
                 var result = await IdentityService.LoginAsync(Login, Password);
 
                 if (result)

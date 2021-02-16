@@ -76,10 +76,6 @@ namespace PVScan.Mobile.ViewModels
 
             IsLoading = true;
 
-            if (CurrentFilter != null)
-            {
-            }
-
             IEnumerable<Barcode> dbBarcodes = null;
 
             if (CurrentFilter == null)
@@ -96,7 +92,7 @@ namespace PVScan.Mobile.ViewModels
             IsLoading = false;
         }
 
-        private Filter CurrentFilter { get; set; }
+        public Filter CurrentFilter { get; set; }
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
 

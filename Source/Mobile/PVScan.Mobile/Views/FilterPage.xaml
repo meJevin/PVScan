@@ -155,7 +155,10 @@
                                     Date
                                 </Label>
 
-                                <Label Text="Reset" TextColor="White" HorizontalOptions="End" 
+                                <Label Text="Reset" TextColor="{AppThemeBinding 
+                                                        Dark={StaticResource TextPrimaryColor_Dark},
+                                                        Light={StaticResource TextPrimaryColor_Light}}"
+                                       HorizontalOptions="End" 
                                     VerticalOptions="End" FontSize="16" Grid.Column="1">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ResetDateFilterCommand}"
@@ -166,7 +169,11 @@
                             <xct:TabView TabStripPlacement="Top" TabStripHeight="30" HeightRequest="200"
                                          SelectedIndex="{Binding DateFilterTypeIndex, Mode=OneWayToSource}"
                                          x:Name="DateFilterTypeTabView">
-                                <xct:TabViewItem Text="Last" TextColor="Gray" TextColorSelected="White">
+                                <xct:TabViewItem Text="Last" 
+                                                 TextColor="Gray"
+                                                 TextColorSelected="{AppThemeBinding 
+                                                        Dark={StaticResource TextPrimaryColor_Dark},
+                                                        Light={StaticResource TextPrimaryColor_Light}}">
                                     <CollectionView VerticalOptions="Center" SelectionMode="Single" 
                                             ItemsSource="{Binding AvailableLastTimeSpans}"
                                             SelectedItem="{Binding SelectedLastTimeSpan}">
@@ -246,7 +253,11 @@
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
                                 </xct:TabViewItem>
-                                <xct:TabViewItem Text="Range" TextColor="Gray" TextColorSelected="White">
+                                <xct:TabViewItem Text="Range" 
+                                                 TextColor="Gray"
+                                                 TextColorSelected="{AppThemeBinding 
+                                                        Dark={StaticResource TextPrimaryColor_Dark},
+                                                        Light={StaticResource TextPrimaryColor_Light}}">
                                     <StackLayout VerticalOptions="Center">
                                         <Label>
                                             From
@@ -265,7 +276,10 @@
                                     Barcode Formats
                                 </Label>
 
-                                <Label Text="Reset" TextColor="White" HorizontalOptions="End" 
+                                <Label Text="Reset" TextColor="{AppThemeBinding 
+                                                        Dark={StaticResource TextPrimaryColor_Dark},
+                                                        Light={StaticResource TextPrimaryColor_Light}}"
+                                       HorizontalOptions="End" 
                                VerticalOptions="End" FontSize="16" Grid.Column="1">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ResetBarcodeFormatsCommand}"/>
