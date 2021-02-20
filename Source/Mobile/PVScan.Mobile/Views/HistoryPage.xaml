@@ -11,7 +11,8 @@
     xmlns:models="clr-namespace:PVScan.Mobile.Models"
     x:Class="PVScan.Mobile.Views.HistoryPage"
     
-    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    xmlns:di="clr-namespace:PVScan.Mobile.DI" 
+    xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps" xmlns:forms="clr-namespace:Naxam.Controls.Forms;assembly=Naxam.Mapbox.Forms"
     di:ViewModelLocator.AutoWireViewModel="True"
     
     PropertyChanged="ContentView_PropertyChanged"
@@ -32,6 +33,7 @@
     </ContentView.Resources>
 
     <Grid>
+        <!-- COLLECTION VIEW OF BARCODES -->
         <RefreshView x:Name="RefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
             <Grid x:Name="BarcodesContainer">
                 <CollectionView ItemsSource="{Binding Barcodes}">
@@ -96,6 +98,12 @@
             </Grid>
         </RefreshView>
 
+        <!-- MAP VIEW -->
+        <Grid x:Name="MapViewContainer">
+            <forms:MapView/>
+        </Grid>
+        
+        <!-- UPPER FILTER BAR -->
         <Grid InputTransparent="True" CascadeInputTransparent="False" RowSpacing="0"
                       x:Name="FilterBarContainer">
             <Grid.RowDefinitions>
@@ -114,9 +122,6 @@
                                    TextChanged="SearchEntry_TextChanged"
                                    x:Name="SearchEntry"
                                HeightRequest="35">
-                        <Entry.Effects>
-                            <effects:NoEntryVerticalPaddingEffect/>
-                        </Entry.Effects>
                     </Entry>
 
                     <ImageButton Grid.Column="1" BackgroundColor="Transparent" Clicked="FilterButton_Clicked">
@@ -129,6 +134,18 @@
                                         Light={StaticResource TextPrimaryColor_Light}}" />
                         </ImageButton.Source>
                     </ImageButton>
+                </Grid>
+
+                <Grid Margin="0,0,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Text="List" CornerRadius="0" BackgroundColor="Transparent" TextColor="White"
+                            x:Name="ListViewButton" Clicked="ListViewButton_Clicked"/>
+                    <Button Text="Map" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="White"
+                            x:Name="MapViewButton" Clicked="MapViewButton_Clicked"/>
                 </Grid>
 
                 <Grid VerticalOptions="Center" HeightRequest="1" 
