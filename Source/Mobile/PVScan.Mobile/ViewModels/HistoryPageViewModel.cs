@@ -63,6 +63,11 @@ namespace PVScan.Mobile.ViewModels
 
                 IsRefresing = false;
             });
+
+            SearchCommand = new Command(async () =>
+            {
+                await LoadBarcodesFromDB();
+            });
         }
 
         public async Task LoadBarcodesFromDB()
@@ -87,10 +92,17 @@ namespace PVScan.Mobile.ViewModels
                 dbBarcodes = await BarcodesRepository.GetAllFiltered(CurrentFilter);
             }
 
+            if (!String.IsNullOrEmpty(Search))
+            {
+                dbBarcodes = dbBarcodes.Where(b => b.Text.Contains(Search));
+            }
+
             Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
 
             IsLoading = false;
         }
+
+        public string Search { get; set; }
 
         public Filter CurrentFilter { get; set; }
 
@@ -101,5 +113,7 @@ namespace PVScan.Mobile.ViewModels
         public bool IsRefresing { get; set; }
 
         public ICommand RefreshCommand { get; set; }
+
+        public ICommand SearchCommand { get; set; }
     }
 }

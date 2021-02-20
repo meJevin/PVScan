@@ -286,5 +286,43 @@ namespace PVScan.Mobile.Tests.ViewModels
             Assert.All(vm.Barcodes, t => Assert.Equal(ZXing.BarcodeFormat.QR_CODE, t.Format));
             Assert.False(vm.IsLoading);
         }
+
+        [Fact]
+        public async Task Can_Load_Barcodes_From_DB_With_Search()
+        {
+            // Arrange
+            DbContext.Barcodes.AddRange(new List<Barcode>()
+            {
+                new Barcode()
+                {
+                    Text = "B2",
+                },
+                new Barcode()
+                {
+                    Text = "B2",
+                },
+                new Barcode()
+                {
+                    Text = "B3",
+                },
+                new Barcode()
+                {
+                    Text = "B4",
+                },
+            });
+            DbContext.SaveChanges();
+
+            var mockRepo = new BarcodesRepository(DbContext);
+            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo);
+            vm.Search = "B2";
+
+            // Act
+            await vm.LoadBarcodesFromDB();
+
+            // Assert
+            Assert.Equal(2, vm.Barcodes.Count);
+            Assert.All(vm.Barcodes, t => Assert.Equal("B2", t.Text));
+            Assert.False(vm.IsLoading);
+        }
     }
 }

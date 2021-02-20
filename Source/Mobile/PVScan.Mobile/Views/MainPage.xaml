@@ -107,9 +107,15 @@
     </ContentPage.Resources>
     <NavigationPage.TitleView>
         <Grid>
+            <Grid.Margin>
+                <OnPlatform x:TypeArguments="Thickness">
+                    <OnPlatform.Platforms>
+                        <On Platform="Android" Value="0, 0, 15, 0" />
+                    </OnPlatform.Platforms>
+                </OnPlatform>
+            </Grid.Margin>
             <Label VerticalTextAlignment="Center"
-                   HorizontalTextAlignment="Center"
-                   Grid.ColumnSpan="2">
+                   HorizontalTextAlignment="Center">
                 PVScan
             </Label>
         </Grid>

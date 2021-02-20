@@ -90,6 +90,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Effects\NoEntryVerticalPaddingEffect.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Renderers\CustomDatePickerRenderer.cs" />
     <Compile Include="Renderers\CustromEntryRenderer.cs" />
