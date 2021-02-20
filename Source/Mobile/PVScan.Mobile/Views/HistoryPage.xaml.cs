@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -18,9 +19,28 @@ namespace PVScan.Mobile.Views
         double FilterPageHeight;
         double OverlayMaxOpacity = 0.65;
 
+        double SearchDelay = 500;
+        Timer SearchDelayTimer;
+
+        bool FilterBarHidden;
+
         public HistoryPage()
         {
             InitializeComponent();
+
+
+            FilterBar.SizeChanged += async (s, e) =>
+            {
+                if (FilterBar.Height != -1)
+                {
+                    await HideFilterBar(0);
+                }
+            };
+
+            SearchDelayTimer = new Timer(SearchDelay);
+            SearchDelayTimer.Enabled = true;
+            SearchDelayTimer.Elapsed += SearchDelayTimer_Elapsed;
+            SearchDelayTimer.AutoReset = false;
 
             Overlay.Opacity = 0;
             Overlay.InputTransparent = true;
@@ -108,6 +128,8 @@ namespace PVScan.Mobile.Views
         private async Task ShowFilterView()
         {
             Overlay.InputTransparent = false;
+
+
             _ = Overlay.FadeTo(OverlayMaxOpacity, 250, Easing.CubicOut);
             await FilterPage.TranslateTo(0, 1, 250, Easing.CubicOut);
         }
@@ -120,6 +142,51 @@ namespace PVScan.Mobile.Views
 
                 FilterPage.HeightRequest = FilterPageHeight;
                 FilterPage.TranslationY = FilterPageHeight;
+            }
+        }
+
+        private void SearchDelayTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            (BindingContext as HistoryPageViewModel).SearchCommand.Execute(null);
+        }
+
+        private void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SearchDelayTimer.Interval = SearchDelay;
+            SearchDelayTimer.Enabled = true;
+        }
+
+        private async Task ShowFilterBar(uint duration = 250)
+        {
+            _ = FilterBarContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
+            _ = ShowHideFilterBarButton.FadeTo(1, duration, Easing.CubicOut);
+            _ = BarcodesContainer.TranslateTo(0, FilterBar.Height, duration, Easing.CubicOut);
+            _ = ShowHideFilterBarButton.TranslateTo(0, ShowHideFilterBarButton.Height / -2, duration, Easing.CubicOut);
+            await ShowHideFilterButtonImage.RotateTo(180, duration, Easing.CubicOut);
+
+            FilterBarHidden = false;
+        }
+
+        private async Task HideFilterBar(uint duration = 250)
+        {
+            _ = FilterBarContainer.TranslateTo(0, -FilterBar.Height, duration, Easing.CubicOut);
+            _ = ShowHideFilterBarButton.FadeTo(0.5, duration, Easing.CubicOut);
+            _ = BarcodesContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
+            _ = ShowHideFilterBarButton.TranslateTo(0, 0, duration, Easing.CubicOut);
+            await ShowHideFilterButtonImage.RotateTo(0, duration, Easing.CubicOut);
+
+            FilterBarHidden = true;
+        }
+
+        private async void ShowHideFilterBarButton_Clicked(object sender, EventArgs e)
+        {
+            if (FilterBarHidden)
+            {
+                await ShowFilterBar();
+            }
+            else
+            {
+                await HideFilterBar();
             }
         }
     }
