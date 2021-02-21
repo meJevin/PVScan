@@ -28,13 +28,18 @@ namespace PVScan.Mobile.Views
         {
             InitializeComponent();
 
-
             FilterBar.SizeChanged += async (s, e) =>
             {
                 if (FilterBar.Height != -1)
                 {
                     await HideFilterBar(0);
                 }
+            };
+
+            this.LayoutChanged += async (s, e) =>
+            {
+                ShowListView(0);
+                HideFilterView();
             };
 
             SearchDelayTimer = new Timer(SearchDelay);
@@ -47,11 +52,11 @@ namespace PVScan.Mobile.Views
 
             if (Device.RuntimePlatform == Device.Android)
             {
-                RefreshView.RefreshColor = Color.Black;
+                BarcodesRefreshView.RefreshColor = Color.Black;
             }
             else if (Device.RuntimePlatform == Device.iOS)
             {
-                RefreshView.SetAppThemeColor(RefreshView.RefreshColorProperty, Color.Black, Color.White);
+                BarcodesRefreshView.SetAppThemeColor(RefreshView.RefreshColorProperty, Color.Black, Color.White);
             }
 
             MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
@@ -160,7 +165,7 @@ namespace PVScan.Mobile.Views
         {
             _ = FilterBarContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
             _ = ShowHideFilterBarButton.FadeTo(1, duration, Easing.CubicOut);
-            _ = BarcodesContainer.TranslateTo(0, FilterBar.Height, duration, Easing.CubicOut);
+            _ = BarcodesRefreshView.TranslateTo(BarcodesRefreshView.TranslationX, FilterBar.Height, duration, Easing.CubicOut);
             _ = ShowHideFilterBarButton.TranslateTo(0, ShowHideFilterBarButton.Height / -2, duration, Easing.CubicOut);
             await ShowHideFilterButtonImage.RotateTo(180, duration, Easing.CubicOut);
 
@@ -171,7 +176,7 @@ namespace PVScan.Mobile.Views
         {
             _ = FilterBarContainer.TranslateTo(0, -FilterBar.Height, duration, Easing.CubicOut);
             _ = ShowHideFilterBarButton.FadeTo(0.5, duration, Easing.CubicOut);
-            _ = BarcodesContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
+            _ = BarcodesRefreshView.TranslateTo(BarcodesRefreshView.TranslationX, 0, duration, Easing.CubicOut);
             _ = ShowHideFilterBarButton.TranslateTo(0, 0, duration, Easing.CubicOut);
             await ShowHideFilterButtonImage.RotateTo(0, duration, Easing.CubicOut);
 
@@ -188,6 +193,40 @@ namespace PVScan.Mobile.Views
             {
                 await HideFilterBar();
             }
+        }
+
+        private async Task ShowListView(uint duration = 250)
+        {
+            //BarcodesRefreshView.IsVisible = true;
+
+            _ = BarcodesRefreshView.TranslateTo(0, BarcodesRefreshView.TranslationY, duration, Easing.CubicOut);
+            await MapViewContainer.TranslateTo(MapViewContainer.Width, 0, duration, Easing.CubicOut);
+
+            ListViewButton.Opacity = 1;
+            MapViewButton.Opacity = 0.35;
+            //MapViewContainer.IsVisible = false;
+        }
+
+        private async Task ShowMapView(uint duration = 250)
+        {
+            //MapViewContainer.IsVisible = true;
+
+            _ = MapViewContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
+            await BarcodesRefreshView.TranslateTo(-BarcodesRefreshView.Width, BarcodesRefreshView.TranslationY, duration, Easing.CubicOut);
+
+            MapViewButton.Opacity = 1;
+            ListViewButton.Opacity = 0.35;
+            //BarcodesRefreshView.IsVisible = false;
+        }
+
+        private async void ListViewButton_Clicked(object sender, EventArgs e)
+        {
+            await ShowListView();
+        }
+
+        private async void MapViewButton_Clicked(object sender, EventArgs e)
+        {
+            await ShowMapView();
         }
     }
 }
