@@ -12,7 +12,7 @@
     x:Class="PVScan.Mobile.Views.HistoryPage"
     
     xmlns:di="clr-namespace:PVScan.Mobile.DI" 
-    xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps" xmlns:forms="clr-namespace:Naxam.Controls.Forms;assembly=Naxam.Mapbox.Forms"
+    xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
     di:ViewModelLocator.AutoWireViewModel="True"
     
     PropertyChanged="ContentView_PropertyChanged"
@@ -100,7 +100,7 @@
 
         <!-- MAP VIEW -->
         <Grid x:Name="MapViewContainer">
-            <forms:MapView/>
+            <maps:Map/>
         </Grid>
         
         <!-- UPPER FILTER BAR -->
@@ -122,6 +122,9 @@
                                    TextChanged="SearchEntry_TextChanged"
                                    x:Name="SearchEntry"
                                HeightRequest="35">
+                        <Entry.Effects>
+                            <effects:NoEntryVerticalPaddingEffect/>
+                        </Entry.Effects>
                     </Entry>
 
                     <ImageButton Grid.Column="1" BackgroundColor="Transparent" Clicked="FilterButton_Clicked">
