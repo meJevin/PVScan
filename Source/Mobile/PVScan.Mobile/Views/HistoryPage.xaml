@@ -145,9 +145,13 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Text="List" CornerRadius="0" BackgroundColor="Transparent" TextColor="White"
+                    <Button Text="List" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
+                            Dark={StaticResource TextPrimaryColor_Dark},
+                            Light={StaticResource TextPrimaryColor_Light}}"
                             x:Name="ListViewButton" Clicked="ListViewButton_Clicked"/>
-                    <Button Text="Map" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="White"
+                    <Button Text="Map" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
+                            Dark={StaticResource TextPrimaryColor_Dark},
+                            Light={StaticResource TextPrimaryColor_Light}}"
                             x:Name="MapViewButton" Clicked="MapViewButton_Clicked"/>
                 </Grid>
 
