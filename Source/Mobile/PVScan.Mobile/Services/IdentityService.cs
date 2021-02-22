@@ -147,10 +147,18 @@ namespace PVScan.Mobile.Services
                     { "Email", email },
                 });
 
-            var result = await httpClient.PostAsync("/Auth/Register", content);
-
-            if (!result.IsSuccessStatusCode)
+            try
             {
+                var result = await httpClient.PostAsync("/Auth/Register", content);
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                // We need proper error messages!!
                 return false;
             }
 
@@ -166,10 +174,19 @@ namespace PVScan.Mobile.Services
 
             // Make a test request to the backend
             HttpClient httpClient = HttpFactory.ForAPI(token);
-            var result = await httpClient.GetAsync("api/v1/users/current");
 
-            if (!result.IsSuccessStatusCode)
+            try
             {
+                var result = await httpClient.GetAsync("api/v1/users/current");
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Todo: add error messages from server...
                 return false;
             }
 
