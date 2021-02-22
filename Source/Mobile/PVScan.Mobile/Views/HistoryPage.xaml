@@ -29,6 +29,7 @@
             <converters:BarcodeFormatImageSourceConverter x:Key="BarcodeFormatImageSource"/>
             <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
             <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
+            <converters:CoordinatePositionConverter x:Key="CoordinatePosition"/>
         </ResourceDictionary>
 
         <DataTemplate x:DataType="models:Barcode" x:Key="NormalBarcodeTemplate">
@@ -144,7 +145,15 @@
 
         <!-- MAP VIEW -->
         <Grid x:Name="MapViewContainer">
-            <maps:Map/>
+            <maps:Map x:Name="Map" IsShowingUser="True"
+                      ItemsSource="{Binding Barcodes}">
+                <maps:Map.ItemTemplate>
+                    <DataTemplate x:DataType="models:Barcode">
+                        <maps:Pin Label="{Binding Text}" Position="{Binding ScanLocation,
+                            Converter={StaticResource CoordinatePosition}}"/>
+                    </DataTemplate>
+                </maps:Map.ItemTemplate>
+            </maps:Map>
         </Grid>
         
         <!-- UPPER FILTER BAR -->
@@ -162,7 +171,7 @@
                              VerticalOptions="Start">
                 <Grid ColumnDefinitions="*, 24" Margin="10">
                     <Entry Placeholder="Search..." Margin="0,0,5,0" 
-                                   Text="{Binding Source={x:Reference HistoryView}, Path=BindingContext.Search}"
+                                   Text="{Binding Search}"
                                    TextChanged="SearchEntry_TextChanged"
                                    x:Name="SearchEntry"
                                HeightRequest="35">
@@ -239,6 +248,7 @@
             </BoxView.GestureRecognizers>
         </BoxView>
 
+        <!-- HIDDEN FILTER PAGE -->
         <views:FilterPage x:Name="FilterPage" VerticalOptions="End">
             <views:FilterPage.GestureRecognizers>
                 <PanGestureRecognizer PanUpdated="FilterViewPanGesture_PanUpdated"/>
