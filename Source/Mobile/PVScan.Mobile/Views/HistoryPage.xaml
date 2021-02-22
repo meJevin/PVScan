@@ -221,7 +221,8 @@
                 <Image x:Name="ShowHideFilterButtonImage">
                     <Image.Source>
                         <FontImageSource FontFamily="FontAwesome"
-                                             Glyph="{x:Static theme:IconFont.AngleDown}">
+                                             Glyph="{x:Static theme:IconFont.AngleDown}"
+                                         Color="White">
                         </FontImageSource>
                     </Image.Source>
                 </Image>
