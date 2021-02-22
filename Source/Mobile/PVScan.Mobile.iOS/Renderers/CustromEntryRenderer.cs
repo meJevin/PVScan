@@ -1,4 +1,5 @@
-﻿using PVScan.Mobile.iOS.Renderers;
+﻿using CoreGraphics;
+using PVScan.Mobile.iOS.Renderers;
 using System.ComponentModel;
 using UIKit;
 using Xamarin.Forms;
@@ -17,6 +18,11 @@ namespace PVScan.Mobile.iOS.Renderers
             {
                 Control.Layer.BorderWidth = 0;
                 Control.BorderStyle = UITextBorderStyle.None;
+
+                Control.LeftView = new UIView(new CGRect(0, 0, 5, 0));
+                Control.LeftViewMode = UITextFieldViewMode.Always;
+                Control.RightView = new UIView(new CGRect(0, 0, 5, 0));
+                Control.RightViewMode = UITextFieldViewMode.Always;
             }
         }
     }
