@@ -20,7 +20,7 @@
 	<key>MinimumOSVersion</key>
 	<string>13.6</string>
 	<key>CFBundleDisplayName</key>
-	<string>PVScan.Mobile</string>
+	<string>PVScan</string>
 	<key>CFBundleIdentifier</key>
 	<string>ru.pinkveil.pvscan</string>
 	<key>CFBundleVersion</key>
