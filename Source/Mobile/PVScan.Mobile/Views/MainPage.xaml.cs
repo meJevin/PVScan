@@ -19,9 +19,9 @@ namespace PVScan.Mobile.Views
         {
             InitializeComponent();
 
-            MainTabView.SelectedIndex = 1;
-            _currentTabView = ScanPage.Parent as TabViewItem;
-            ScanPage.Initialize();
+
+            _currentTabView = HistoryPage.Parent as TabViewItem;
+            HistoryPage.Initialize();
         }
 
         private async void HistoryTabItem_TabTapped(object sender, TabTappedEventArgs e)

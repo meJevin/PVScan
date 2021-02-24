@@ -12,7 +12,8 @@
     x:Class="PVScan.Mobile.Views.HistoryPage"
     
     xmlns:di="clr-namespace:PVScan.Mobile.DI" 
-    xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps" xmlns:controls="clr-namespace:PVScan.Mobile.Controls"
+    xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+    xmlns:controls="clr-namespace:PVScan.Mobile.Controls"
     di:ViewModelLocator.AutoWireViewModel="True"
     
     PropertyChanged="ContentView_PropertyChanged"
