@@ -37,17 +37,26 @@
             <Grid ColumnDefinitions="Auto,*">
                 <Label Text="Last scanned barcode" FontSize="18"/>
 
-                <ImageButton HorizontalOptions="End" Grid.Column="1" Padding="8,0"
-                             Command="{Binding ClearCommand}" IsEnabled="{Binding CanClear, TargetNullValue=False}" 
-                             BackgroundColor="Transparent">
-                    <ImageButton.Source>
-                        <FontImageSource
-                            FontFamily="FontAwesome"
-                            Glyph="{x:Static theme:IconFont.Times}"
-                            Size="22"
-                            Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" />
-                    </ImageButton.Source>
-                </ImageButton>
+
+                <Grid BackgroundColor="Transparent"
+                      HorizontalOptions="End" Grid.Column="1" Padding="8,0"
+                      IsEnabled="{Binding CanClear, TargetNullValue=False}">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="FontAwesome"
+                                Glyph="{x:Static theme:IconFont.Times}"
+                                Size="22"
+                                Color="{AppThemeBinding
+                                Dark={StaticResource TextPrimaryColor_Dark},
+                                Light={StaticResource TextPrimaryColor_Light}}" />
+                        </Image.Source>
+                    </Image>
+
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ClearCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
             </Grid>
 
             <BoxView Grid.Column="2" HeightRequest="1" HorizontalOptions="Fill" VerticalOptions="Center" 
