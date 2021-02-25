@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using PVScan.Mobile.Views.Extensions;
 
 namespace PVScan.Mobile.Views
 {
@@ -167,6 +168,7 @@ namespace PVScan.Mobile.Views
             _ = ShowHideFilterBarButton.FadeTo(1, duration, Easing.CubicOut);
             _ = BarcodesRefreshView.TranslateTo(BarcodesRefreshView.TranslationX, FilterBar.Height, duration, Easing.CubicOut);
             _ = ShowHideFilterBarButton.TranslateTo(0, ShowHideFilterBarButton.Height / -2, duration, Easing.CubicOut);
+            _ = CollectionViewFooterBottomMargin.HeightTo(FilterBar.Height, duration, Easing.CubicOut);
             await ShowHideFilterButtonImage.RotateTo(180, duration, Easing.CubicOut);
 
             FilterBarHidden = false;
@@ -178,6 +180,7 @@ namespace PVScan.Mobile.Views
             _ = ShowHideFilterBarButton.FadeTo(0.5, duration, Easing.CubicOut);
             _ = BarcodesRefreshView.TranslateTo(BarcodesRefreshView.TranslationX, 0, duration, Easing.CubicOut);
             _ = ShowHideFilterBarButton.TranslateTo(0, 0, duration, Easing.CubicOut);
+            _ = CollectionViewFooterBottomMargin.HeightTo(0, duration, Easing.CubicOut);
             await ShowHideFilterButtonImage.RotateTo(0, duration, Easing.CubicOut);
 
             FilterBarHidden = true;
