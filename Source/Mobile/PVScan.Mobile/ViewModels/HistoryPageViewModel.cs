@@ -68,6 +68,11 @@ namespace PVScan.Mobile.ViewModels
             {
                 await LoadBarcodesFromDB();
             });
+
+            ClearSearchCommand = new Command(async () =>
+            {
+                Search = "";
+            });
         }
 
         public async Task LoadBarcodesFromDB()
@@ -115,5 +120,7 @@ namespace PVScan.Mobile.ViewModels
         public ICommand RefreshCommand { get; set; }
 
         public ICommand SearchCommand { get; set; }
+
+        public ICommand ClearSearchCommand { get; set; }
     }
 }

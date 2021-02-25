@@ -31,6 +31,7 @@
             <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
             <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
             <converters:CoordinatePositionConverter x:Key="CoordinatePosition"/>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmpty"/>
         </ResourceDictionary>
 
         <DataTemplate x:DataType="models:Barcode" x:Key="NormalBarcodeTemplate">
@@ -54,10 +55,9 @@
                 </Grid>
 
                 <Grid Grid.Column="2" Margin="10, 0">
-
+                        
                     <StackLayout VerticalOptions="Center" Spacing="0">
-                        <Image
-                                       Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
+                        <Image Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
 
                         <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
                                            FontSize="Micro" HorizontalOptions="Center"/>
@@ -171,15 +171,38 @@
                         Light={StaticResource BackgroundColorLighter}}"
                              VerticalOptions="Start">
                 <Grid ColumnDefinitions="*, 24" Margin="10">
-                    <Entry Placeholder="Search..." Margin="0,0,5,0" 
-                                   Text="{Binding Search}"
-                                   TextChanged="SearchEntry_TextChanged"
-                                   x:Name="SearchEntry"
-                               HeightRequest="35">
-                        <Entry.Effects>
-                            <effects:NoEntryVerticalPaddingEffect/>
-                        </Entry.Effects>
-                    </Entry>
+                    <Grid>
+                        <Entry Placeholder="Search..." Margin="0,0,5,0" 
+                                       Text="{Binding Search}"
+                                       TextChanged="SearchEntry_TextChanged"
+                                       x:Name="SearchEntry"
+                                   HeightRequest="35"
+                                   Keyboard="Text">
+                            <Entry.Effects>
+                                <effects:NoEntryVerticalPaddingEffect/>
+                            </Entry.Effects>
+                        </Entry>
+
+                        <Grid HorizontalOptions="End" BackgroundColor="Transparent"
+                               Padding="14,0"
+                              IsVisible="{Binding Search, Converter={StaticResource StringNotEmpty}}">
+                            <Image>
+                                <Image.Source>
+                                    <FontImageSource
+                                                FontFamily="FontAwesome"
+                                                Glyph="{x:Static theme:IconFont.Times}"
+                                                Color="{AppThemeBinding
+                                                Dark={StaticResource TextPrimaryColor_Dark},
+                                                Light={StaticResource TextPrimaryColor_Light}}"
+                                                Size="22"/>
+                                </Image.Source>
+                            </Image>
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ClearSearchCommand}"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </Grid>
 
                     <ImageButton Grid.Column="1" BackgroundColor="Transparent" Clicked="FilterButton_Clicked">
                         <ImageButton.Source>

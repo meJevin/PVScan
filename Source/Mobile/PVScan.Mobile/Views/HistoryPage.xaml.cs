@@ -228,5 +228,10 @@ namespace PVScan.Mobile.Views
         {
             await ShowMapView();
         }
+
+        void ClearSearchEntryButton_Clicked(object sender, EventArgs e)
+        {
+
+        }
     }
 }
