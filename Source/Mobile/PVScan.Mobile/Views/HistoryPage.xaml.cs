@@ -8,7 +8,9 @@ using System.Text;
 using System.Timers;
 using System.Threading.Tasks;
 
+using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
 using PVScan.Mobile.Views.Extensions;
 
@@ -24,6 +26,8 @@ namespace PVScan.Mobile.Views
         Timer SearchDelayTimer;
 
         bool FilterBarHidden;
+
+        bool MovedMapToInitialLocation = false;
 
         public HistoryPage()
         {
@@ -213,6 +217,20 @@ namespace PVScan.Mobile.Views
         private async Task ShowMapView(uint duration = 250)
         {
             //MapViewContainer.IsVisible = true;
+            if (!MovedMapToInitialLocation)
+            {
+                var initialLocation = await Geolocation.GetLocationAsync(new GeolocationRequest()
+                {
+                    DesiredAccuracy = GeolocationAccuracy.Best,
+                    Timeout = TimeSpan.FromSeconds(1.5),
+                });
+
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(
+                    new Position(initialLocation.Latitude, initialLocation.Longitude),
+                    Distance.FromKilometers(0.5)));
+
+                MovedMapToInitialLocation = true;
+            }
 
             _ = MapViewContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
             await BarcodesRefreshView.TranslateTo(-BarcodesRefreshView.Width, BarcodesRefreshView.TranslationY, duration, Easing.CubicOut);
