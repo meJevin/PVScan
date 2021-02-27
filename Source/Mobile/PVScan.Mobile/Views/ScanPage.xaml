@@ -17,6 +17,7 @@
     </ContentView.Resources>
     
     <Grid>
+        <!-- Screen with allow camera button if user hasn't allowed camera -->
         <Grid IsVisible="{Binding IsCameraAllowed, Converter={StaticResource InverBool}}">
             <StackLayout VerticalOptions="Center" Spacing="24">
                 <Label HorizontalOptions="Center">
@@ -26,9 +27,11 @@
             </StackLayout>
         </Grid>
 
+        <!-- Scanner View -->
         <Grid x:Name="ScannerViewContainer" IsVisible="{Binding IsCameraAllowed}">
         </Grid>
 
+        <!-- Upper bar for last scanned barcode information-->
         <StackLayout Orientation="Vertical" VerticalOptions="Start" 
                      BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarkSeeThrough}, Light={StaticResource BackgroundColorLightSeeThrough}}" 
                      Padding="10"
@@ -74,6 +77,7 @@
             </Grid>
         </StackLayout>
 
+        <!-- Lower save button for last scanned barcode -->
         <Grid VerticalOptions="End"
               x:Name="SaveButtonContainer"
               PropertyChanged="SaveButtonContainer_PropertyChanged">

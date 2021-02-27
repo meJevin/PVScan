@@ -144,29 +144,10 @@
 
                 <CollectionView.Footer>
                     <StackLayout>
-                        <Grid>
-                            <StackLayout Orientation="Horizontal" Margin="6">
-                                <Label Text="Barcodes:"/>
-                                <Label Text="{Binding 
-                                    Source={x:Reference BarcodesCollectionView},
-                                    Path=ItemsSource.Count}"/>
-                            </StackLayout>
-                        </Grid>
-
                         <Grid x:Name="CollectionViewFooterBottomMargin" 
                               BackgroundColor="Transparent">
                             
                         </Grid>
-
-                        <StackLayout.Triggers>
-                            <DataTrigger TargetType="StackLayout"
-                                         Binding="{Binding 
-                                Source={x:Reference BarcodesCollectionView},
-                                Path=ItemsSource.Count}"
-                                         Value="0">
-                                <Setter Property="IsVisible" Value="False"/>
-                            </DataTrigger>
-                        </StackLayout.Triggers>
                     </StackLayout>
                 </CollectionView.Footer>
             </CollectionView>
