@@ -27,8 +27,6 @@ namespace PVScan.Mobile.Views
 
         bool FilterBarHidden;
 
-        bool MovedMapToInitialLocation = false;
-
         public HistoryPage()
         {
             InitializeComponent();
@@ -74,6 +72,16 @@ namespace PVScan.Mobile.Views
         public async Task Initialize()
         {
             await (BindingContext as HistoryPageViewModel).LoadBarcodesFromDB();
+
+            var initialLocation = await Geolocation.GetLocationAsync(new GeolocationRequest()
+            {
+                DesiredAccuracy = GeolocationAccuracy.Best,
+                Timeout = TimeSpan.FromSeconds(1.5),
+            });
+
+            Map.MoveToRegion(MapSpan.FromCenterAndRadius(
+                new Position(initialLocation.Latitude, initialLocation.Longitude),
+                Distance.FromKilometers(0.5)));
         }
 
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
@@ -216,22 +224,6 @@ namespace PVScan.Mobile.Views
 
         private async Task ShowMapView(uint duration = 250)
         {
-            //MapViewContainer.IsVisible = true;
-            if (!MovedMapToInitialLocation)
-            {
-                var initialLocation = await Geolocation.GetLocationAsync(new GeolocationRequest()
-                {
-                    DesiredAccuracy = GeolocationAccuracy.Best,
-                    Timeout = TimeSpan.FromSeconds(1.5),
-                });
-
-                Map.MoveToRegion(MapSpan.FromCenterAndRadius(
-                    new Position(initialLocation.Latitude, initialLocation.Longitude),
-                    Distance.FromKilometers(0.5)));
-
-                MovedMapToInitialLocation = true;
-            }
-
             _ = MapViewContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
             await BarcodesRefreshView.TranslateTo(-BarcodesRefreshView.Width, BarcodesRefreshView.TranslationY, duration, Easing.CubicOut);
 
