@@ -31,18 +31,11 @@ namespace PVScan.Mobile.Views
         {
             InitializeComponent();
 
-            FilterBar.SizeChanged += async (s, e) =>
+            LayoutChanged += async (s, e) =>
             {
-                if (FilterBar.Height != -1)
-                {
-                    await HideFilterBar(0);
-                }
-            };
-
-            this.LayoutChanged += async (s, e) =>
-            {
-                ShowListView(0);
-                HideFilterView();
+                _ = ShowListView(0);
+                _ = ShowFilterBar(0);
+                _ = HideFilterView(0);
             };
 
             SearchDelayTimer = new Timer(SearchDelay);
@@ -136,31 +129,20 @@ namespace PVScan.Mobile.Views
             await HideFilterView();
         }
 
-        private async Task HideFilterView()
+        private async Task HideFilterView(uint duration = 250)
         {
             Overlay.InputTransparent = true;
-            _ = Overlay.FadeTo(0, 250, Easing.CubicOut);
-            await FilterPage.TranslateTo(0, FilterPageHeight, 250, Easing.CubicOut);
+
+            _ = Overlay.FadeTo(0, duration, Easing.CubicOut);
+            await FilterPage.TranslateTo(0, FilterPageHeight, duration, Easing.CubicOut);
         }
 
-        private async Task ShowFilterView()
+        private async Task ShowFilterView(uint duration = 250)
         {
             Overlay.InputTransparent = false;
 
-
-            _ = Overlay.FadeTo(OverlayMaxOpacity, 250, Easing.CubicOut);
-            await FilterPage.TranslateTo(0, 1, 250, Easing.CubicOut);
-        }
-
-        private void ContentView_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Height))
-            {
-                FilterPageHeight = Height - 50;
-
-                FilterPage.HeightRequest = FilterPageHeight;
-                FilterPage.TranslationY = FilterPageHeight;
-            }
+            _ = Overlay.FadeTo(OverlayMaxOpacity, duration, Easing.CubicOut);
+            await FilterPage.TranslateTo(0, 1, duration, Easing.CubicOut);
         }
 
         private void SearchDelayTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -242,9 +224,15 @@ namespace PVScan.Mobile.Views
             await ShowMapView();
         }
 
-        void ClearSearchEntryButton_Clicked(object sender, EventArgs e)
+        // Unfortunatelly the only way I found to size FilterPage properly :(
+        private void ContentView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-
+            if (e.PropertyName == nameof(Height))
+            {
+                FilterPageHeight = Height - 50;
+                FilterPage.HeightRequest = FilterPageHeight;
+                FilterPage.TranslationY = FilterPageHeight;
+            }
         }
     }
 }
