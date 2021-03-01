@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{BE167C20-D070-495D-9881-F02681EEA5A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2F5CEDCC-A3CD-4DFF-9543-22D7598C1FDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Desktop.WPF", "PVScan.Desktop.WPF\PVScan.Desktop.WPF.csproj", "{115B04C6-9276-4BBF-9FE3-842866AF71D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{115B04C6-9276-4BBF-9FE3-842866AF71D5} = {BE167C20-D070-495D-9881-F02681EEA5A4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43ACD540-A518-44FD-9F53-96947E323FBF}
+	EndGlobalSection
+EndGlobal
