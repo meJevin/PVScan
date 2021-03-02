@@ -1,0 +1,13 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:PVScan.Desktop.WPF">
+
+    <!-- THEME COLORS -->
+    <SolidColorBrush Color="#2c2c2c" x:Key="Background_Dark"/>
+    <SolidColorBrush Color="#f6f6f6" x:Key="Background_Light"/>
+    
+    <SolidColorBrush Color="#FFFFFF" x:Key="TextPrimary_Dark"/>
+    <SolidColorBrush Color="#323130" x:Key="TextPrimary_Light"/>
+    
+</ResourceDictionary>

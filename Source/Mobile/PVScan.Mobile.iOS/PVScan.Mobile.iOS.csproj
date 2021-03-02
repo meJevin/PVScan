@@ -78,15 +78,33 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\1024-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\120.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\120-2.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\180-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\40-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\58-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\60-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\80-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\87-1.png" />
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\1024-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\120.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\120-2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\180-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\40-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\58-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\60-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\80-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\87-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
