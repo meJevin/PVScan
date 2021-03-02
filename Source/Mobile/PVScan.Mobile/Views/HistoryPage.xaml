@@ -50,7 +50,7 @@
                     <StackLayout Orientation="Vertical">
                         <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
                         <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
-                                           FontSize="12"/>
+                                           FontSize="12" Opacity="0.5"/>
                     </StackLayout>
                 </Grid>
 
@@ -89,7 +89,7 @@
                     <StackLayout Orientation="Vertical">
                         <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
                         <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
-                                           FontSize="12"/>
+                                           FontSize="12" Opacity="0.5"/>
                     </StackLayout>
                 </Grid>
 
