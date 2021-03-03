@@ -111,7 +111,7 @@ namespace PVScan.Mobile.ViewModels
 
         public Filter CurrentFilter { get; set; }
 
-        public ObservableRangeCollection<Barcode> Barcodes { get; set; }
+        public ObservableRangeCollection<Barcode> Barcodes { get; set; } = new ObservableRangeCollection<Barcode>();
 
         public bool IsLoading { get; set; }
 
