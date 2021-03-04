@@ -40,6 +40,7 @@ namespace PVScan.Mobile.ViewModels
             BarcodesRepository = barcodesRepository;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
+            BarcodesPaged = new ObservableRangeCollection<Barcode>();
 
             //MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
             //    async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
@@ -73,7 +74,18 @@ namespace PVScan.Mobile.ViewModels
             {
                 Search = "";
             });
+
+            LoadNextPage = new Command(async () =>
+            {
+                BarcodesPaged.AddRange(Barcodes.Skip(PageCount * PageSize).Take(PageSize));
+                ++PageCount;
+            });
         }
+
+        // How many pages have we loaded in the list?
+        private int PageCount { get; set; }
+        // How many items per page?
+        private int PageSize { get; set; } = 50;
 
         public async Task LoadBarcodesFromDB()
         {
@@ -83,6 +95,9 @@ namespace PVScan.Mobile.ViewModels
             }
 
             Barcodes.Clear();
+            BarcodesPaged.Clear();
+
+            PageCount = 1;
 
             IsLoading = true;
 
@@ -103,6 +118,7 @@ namespace PVScan.Mobile.ViewModels
             }
 
             Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
+            BarcodesPaged.AddRange(Barcodes.Take(PageSize));
 
             IsLoading = false;
         }
@@ -112,6 +128,9 @@ namespace PVScan.Mobile.ViewModels
         public Filter CurrentFilter { get; set; }
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
+        public ObservableRangeCollection<Barcode> BarcodesPaged { get; set; }
+
+        public ICommand LoadNextPage { get; set; }
 
         public bool IsLoading { get; set; }
 

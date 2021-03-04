@@ -33,125 +33,73 @@
             <converters:CoordinatePositionConverter x:Key="CoordinatePosition"/>
             <converters:StringNotEmptyConverter x:Key="StringNotEmpty"/>
         </ResourceDictionary>
-
-        <DataTemplate x:DataType="models:Barcode" x:Key="NormalBarcodeTemplate">
-            <Grid BackgroundColor="{AppThemeBinding 
-                            Dark={StaticResource BackgroundColorDarker},
-                            Light={StaticResource BackgroundColorLighter}}"
-                              HeightRequest="65">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
-                    <StackLayout Orientation="Vertical">
-                        <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
-                        <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
-                                           FontSize="12" Opacity="0.5"/>
-                    </StackLayout>
-                </Grid>
-
-                <Grid Grid.Column="2" Margin="10, 0">
-                        
-                    <StackLayout VerticalOptions="Center" Spacing="0">
-                        <Image Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
-
-                        <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
-                                           FontSize="Micro" HorizontalOptions="Center"/>
-                    </StackLayout>
-                </Grid>
-
-                <BoxView BackgroundColor="{AppThemeBinding 
-                                    Dark={StaticResource BackgroundColorDark},
-                                    Light={StaticResource BackgroundColorLight}}" 
-                                     VerticalOptions="End"
-                                     HeightRequest="2" 
-                                     Grid.ColumnSpan="3"/>
-            </Grid>
-        </DataTemplate>
-        
-        <DataTemplate x:DataType="models:Barcode" x:Key="MarginBarcodeTemplate">
-            <Grid BackgroundColor="{AppThemeBinding 
-                            Dark={StaticResource BackgroundColorDarker},
-                            Light={StaticResource BackgroundColorLighter}}"
-                              HeightRequest="65" Padding="0,24,0,0">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
-                    <StackLayout Orientation="Vertical">
-                        <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
-                        <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
-                                           FontSize="12" Opacity="0.5"/>
-                    </StackLayout>
-                </Grid>
-
-                <Grid Grid.Column="2" Margin="10, 0">
-
-                    <StackLayout VerticalOptions="Center" Spacing="0">
-                        <Image
-                                       Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
-
-                        <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
-                                           FontSize="Micro" HorizontalOptions="Center"/>
-                    </StackLayout>
-                </Grid>
-
-                <BoxView BackgroundColor="{AppThemeBinding 
-                                    Dark={StaticResource BackgroundColorDark},
-                                    Light={StaticResource BackgroundColorLight}}" 
-                                     VerticalOptions="End"
-                                     HeightRequest="2" 
-                                     Grid.ColumnSpan="3"/>
-            </Grid>
-        </DataTemplate>
     </ContentView.Resources>
 
     <Grid>
         <!-- COLLECTION VIEW OF BARCODES -->
-        <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
-            <CollectionView ItemsSource="{Binding Barcodes}" ItemSizingStrategy="MeasureAllItems"
-                                x:Name="BarcodesCollectionView">
-                <CollectionView.ItemTemplate>
-                    <controls:BarcodesFirstItemMarginDataTemplateSelector 
-                        NormarTemplate="{StaticResource NormalBarcodeTemplate}"
-                        MarginTemplate="{StaticResource MarginBarcodeTemplate}"
-                        Page="{x:Reference HistoryView}"/>
-                </CollectionView.ItemTemplate>
+        <Grid x:Name="BarcodesListContainer">
+            <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
+                <CollectionView ItemsSource="{Binding BarcodesPaged}" RemainingItemsThreshold="3"
+                                RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Barcode">
+                            <Grid BackgroundColor="{AppThemeBinding 
+                                            Dark={StaticResource BackgroundColorDarker},
+                                            Light={StaticResource BackgroundColorLighter}}"
+                                              HeightRequest="65">
 
-                <CollectionView.EmptyView>
-                    <Grid BackgroundColor="{AppThemeBinding 
-                        Dark={StaticResource BackgroundColorDarker},
-                        Light={StaticResource BackgroundColorLighter}}">
-                        <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InverseBool}}">
-                            <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
-                           Text="No barcodes"/>
-                        </StackLayout>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                        <StackLayout IsVisible="{Binding IsLoading}">
-                            <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
-                           Text="Loading..."/>
-                        </StackLayout>
-                    </Grid>
-                </CollectionView.EmptyView>
+                                <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
+                                    <StackLayout Orientation="Vertical">
+                                        <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
+                                        <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
+                                                           FontSize="12" Opacity="0.5"/>
+                                    </StackLayout>
+                                </Grid>
 
-                <CollectionView.Footer>
-                    <StackLayout>
-                        <Grid x:Name="CollectionViewFooterBottomMargin" 
-                              BackgroundColor="Transparent">
-                            
+                                <Grid Grid.Column="2" Margin="10, 0">
+
+                                    <StackLayout VerticalOptions="Center" Spacing="0">
+                                        <Image Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
+
+                                        <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
+                                                           FontSize="Micro" HorizontalOptions="Center"/>
+                                    </StackLayout>
+                                </Grid>
+
+                                <BoxView BackgroundColor="{AppThemeBinding 
+                                                    Dark={StaticResource BackgroundColorDark},
+                                                    Light={StaticResource BackgroundColorLight}}" 
+                                                     VerticalOptions="End"
+                                                     HeightRequest="2" 
+                                                     Grid.ColumnSpan="3"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.EmptyView>
+                        <Grid BackgroundColor="{AppThemeBinding 
+                            Dark={StaticResource BackgroundColorDarker},
+                            Light={StaticResource BackgroundColorLighter}}">
+                            <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InverseBool}}">
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
+                               Text="No barcodes"/>
+                            </StackLayout>
+
+                            <StackLayout IsVisible="{Binding IsLoading}">
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
+                               Text="Loading..."/>
+                            </StackLayout>
                         </Grid>
-                    </StackLayout>
-                </CollectionView.Footer>
-            </CollectionView>
-        </RefreshView>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
 
         <!-- MAP VIEW -->
         <Grid x:Name="MapViewContainer">
@@ -165,7 +113,7 @@
                 </maps:Map.ItemTemplate>
             </maps:Map>
         </Grid>
-        
+
         <!-- UPPER FILTER BAR -->
         <Grid InputTransparent="True" CascadeInputTransparent="False" RowSpacing="0"
                       x:Name="FilterBarContainer">
@@ -274,7 +222,7 @@
                 </Grid.GestureRecognizers>
             </Grid>
         </Grid>
-        
+
         <BoxView x:Name="Overlay" BackgroundColor="Black">
             <BoxView.GestureRecognizers>
                 <TapGestureRecognizer Tapped="Overlay_Tapped"/>

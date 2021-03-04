@@ -27,5 +27,47 @@ namespace PVScan.Mobile.Views.Extensions
 
             return await tcs.Task;
         }
+
+        public static async Task<bool> PaddingTopTo(this Layout layout, double top, uint duration = 250, Easing easing = null)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var paddingAnimation = new Animation(x =>
+            {
+                layout.Padding = new Thickness()
+                {
+                    Top = x,
+                    Bottom = layout.Padding.Bottom,
+                    Left = layout.Padding.Left,
+                    Right = layout.Padding.Right,
+                };
+            },
+
+            layout.Padding.Top, top);
+            paddingAnimation.Commit(layout, "WidthAnimation", 10, duration, easing, (finalValue, finished) => { tcs.SetResult(finished); });
+
+            return await tcs.Task;
+        }
+
+        public static async Task<bool> PaddingBottomTo(this Layout layout, double bottom, uint duration = 250, Easing easing = null)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var paddingAnimation = new Animation(x =>
+            {
+                layout.Padding = new Thickness()
+                {
+                    Top = layout.Padding.Top,
+                    Bottom = x,
+                    Left = layout.Padding.Left,
+                    Right = layout.Padding.Right,
+                };
+            },
+
+            layout.Padding.Bottom, bottom);
+            paddingAnimation.Commit(layout, "WidthAnimation", 10, duration, easing, (finalValue, finished) => { tcs.SetResult(finished); });
+
+            return await tcs.Task;
+        }
     }
 }
