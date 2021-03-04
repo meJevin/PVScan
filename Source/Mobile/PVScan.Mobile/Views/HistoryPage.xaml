@@ -39,7 +39,8 @@
         <!-- COLLECTION VIEW OF BARCODES -->
         <Grid x:Name="BarcodesListContainer">
             <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding Barcodes}" ItemSizingStrategy="MeasureAllItems">
+                <CollectionView ItemsSource="{Binding BarcodesPaged}" RemainingItemsThreshold="3"
+                                RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:Barcode">
                             <Grid BackgroundColor="{AppThemeBinding 
