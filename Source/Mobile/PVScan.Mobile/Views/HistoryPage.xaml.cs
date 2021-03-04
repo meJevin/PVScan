@@ -162,8 +162,7 @@ namespace PVScan.Mobile.Views
             _ = ShowHideFilterBarButton.FadeTo(1, duration, Easing.CubicOut);
             _ = ShowHideFilterBarButton.TranslateTo(0, ShowHideFilterBarButton.Height / -2, duration, Easing.CubicOut);
 
-            _ = BarcodesRefreshView.TranslateTo(0, FilterBar.Height, duration, Easing.CubicOut);
-            _ = BarcodesListContainer.PaddingBottomTo(FilterBar.Height, duration, Easing.CubicOut);
+            _ = BarcodesListContainer.PaddingTopTo(FilterBar.Height, duration, Easing.CubicOut);
 
             await ShowHideFilterButtonImage.RotateTo(180, duration, Easing.CubicOut);
 
@@ -176,8 +175,7 @@ namespace PVScan.Mobile.Views
             _ = ShowHideFilterBarButton.FadeTo(0.5, duration, Easing.CubicOut);
             _ = ShowHideFilterBarButton.TranslateTo(0, 0, duration, Easing.CubicOut);
 
-            _ = BarcodesRefreshView.TranslateTo(0, 0, duration, Easing.CubicOut);
-            _ = BarcodesListContainer.PaddingBottomTo(0, duration, Easing.CubicOut);
+            _ = BarcodesListContainer.PaddingTopTo(0, duration, Easing.CubicOut);
 
             await ShowHideFilterButtonImage.RotateTo(0, duration, Easing.CubicOut);
 
