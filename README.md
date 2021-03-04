@@ -1,5 +1,5 @@
 # PVScan
-PVScan is a mobile application which allows users to scan barcodes of different formats and optionally save them to their device for logging purposes.
+PVScan is a mobile, desktop, and web application which allows users to scan barcodes of different formats and optionally save them to their device for logging purposes.
 
 This application also allows users to create an optional profile via its backend server and sync barcodes across multiple devices.
 
