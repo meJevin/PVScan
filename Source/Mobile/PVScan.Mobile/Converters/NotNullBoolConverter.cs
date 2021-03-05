@@ -4,11 +4,11 @@ using Xamarin.Forms;
 
 namespace PVScan.Mobile.Converters
 {
-    public class NullBoolConverter : IValueConverter
+    public class NotNullBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object inverse, CultureInfo culture)
         {
-            return (value == null);
+            return (value != null);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
