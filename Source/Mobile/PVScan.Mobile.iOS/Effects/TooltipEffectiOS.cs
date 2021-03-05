@@ -16,6 +16,8 @@ namespace PVScan.Mobile.iOS.Effects
         EasyTipView.EasyTipView tooltip;
         UITapGestureRecognizer tapGestureRecognizer;
 
+        bool isShowing = false;
+
         public TooltipEffectiOS()
         {
             tooltip = new EasyTipView.EasyTipView();
@@ -27,6 +29,13 @@ namespace PVScan.Mobile.iOS.Effects
             var control = Control ?? Container;
 
             var text = TooltipEffect.GetText(Element);
+
+            if (isShowing)
+            {
+                tooltip?.Dismiss();
+                isShowing = false;
+                return;
+            }
 
             if (!string.IsNullOrEmpty(text))
             {
@@ -42,10 +51,9 @@ namespace PVScan.Mobile.iOS.Effects
                     vc = vc.PresentedViewController;
                 }
 
-
                 tooltip?.Show(control, vc.View, true);
+                isShowing = true;
             }
-
         }
 
         void OnDismiss(object sender, EventArgs e)

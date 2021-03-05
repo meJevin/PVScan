@@ -16,6 +16,8 @@ namespace PVScan.Mobile.Android.Effects
         ToolTipsManager _toolTipsManager;
         ITipListener listener;
 
+        bool isShowing = false;
+
         public TooltipEffectAndroid()
         {
             listener = new TipListener();
@@ -28,9 +30,16 @@ namespace PVScan.Mobile.Android.Effects
 
             var text = TooltipEffect.GetText(Element);
 
+            if (isShowing)
+            {
+                _toolTipsManager.FindAndDismiss(control);
+                isShowing = false;
+                return;
+            }
+
             if (!string.IsNullOrEmpty(text))
             {
-               ToolTip.Builder builder;
+                ToolTip.Builder builder;
                 var parentContent = control.RootView;
                
                 var position = TooltipEffect.GetPosition(Element);
@@ -57,6 +66,7 @@ namespace PVScan.Mobile.Android.Effects
                 toolTipView = builder.Build();
                
                 _toolTipsManager?.Show(toolTipView);
+                isShowing = true;
             }
         }
 

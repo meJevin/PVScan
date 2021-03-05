@@ -60,7 +60,6 @@
                                         <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
 
                                         <Grid>
-
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="Auto"/>
@@ -74,16 +73,16 @@
 
                                             <Image Grid.Column="1" WidthRequest="20"
                                                    IsVisible="{Binding ScanLocation, Converter={StaticResource NullBool}}"
-                                                   Opacity="0.5">
+                                                   Opacity="0.5"
+                                                   effects:TooltipEffect.HasTooltip="True"
+                                                   effects:TooltipEffect.Text="Could not determine geolocation!"
+                                                   effects:TooltipEffect.Position="Bottom"
+                                                   effects:TooltipEffect.BackgroundColor="Black"
+                                                   effects:TooltipEffect.TextColor="White">
                                                 <Image.Source>
                                                     <FontImageSource FontFamily="FontAwesome"
                                                                      Glyph="{x:Static theme:IconFont.ExclamationCircle}"
-                                                                     Color="Red"
-                                                                     effects:TooltipEffect.HasTooltip="True"
-                                                                     effects:TooltipEffect.Text="Could not determine geolocation!"
-                                                                     effects:TooltipEffect.Position="Bottom"
-                                                                     effects:TooltipEffect.BackgroundColor="Black"
-                                                                     effects:TooltipEffect.TextColor="White"/>
+                                                                     Color="Red"/>
                                                 </Image.Source>
                                             </Image>
                                         </Grid>
