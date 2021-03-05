@@ -73,13 +73,17 @@ namespace PVScan.Mobile.ViewModels
                     Format = LastResult.BarcodeFormat,
                     Text = LastResult.Text,
                     ServerSynced = false,
-                    ScanLocation = new Coordinate()
-                    {
-                        Latitude = location?.Latitude,
-                        Longitude = location?.Longitude,
-                    },
                     ScanTime = DateTime.UtcNow,
                 };
+
+                if (location != null)
+                {
+                    b.ScanLocation = new Coordinate()
+                    {
+                        Latitude = location.Latitude,
+                        Longitude = location.Longitude,
+                    };
+                }
 
                 b = await BarcodesRepository.Save(b);
 
