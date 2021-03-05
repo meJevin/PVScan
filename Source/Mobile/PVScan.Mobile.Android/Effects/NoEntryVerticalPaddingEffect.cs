@@ -1,20 +1,11 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using PVScan.Mobile.Droid.Effects;
+﻿using PVScan.Mobile.Android.Effects;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ResolutionGroupName("PVScan")]
 [assembly: ExportEffect(typeof(NoEntryVerticalPaddingEffect), nameof(NoEntryVerticalPaddingEffect))]
-namespace PVScan.Mobile.Droid.Effects
+namespace PVScan.Mobile.Android.Effects
 {
     public class NoEntryVerticalPaddingEffect : PlatformEffect
     {

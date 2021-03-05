@@ -78,7 +78,12 @@
                                                 <Image.Source>
                                                     <FontImageSource FontFamily="FontAwesome"
                                                                      Glyph="{x:Static theme:IconFont.ExclamationCircle}"
-                                                                     Color="Red"/>
+                                                                     Color="Red"
+                                                                     effects:TooltipEffect.HasTooltip="True"
+                                                                     effects:TooltipEffect.Text="Could not determine geolocation!"
+                                                                     effects:TooltipEffect.Position="Bottom"
+                                                                     effects:TooltipEffect.BackgroundColor="Black"
+                                                                     effects:TooltipEffect.TextColor="White"/>
                                                 </Image.Source>
                                             </Image>
                                         </Grid>

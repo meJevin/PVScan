@@ -5,7 +5,7 @@ using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using PVScan.Mobile.Droid.Renderers;
+using PVScan.Mobile.Android.Renderers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(DatePicker), typeof(CustomDatePickerRenderer))]
-namespace PVScan.Mobile.Droid.Renderers
+namespace PVScan.Mobile.Android.Renderers
 {
     public class CustomDatePickerRenderer : DatePickerRenderer
     {
@@ -23,7 +23,7 @@ namespace PVScan.Mobile.Droid.Renderers
 
         }
 
-        void SetColor(Android.Graphics.Color color)
+        void SetColor(global::Android.Graphics.Color color)
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
             {
@@ -41,17 +41,17 @@ namespace PVScan.Mobile.Droid.Renderers
 
             if (Control != null)
             {
-                SetColor(Android.Graphics.Color.Transparent);
+                SetColor(global::Android.Graphics.Color.Transparent);
 
                 this.EditText.FocusChange += (sender, ee) => {
                     bool hasFocus = ee.HasFocus;
                     if (hasFocus)
                     {
-                        SetColor(Android.Graphics.Color.Transparent);
+                        SetColor(global::Android.Graphics.Color.Transparent);
                     }
                     else
                     {
-                        SetColor(Android.Graphics.Color.Transparent);
+                        SetColor(global::Android.Graphics.Color.Transparent);
                     }
                 };
             }

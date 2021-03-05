@@ -69,6 +69,7 @@
     <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Effects\TooltipEffectiOS.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\CustomDatePickerRenderer.cs" />
@@ -78,15 +79,33 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\1024-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\120.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\120-2.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\180-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\40-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\58-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\60-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\80-1.png" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\87-1.png" />
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\1024-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\120.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\120-2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\180-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\40-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\58-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\60-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\80-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\87-1.png">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -100,6 +119,9 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="EasyTipView">
+      <Version>1.0.1</Version>
+    </PackageReference>
     <PackageReference Include="IdentityModel.OidcClient">
       <Version>3.1.2</Version>
     </PackageReference>
@@ -128,10 +150,7 @@
       <Name>PVScan.Mobile</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="Assets.xcassets\PVScan-Normal.appiconset\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
