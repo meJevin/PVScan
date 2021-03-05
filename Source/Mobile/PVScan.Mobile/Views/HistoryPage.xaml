@@ -73,12 +73,7 @@
 
                                             <Image Grid.Column="1" WidthRequest="20"
                                                    IsVisible="{Binding ScanLocation, Converter={StaticResource NullBool}}"
-                                                   Opacity="0.5"
-                                                   effects:TooltipEffect.HasTooltip="True"
-                                                   effects:TooltipEffect.Text="Could not determine geolocation!"
-                                                   effects:TooltipEffect.Position="Bottom"
-                                                   effects:TooltipEffect.BackgroundColor="Black"
-                                                   effects:TooltipEffect.TextColor="White">
+                                                   Opacity="0.5">
                                                 <Image.Source>
                                                     <FontImageSource FontFamily="FontAwesome"
                                                                      Glyph="{x:Static theme:IconFont.ExclamationCircle}"
