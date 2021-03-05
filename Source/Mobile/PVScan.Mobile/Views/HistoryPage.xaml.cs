@@ -63,6 +63,7 @@ namespace PVScan.Mobile.Views
                 });
         }
 
+        // This should really be called once.. 
         public async Task Initialize()
         {
             await (BindingContext as HistoryPageViewModel).LoadBarcodesFromDB();
