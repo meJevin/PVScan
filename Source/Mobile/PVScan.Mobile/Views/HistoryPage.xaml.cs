@@ -13,6 +13,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
 using PVScan.Mobile.Views.Extensions;
+using PVScan.Mobile.Effects;
 
 namespace PVScan.Mobile.Views
 {
@@ -66,15 +67,22 @@ namespace PVScan.Mobile.Views
         {
             await (BindingContext as HistoryPageViewModel).LoadBarcodesFromDB();
 
-            var initialLocation = await Geolocation.GetLocationAsync(new GeolocationRequest()
+            try
             {
-                DesiredAccuracy = GeolocationAccuracy.Best,
-                Timeout = TimeSpan.FromSeconds(1.5),
-            });
+                var initialLocation = await Geolocation.GetLocationAsync(new GeolocationRequest()
+                {
+                    DesiredAccuracy = GeolocationAccuracy.Best,
+                    Timeout = TimeSpan.FromSeconds(1.5),
+                });
 
-            Map.MoveToRegion(MapSpan.FromCenterAndRadius(
-                new Position(initialLocation.Latitude, initialLocation.Longitude),
-                Distance.FromKilometers(0.5)));
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(
+                    new Position(initialLocation.Latitude, initialLocation.Longitude),
+                    Distance.FromKilometers(0.5)));
+            }
+            catch
+            {
+
+            }
         }
 
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
