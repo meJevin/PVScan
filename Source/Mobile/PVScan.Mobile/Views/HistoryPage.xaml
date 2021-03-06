@@ -18,6 +18,8 @@
     
     PropertyChanged="ContentView_PropertyChanged"
 
+    x:DataType="viewmodels:HistoryPageViewModel"
+
     BackgroundColor="{AppThemeBinding 
     Dark={StaticResource BackgroundColorDarker},
     Light={StaticResource BackgroundColorLighter}}"
