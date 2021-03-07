@@ -14,6 +14,7 @@ using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
 using PVScan.Mobile.Views.Extensions;
 using PVScan.Mobile.Effects;
+using PVScan.Mobile.Models;
 
 namespace PVScan.Mobile.Views
 {
@@ -37,6 +38,7 @@ namespace PVScan.Mobile.Views
                 _ = ShowListView(0);
                 _ = HideFilterBar(0);
                 _ = HideFilterView(0);
+                _ = HideCopyToClipboardNotification(0);
             };
 
             SearchDelayTimer = new Timer(SearchDelay);
@@ -56,11 +58,32 @@ namespace PVScan.Mobile.Views
                 BarcodesRefreshView.SetAppThemeColor(RefreshView.RefreshColorProperty, Color.Black, Color.White);
             }
 
+            (BindingContext as HistoryPageViewModel).BarcodeCopiedToClipboard += HistoryPage_BarcodeCopiedToClipboard;
+
             MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
                 async (FilterPageViewModel vm, FilterAppliedMessage args) =>
                 {
                     await HideFilterView();
                 });
+        }
+
+        private async void HistoryPage_BarcodeCopiedToClipboard(object sender, Barcode e)
+        {
+            await ShowCopyToClipboardNotification(250);
+
+            await Task.Delay(1000);
+
+            await HideCopyToClipboardNotification(250);
+        }
+
+        private async Task ShowCopyToClipboardNotification(uint duration)
+        {
+            await CopiedToClipboardNotification.TranslateTo(0, 0, duration, Easing.CubicOut);
+        }
+
+        private async Task HideCopyToClipboardNotification(uint duration)
+        {
+            await CopiedToClipboardNotification.TranslateTo(0, CopiedToClipboardNotification.Height, duration, Easing.CubicOut);
         }
 
         // This should really be called once.. 

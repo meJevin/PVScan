@@ -81,6 +81,19 @@ namespace PVScan.Mobile.ViewModels
 
                 ++PageCount;
             });
+
+            BarcodeItemLongPressCommand = new Command(async (object barcodeObject) =>
+            {
+                Barcode barcode = barcodeObject as Barcode;
+
+                if (barcode == null)
+                {
+                    return;
+                }
+
+                await Clipboard.SetTextAsync(barcode.Text);
+                BarcodeCopiedToClipboard?.Invoke(this, barcode);
+            });
         }
 
         public async Task LoadBarcodesFromDB()
@@ -145,5 +158,9 @@ namespace PVScan.Mobile.ViewModels
         public ICommand SearchCommand { get; set; }
 
         public ICommand ClearSearchCommand { get; set; }
+
+        public ICommand BarcodeItemLongPressCommand { get; set; }
+
+        public event EventHandler<Barcode> BarcodeCopiedToClipboard;
     }
 }
