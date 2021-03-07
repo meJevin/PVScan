@@ -55,7 +55,7 @@
                                       xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
                                       xtc:TouchEffect.AnimationDuration="100"
                                       xtc:TouchEffect.LongPressCommand="{Binding Source={x:Reference HistoryView},
-                                                                         Path=BindingContext.BarcodeItemLongPressCommand}"
+                                                                         Path=BindingContext.CopyBarcodeToClipboardCommand}"
                                       xtc:TouchEffect.LongPressCommandParameter="{Binding .}">
 
                                     <Grid.ColumnDefinitions>
@@ -257,7 +257,7 @@
 
         <Grid x:Name="CopiedToClipboardNotification"
               VerticalOptions="End" HeightRequest="100"
-              BackgroundColor="Green" TranslationY="0">
+              BackgroundColor="Green">
             <Label TextColor="White"
                    FontSize="Large"
                    HorizontalOptions="Center"

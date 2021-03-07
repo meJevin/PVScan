@@ -82,7 +82,8 @@ namespace PVScan.Mobile.ViewModels
                 ++PageCount;
             });
 
-            BarcodeItemLongPressCommand = new Command(async (object barcodeObject) =>
+            // Todo: Add settings to set which parts of barcode object are copied
+            CopyBarcodeToClipboardCommand = new Command(async (object barcodeObject) =>
             {
                 Barcode barcode = barcodeObject as Barcode;
 
@@ -91,6 +92,7 @@ namespace PVScan.Mobile.ViewModels
                     return;
                 }
 
+                // Todo: make this a service!
                 await Clipboard.SetTextAsync(barcode.Text);
                 BarcodeCopiedToClipboard?.Invoke(this, barcode);
             });
@@ -159,7 +161,7 @@ namespace PVScan.Mobile.ViewModels
 
         public ICommand ClearSearchCommand { get; set; }
 
-        public ICommand BarcodeItemLongPressCommand { get; set; }
+        public ICommand CopyBarcodeToClipboardCommand { get; set; }
 
         public event EventHandler<Barcode> BarcodeCopiedToClipboard;
     }
