@@ -42,7 +42,7 @@
         <!-- COLLECTION VIEW OF BARCODES -->
         <Grid x:Name="BarcodesListContainer">
             <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding BarcodesPaged}" RemainingItemsThreshold="3"
+                <CollectionView ItemsSource="{Binding BarcodesPaged}" RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
                                 RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:Barcode">
@@ -228,7 +228,7 @@
                                  VerticalOptions="Start"
                                  Grid.Row="1"
                                  Margin="0" 
-                                BackgroundColor="{StaticResource BackgroundColorDark}"
+                                 BackgroundColor="{StaticResource BackgroundColorDark}"
                                  TranslationY="0"
                                  x:Name="ShowHideFilterBarButton"
                                  InputTransparent="False">

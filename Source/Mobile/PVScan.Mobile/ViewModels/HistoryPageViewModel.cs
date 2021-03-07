@@ -77,19 +77,11 @@ namespace PVScan.Mobile.ViewModels
 
             LoadNextPage = new Command(async () =>
             {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    BarcodesPaged.AddRange(Barcodes.Skip(PageCount * PageSize).Take(PageSize));
-                });
+                BarcodesPaged.AddRange(Barcodes.Skip(PageCount * PageSize).Take(PageSize));
 
                 ++PageCount;
             });
         }
-
-        // How many pages have we loaded in the list?
-        private int PageCount { get; set; }
-        // How many items per page?
-        private int PageSize { get; set; } = 50;
 
         public async Task LoadBarcodesFromDB()
         {
@@ -98,12 +90,8 @@ namespace PVScan.Mobile.ViewModels
                 return;
             }
 
-            // https://github.com/xamarin/Xamarin.Forms/issues/12080#issuecomment-743656125
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                Barcodes.Clear();
-                BarcodesPaged.Clear();
-            });
+            Barcodes.Clear();
+            BarcodesPaged.Clear();
 
             PageCount = 1;
 
@@ -125,11 +113,8 @@ namespace PVScan.Mobile.ViewModels
                 dbBarcodes = dbBarcodes.Where(b => b.Text.Contains(Search));
             }
 
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
-                BarcodesPaged.AddRange(Barcodes.Take(PageSize));
-            });
+            Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
+            BarcodesPaged.AddRange(Barcodes.Take(PageSize));
 
             IsLoading = false;
         }
@@ -140,6 +125,14 @@ namespace PVScan.Mobile.ViewModels
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
         public ObservableRangeCollection<Barcode> BarcodesPaged { get; set; }
+
+
+        // How many pages have we loaded in the list?
+        private int PageCount { get; set; }
+        // How many items per page?
+        private int PageSize { get; set; } = 50;
+        // Remaining item threshold
+        public int RemainingBarcodesThreshold { get; set; } = 3;
 
         public ICommand LoadNextPage { get; set; }
 
