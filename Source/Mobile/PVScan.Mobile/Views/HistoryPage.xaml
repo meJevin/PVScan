@@ -18,6 +18,8 @@
     
     PropertyChanged="ContentView_PropertyChanged"
 
+    x:DataType="viewmodels:HistoryPageViewModel"
+
     BackgroundColor="{AppThemeBinding 
     Dark={StaticResource BackgroundColorDarker},
     Light={StaticResource BackgroundColorLighter}}"
@@ -32,6 +34,7 @@
             <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
             <converters:CoordinatePositionConverter x:Key="CoordinatePosition"/>
             <converters:StringNotEmptyConverter x:Key="StringNotEmpty"/>
+            <converters:NullBoolConverter x:Key="NullBool"/>
         </ResourceDictionary>
     </ContentView.Resources>
 
@@ -57,8 +60,29 @@
                                 <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
                                     <StackLayout Orientation="Vertical">
                                         <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
-                                        <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
-                                                           FontSize="12" Opacity="0.5"/>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
+                                                   FontSize="12"
+                                                   Opacity="0.5"
+                                                   VerticalOptions="Center"/>
+
+                                            <Image Grid.Column="1" WidthRequest="20"
+                                                   IsVisible="{Binding ScanLocation, Converter={StaticResource NullBool}}"
+                                                   Opacity="0.5">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FontAwesome"
+                                                                     Glyph="{x:Static theme:IconFont.ExclamationCircle}"
+                                                                     Color="Red"/>
+                                                </Image.Source>
+                                            </Image>
+                                        </Grid>
                                     </StackLayout>
                                 </Grid>
 

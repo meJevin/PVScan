@@ -53,11 +53,7 @@ namespace PVScan.Mobile.Views
             var b = new Barcode()
             {
                 Format = randomType,
-                ScanLocation = new Coordinate()
-                {
-                    Latitude = random.NextDouble() * 70,
-                    Longitude = random.NextDouble() * 70,
-                },
+                ScanLocation = null,
                 ScanTime = date,
                 ServerSynced = false,
                 Text = Guid.NewGuid().ToString(),
