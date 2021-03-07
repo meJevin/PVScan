@@ -77,7 +77,11 @@ namespace PVScan.Mobile.ViewModels
 
             LoadNextPage = new Command(async () =>
             {
-                BarcodesPaged.AddRange(Barcodes.Skip(PageCount * PageSize).Take(PageSize));
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    BarcodesPaged.AddRange(Barcodes.Skip(PageCount * PageSize).Take(PageSize));
+                });
+
                 ++PageCount;
             });
         }
@@ -94,8 +98,12 @@ namespace PVScan.Mobile.ViewModels
                 return;
             }
 
-            Barcodes.Clear();
-            BarcodesPaged.Clear();
+            // https://github.com/xamarin/Xamarin.Forms/issues/12080#issuecomment-743656125
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Barcodes.Clear();
+                BarcodesPaged.Clear();
+            });
 
             PageCount = 1;
 
@@ -117,8 +125,11 @@ namespace PVScan.Mobile.ViewModels
                 dbBarcodes = dbBarcodes.Where(b => b.Text.Contains(Search));
             }
 
-            Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
-            BarcodesPaged.AddRange(Barcodes.Take(PageSize));
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
+                BarcodesPaged.AddRange(Barcodes.Take(PageSize));
+            });
 
             IsLoading = false;
         }

@@ -40,7 +40,7 @@ namespace PVScan.Mobile.Views
             };
 
             SearchDelayTimer = new Timer(SearchDelay);
-            SearchDelayTimer.Enabled = true;
+            SearchDelayTimer.Enabled = false;
             SearchDelayTimer.Elapsed += SearchDelayTimer_Elapsed;
             SearchDelayTimer.AutoReset = false;
 
