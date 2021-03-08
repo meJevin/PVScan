@@ -94,6 +94,10 @@ namespace PVScan.Mobile.ViewModels
 
                 // Todo: make this a service!
                 await Clipboard.SetTextAsync(barcode.Text);
+
+                // Todo: this too!
+                HapticFeedback.Perform(HapticFeedbackType.LongPress);
+
                 BarcodeCopiedToClipboard?.Invoke(this, barcode);
             });
 
