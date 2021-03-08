@@ -213,7 +213,7 @@
                     </ImageButton>
                 </Grid>
 
-                <Grid Margin="0,0,0,5">
+                <Grid Margin="0,0,0,5" HeightRequest="40">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -290,6 +290,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
@@ -317,26 +318,35 @@
                     Light={StaticResource TextPrimaryColor_Light}}" 
                          Margin="0,0,0,4"/>
 
-                <Button Text="Show on map" Style="{StaticResource PrimaryButton}" Margin="0, 10" Grid.Row="2"
+                <ScrollView Grid.Row="2">
+                    <StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding SelectedBarcode.Text, FallbackValue=None, StringFormat='Text: {0}'}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Location:"/>
+                            <Label Text="{Binding SelectedBarcode.ScanLocation.Latitude, FallbackValue=None}"/>
+                            <Label Text="{Binding SelectedBarcode.ScanLocation.Longitude, FallbackValue=None}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Format:"/>
+                            <Label Text="{Binding SelectedBarcode.Format, Converter={StaticResource BarcodeFormatString}}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding SelectedBarcode.ScanTime, FallbackValue=None, StringFormat='Scan time: {0}'}"/>
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+                
+
+                <Button Text="Show on map" Style="{StaticResource PrimaryButton}" Margin="0, 5" Grid.Row="3"
                         Clicked="BarcodeInfoShowOnMap_Clicked"/>
 
-                <StackLayout Grid.Row="3">
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding SelectedBarcode.Text, FallbackValue=None, StringFormat='Text: {0}'}"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Location:"/>
-                        <Label Text="{Binding SelectedBarcode.ScanLocation.Latitude, FallbackValue=None}"/>
-                        <Label Text="{Binding SelectedBarcode.ScanLocation.Longitude, FallbackValue=None}"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="Format:"/>
-                        <Label Text="{Binding SelectedBarcode.Format, Converter={StaticResource BarcodeFormatString}}"/>
-                    </StackLayout>
-                    <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding SelectedBarcode.ScanTime, FallbackValue=None, StringFormat='Scan time: {0}'}"/>
-                    </StackLayout>
-                </StackLayout>
+                <Button Text="Delete" Grid.Row="4"
+                        VerticalOptions="End" BackgroundColor="#d61818" TextColor="White"
+                        Command="{Binding DeleteBarcodeCommand}"
+                        CommandParameter="{Binding SelectedBarcode}"
+                        Clicked="BarcodeInfoDelete_Clicked"/>
             </Grid>
 
             <Grid.GestureRecognizers>
