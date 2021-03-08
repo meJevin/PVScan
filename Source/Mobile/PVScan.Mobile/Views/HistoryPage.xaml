@@ -51,9 +51,9 @@
                                 <Grid BackgroundColor="{AppThemeBinding 
                                                 Dark={StaticResource BackgroundColorDarker},
                                                 Light={StaticResource BackgroundColorLighter}}"
-                                      xtc:TouchEffect.PressedScale="0.95"
+                                      xtc:TouchEffect.PressedScale="0.965"
                                       xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
-                                      xtc:TouchEffect.AnimationDuration="100"
+                                      xtc:TouchEffect.AnimationDuration="85"
                                       xtc:TouchEffect.LongPressCommand="{Binding Source={x:Reference HistoryView},
                                                                          Path=BindingContext.CopyBarcodeToClipboardCommand}"
                                       xtc:TouchEffect.LongPressCommandParameter="{Binding .}">
