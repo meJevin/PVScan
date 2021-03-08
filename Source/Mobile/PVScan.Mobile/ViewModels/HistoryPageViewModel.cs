@@ -108,6 +108,21 @@ namespace PVScan.Mobile.ViewModels
 
                 SelectedBarcode = barcode;
             });
+
+            DeleteBarcodeCommand = new Command(async (object barcodeObject) =>
+            {
+                Barcode barcode = barcodeObject as Barcode;
+
+                if (barcode == null)
+                {
+                    return;
+                }
+
+                await BarcodesRepository.Delete(barcode);
+
+                BarcodesPaged.Remove(barcode);
+                Barcodes.Remove(barcode);
+            });
         }
 
         public async Task LoadBarcodesFromDB()
@@ -178,5 +193,8 @@ namespace PVScan.Mobile.ViewModels
 
         public ICommand SelectBarcodeCommand { get; set; }
         public Barcode SelectedBarcode { get; set; }
+
+
+        public ICommand DeleteBarcodeCommand { get; set; }
     }
 }

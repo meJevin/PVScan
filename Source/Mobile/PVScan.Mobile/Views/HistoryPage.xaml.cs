@@ -366,5 +366,10 @@ namespace PVScan.Mobile.Views
                 new Position(barcodeLocation.Latitude.Value, barcodeLocation.Longitude.Value),
                 Distance.FromKilometers(0.5)));
         }
+
+        private async void BarcodeInfoDelete_Clicked(object sender, EventArgs e)
+        {
+            await HideBarcodeInfo();
+        }
     }
 }
