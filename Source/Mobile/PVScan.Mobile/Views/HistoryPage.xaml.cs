@@ -29,6 +29,9 @@ namespace PVScan.Mobile.Views
 
         bool FilterBarHidden;
 
+        // Cancel event flag for when we long press a barcode
+        bool CancelBarcodeTapped = false;
+
         public HistoryPage()
         {
             InitializeComponent();
@@ -39,6 +42,7 @@ namespace PVScan.Mobile.Views
                 _ = HideFilterBar(0);
                 _ = HideFilterView(0);
                 _ = HideCopyToClipboardNotification(0);
+                _ = HideBarcodeInfo(0);
             };
 
             SearchDelayTimer = new Timer(SearchDelay);
@@ -46,8 +50,8 @@ namespace PVScan.Mobile.Views
             SearchDelayTimer.Elapsed += SearchDelayTimer_Elapsed;
             SearchDelayTimer.AutoReset = false;
 
-            Overlay.Opacity = 0;
-            Overlay.InputTransparent = true;
+            FilterPageOverlay.Opacity = 0;
+            FilterPageOverlay.InputTransparent = true;
 
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -65,25 +69,6 @@ namespace PVScan.Mobile.Views
                 {
                     await HideFilterView();
                 });
-        }
-
-        private async void HistoryPage_BarcodeCopiedToClipboard(object sender, Barcode e)
-        {
-            await ShowCopyToClipboardNotification(250);
-
-            await Task.Delay(1000);
-
-            await HideCopyToClipboardNotification(250);
-        }
-
-        private async Task ShowCopyToClipboardNotification(uint duration)
-        {
-            await CopiedToClipboardNotification.TranslateTo(0, 0, duration, Easing.CubicOut);
-        }
-
-        private async Task HideCopyToClipboardNotification(uint duration)
-        {
-            await CopiedToClipboardNotification.TranslateTo(0, CopiedToClipboardNotification.Height, duration, Easing.CubicOut);
         }
 
         // This should really be called once.. 
@@ -107,6 +92,27 @@ namespace PVScan.Mobile.Views
             {
 
             }
+        }
+
+        private async void HistoryPage_BarcodeCopiedToClipboard(object sender, Barcode e)
+        {
+            CancelBarcodeTapped = true;
+
+            await ShowCopyToClipboardNotification(250);
+
+            await Task.Delay(1000);
+
+            await HideCopyToClipboardNotification(250);
+        }
+
+        private async Task ShowCopyToClipboardNotification(uint duration)
+        {
+            await CopiedToClipboardNotification.TranslateTo(0, 0, duration, Easing.CubicOut);
+        }
+
+        private async Task HideCopyToClipboardNotification(uint duration)
+        {
+            await CopiedToClipboardNotification.TranslateTo(0, CopiedToClipboardNotification.Height, duration, Easing.CubicOut);
         }
 
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
@@ -134,7 +140,7 @@ namespace PVScan.Mobile.Views
                 double newOverlayOpacity = OverlayMaxOpacity - ((newTranslationY / FilterPageHeight) * OverlayMaxOpacity);
 
                 FilterPage.TranslationY = newTranslationY;
-                Overlay.Opacity = newOverlayOpacity;
+                FilterPageOverlay.Opacity = newOverlayOpacity;
 
                 Console.WriteLine($"\nTOTAL_T, NEW_TRANS_Y: {e.TotalY}, {newTranslationY}");
             }
@@ -156,24 +162,24 @@ namespace PVScan.Mobile.Views
             await ShowFilterView();
         }
 
-        private async void Overlay_Tapped(object sender, EventArgs e)
+        private async void FilterPageOverlay_Tapped(object sender, EventArgs e)
         {
             await HideFilterView();
         }
 
         private async Task HideFilterView(uint duration = 250)
         {
-            Overlay.InputTransparent = true;
+            FilterPageOverlay.InputTransparent = true;
 
-            _ = Overlay.FadeTo(0, duration, Easing.CubicOut);
+            _ = FilterPageOverlay.FadeTo(0, duration, Easing.CubicOut);
             await FilterPage.TranslateTo(0, FilterPageHeight, duration, Easing.CubicOut);
         }
 
         private async Task ShowFilterView(uint duration = 250)
         {
-            Overlay.InputTransparent = false;
+            FilterPageOverlay.InputTransparent = false;
 
-            _ = Overlay.FadeTo(OverlayMaxOpacity, duration, Easing.CubicOut);
+            _ = FilterPageOverlay.FadeTo(OverlayMaxOpacity, duration, Easing.CubicOut);
             await FilterPage.TranslateTo(0, 1, duration, Easing.CubicOut);
         }
 
@@ -263,6 +269,102 @@ namespace PVScan.Mobile.Views
                 FilterPage.HeightRequest = FilterPageHeight;
                 FilterPage.TranslationY = FilterPageHeight;
             }
+        }
+
+        private async void BarcodeInfoOverlay_Tapped(object sender, EventArgs e)
+        {
+            await HideBarcodeInfo();
+        }
+
+        private async Task HideBarcodeInfo(uint duration = 250)
+        {
+            BarcodeInfoOverlay.InputTransparent = true;
+
+            _ = BarcodeInfoOverlay.FadeTo(0, duration, Easing.CubicOut);
+            await BarcodeInfo.TranslateTo(0, BarcodeInfo.Height, duration, Easing.CubicOut);
+        }
+
+        private async Task ShowBarcodeInfo(uint duration = 250)
+        {
+            BarcodeInfoOverlay.InputTransparent = false;
+
+            _ = BarcodeInfoOverlay.FadeTo(OverlayMaxOpacity, duration, Easing.CubicOut);
+            await BarcodeInfo.TranslateTo(0, 1, duration, Easing.CubicOut);
+        }
+
+        private async void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
+        {
+            if (e.StatusType == GestureStatus.Running)
+            {
+                double newTranslationY = BarcodeInfo.TranslationY;
+
+                // Because xamarin :L
+                // The interesting thing is that values are actually the same, but android does something weird and we actually have to add, IDK
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    newTranslationY += e.TotalY;
+                }
+                else if (Device.RuntimePlatform == Device.iOS)
+                {
+                    newTranslationY = e.TotalY;
+                }
+
+                if (newTranslationY < 1)
+                {
+                    newTranslationY = 1;
+                }
+
+                double newOverlayOpacity = OverlayMaxOpacity - ((newTranslationY / BarcodeInfo.Height) * OverlayMaxOpacity);
+
+                BarcodeInfo.TranslationY = newTranslationY;
+                BarcodeInfoOverlay.Opacity = newOverlayOpacity;
+
+                Console.WriteLine($"\nTOTAL_T, NEW_TRANS_Y: {e.TotalY}, {newTranslationY}");
+            }
+            else if (e.StatusType == GestureStatus.Completed)
+            {
+                if (BarcodeInfo.TranslationY < (BarcodeInfo.Height * 0.25))
+                {
+                    await ShowBarcodeInfo();
+                }
+                else
+                {
+                    await HideBarcodeInfo();
+                }
+            }
+        }
+
+        private async void Barcode_Tapped(object sender, EventArgs e)
+        {
+            var barcodeGrid = sender as Grid;
+
+            if (barcodeGrid == null || CancelBarcodeTapped)
+            {
+                CancelBarcodeTapped = false;
+                return;
+            }
+
+            await ShowBarcodeInfo();
+        }
+
+        private async void BarcodeInfoShowOnMap_Clicked(object sender, EventArgs e)
+        {
+            Barcode selectedBarcode = (BindingContext as HistoryPageViewModel).SelectedBarcode;
+            var barcodeLocation = selectedBarcode.ScanLocation;
+
+            if (barcodeLocation == null)
+            {
+                return;
+            }
+
+            _ = HideBarcodeInfo();
+            _ = ShowFilterBar();
+            await ShowMapView();
+
+
+            Map.MoveToRegion(MapSpan.FromCenterAndRadius(
+                new Position(barcodeLocation.Latitude.Value, barcodeLocation.Longitude.Value),
+                Distance.FromKilometers(0.5)));
         }
     }
 }

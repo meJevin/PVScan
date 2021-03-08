@@ -44,14 +44,15 @@
         <Grid x:Name="BarcodesListContainer">
             <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding BarcodesPaged}" RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
-                                RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}">
+                                RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}"
+                                x:Name="BarcodesCollectionView">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:Barcode">
                             <Grid HeightRequest="65">
                                 <Grid BackgroundColor="{AppThemeBinding 
                                                 Dark={StaticResource BackgroundColorDarker},
                                                 Light={StaticResource BackgroundColorLighter}}"
-                                      xtc:TouchEffect.PressedScale="0.95"
+                                      xtc:TouchEffect.PressedScale="0.965"
                                       xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
                                       xtc:TouchEffect.AnimationDuration="100"
                                       xtc:TouchEffect.LongPressCommand="{Binding Source={x:Reference HistoryView},
@@ -102,6 +103,13 @@
                                                                FontSize="Micro" HorizontalOptions="Center"/>
                                         </StackLayout>
                                     </Grid>
+
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference HistoryView},
+                                                                        Path=BindingContext.SelectBarcodeCommand}"
+                                                              CommandParameter="{Binding .}"
+                                                              Tapped="Barcode_Tapped"/>
+                                    </Grid.GestureRecognizers>
                                 </Grid>
                                 
                                 <!-- SERPARATOR -->
@@ -255,6 +263,88 @@
             </Grid>
         </Grid>
 
+        <!-- Filter Page Overlay -->
+        <BoxView x:Name="BarcodeInfoOverlay" BackgroundColor="Black">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="BarcodeInfoOverlay_Tapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- Barcode info panel at the bottom -->
+        <Grid x:Name="BarcodeInfo" HeightRequest="400" VerticalOptions="End">
+            <Frame BackgroundColor="{AppThemeBinding 
+                Dark={StaticResource BackgroundColorDarker},
+                Light={StaticResource BackgroundColorLighter}}"
+                   HasShadow="False" CornerRadius="20">
+                
+            </Frame>
+
+            <BoxView BackgroundColor="{AppThemeBinding 
+                Dark={StaticResource BackgroundColorDarker},
+                Light={StaticResource BackgroundColorLighter}}" 
+                     HeightRequest="20" VerticalOptions="End">
+                
+            </BoxView>
+
+            <Grid Margin="15, 15, 15, 35">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackLayout Spacing="15">
+                    <Frame HasShadow="False" 
+                           BackgroundColor="{AppThemeBinding 
+                    Dark={StaticResource TextPrimaryColor_Dark}, 
+                    Light={StaticResource TextPrimaryColor_Light}}"
+                           WidthRequest="45"
+                           HeightRequest="6"
+                           Padding="0" 
+                           HorizontalOptions="Center"
+                           CornerRadius="{OnPlatform Android=12, iOS=4}"/>
+
+                    <Label HorizontalOptions="Center"
+                       FontSize="16"
+                       Margin="0,0,0,5">
+                        Barcode Information
+                    </Label>
+                </StackLayout>
+
+                <BoxView Grid.Row="1" HeightRequest="1" Color="{AppThemeBinding 
+                    Dark={StaticResource TextPrimaryColor_Dark}, 
+                    Light={StaticResource TextPrimaryColor_Light}}" 
+                         Margin="0,0,0,4"/>
+
+                <Button Text="Show on map" Style="{StaticResource PrimaryButton}" Margin="0, 10" Grid.Row="2"
+                        Clicked="BarcodeInfoShowOnMap_Clicked"/>
+
+                <StackLayout Grid.Row="3">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding SelectedBarcode.Text, FallbackValue=None, StringFormat='Text: {0}'}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Location:"/>
+                        <Label Text="{Binding SelectedBarcode.ScanLocation.Latitude, FallbackValue=None}"/>
+                        <Label Text="{Binding SelectedBarcode.ScanLocation.Longitude, FallbackValue=None}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Format:"/>
+                        <Label Text="{Binding SelectedBarcode.Format, Converter={StaticResource BarcodeFormatString}}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding SelectedBarcode.ScanTime, FallbackValue=None, StringFormat='Scan time: {0}'}"/>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+
+            <Grid.GestureRecognizers>
+                <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
+            </Grid.GestureRecognizers>
+        </Grid>
+
+        <!-- Copy to clipboard notification -->
         <Grid x:Name="CopiedToClipboardNotification"
               VerticalOptions="End" HeightRequest="100"
               BackgroundColor="Green">
@@ -267,9 +357,9 @@
         </Grid>
 
         <!-- Filter Page Overlay -->
-        <BoxView x:Name="Overlay" BackgroundColor="Black">
+        <BoxView x:Name="FilterPageOverlay" BackgroundColor="Black">
             <BoxView.GestureRecognizers>
-                <TapGestureRecognizer Tapped="Overlay_Tapped"/>
+                <TapGestureRecognizer Tapped="FilterPageOverlay_Tapped"/>
             </BoxView.GestureRecognizers>
         </BoxView>
 
