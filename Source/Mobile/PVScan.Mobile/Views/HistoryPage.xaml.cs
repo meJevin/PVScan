@@ -18,6 +18,9 @@ using PVScan.Mobile.Models;
 
 namespace PVScan.Mobile.Views
 {
+    // IMPORTANT
+    // I use 1px offsets when translating UI elements because on Anroid sometimes UI elements don't line up
+    // like they do on iOS. So this little hack is fine, I guess ;)
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HistoryPage : ContentView
     {
@@ -107,12 +110,12 @@ namespace PVScan.Mobile.Views
 
         private async Task ShowCopyToClipboardNotification(uint duration)
         {
-            await CopiedToClipboardNotification.TranslateTo(0, 0, duration, Easing.CubicOut);
+            await CopiedToClipboardNotification.TranslateTo(0, 1, duration, Easing.CubicOut);
         }
 
         private async Task HideCopyToClipboardNotification(uint duration)
         {
-            await CopiedToClipboardNotification.TranslateTo(0, CopiedToClipboardNotification.Height, duration, Easing.CubicOut);
+            await CopiedToClipboardNotification.TranslateTo(0, CopiedToClipboardNotification.Height + 1, duration, Easing.CubicOut);
         }
 
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)

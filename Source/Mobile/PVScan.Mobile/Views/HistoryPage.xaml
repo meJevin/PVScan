@@ -263,7 +263,19 @@
             </Grid>
         </Grid>
 
-        <!-- Filter Page Overlay -->
+        <!-- Copy to clipboard notification -->
+        <Grid x:Name="CopiedToClipboardNotification"
+              VerticalOptions="End" HeightRequest="100"
+              BackgroundColor="Green">
+            <Label TextColor="White"
+                   FontSize="Large"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center">
+                Copied to clipboard
+            </Label>
+        </Grid>
+
+        <!-- Barcode info pane Overlay -->
         <BoxView x:Name="BarcodeInfoOverlay" BackgroundColor="Black">
             <BoxView.GestureRecognizers>
                 <TapGestureRecognizer Tapped="BarcodeInfoOverlay_Tapped"/>
@@ -352,18 +364,6 @@
             <Grid.GestureRecognizers>
                 <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated"/>
             </Grid.GestureRecognizers>
-        </Grid>
-
-        <!-- Copy to clipboard notification -->
-        <Grid x:Name="CopiedToClipboardNotification"
-              VerticalOptions="End" HeightRequest="100"
-              BackgroundColor="Green">
-            <Label TextColor="White"
-                   FontSize="Large"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center">
-                Copied to clipboard
-            </Label>
         </Grid>
 
         <!-- Filter Page Overlay -->
