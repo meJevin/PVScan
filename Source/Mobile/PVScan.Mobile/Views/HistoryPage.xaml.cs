@@ -71,27 +71,6 @@ namespace PVScan.Mobile.Views
                 });
         }
 
-        private async void HistoryPage_BarcodeCopiedToClipboard(object sender, Barcode e)
-        {
-            CancelBarcodeTapped = true;
-
-            await ShowCopyToClipboardNotification(250);
-
-            await Task.Delay(1000);
-
-            await HideCopyToClipboardNotification(250);
-        }
-
-        private async Task ShowCopyToClipboardNotification(uint duration)
-        {
-            await CopiedToClipboardNotification.TranslateTo(0, 0, duration, Easing.CubicOut);
-        }
-
-        private async Task HideCopyToClipboardNotification(uint duration)
-        {
-            await CopiedToClipboardNotification.TranslateTo(0, CopiedToClipboardNotification.Height, duration, Easing.CubicOut);
-        }
-
         // This should really be called once.. 
         public async Task Initialize()
         {
@@ -113,6 +92,27 @@ namespace PVScan.Mobile.Views
             {
 
             }
+        }
+
+        private async void HistoryPage_BarcodeCopiedToClipboard(object sender, Barcode e)
+        {
+            CancelBarcodeTapped = true;
+
+            await ShowCopyToClipboardNotification(250);
+
+            await Task.Delay(1000);
+
+            await HideCopyToClipboardNotification(250);
+        }
+
+        private async Task ShowCopyToClipboardNotification(uint duration)
+        {
+            await CopiedToClipboardNotification.TranslateTo(0, 0, duration, Easing.CubicOut);
+        }
+
+        private async Task HideCopyToClipboardNotification(uint duration)
+        {
+            await CopiedToClipboardNotification.TranslateTo(0, CopiedToClipboardNotification.Height, duration, Easing.CubicOut);
         }
 
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
@@ -345,6 +345,26 @@ namespace PVScan.Mobile.Views
             }
 
             await ShowBarcodeInfo();
+        }
+
+        private async void BarcodeInfoShowOnMap_Clicked(object sender, EventArgs e)
+        {
+            Barcode selectedBarcode = (BindingContext as HistoryPageViewModel).SelectedBarcode;
+            var barcodeLocation = selectedBarcode.ScanLocation;
+
+            if (barcodeLocation == null)
+            {
+                return;
+            }
+
+            _ = HideBarcodeInfo();
+            _ = ShowFilterBar();
+            await ShowMapView();
+
+
+            Map.MoveToRegion(MapSpan.FromCenterAndRadius(
+                new Position(barcodeLocation.Latitude.Value, barcodeLocation.Longitude.Value),
+                Distance.FromKilometers(0.5)));
         }
     }
 }
