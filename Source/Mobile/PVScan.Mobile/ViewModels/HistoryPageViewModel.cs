@@ -96,6 +96,18 @@ namespace PVScan.Mobile.ViewModels
                 await Clipboard.SetTextAsync(barcode.Text);
                 BarcodeCopiedToClipboard?.Invoke(this, barcode);
             });
+
+            SelectBarcodeCommand = new Command(async (object barcodeObject) =>
+            {
+                Barcode barcode = barcodeObject as Barcode;
+
+                if (barcode == null)
+                {
+                    return;
+                }
+
+                SelectedBarcode = barcode;
+            });
         }
 
         public async Task LoadBarcodesFromDB()
@@ -141,28 +153,30 @@ namespace PVScan.Mobile.ViewModels
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
         public ObservableRangeCollection<Barcode> BarcodesPaged { get; set; }
 
-
         // How many pages have we loaded in the list?
         private int PageCount { get; set; }
         // How many items per page?
         private int PageSize { get; set; } = 50;
+
         // Remaining item threshold
         public int RemainingBarcodesThreshold { get; set; } = 3;
-
         public ICommand LoadNextPage { get; set; }
 
+
         public bool IsLoading { get; set; }
-
         public bool IsRefresing { get; set; }
-
         public ICommand RefreshCommand { get; set; }
 
-        public ICommand SearchCommand { get; set; }
 
+        public ICommand SearchCommand { get; set; }
         public ICommand ClearSearchCommand { get; set; }
 
-        public ICommand CopyBarcodeToClipboardCommand { get; set; }
 
+        public ICommand CopyBarcodeToClipboardCommand { get; set; }
         public event EventHandler<Barcode> BarcodeCopiedToClipboard;
+
+
+        public ICommand SelectBarcodeCommand { get; set; }
+        public Barcode SelectedBarcode { get; set; }
     }
 }
