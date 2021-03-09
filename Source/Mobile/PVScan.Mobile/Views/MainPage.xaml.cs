@@ -80,6 +80,7 @@ namespace PVScan.Mobile.Views
 
         private void InitializeSafeArea()
         {
+            // This doesn't work on iOS simulators because their model is your arm64, x86_64 etc..
             if (Device.RuntimePlatform == Device.iOS)
             {
                 iOSSafeArea();
