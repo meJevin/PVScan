@@ -40,7 +40,7 @@
             x:Key="BasketTabItemTemplate">
             <Grid>
                 <Grid
-                    Margin="0, 0, 0, 36">
+                    Margin="{DynamicResource TabBarCameraButtonMargin}">
                     <ImageButton
                         InputTransparent="True"
                         Source="{TemplateBinding CurrentIcon}"
@@ -95,7 +95,7 @@
                 Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=#E6F9F9F9}" />
             <Setter
                 Property="TabStripHeight"
-                Value="74" />
+                Value="{DynamicResource TabBarHeight}"/>
             <Setter
                 Property="TabContentBackgroundColor"
                 Value="#F5F5F5" />
