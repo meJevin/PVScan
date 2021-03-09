@@ -276,14 +276,14 @@
             </Label>
         </Grid>
 
-        <!-- Barcode info pane Overlay -->
+        <!-- Barcode info panel Overlay -->
         <BoxView x:Name="BarcodeInfoOverlay" BackgroundColor="Black">
             <BoxView.GestureRecognizers>
                 <TapGestureRecognizer Tapped="BarcodeInfoOverlay_Tapped"/>
             </BoxView.GestureRecognizers>
         </BoxView>
 
-        <!-- Barcode info panel at the bottom -->
+        <!-- Barcode info panel -->
         <Grid x:Name="BarcodeInfo" HeightRequest="400" VerticalOptions="End">
             <Frame BackgroundColor="{AppThemeBinding 
                 Dark={StaticResource BackgroundColorDarker},
@@ -346,7 +346,9 @@
                             <Label Text="{Binding SelectedBarcode.Format, Converter={StaticResource BarcodeFormatString}}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding SelectedBarcode.ScanTime, FallbackValue=None, StringFormat='Scan time: {0}'}"/>
+                            <Label Text="{Binding SelectedBarcode.ScanTime,
+                                FallbackValue=None, StringFormat='Scan time: {0}',
+                                Converter={StaticResource DateTimeUTCDateTimeLocal}}"/>
                         </StackLayout>
                     </StackLayout>
                 </ScrollView>
