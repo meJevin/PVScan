@@ -154,7 +154,7 @@
             </maps:Map>
         </Grid>
 
-        <!-- UPPER FILTER BAR -->
+        <!-- UPPER SEARCH/FILTER/VIEW BAR -->
         <Grid InputTransparent="True" CascadeInputTransparent="False" RowSpacing="0"
                       x:Name="FilterBarContainer">
             <Grid.RowDefinitions>
@@ -264,7 +264,7 @@
             </Grid>
         </Grid>
 
-        <!-- Copy to clipboard notification -->
+        <!-- COPIED TO CLIBOARD BOX -->
         <Grid x:Name="CopiedToClipboardNotification"
               VerticalOptions="End" HeightRequest="100"
               BackgroundColor="Green">
@@ -276,14 +276,14 @@
             </Label>
         </Grid>
 
-        <!-- Barcode info panel Overlay -->
+        <!-- OVERLAY (BARCODE INFO PANEL) -->
         <BoxView x:Name="BarcodeInfoOverlay" BackgroundColor="Black">
             <BoxView.GestureRecognizers>
                 <TapGestureRecognizer Tapped="BarcodeInfoOverlay_Tapped"/>
             </BoxView.GestureRecognizers>
         </BoxView>
 
-        <!-- Barcode info panel -->
+        <!-- BARCODE INFO PANEL -->
         <Grid x:Name="BarcodeInfo" HeightRequest="400" VerticalOptions="End">
             <Frame BackgroundColor="{AppThemeBinding 
                 Dark={StaticResource BackgroundColorDarker},
@@ -369,14 +369,14 @@
             </Grid.GestureRecognizers>
         </Grid>
 
-        <!-- Filter Page Overlay -->
+        <!-- OVERLAY (FILTER PAGE) -->
         <BoxView x:Name="FilterPageOverlay" BackgroundColor="Black">
             <BoxView.GestureRecognizers>
                 <TapGestureRecognizer Tapped="FilterPageOverlay_Tapped"/>
             </BoxView.GestureRecognizers>
         </BoxView>
 
-        <!-- HIDDEN FILTER PAGE -->
+        <!-- FILTER PAGE -->
         <views:FilterPage x:Name="FilterPage" VerticalOptions="End">
             <views:FilterPage.GestureRecognizers>
                 <PanGestureRecognizer PanUpdated="FilterViewPanGesture_PanUpdated"/>
