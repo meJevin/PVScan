@@ -125,13 +125,13 @@ namespace PVScan.Mobile.Views
         private void iOSSafeArea()
         {
             Application.Current.Resources["TabBarCameraButtonMargin"] = new Thickness(0, 0, 0, 32);
-            Application.Current.Resources["TabBarHeight"] = 74;
+            Application.Current.Resources["TabBarHeight"] = 76;
         }
 
         private void iOSNoSafeArea()
         {
-            Application.Current.Resources["TabBarCameraButtonMargin"] = new Thickness(0, 0, 0, 8);
-            Application.Current.Resources["TabBarHeight"] = 45;
+            Application.Current.Resources["TabBarCameraButtonMargin"] = new Thickness(0, 0, 0, 12);
+            Application.Current.Resources["TabBarHeight"] = 50;
         }
     }
 }
