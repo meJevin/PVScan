@@ -139,6 +139,10 @@
                     </CollectionView.EmptyView>
                 </CollectionView>
             </RefreshView>
+        
+            <BoxView x:Name="BarcodeListViewOverlay" BackgroundColor="Black"
+                     Opacity="0" InputTransparent="True">
+            </BoxView>
         </Grid>
 
         <!-- MAP VIEW -->
@@ -152,6 +156,10 @@
                     </DataTemplate>
                 </maps:Map.ItemTemplate>
             </maps:Map>
+
+            <BoxView x:Name="BarcodeMapViewOverlay" BackgroundColor="Black"
+                     Opacity="0" InputTransparent="True">
+            </BoxView>
         </Grid>
 
         <!-- UPPER SEARCH/FILTER/VIEW BAR -->
@@ -175,7 +183,9 @@
                                x:Name="SearchEntry"
                                HeightRequest="35"
                                Keyboard="Text"
-                               IsTextPredictionEnabled="False">
+                               IsTextPredictionEnabled="False"
+                               Focused="SearchEntry_Focused"
+                               Unfocused="SearchEntry_Unfocused">
                             <Entry.Effects>
                                 <effects:NoEntryVerticalPaddingEffect/>
                             </Entry.Effects>

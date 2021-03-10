@@ -374,5 +374,21 @@ namespace PVScan.Mobile.Views
         {
             await HideBarcodeInfo();
         }
+
+        private async void SearchEntry_Focused(object sender, FocusEventArgs e)
+        {
+            BarcodeListViewOverlay.InputTransparent = false;
+            BarcodeMapViewOverlay.InputTransparent = false;
+            _ = BarcodeListViewOverlay.FadeTo(OverlayMaxOpacity, 250, Easing.CubicOut);
+            await BarcodeMapViewOverlay.FadeTo(OverlayMaxOpacity, 250, Easing.CubicOut);
+        }
+
+        private async void SearchEntry_Unfocused(object sender, FocusEventArgs e)
+        {
+            BarcodeListViewOverlay.InputTransparent = true;
+            BarcodeMapViewOverlay.InputTransparent = true;
+            _ = BarcodeListViewOverlay.FadeTo(0, 250, Easing.CubicOut);
+            await BarcodeMapViewOverlay.FadeTo(0, 250, Easing.CubicOut);
+        }
     }
 }
