@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms"
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      x:Class="PVScan.Mobile.Views.DataTemplates.NormalBarcodeItem"
+      xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+      xmlns:views="clr-namespace:PVScan.Mobile.Views"
+      xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
+      xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+      xmlns:xtc="http://xamarin.com/schemas/2020/toolkit"
+      xmlns:models="clr-namespace:PVScan.Mobile.Models"
+      HeightRequest="65"
+      x:DataType="models:Barcode"
+      BackgroundColor="{AppThemeBinding
+        Dark={StaticResource BackgroundColorDarker},
+        Light={StaticResource BackgroundColorLighter}}">
+    <Grid.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBool"/>
+            <converters:BarcodeFormatImageSourceConverter x:Key="BarcodeFormatImageSource"/>
+            <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
+            <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
+            <converters:CoordinatePositionConverter x:Key="CoordinatePosition"/>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmpty"/>
+            <converters:NullBoolConverter x:Key="NullBool"/>
+        </ResourceDictionary>
+    </Grid.Resources>
+    <Grid xtc:TouchEffect.PressedScale="0.95"
+          xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
+          xtc:TouchEffect.AnimationDuration="650"
+          xtc:TouchEffect.LongPressCommand="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                            Path=BindingContext.CopyBarcodeToClipboardCommand}"
+          xtc:TouchEffect.LongPressCommandParameter="{Binding .}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
+            <StackLayout Orientation="Vertical">
+                <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
+                                                       FontSize="12"
+                                                       Opacity="0.5"
+                                                       VerticalOptions="Center"/>
+
+                    <Image Grid.Column="1" WidthRequest="20"
+                                                       IsVisible="{Binding ScanLocation, Converter={StaticResource NullBool}}"
+                                                       Opacity="0.5">
+                        <Image.Source>
+                            <FontImageSource FontFamily="FontAwesome"
+                                                                         Glyph="{x:Static theme:IconFont.ExclamationCircle}"
+                                                                         Color="Red"/>
+                        </Image.Source>
+                    </Image>
+                </Grid>
+            </StackLayout>
+        </Grid>
+
+        <Grid Grid.Column="2" Margin="10, 0">
+
+            <StackLayout VerticalOptions="Center" Spacing="0">
+                <Image Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
+
+                <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
+                                                               FontSize="Micro" HorizontalOptions="Center"/>
+            </StackLayout>
+        </Grid>
+
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                                                        Path=BindingContext.SelectBarcodeCommand}"
+                                                              CommandParameter="{Binding .}"
+                                                              Tapped="Barcode_Tapped"/>
+        </Grid.GestureRecognizers>
+    </Grid>
+
+    <!-- SERPARATOR -->
+    <BoxView BackgroundColor="{AppThemeBinding 
+                                                    Dark={StaticResource BackgroundColorDark},
+                                                    Light={StaticResource BackgroundColorLighterAlt}}" 
+                                                     VerticalOptions="End"
+                                                     HeightRequest="2"/>
+</Grid>

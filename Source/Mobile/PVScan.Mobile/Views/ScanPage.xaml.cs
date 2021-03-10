@@ -44,6 +44,11 @@ namespace PVScan.Mobile.Views
                     IsScanning = true,
                 };
 
+                ScannerView.Options.CameraResolutionSelector = (res) =>
+                {
+                    return res.Last();
+                };
+
                 ScannerView.OnScanResult += ScannerView_OnScanResult;
 
                 ScannerViewContainer.Children.Clear();
@@ -97,6 +102,11 @@ namespace PVScan.Mobile.Views
             {
                 IsAnalyzing = true,
                 IsScanning = true,
+            };
+
+            ScannerView.Options.CameraResolutionSelector = (res) =>
+            {
+                return res.Last();
             };
 
             ScannerView.OnScanResult += ScannerView_OnScanResult;

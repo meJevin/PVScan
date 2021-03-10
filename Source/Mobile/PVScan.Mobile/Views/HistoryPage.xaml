@@ -10,7 +10,6 @@
     xmlns:views="clr-namespace:PVScan.Mobile.Views"
     xmlns:models="clr-namespace:PVScan.Mobile.Models"
     x:Class="PVScan.Mobile.Views.HistoryPage"
-    
     xmlns:di="clr-namespace:PVScan.Mobile.DI" 
     xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
     xmlns:controls="clr-namespace:PVScan.Mobile.Controls"
@@ -45,82 +44,25 @@
             <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding BarcodesPaged}" RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
                                 RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}"
+                                SelectedItems="{Binding SelectedBarcodes}"
                                 x:Name="BarcodesCollectionView">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:Barcode">
-                            <Grid HeightRequest="65">
-                                <Grid BackgroundColor="{AppThemeBinding 
-                                                Dark={StaticResource BackgroundColorDarker},
-                                                Light={StaticResource BackgroundColorLighter}}"
-                                      xtc:TouchEffect.PressedScale="0.965"
-                                      xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
-                                      xtc:TouchEffect.AnimationDuration="100"
-                                      xtc:TouchEffect.LongPressCommand="{Binding Source={x:Reference HistoryView},
-                                                                         Path=BindingContext.CopyBarcodeToClipboardCommand}"
-                                      xtc:TouchEffect.LongPressCommandParameter="{Binding .}">
+                    <CollectionView.Header>
+                        <Grid HeightRequest="32" ColumnDefinitions="Auto,*,Auto" Padding="10, 8, 10, 4">
+                            <Button Text="Delete" Padding="14, 0"
+                                    Command="{Binding DeleteSelectedBarcodesCommand}"
+                                    Opacity="0" InputTransparent="True"
+                                    x:Name="DeleteButton"/>
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
-                                        <StackLayout Orientation="Vertical">
-                                            <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
-
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
-                                                       FontSize="12"
-                                                       Opacity="0.5"
-                                                       VerticalOptions="Center"/>
-
-                                                <Image Grid.Column="1" WidthRequest="20"
-                                                       IsVisible="{Binding ScanLocation, Converter={StaticResource NullBool}}"
-                                                       Opacity="0.5">
-                                                    <Image.Source>
-                                                        <FontImageSource FontFamily="FontAwesome"
-                                                                         Glyph="{x:Static theme:IconFont.ExclamationCircle}"
-                                                                         Color="Red"/>
-                                                    </Image.Source>
-                                                </Image>
-                                            </Grid>
-                                        </StackLayout>
-                                    </Grid>
-
-                                    <Grid Grid.Column="2" Margin="10, 0">
-
-                                        <StackLayout VerticalOptions="Center" Spacing="0">
-                                            <Image Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
-
-                                            <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
-                                                               FontSize="Micro" HorizontalOptions="Center"/>
-                                        </StackLayout>
-                                    </Grid>
-
-                                    <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={x:Reference HistoryView},
-                                                                        Path=BindingContext.SelectBarcodeCommand}"
-                                                              CommandParameter="{Binding .}"
-                                                              Tapped="Barcode_Tapped"/>
-                                    </Grid.GestureRecognizers>
-                                </Grid>
-
-                                <!-- SERPARATOR -->
-                                <BoxView BackgroundColor="{AppThemeBinding 
-                                                    Dark={StaticResource BackgroundColorDark},
-                                                    Light={StaticResource BackgroundColorLight}}" 
-                                                     VerticalOptions="End"
-                                                     HeightRequest="2"/>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
+                            <Button Grid.Column="2" Text="Edit" Padding="14, 0"
+                                    Command="{Binding StartEditCommand}"
+                                    Opacity="1" InputTransparent="False"
+                                    x:Name="EditButton"/>
+                            <Button Grid.Column="2" Text="Done" Padding="14, 0"
+                                    Command="{Binding DoneEditCommand}"
+                                    Opacity="0" InputTransparent="True"
+                                    x:Name="DoneButton"/>
+                        </Grid>
+                    </CollectionView.Header>
 
                     <CollectionView.EmptyView>
                         <Grid BackgroundColor="{AppThemeBinding 
