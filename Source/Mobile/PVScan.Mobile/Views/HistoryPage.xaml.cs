@@ -15,6 +15,7 @@ using Xamarin.Forms.Xaml;
 using PVScan.Mobile.Views.Extensions;
 using PVScan.Mobile.Effects;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Views.DataTemplates;
 
 namespace PVScan.Mobile.Views
 {
@@ -34,6 +35,8 @@ namespace PVScan.Mobile.Views
 
         // Cancel event flag for when we long press a barcode
         bool CancelBarcodeTapped = false;
+
+        HistoryPageViewModel VM;
 
         public HistoryPage()
         {
@@ -65,13 +68,72 @@ namespace PVScan.Mobile.Views
                 BarcodesRefreshView.SetAppThemeColor(RefreshView.RefreshColorProperty, Color.Black, Color.White);
             }
 
-            (BindingContext as HistoryPageViewModel).BarcodeCopiedToClipboard += HistoryPage_BarcodeCopiedToClipboard;
+            VM = (BindingContext as HistoryPageViewModel);
+
+            VM.BarcodeCopiedToClipboard += HistoryPage_BarcodeCopiedToClipboard;
+            VM.PropertyChanged += VM_PropertyChanged;
+
+            InitializeNormalBarcodeItemTemplate();
 
             MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
                 async (FilterPageViewModel vm, FilterAppliedMessage args) =>
                 {
                     await HideFilterView();
                 });
+        }
+
+        private void InitializeNormalBarcodeItemTemplate()
+        {
+            BarcodesCollectionView.ItemTemplate = new DataTemplate(() =>
+            {
+                var item = new NormalBarcodeItem();
+                item.Tapped += Barcode_Tapped;
+                return item;
+            });
+        }
+
+        private void InitializeSelectableBarcodeItemTemplate()
+        {
+            BarcodesCollectionView.ItemTemplate = new DataTemplate(() =>
+            {
+                var item = new SelectableBarcodeItem();
+                return item;
+            });
+        }
+
+        private async void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(VM.IsEditing))
+            {
+                if (VM.IsEditing)
+                {
+                    EditButton.InputTransparent = true;
+
+                    _ = DeleteButton.FadeTo(1, 250, Easing.CubicOut);
+                    _ = DoneButton.FadeTo(1, 250, Easing.CubicOut);
+                    _ = await EditButton.FadeTo(0, 250, Easing.CubicOut);
+
+                    DoneButton.InputTransparent = false;
+                    DeleteButton.InputTransparent = false;
+
+                    InitializeSelectableBarcodeItemTemplate();
+                    BarcodesCollectionView.SelectionMode = SelectionMode.Multiple;
+                }
+                else
+                {
+                    DoneButton.InputTransparent = true;
+                    DeleteButton.InputTransparent = true;
+
+                    _ = DeleteButton.FadeTo(0, 250, Easing.CubicOut);
+                    _ = DoneButton.FadeTo(0, 250, Easing.CubicOut);
+                    _ = await EditButton.FadeTo(1, 250, Easing.CubicOut);
+
+                    EditButton.InputTransparent = false;
+
+                    InitializeNormalBarcodeItemTemplate();
+                    BarcodesCollectionView.SelectionMode = SelectionMode.None;
+                }
+            }
         }
 
         // This should really be called once.. 

@@ -42,6 +42,8 @@ namespace PVScan.Mobile.ViewModels
             Barcodes = new ObservableRangeCollection<Barcode>();
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
 
+            SelectedBarcodes = new ObservableCollection<object>();
+
             //MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
             //    async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
             //    {
@@ -127,6 +129,33 @@ namespace PVScan.Mobile.ViewModels
                 BarcodesPaged.Remove(barcode);
                 Barcodes.Remove(barcode);
             });
+
+            StartEditCommand = new Command(() =>
+            {
+                IsEditing = true;
+            });
+
+            DoneEditCommand = new Command(() =>
+            {
+                IsEditing = false;
+                SelectedBarcodes.Clear();
+            });
+
+            DeleteSelectedBarcodesCommand = new Command(async () =>
+            {
+                var sb = SelectedBarcodes.Select(b => b as Barcode);
+
+                foreach (var b in sb)
+                {
+                    await barcodesRepository.Delete(b);
+                }
+
+                Barcodes.RemoveRange(sb, NotifyCollectionChangedAction.Remove);
+                BarcodesPaged.RemoveRange(sb, NotifyCollectionChangedAction.Remove);
+
+                IsEditing = false;
+                SelectedBarcodes.Clear();
+            });
         }
 
         public async Task LoadBarcodesFromDB()
@@ -200,5 +229,13 @@ namespace PVScan.Mobile.ViewModels
 
 
         public ICommand DeleteBarcodeCommand { get; set; }
+
+
+        public bool IsEditing { get; set; }
+        public ICommand StartEditCommand { get; set; }
+        public ICommand DoneEditCommand { get; set; }
+        public ICommand DeleteSelectedBarcodesCommand { get; set; }
+
+        public ObservableCollection<object> SelectedBarcodes { get; set; }
     }
 }
