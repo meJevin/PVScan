@@ -47,21 +47,7 @@
                                 SelectedItems="{Binding SelectedBarcodes}"
                                 x:Name="BarcodesCollectionView">
                     <CollectionView.Header>
-                        <Grid HeightRequest="32" ColumnDefinitions="Auto,*,Auto" Padding="10, 8, 10, 4">
-                            <Button Text="Delete" Padding="14, 0"
-                                    Command="{Binding DeleteSelectedBarcodesCommand}"
-                                    Opacity="0" InputTransparent="True"
-                                    x:Name="DeleteButton"/>
-
-                            <Button Grid.Column="2" Text="Edit" Padding="14, 0"
-                                    Command="{Binding StartEditCommand}"
-                                    Opacity="1" InputTransparent="False"
-                                    x:Name="EditButton"/>
-                            <Button Grid.Column="2" Text="Done" Padding="14, 0"
-                                    Command="{Binding DoneEditCommand}"
-                                    Opacity="0" InputTransparent="True"
-                                    x:Name="DoneButton"/>
-                        </Grid>
+                        <Grid HeightRequest="36"/>
                     </CollectionView.Header>
 
                     <CollectionView.EmptyView>
@@ -81,7 +67,24 @@
                     </CollectionView.EmptyView>
                 </CollectionView>
             </RefreshView>
-        
+
+            <Grid HeightRequest="32" ColumnDefinitions="Auto,*,Auto" Padding="10, 8, 10, 4"
+                  VerticalOptions="Start">
+                <Button Text="Delete" Padding="14, 0"
+                                    Command="{Binding DeleteSelectedBarcodesCommand}"
+                                    Opacity="0" InputTransparent="True"
+                                    x:Name="DeleteButton"/>
+
+                <Button Grid.Column="2" Text="Edit" Padding="14, 0"
+                                    Command="{Binding StartEditCommand}"
+                                    Opacity="1" InputTransparent="False"
+                                    x:Name="EditButton"/>
+                <Button Grid.Column="2" Text="Done" Padding="14, 0"
+                                    Command="{Binding DoneEditCommand}"
+                                    Opacity="0" InputTransparent="True"
+                                    x:Name="DoneButton"/>
+            </Grid>
+
             <BoxView x:Name="BarcodeListViewOverlay" BackgroundColor="Black"
                      Opacity="0" InputTransparent="True">
             </BoxView>
