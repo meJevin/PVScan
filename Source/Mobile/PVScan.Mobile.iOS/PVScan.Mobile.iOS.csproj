@@ -64,9 +64,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Development: MIKHAIL SARANDUK (ANL7AR22ZM)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
+    <CodesignProvision>PVScan Development</CodesignProvision>
+    <MtouchDebug>true</MtouchDebug>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Effects\TooltipEffectiOS.cs" />
