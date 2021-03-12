@@ -16,6 +16,7 @@ using PVScan.Mobile.Views.Extensions;
 using PVScan.Mobile.Effects;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.Views.DataTemplates;
+using System.Collections.Specialized;
 
 namespace PVScan.Mobile.Views
 {
@@ -72,6 +73,7 @@ namespace PVScan.Mobile.Views
 
             VM.BarcodeCopiedToClipboard += HistoryPage_BarcodeCopiedToClipboard;
             VM.PropertyChanged += VM_PropertyChanged;
+            VM.SelectedBarcodes.CollectionChanged += SelectedBarcodes_CollectionChanged;
 
             InitializeNormalBarcodeItemTemplate();
 
@@ -101,6 +103,30 @@ namespace PVScan.Mobile.Views
             });
         }
 
+
+        private async void SelectedBarcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (VM.IsEditing)
+            {
+                if (VM.SelectedBarcodes.Count == 0)
+                {
+                    if (!DeleteButton.InputTransparent)
+                    {
+                        DeleteButton.FadeTo(0.5, 250, Easing.CubicOut);
+                        DeleteButton.InputTransparent = true;
+                    }
+                }
+                else
+                {
+                    if (DeleteButton.InputTransparent)
+                    {
+                        DeleteButton.FadeTo(1, 250, Easing.CubicOut);
+                        DeleteButton.InputTransparent = false;
+                    }
+                }
+            }
+        }
+
         private async void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(VM.IsEditing))
@@ -109,12 +135,11 @@ namespace PVScan.Mobile.Views
                 {
                     EditButton.InputTransparent = true;
 
-                    _ = DeleteButton.FadeTo(1, 250, Easing.CubicOut);
+                    _ = DeleteButton.FadeTo(0.5, 250, Easing.CubicOut);
                     _ = DoneButton.FadeTo(1, 250, Easing.CubicOut);
                     _ = await EditButton.FadeTo(0, 250, Easing.CubicOut);
 
                     DoneButton.InputTransparent = false;
-                    DeleteButton.InputTransparent = false;
 
                     InitializeSelectableBarcodeItemTemplate();
                     BarcodesCollectionView.SelectionMode = SelectionMode.Multiple;
