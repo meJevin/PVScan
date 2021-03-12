@@ -21,34 +21,46 @@ using ZXing;
 
 namespace PVScan.Mobile.ViewModels
 {
-    public class Filter
-    {
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
-
-        public LastTimeType? LastType { get; set; } 
-
-        public IEnumerable<BarcodeFormat> BarcodeFormats { get; set; }
-    }
-
     public class HistoryPageViewModel : BaseViewModel
     {
         readonly IBarcodesRepository BarcodesRepository;
+        readonly IBarcodesFilter FilterService;
 
-        public HistoryPageViewModel(IBarcodesRepository barcodesRepository)
+        public HistoryPageViewModel(IBarcodesRepository barcodesRepository,
+            IBarcodesFilter filterService)
         {
             BarcodesRepository = barcodesRepository;
+            FilterService = filterService;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
 
             SelectedBarcodes = new ObservableCollection<object>();
 
-            //MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
-            //    async (ScanPageViewModel vm, BarcodeScannedMessage args) => 
-            //    {
-            //        Barcodes.Add(args.ScannedBarcode);
-            //    });
+            MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
+                async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
+                {
+                    Barcode result = args.ScannedBarcode;
+
+                    if (CurrentFilter != null)
+                    {
+                        result = FilterService
+                                        .Filter(new List<Barcode>() { result }, CurrentFilter)
+                                        .FirstOrDefault();
+                    }
+
+                    if (result != null)
+                    {
+                        if (!String.IsNullOrEmpty(Search) &&
+                            !result.Text.ToLower().Contains(Search.ToLower()))
+                        {
+                            return;
+                        }
+
+                        Barcodes.Insert(0, result);
+                        BarcodesPaged.Insert(0, result);
+                    }
+                });
 
             MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
                 async (FilterPageViewModel vm, FilterAppliedMessage args) =>
@@ -170,6 +182,7 @@ namespace PVScan.Mobile.ViewModels
 
             Barcodes.Clear();
             BarcodesPaged.Clear();
+            SelectedBarcodes.Clear();
 
             PageCount = 1;
 
@@ -183,12 +196,13 @@ namespace PVScan.Mobile.ViewModels
             }
             else
             {
-                dbBarcodes = await BarcodesRepository.GetAllFiltered(CurrentFilter);
+                dbBarcodes = await BarcodesRepository.GetAll();
+                dbBarcodes = FilterService.Filter(dbBarcodes, CurrentFilter);
             }
 
             if (!String.IsNullOrEmpty(Search))
             {
-                dbBarcodes = dbBarcodes.Where(b => b.Text.Contains(Search));
+                dbBarcodes = dbBarcodes.Where(b => b.Text.ToLower().Contains(Search.ToLower()));
             }
 
             Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));

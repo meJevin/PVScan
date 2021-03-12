@@ -84,6 +84,34 @@ namespace PVScan.Mobile.Views
                 });
         }
 
+
+        private bool Initialized = false;
+        public async Task Initialize()
+        {
+            if (Initialized) return;
+
+            await (BindingContext as HistoryPageViewModel).LoadBarcodesFromDB();
+
+            try
+            {
+                var initialLocation = await Geolocation.GetLocationAsync(new GeolocationRequest()
+                {
+                    DesiredAccuracy = GeolocationAccuracy.Best,
+                    Timeout = TimeSpan.FromSeconds(1.5),
+                });
+
+                Map.MoveToRegion(MapSpan.FromCenterAndRadius(
+                    new Position(initialLocation.Latitude, initialLocation.Longitude),
+                    Distance.FromKilometers(0.5)));
+            }
+            catch
+            {
+
+            }
+
+            Initialized = true;
+        }
+
         private void InitializeNormalBarcodeItemTemplate()
         {
             BarcodesCollectionView.ItemTemplate = new DataTemplate(() =>
@@ -158,29 +186,6 @@ namespace PVScan.Mobile.Views
                     InitializeNormalBarcodeItemTemplate();
                     BarcodesCollectionView.SelectionMode = SelectionMode.None;
                 }
-            }
-        }
-
-        // This should really be called once.. 
-        public async Task Initialize()
-        {
-            await (BindingContext as HistoryPageViewModel).LoadBarcodesFromDB();
-
-            try
-            {
-                var initialLocation = await Geolocation.GetLocationAsync(new GeolocationRequest()
-                {
-                    DesiredAccuracy = GeolocationAccuracy.Best,
-                    Timeout = TimeSpan.FromSeconds(1.5),
-                });
-
-                Map.MoveToRegion(MapSpan.FromCenterAndRadius(
-                    new Position(initialLocation.Latitude, initialLocation.Longitude),
-                    Distance.FromKilometers(0.5)));
-            }
-            catch
-            {
-
             }
         }
 

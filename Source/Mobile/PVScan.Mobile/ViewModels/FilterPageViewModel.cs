@@ -1,5 +1,6 @@
 ﻿using MvvmHelpers;
 using PVScan.Mobile.DAL;
+using PVScan.Mobile.Models;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Filtering;
 using System;
@@ -25,15 +26,6 @@ namespace PVScan.Mobile.ViewModels
     public class LastTimeSpan
     {
         public LastTimeType Type { get; set; }
-    }
-
-    // Enum for filter page to filter by last day/week/month/year
-    public enum LastTimeType
-    {
-        Day,
-        Week,
-        Month,
-        Year,
     }
 
     public class FilterPageViewModel : BaseViewModel
