@@ -148,10 +148,14 @@ namespace PVScan.Mobile.ViewModels
                 foreach (var b in sb)
                 {
                     await barcodesRepository.Delete(b);
-                }
 
-                Barcodes.RemoveRange(sb);
-                BarcodesPaged.RemoveRange(sb);
+                    Barcodes.Remove(b);
+
+                    if (BarcodesPaged.Contains(b))
+                    {
+                        BarcodesPaged.Remove(b);
+                    }
+                }
 
                 SelectedBarcodes.Clear();
             });
