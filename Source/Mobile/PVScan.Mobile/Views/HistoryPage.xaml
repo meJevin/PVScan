@@ -42,7 +42,8 @@
         <!-- COLLECTION VIEW OF BARCODES -->
         <Grid x:Name="BarcodesListContainer">
             <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding BarcodesPaged}" RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
+                <CollectionView ItemsSource="{Binding BarcodesPaged}"
+                                RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
                                 RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}"
                                 SelectedItems="{Binding SelectedBarcodes}"
                                 x:Name="BarcodesCollectionView">
