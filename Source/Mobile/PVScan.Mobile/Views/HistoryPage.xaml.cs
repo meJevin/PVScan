@@ -237,7 +237,7 @@ namespace PVScan.Mobile.Views
                 FilterPage.TranslationY = newTranslationY;
                 FilterPageOverlay.Opacity = newOverlayOpacity;
 
-                Console.WriteLine($"\nTOTAL_T, NEW_TRANS_Y: {e.TotalY}, {newTranslationY}");
+                //Console.WriteLine($"\nTOTAL_T, NEW_TRANS_Y: {e.TotalY}, {newTranslationY}");
             }
             else if (e.StatusType == GestureStatus.Completed)
             {
@@ -414,7 +414,7 @@ namespace PVScan.Mobile.Views
                 BarcodeInfo.TranslationY = newTranslationY;
                 BarcodeInfoOverlay.Opacity = newOverlayOpacity;
 
-                Console.WriteLine($"\nTOTAL_T, NEW_TRANS_Y: {e.TotalY}, {newTranslationY}");
+                //Console.WriteLine($"\nTOTAL_T, NEW_TRANS_Y: {e.TotalY}, {newTranslationY}");
             }
             else if (e.StatusType == GestureStatus.Completed)
             {
