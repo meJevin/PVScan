@@ -52,5 +52,10 @@ namespace PVScan.Mobile.Services
 
             return dbBarcodes;
         }
+
+        public IEnumerable<Barcode> Search(IEnumerable<Barcode> barcodes, string search)
+        {
+            return barcodes.Where(b => b.Text.ToLower().Contains(search.ToLower()));
+        }
     }
 }

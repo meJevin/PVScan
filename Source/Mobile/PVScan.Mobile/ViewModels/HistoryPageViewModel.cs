@@ -40,23 +40,24 @@ namespace PVScan.Mobile.ViewModels
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
                 {
-                    Barcode result = args.ScannedBarcode;
-
+                    var tempEnumerable = new List<Barcode>() { args.ScannedBarcode };
                     if (CurrentFilter != null)
                     {
-                        result = FilterService
-                                        .Filter(new List<Barcode>() { result }, CurrentFilter)
-                                        .FirstOrDefault();
+                        tempEnumerable = FilterService
+                                            .Filter(tempEnumerable, CurrentFilter)
+                                            .ToList();
                     }
 
+                    if (!String.IsNullOrEmpty(Search))
+                    {
+                        tempEnumerable = FilterService
+                                            .Search(tempEnumerable, Search)
+                                            .ToList();
+                    }
+
+                    var result = tempEnumerable.FirstOrDefault();
                     if (result != null)
                     {
-                        if (!String.IsNullOrEmpty(Search) &&
-                            !result.Text.ToLower().Contains(Search.ToLower()))
-                        {
-                            return;
-                        }
-
                         Barcodes.Insert(0, result);
                         BarcodesPaged.Insert(0, result);
                     }
@@ -190,19 +191,16 @@ namespace PVScan.Mobile.ViewModels
 
             IEnumerable<Barcode> dbBarcodes = null;
 
-            if (CurrentFilter == null)
+            dbBarcodes = await BarcodesRepository.GetAll();
+
+            if (CurrentFilter != null)
             {
-                dbBarcodes = await BarcodesRepository.GetAll();
-            }
-            else
-            {
-                dbBarcodes = await BarcodesRepository.GetAll();
                 dbBarcodes = FilterService.Filter(dbBarcodes, CurrentFilter);
             }
 
             if (!String.IsNullOrEmpty(Search))
             {
-                dbBarcodes = dbBarcodes.Where(b => b.Text.ToLower().Contains(Search.ToLower()));
+                dbBarcodes = FilterService.Search(dbBarcodes, Search);
             }
 
             Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
