@@ -50,6 +50,11 @@ namespace PVScan.Mobile
                 .As<IPersistentKVP>()
                 .InstancePerLifetimeScope();
 
+            // Filter Service
+            containerBuilder.RegisterType<BarcodesFilter>()
+                .As<IBarcodesFilter>()
+                .InstancePerLifetimeScope();
+
             // Http factory
 #if DEBUG
             containerBuilder.RegisterType<DebugCertHttpClientFactory>()
