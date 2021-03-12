@@ -280,7 +280,10 @@ namespace PVScan.Mobile.Views
 
         private void SearchDelayTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            (BindingContext as HistoryPageViewModel).SearchCommand.Execute(null);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                (BindingContext as HistoryPageViewModel).SearchCommand.Execute(null);
+            });
         }
 
         private void SearchEntry_TextChanged(object sender, TextChangedEventArgs e)
