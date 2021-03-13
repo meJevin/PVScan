@@ -10,10 +10,10 @@ namespace PVScan.Mobile.Services.Interfaces
 
         bool ContainsKey(string key);
 
-        dynamic Get(string key, dynamic defaultValue);
+        string Get(string key, string defaultValue);
 
         void Remove(string key);
 
-        void Set(string key, dynamic value);
+        void Set(string key, string value);
     }
 }

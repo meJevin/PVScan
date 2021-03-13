@@ -18,7 +18,7 @@ namespace PVScan.Mobile.Services
             return Preferences.ContainsKey(key);
         }
 
-        public dynamic Get(string key, dynamic defaultValue)
+        public string Get(string key, string defaultValue)
         {
             return Preferences.Get(key, defaultValue);
         }
@@ -28,7 +28,7 @@ namespace PVScan.Mobile.Services
             Preferences.Remove(key);
         }
 
-        public void Set(string key, dynamic value)
+        public void Set(string key, string value)
         {
             Preferences.Set(key, value);
         }
