@@ -20,9 +20,7 @@
         <!-- Screen with allow camera button if user hasn't allowed camera -->
         <Grid IsVisible="{Binding IsCameraAllowed, Converter={StaticResource InverBool}}">
             <StackLayout VerticalOptions="Center" Spacing="24">
-                <Label HorizontalOptions="Center">
-                    Allow camera access in order to scan
-                </Label>
+                <Label HorizontalOptions="Center" Text="Allow camera access in order to scan" />
                 <Button Text="Allow" Command="{Binding AllowCameraCommand}" Style="{StaticResource PrimaryButton}" Margin="20, 0"/>
             </StackLayout>
         </Grid>

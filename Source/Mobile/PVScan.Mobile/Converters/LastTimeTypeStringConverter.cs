@@ -1,4 +1,5 @@
-﻿using PVScan.Mobile.ViewModels;
+﻿using PVScan.Mobile.Models;
+using PVScan.Mobile.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

@@ -42,7 +42,8 @@
         <!-- COLLECTION VIEW OF BARCODES -->
         <Grid x:Name="BarcodesListContainer">
             <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding BarcodesPaged}" RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
+                <CollectionView ItemsSource="{Binding BarcodesPaged}"
+                                RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
                                 RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}"
                                 SelectedItems="{Binding SelectedBarcodes}"
                                 x:Name="BarcodesCollectionView">
@@ -275,10 +276,9 @@
                            CornerRadius="{OnPlatform Android=12, iOS=4}"/>
 
                     <Label HorizontalOptions="Center"
-                       FontSize="16"
-                       Margin="0,0,0,5">
-                        Barcode Information
-                    </Label>
+                           FontSize="16"
+                           Margin="0,0,0,5"
+                           Text="Barcode Information"/>
                 </StackLayout>
 
                 <BoxView Grid.Row="1" HeightRequest="1" Color="{AppThemeBinding 

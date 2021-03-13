@@ -19,12 +19,7 @@ namespace PVScan.Mobile.Views
         public MainPage()
         {
             InitializeSafeArea();
-
             InitializeComponent();
-
-
-            _currentTabView = HistoryPage.Parent as TabViewItem;
-            HistoryPage.Initialize();
         }
 
         private async void HistoryTabItem_TabTapped(object sender, TabTappedEventArgs e)
@@ -40,8 +35,6 @@ namespace PVScan.Mobile.Views
             }
 
             _currentTabView = sender as TabViewItem;
-
-            await HistoryPage.Initialize();
         }
 
         private async void ScanTabItem_TabTapped(object sender, TabTappedEventArgs e)
@@ -51,14 +44,9 @@ namespace PVScan.Mobile.Views
                 return;
             }
 
-            _currentTabView = sender as TabViewItem;
-
-            // Tap animation
-            var tabViewOriginalScale = _currentTabView.Scale;
-            await _currentTabView.ScaleTo(tabViewOriginalScale - 0.1, 50, Easing.Linear);
-            await _currentTabView.ScaleTo(tabViewOriginalScale, 50, Easing.Linear);
-
             await ScanPage.Initialize();
+
+            _currentTabView = sender as TabViewItem;
         }
 
         private async void ProfileTabItem_TabTapped(object sender, TabTappedEventArgs e)
@@ -74,8 +62,6 @@ namespace PVScan.Mobile.Views
             }
 
             _currentTabView = sender as TabViewItem;
-
-            await ProfilePage.Initialize();
         }
 
         private void InitializeSafeArea()
@@ -133,6 +119,14 @@ namespace PVScan.Mobile.Views
         {
             Application.Current.Resources["TabBarCameraButtonMargin"] = new Thickness(0, 0, 0, 12);
             Application.Current.Resources["TabBarHeight"] = 50;
+        }
+
+        private async void ContentPage_Appearing(object sender, EventArgs e)
+        {
+            _currentTabView = HistoryPage.Parent as TabViewItem;
+
+            await HistoryPage.Initialize();
+            await ProfilePage.Initialize();
         }
     }
 }
