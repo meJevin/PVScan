@@ -12,6 +12,8 @@
              
     ios:NavigationPage.HideNavigationBarSeparator="true"
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
+
+    Appearing="ContentPage_Appearing"
     >
 
     <ContentPage.Resources>

@@ -84,12 +84,8 @@ namespace PVScan.Mobile.Views
                 });
         }
 
-
-        private bool Initialized = false;
         public async Task Initialize()
         {
-            if (Initialized) return;
-
             await (BindingContext as HistoryPageViewModel).LoadBarcodesFromDB();
 
             try
@@ -108,8 +104,6 @@ namespace PVScan.Mobile.Views
             {
 
             }
-
-            Initialized = true;
         }
 
         private void InitializeNormalBarcodeItemTemplate()

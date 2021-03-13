@@ -92,8 +92,11 @@ namespace PVScan.Mobile.Views
                 return;
             }
 
-            ScannerView.IsScanning = false;
             ScannerView.IsAnalyzing = false;
+            // Remove this comment if you want slower tab switch speed
+            // for scan page. But camra is actually turned off here
+            // and the device is going to be faster
+            //ScannerView.IsScanning = false;
         }
 
         private async Task CameraAllowedHandler()
