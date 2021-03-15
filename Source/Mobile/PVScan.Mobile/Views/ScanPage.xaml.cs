@@ -46,7 +46,7 @@ namespace PVScan.Mobile.Views
 
                 ScannerView.Options.CameraResolutionSelector = (res) =>
                 {
-                    return res.Last();
+                    return res.Best();
                 };
 
                 ScannerView.OnScanResult += ScannerView_OnScanResult;
@@ -109,7 +109,7 @@ namespace PVScan.Mobile.Views
 
             ScannerView.Options.CameraResolutionSelector = (res) =>
             {
-                return res.Last();
+                return res.Best();
             };
 
             ScannerView.OnScanResult += ScannerView_OnScanResult;
