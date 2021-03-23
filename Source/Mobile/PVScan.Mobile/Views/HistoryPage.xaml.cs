@@ -561,6 +561,8 @@ namespace PVScan.Mobile.Views
             await HideBarcodeMapsInfo();
             await ShowListView();
 
+            await Task.Delay(100);
+
             BarcodesCollectionView.ScrollTo(selectedBarcodeIndex, -1, ScrollToPosition.Center);
 
             await Task.Delay(250);
