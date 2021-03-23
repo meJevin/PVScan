@@ -147,6 +147,11 @@
 
                         <CollectionView.Header>
                             <StackLayout>
+                                <Button Text="Apply" Style="{StaticResource PrimaryButton}"
+                                        Command="{Binding ApplyFilterCommand}"
+                                        x:Name="ApplyFilterButton"
+                                        Margin="0,0,0,10"/>
+
                                 <Grid ColumnDefinitions="*,*">
                                     <Label FontSize="20">
                                         Date
@@ -287,10 +292,6 @@
                             </StackLayout>
                         </CollectionView.Header>
                     </CollectionView>
-                    
-                    <Button Text="Apply" Style="{StaticResource PrimaryButton}"
-                                    Command="{Binding ApplyFilterCommand}"
-                            x:Name="ApplyFilterButton" VerticalOptions="Start"/>
                 </Grid>
             </Grid>
         </Grid>
