@@ -128,7 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PVScan.Mobile\PVScan.Mobile.csproj">
-      <Project>{C35D18A0-F42A-4622-A692-8D8A69A414C6}</Project>
+      <Project>{16D63816-8B81-450E-9838-D38B770E3D05}</Project>
       <Name>PVScan.Mobile</Name>
     </ProjectReference>
   </ItemGroup>
