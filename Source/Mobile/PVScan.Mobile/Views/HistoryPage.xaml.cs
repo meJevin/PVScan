@@ -37,9 +37,8 @@ namespace PVScan.Mobile.Views
         // Cancel event flag for when we long press a barcode
         bool CancelBarcodeTapped = false;
 
+        // Map or List view right now?
         bool ShowingListView = false;
-
-        bool ShowingListViewBarcodeInfo = false;
 
         HistoryPageViewModel VM;
 
@@ -331,24 +330,24 @@ namespace PVScan.Mobile.Views
 
         private async Task ShowListView(uint duration = 250)
         {
+            ShowingListView = true;
+
             _ = BarcodesListContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
             await MapViewContainer.TranslateTo(MapViewContainer.Width, 0, duration, Easing.CubicOut);
 
             ListViewButton.Opacity = 1;
             MapViewButton.Opacity = 0.35;
-
-            ShowingListView = true;
         }
 
         private async Task ShowMapView(uint duration = 250)
         {
+            ShowingListView = false;
+
             _ = MapViewContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
             await BarcodesListContainer.TranslateTo(-BarcodesListContainer.Width, 0, duration, Easing.CubicOut);
 
             MapViewButton.Opacity = 1;
             ListViewButton.Opacity = 0.35;
-
-            ShowingListView = false;
         }
 
         private async void ListViewButton_Clicked(object sender, EventArgs e)
