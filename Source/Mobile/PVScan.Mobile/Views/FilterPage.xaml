@@ -41,14 +41,13 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <StackLayout Spacing="15">
                     <Frame HasShadow="False" 
                            BackgroundColor="{AppThemeBinding 
-                    Dark={StaticResource TextPrimaryColor_Dark}, 
-                    Light={StaticResource TextPrimaryColor_Light}}"
+                        Dark={StaticResource TextPrimaryColor_Dark}, 
+                        Light={StaticResource TextPrimaryColor_Light}}"
                            WidthRequest="45"
                            HeightRequest="6"
                            Padding="0" 
@@ -67,228 +66,233 @@
                     Light={StaticResource TextPrimaryColor_Light}}" 
                          Margin="0,0,0,4"/>
 
-                <CollectionView Grid.Row="2"
-                                ItemsSource="{Binding AvailableBarcodeFormats}" 
+                <Grid Grid.Row="2">
+                    <CollectionView ItemsSource="{Binding AvailableBarcodeFormats}" 
                                 SelectionMode="Multiple"
-                                SelectedItems="{Binding SelectedBarcodeFormats}">
-                    <CollectionView.ItemTemplate x:DataType="viewmodels:ZXingBarcodeFormat">
-                        <DataTemplate>
-                            <Grid Padding="0, 10">
+                                SelectedItems="{Binding SelectedBarcodeFormats}"
+                                    x:Name="MainCollectionView">
+                        <CollectionView.ItemTemplate x:DataType="viewmodels:ZXingBarcodeFormat">
+                            <DataTemplate>
+                                <Grid Padding="0, 10">
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
 
-                                <Image>
-                                    <Image.Source>
-                                        <FontImageSource x:Name="CheckIcon"
+                                    <Image>
+                                        <Image.Source>
+                                            <FontImageSource x:Name="CheckIcon"
                                             FontFamily="FontAwesome"
                                             Color="{AppThemeBinding 
                                             Dark={StaticResource TextPrimaryColor_Light},
                                             Light={StaticResource TextPrimaryColor_Dark}}"
                                             Size="16">
 
-                                        </FontImageSource>
-                                    </Image.Source>
-                                </Image>
+                                            </FontImageSource>
+                                        </Image.Source>
+                                    </Image>
 
-                                <Label x:Name="FormatLabel"
+                                    <Label x:Name="FormatLabel"
                                     Grid.Column="1" Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
                                        FontAttributes="Bold"/>
 
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup Name="CommonStates">
-                                        <VisualState Name="Normal">
-                                            <VisualState.Setters>
-                                                <Setter TargetName="CheckIcon"
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="CommonStates">
+                                            <VisualState Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter TargetName="CheckIcon"
                                                         Property="FontImageSource.Glyph" 
                                                         Value="{x:Static theme:IconFont.Square}"/>
-                                                <Setter TargetName="CheckIcon"
+                                                    <Setter TargetName="CheckIcon"
                                                         Property="FontImageSource.Color" 
                                                         Value="{AppThemeBinding 
                                                         Dark={StaticResource TextPrimaryColor_Light},
                                                         Light={StaticResource TextPrimaryColor_Dark}}"/>
-                                                <Setter TargetName="FormatLabel"
+                                                    <Setter TargetName="FormatLabel"
                                                         Property="Label.TextColor"
                                                         Value="{AppThemeBinding 
                                                         Dark={StaticResource TextPrimaryColor_Dark},
                                                         Light={StaticResource TextPrimaryColor_Light}}"/>
-                                                <Setter Property="BackgroundColor"
+                                                    <Setter Property="BackgroundColor"
                                                         Value="Transparent"/>
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                        <VisualState Name="Selected">
-                                            <VisualState.Setters>
-                                                <Setter TargetName="CheckIcon"
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState Name="Selected">
+                                                <VisualState.Setters>
+                                                    <Setter TargetName="CheckIcon"
                                                         Property="FontImageSource.Glyph" 
                                                         Value="{x:Static theme:IconFont.Check}"/>
-                                                <Setter TargetName="CheckIcon"
+                                                    <Setter TargetName="CheckIcon"
                                                         Property="FontImageSource.Color" 
                                                         Value="White"/>
-                                                <Setter TargetName="FormatLabel"
+                                                    <Setter TargetName="FormatLabel"
                                                         Property="Label.TextColor"
                                                         Value="White"/>
-                                                <Setter Property="BackgroundColor"
+                                                    <Setter Property="BackgroundColor"
                                                         Value="{StaticResource ThemePrimary}"/>
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                        <VisualState Name="Focused">
-                                            <VisualState.Setters>
-                                                <Setter Property="BackgroundColor"
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState Name="Focused">
+                                                <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor"
                                                         Value="Transparent"/>
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
 
-                    <CollectionView.Header>
-                        <StackLayout>
-                            <Button Text="Apply" Style="{StaticResource PrimaryButton}" Margin="0, 10"
-                                    Command="{Binding ApplyFilterCommand}"/>
+                        <CollectionView.Header>
+                            <StackLayout>
+                                <Button Text="Apply" Style="{StaticResource PrimaryButton}"
+                                        Command="{Binding ApplyFilterCommand}"
+                                        x:Name="ApplyFilterButton"
+                                        Margin="0,0,0,10"/>
 
-                            <Grid ColumnDefinitions="*,*">
-                                <Label FontSize="20">
-                                    Date
-                                </Label>
+                                <Grid ColumnDefinitions="*,*">
+                                    <Label FontSize="20">
+                                        Date
+                                    </Label>
 
-                                <Label Text="Reset" TextColor="{AppThemeBinding 
+                                    <Label Text="Reset" TextColor="{AppThemeBinding 
                                                         Dark={StaticResource TextPrimaryColor_Dark},
                                                         Light={StaticResource TextPrimaryColor_Light}}"
                                        HorizontalOptions="End" 
                                     VerticalOptions="End" FontSize="16" Grid.Column="1">
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ResetDateFilterCommand}"
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ResetDateFilterCommand}"
                                                               Tapped="ResetDateFilter_Tapped"/>
-                                    </Label.GestureRecognizers>
-                                </Label>
-                            </Grid>
-                            <xct:TabView TabStripPlacement="Top" TabStripHeight="30" HeightRequest="200"
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+
+                                <xct:TabView TabStripPlacement="Top" TabStripHeight="30" HeightRequest="200"
                                          SelectedIndex="{Binding DateFilterTypeIndex, Mode=OneWayToSource}"
                                          x:Name="DateFilterTypeTabView">
-                                <xct:TabViewItem Text="Last" 
+                                    <xct:TabViewItem Text="Last" 
                                                  TextColor="Gray"
                                                  TextColorSelected="{AppThemeBinding 
                                                         Dark={StaticResource TextPrimaryColor_Dark},
                                                         Light={StaticResource TextPrimaryColor_Light}}">
-                                    <CollectionView VerticalOptions="Center" SelectionMode="Single" 
+                                        <CollectionView VerticalOptions="Center" SelectionMode="Single" 
                                             ItemsSource="{Binding AvailableLastTimeSpans}"
                                             SelectedItem="{Binding SelectedLastTimeSpan}">
-                                        <CollectionView.ItemTemplate>
-                                            <DataTemplate x:DataType="viewmodels:LastTimeSpan">
-                                                <Grid Padding="0, 10">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate x:DataType="viewmodels:LastTimeSpan">
+                                                    <Grid Padding="0, 10">
 
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="20"/>
-                                                        <ColumnDefinition/>
-                                                    </Grid.ColumnDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="20"/>
+                                                            <ColumnDefinition/>
+                                                        </Grid.ColumnDefinitions>
 
-                                                    <Image>
-                                                        <Image.Source>
-                                                            <FontImageSource x:Name="CheckIcon"
+                                                        <Image>
+                                                            <Image.Source>
+                                                                <FontImageSource x:Name="CheckIcon"
                                                             FontFamily="FontAwesome"
                                                             Color="{AppThemeBinding 
                                                             Dark={StaticResource TextPrimaryColor_Light},
                                                             Light={StaticResource TextPrimaryColor_Dark}}"
                                                             Size="16">
 
-                                                            </FontImageSource>
-                                                        </Image.Source>
-                                                    </Image>
+                                                                </FontImageSource>
+                                                            </Image.Source>
+                                                        </Image>
 
-                                                    <Label x:Name="FormatLabel"
+                                                        <Label x:Name="FormatLabel"
                                                    Grid.Column="1" 
                                                    Text="{Binding Type, Converter={StaticResource LastTimeTypeString}}"
                                                    FontAttributes="Bold"/>
 
-                                                    <VisualStateManager.VisualStateGroups>
-                                                        <VisualStateGroup Name="CommonStates">
-                                                            <VisualState Name="Normal">
-                                                                <VisualState.Setters>
-                                                                    <Setter TargetName="CheckIcon"
+                                                        <VisualStateManager.VisualStateGroups>
+                                                            <VisualStateGroup Name="CommonStates">
+                                                                <VisualState Name="Normal">
+                                                                    <VisualState.Setters>
+                                                                        <Setter TargetName="CheckIcon"
                                                                         Property="FontImageSource.Glyph" 
                                                                         Value="{x:Static theme:IconFont.Square}"/>
-                                                                    <Setter TargetName="CheckIcon"
+                                                                        <Setter TargetName="CheckIcon"
                                                                         Property="FontImageSource.Color" 
                                                                         Value="{AppThemeBinding 
                                                                         Dark={StaticResource TextPrimaryColor_Light},
                                                                         Light={StaticResource TextPrimaryColor_Dark}}"/>
-                                                                    <Setter TargetName="FormatLabel"
+                                                                        <Setter TargetName="FormatLabel"
                                                                         Property="Label.TextColor"
                                                                         Value="{AppThemeBinding 
                                                                         Dark={StaticResource TextPrimaryColor_Dark},
                                                                         Light={StaticResource TextPrimaryColor_Light}}"/>
-                                                                    <Setter Property="BackgroundColor"
+                                                                        <Setter Property="BackgroundColor"
                                                                         Value="Transparent"/>
-                                                                </VisualState.Setters>
-                                                            </VisualState>
-                                                            <VisualState Name="Selected">
-                                                                <VisualState.Setters>
-                                                                    <Setter TargetName="CheckIcon"
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                                <VisualState Name="Selected">
+                                                                    <VisualState.Setters>
+                                                                        <Setter TargetName="CheckIcon"
                                                                         Property="FontImageSource.Glyph" 
                                                                         Value="{x:Static theme:IconFont.Check}"/>
-                                                                    <Setter TargetName="CheckIcon"
+                                                                        <Setter TargetName="CheckIcon"
                                                                         Property="FontImageSource.Color" 
                                                                         Value="White"/>
-                                                                    <Setter TargetName="FormatLabel"
+                                                                        <Setter TargetName="FormatLabel"
                                                                         Property="Label.TextColor"
                                                                         Value="White"/>
-                                                                    <Setter Property="BackgroundColor"
+                                                                        <Setter Property="BackgroundColor"
                                                                         Value="{StaticResource ThemePrimary}"/>
-                                                                </VisualState.Setters>
-                                                            </VisualState>
-                                                            <VisualState Name="Focused">
-                                                                <VisualState.Setters>
-                                                                    <Setter Property="BackgroundColor"
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                                <VisualState Name="Focused">
+                                                                    <VisualState.Setters>
+                                                                        <Setter Property="BackgroundColor"
                                                                         Value="Transparent"/>
-                                                                </VisualState.Setters>
-                                                            </VisualState>
-                                                        </VisualStateGroup>
-                                                    </VisualStateManager.VisualStateGroups>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
-                                </xct:TabViewItem>
-                                <xct:TabViewItem Text="Range" 
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                            </VisualStateGroup>
+                                                        </VisualStateManager.VisualStateGroups>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </xct:TabViewItem>
+                                    <xct:TabViewItem Text="Range" 
                                                  TextColor="Gray"
                                                  TextColorSelected="{AppThemeBinding 
                                                         Dark={StaticResource TextPrimaryColor_Dark},
                                                         Light={StaticResource TextPrimaryColor_Light}}">
-                                    <StackLayout VerticalOptions="Center">
-                                        <Label>
-                                            From
-                                        </Label>
-                                        <DatePicker Date="{Binding FromDate}"/>
-                                        <Label>
-                                            To
-                                        </Label>
-                                        <DatePicker Date="{Binding ToDate}"/>
-                                    </StackLayout>
-                                </xct:TabViewItem>
-                            </xct:TabView>
+                                        <StackLayout VerticalOptions="Center">
+                                            <Label>
+                                                From
+                                            </Label>
+                                            <DatePicker Date="{Binding FromDate}"/>
+                                            <Label>
+                                                To
+                                            </Label>
+                                            <DatePicker Date="{Binding ToDate}"/>
+                                        </StackLayout>
+                                    </xct:TabViewItem>
+                                </xct:TabView>
 
-                            <Grid ColumnDefinitions="*,*" Margin="0, 20, 0, 10">
-                                <Label FontSize="20">
-                                    Barcode Formats
-                                </Label>
+                                <Grid ColumnDefinitions="*,*" Margin="0, 20, 0, 10">
+                                    <Label FontSize="20">
+                                        Barcode Formats
+                                    </Label>
 
-                                <Label Text="Reset" TextColor="{AppThemeBinding 
+                                    <Label Text="Reset" TextColor="{AppThemeBinding 
                                                         Dark={StaticResource TextPrimaryColor_Dark},
                                                         Light={StaticResource TextPrimaryColor_Light}}"
                                        HorizontalOptions="End" 
                                VerticalOptions="End" FontSize="16" Grid.Column="1">
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ResetBarcodeFormatsCommand}"/>
-                                    </Label.GestureRecognizers>
-                                </Label>
-                            </Grid>
-                        </StackLayout>
-                    </CollectionView.Header>
-                </CollectionView>
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ResetBarcodeFormatsCommand}"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                            </StackLayout>
+                        </CollectionView.Header>
+                    </CollectionView>
+                </Grid>
             </Grid>
         </Grid>
     </ContentView.Content>

@@ -213,8 +213,10 @@ namespace PVScan.Mobile.ViewModels
 
         public Filter CurrentFilter { get; set; }
 
+
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
         public ObservableRangeCollection<Barcode> BarcodesPaged { get; set; }
+
 
         // How many pages have we loaded in the list?
         private int PageCount { get; set; }
