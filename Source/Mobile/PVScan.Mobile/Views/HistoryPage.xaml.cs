@@ -580,5 +580,10 @@ namespace PVScan.Mobile.Views
         {
             await HideBarcodeMapsInfo();
         }
+
+        private async void Map_MapClicked(object sender, MapClickedEventArgs e)
+        {
+            await HideBarcodeMapsInfo();
+        }
     }
 }

@@ -182,7 +182,8 @@
         <!-- MAP VIEW -->
         <Grid x:Name="MapViewContainer">
             <maps:Map x:Name="Map" IsShowingUser="True"
-                      ItemsSource="{Binding Barcodes}">
+                      ItemsSource="{Binding Barcodes}"
+                      MapClicked="Map_MapClicked">
                 <maps:Map.ItemTemplate>
                     <DataTemplate x:DataType="models:Barcode">
                         <maps:Pin Label="{Binding Text}" Position="{Binding ScanLocation,
