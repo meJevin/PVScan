@@ -396,18 +396,6 @@
             </Grid>
         </Grid>
 
-        <!-- COPIED TO CLIBOARD BOX -->
-        <Grid x:Name="CopiedToClipboardNotification"
-              VerticalOptions="End" HeightRequest="100"
-              BackgroundColor="Green">
-            <Label TextColor="White"
-                   FontSize="Large"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center">
-                Copied to clipboard
-            </Label>
-        </Grid>
-
         <!-- OVERLAY (FILTER PAGE) -->
         <BoxView x:Name="FilterPageOverlay" BackgroundColor="Black">
             <BoxView.GestureRecognizers>

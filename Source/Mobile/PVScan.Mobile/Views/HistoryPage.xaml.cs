@@ -51,7 +51,6 @@ namespace PVScan.Mobile.Views
                 _ = ShowListView(0);
                 _ = HideFilterBar(0);
                 _ = HideFilterView(0);
-                _ = HideCopyToClipboardNotification(0);
                 _ = HideBarcodeInfo(0);
                 _ = HideBarcodeMapsInfo(0);
             };
@@ -190,22 +189,6 @@ namespace PVScan.Mobile.Views
         private async void HistoryPage_BarcodeCopiedToClipboard(object sender, Barcode e)
         {
             CancelBarcodeTapped = true;
-
-            await ShowCopyToClipboardNotification(250);
-
-            await Task.Delay(1000);
-
-            await HideCopyToClipboardNotification(250);
-        }
-
-        private async Task ShowCopyToClipboardNotification(uint duration)
-        {
-            await CopiedToClipboardNotification.TranslateTo(0, 1, duration, Easing.CubicOut);
-        }
-
-        private async Task HideCopyToClipboardNotification(uint duration)
-        {
-            await CopiedToClipboardNotification.TranslateTo(0, CopiedToClipboardNotification.Height + 1, duration, Easing.CubicOut);
         }
 
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
