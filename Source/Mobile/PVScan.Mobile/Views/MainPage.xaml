@@ -201,7 +201,8 @@
                    CornerRadius="{OnPlatform Android=4, iOS=12}">
                 <Label x:Name="PopupMessageLabel" x:FieldModifier="Public"
                        VerticalOptions="Center" HorizontalOptions="Center"
-                       FontSize="22"
+                       FontSize="22" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                       TextColor="White"
                        Text="Copied to clipboard"/>
             </Frame>
         </Grid>
