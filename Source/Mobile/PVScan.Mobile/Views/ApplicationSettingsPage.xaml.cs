@@ -50,10 +50,16 @@ namespace PVScan.Mobile.Views
             DateTime date = DateTime.UtcNow;
             date = date.Subtract(TimeSpan.FromSeconds(random.NextDouble() * 157680000));
 
+            Coordinate randomCoord = new Coordinate()
+            {
+                Latitude = (random.NextDouble() * 180) - 90,
+                Longitude = (random.NextDouble() * 360) - 180,
+            };
+
             var b = new Barcode()
             {
                 Format = randomType,
-                ScanLocation = null,
+                ScanLocation = random.NextDouble() > 0.25 ? randomCoord : null,
                 ScanTime = date,
                 ServerSynced = false,
                 Text = Guid.NewGuid().ToString(),
