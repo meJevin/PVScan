@@ -25,7 +25,7 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void Can_Create_Empty()
         {
             // Arrange + Act
-            HistoryPageViewModel vm = new HistoryPageViewModel(null, null);
+            HistoryPageViewModel vm = new HistoryPageViewModel(null, null, null);
 
             // Assert
             Assert.Empty(vm.Barcodes);
