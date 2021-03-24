@@ -377,7 +377,7 @@ namespace PVScan.Mobile.Views
 
         private async Task HideBarcodeMapsInfo(uint duration = 250)
         {
-            await BarcodeMapsInfo.TranslateTo(0, BarcodeInfo.Height, duration, Easing.CubicOut);
+            await BarcodeMapsInfo.TranslateTo(0, BarcodeMapsInfo.Height, duration, Easing.CubicOut);
         }
 
         private async Task ShowBarcodeMapsInfo(uint duration = 250)
