@@ -89,7 +89,7 @@ namespace PVScan.Mobile.Views
 
         public async Task Initialize()
         {
-            await (BindingContext as HistoryPageViewModel).LoadBarcodesFromDB();
+            await VM.LoadBarcodesFromDB();
 
             try
             {
@@ -263,7 +263,7 @@ namespace PVScan.Mobile.Views
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                (BindingContext as HistoryPageViewModel).SearchCommand.Execute(null);
+                VM.SearchCommand.Execute(null);
             });
         }
 
@@ -479,7 +479,7 @@ namespace PVScan.Mobile.Views
 
         private async void BarcodeInfoShowOnMap_Clicked(object sender, EventArgs e)
         {
-            Barcode selectedBarcode = (BindingContext as HistoryPageViewModel).SelectedBarcode;
+            Barcode selectedBarcode = VM.SelectedBarcode;
             var barcodeLocation = selectedBarcode.ScanLocation;
 
             if (barcodeLocation == null)
@@ -531,8 +531,6 @@ namespace PVScan.Mobile.Views
 
         private async void BarcodeInfoMapsShowOnList_Clicked(object sender, EventArgs e)
         {
-            var VM = (BindingContext as HistoryPageViewModel);
-
             var selectedBarcodeIndex = VM.Barcodes.IndexOf(VM.SelectedBarcode);
 
             while (VM.BarcodesPaged.Count - 1 < selectedBarcodeIndex)
