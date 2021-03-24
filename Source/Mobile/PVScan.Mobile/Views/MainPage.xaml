@@ -190,5 +190,20 @@
                 <views:ProfilePage x:Name="ProfilePage"/>
             </toolkit:TabViewItem>
         </toolkit:TabView>
+
+        <Grid InputTransparent="True" x:Name="PopupContainer" x:FieldModifier="Public"
+              ColumnDefinitions="*,3*,*" RowDefinitions="8*,*"
+              Opacity="0">
+            <Frame x:Name="PopupMessageBox" BackgroundColor="#D000"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   Padding="26" Grid.Column="1"
+                   HasShadow="False"
+                   CornerRadius="{OnPlatform Android=4, iOS=12}">
+                <Label x:Name="PopupMessageLabel" x:FieldModifier="Public"
+                       VerticalOptions="Center" HorizontalOptions="Center"
+                       FontSize="22"
+                       Text="Copied to clipboard"/>
+            </Frame>
+        </Grid>
     </Grid>
 </ContentPage>
