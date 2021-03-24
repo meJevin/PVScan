@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.Views;
 using System;
@@ -21,8 +22,11 @@ namespace PVScan.Mobile
 
             InitializeComponent();
 
-            var navigationPage = new Xamarin.Forms.NavigationPage(Resolver.Resolve<MainPage>());
+            var mainPage = Resolver.Resolve<MainPage>();
 
+            InitializePopupService(mainPage);
+
+            var navigationPage = new Xamarin.Forms.NavigationPage(mainPage);
             navigationPage.On<iOS>().SetHideNavigationBarSeparator(false);
             navigationPage.SetOnAppTheme(Xamarin.Forms.NavigationPage.BarTextColorProperty, Color.Black, Color.White);
 
@@ -49,6 +53,12 @@ namespace PVScan.Mobile
             {
                 // Respond to user device theme change if option is set?
             };
+        }
+
+        private void InitializePopupService(MainPage mainPage)
+        {
+            var popupService = (Resolver.Resolve<IPopupMessageService>() as PopupMessageService);
+            popupService.Initialize(mainPage.PopupContainer, mainPage.PopupMessageLabel);
         }
 
         protected override async void OnStart()

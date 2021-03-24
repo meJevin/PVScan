@@ -51,7 +51,6 @@ namespace PVScan.Mobile.Views
                 _ = ShowListView(0);
                 _ = HideFilterBar(0);
                 _ = HideFilterView(0);
-                _ = HideCopyToClipboardNotification(0);
                 _ = HideBarcodeInfo(0);
                 _ = HideBarcodeMapsInfo(0);
             };
@@ -90,7 +89,7 @@ namespace PVScan.Mobile.Views
 
         public async Task Initialize()
         {
-            await (BindingContext as HistoryPageViewModel).LoadBarcodesFromDB();
+            await VM.LoadBarcodesFromDB();
 
             try
             {
@@ -190,22 +189,6 @@ namespace PVScan.Mobile.Views
         private async void HistoryPage_BarcodeCopiedToClipboard(object sender, Barcode e)
         {
             CancelBarcodeTapped = true;
-
-            await ShowCopyToClipboardNotification(250);
-
-            await Task.Delay(1000);
-
-            await HideCopyToClipboardNotification(250);
-        }
-
-        private async Task ShowCopyToClipboardNotification(uint duration)
-        {
-            await CopiedToClipboardNotification.TranslateTo(0, 1, duration, Easing.CubicOut);
-        }
-
-        private async Task HideCopyToClipboardNotification(uint duration)
-        {
-            await CopiedToClipboardNotification.TranslateTo(0, CopiedToClipboardNotification.Height + 1, duration, Easing.CubicOut);
         }
 
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
@@ -280,7 +263,7 @@ namespace PVScan.Mobile.Views
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                (BindingContext as HistoryPageViewModel).SearchCommand.Execute(null);
+                VM.SearchCommand.Execute(null);
             });
         }
 
@@ -394,7 +377,7 @@ namespace PVScan.Mobile.Views
 
         private async Task HideBarcodeMapsInfo(uint duration = 250)
         {
-            await BarcodeMapsInfo.TranslateTo(0, BarcodeInfo.Height, duration, Easing.CubicOut);
+            await BarcodeMapsInfo.TranslateTo(0, BarcodeMapsInfo.Height, duration, Easing.CubicOut);
         }
 
         private async Task ShowBarcodeMapsInfo(uint duration = 250)
@@ -496,7 +479,7 @@ namespace PVScan.Mobile.Views
 
         private async void BarcodeInfoShowOnMap_Clicked(object sender, EventArgs e)
         {
-            Barcode selectedBarcode = (BindingContext as HistoryPageViewModel).SelectedBarcode;
+            Barcode selectedBarcode = VM.SelectedBarcode;
             var barcodeLocation = selectedBarcode.ScanLocation;
 
             if (barcodeLocation == null)
@@ -548,8 +531,6 @@ namespace PVScan.Mobile.Views
 
         private async void BarcodeInfoMapsShowOnList_Clicked(object sender, EventArgs e)
         {
-            var VM = (BindingContext as HistoryPageViewModel);
-
             var selectedBarcodeIndex = VM.Barcodes.IndexOf(VM.SelectedBarcode);
 
             while (VM.BarcodesPaged.Count - 1 < selectedBarcodeIndex)
@@ -560,6 +541,8 @@ namespace PVScan.Mobile.Views
 
             await HideBarcodeMapsInfo();
             await ShowListView();
+
+            await Task.Delay(100);
 
             BarcodesCollectionView.ScrollTo(selectedBarcodeIndex, -1, ScrollToPosition.Center);
 
