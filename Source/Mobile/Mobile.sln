@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dummy", "Dummy", "{DD11B35B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Mobile.Database", "Dummy\PVScan.Mobile.Database\PVScan.Mobile.Database.csproj", "{8AE6230B-D0B8-4878-A1BC-77C84C2F175E}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "PVScan.Mobile.Tests", "..\..\Tests\Mobile\PVScan.Mobile.Tests\PVScan.Mobile.Tests.csproj", "{FAD34B32-BA6D-4437-A64F-CF1C6432BCC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Mobile.Tests", "..\..\Tests\Mobile\PVScan.Mobile.Tests\PVScan.Mobile.Tests.csproj", "{FAD34B32-BA6D-4437-A64F-CF1C6432BCC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

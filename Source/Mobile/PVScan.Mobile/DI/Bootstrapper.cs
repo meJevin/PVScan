@@ -66,6 +66,11 @@ namespace PVScan.Mobile
                 .InstancePerLifetimeScope();
 #endif
 
+            // Popup message Service
+            containerBuilder.RegisterType<PopupMessageService>()
+                .As<IPopupMessageService>()
+                .SingleInstance();
+
             var container = containerBuilder.Build();
             Resolver.Initialize(container);
         }
