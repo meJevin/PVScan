@@ -9,6 +9,11 @@ using Xamarin.Forms.Xaml;
 
 namespace PVScan.Mobile.Views.DataTemplates
 {
+    // Todo:
+    /// IMPORTANT!!!!
+    /// I remove effects because otherwise multiple selection doesn't work on iOS
+    /// On android even with effects the selection works
+    /// Need help! 
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NormalBarcodeItem : Grid
     {
@@ -38,15 +43,18 @@ namespace PVScan.Mobile.Views.DataTemplates
             }
         }
 
-        IList<IGestureRecognizer> InnerContainerGestureRecognizers = new List<IGestureRecognizer>();
+        IGestureRecognizer InnerContainerTapGestureRecognizer;
+        IList<Effect> InnerContainerEffects = new List<Effect>();
 
         public NormalBarcodeItem()
         {
             InitializeComponent();
 
-            foreach (var e in InnerContainer.GestureRecognizers)
+            InnerContainerTapGestureRecognizer = InnerContainer.GestureRecognizers[0];
+
+            foreach (var e in InnerContainer.Effects)
             {
-                InnerContainerGestureRecognizers.Add(e);
+                InnerContainerEffects.Add(e);
             }
         }
 
@@ -57,7 +65,12 @@ namespace PVScan.Mobile.Views.DataTemplates
 
         public async Task MakeEditable()
         {
-            InnerContainer.GestureRecognizers.Clear();
+            InnerContainer.GestureRecognizers.Remove(InnerContainerTapGestureRecognizer);
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                InnerContainer.Effects.Clear();
+            }
 
             await InfoContainer.PaddingLeftTo(54, 250, Easing.CubicInOut);
             _ = ImageLeftContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
@@ -66,9 +79,14 @@ namespace PVScan.Mobile.Views.DataTemplates
 
         public async Task MakeNotEditable()
         {
-            foreach (var e in InnerContainerGestureRecognizers)
+            InnerContainer.GestureRecognizers.Add(InnerContainerTapGestureRecognizer);
+
+            if (Device.RuntimePlatform == Device.iOS)
             {
-                InnerContainer.GestureRecognizers.Add(e);
+                foreach (var e in InnerContainerEffects)
+                {
+                    InnerContainer.Effects.Add(e);
+                }
             }
 
             _ = ImageLeftContainer.TranslateTo(-44, 0, 250, Easing.CubicOut);
