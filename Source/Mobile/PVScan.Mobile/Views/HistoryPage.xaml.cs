@@ -78,7 +78,7 @@ namespace PVScan.Mobile.Views
             VM.PropertyChanged += VM_PropertyChanged;
             VM.SelectedBarcodes.CollectionChanged += SelectedBarcodes_CollectionChanged;
 
-            InitializeNormalBarcodeItemTemplate();
+            //InitializeNormalBarcodeItemTemplate();
 
             MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
                 async (FilterPageViewModel vm, FilterAppliedMessage args) =>
@@ -166,7 +166,7 @@ namespace PVScan.Mobile.Views
 
                     DoneButton.InputTransparent = false;
 
-                    InitializeSelectableBarcodeItemTemplate();
+                    //InitializeSelectableBarcodeItemTemplate();
                     BarcodesCollectionView.SelectionMode = SelectionMode.Multiple;
                 }
                 else
@@ -180,7 +180,7 @@ namespace PVScan.Mobile.Views
 
                     EditButton.InputTransparent = false;
 
-                    InitializeNormalBarcodeItemTemplate();
+                    //InitializeNormalBarcodeItemTemplate();
                     BarcodesCollectionView.SelectionMode = SelectionMode.None;
                 }
             }

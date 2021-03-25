@@ -10,6 +10,7 @@
       xmlns:models="clr-namespace:PVScan.Mobile.Models"
       HeightRequest="65"
       x:DataType="models:Barcode"
+      x:Name="MainContainer"
       BackgroundColor="{AppThemeBinding
         Dark={StaticResource BackgroundColorDarker},
         Light={StaticResource BackgroundColorLighter}}">
@@ -24,7 +25,9 @@
             <converters:NullBoolConverter x:Key="NullBool"/>
         </ResourceDictionary>
     </Grid.Resources>
-    <Grid xtc:TouchEffect.PressedScale="0.95"
+
+    <Grid x:Name="InnerContainer"
+          xtc:TouchEffect.PressedScale="0.95"
           xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
           xtc:TouchEffect.AnimationDuration="650"
           xtc:TouchEffect.LongPressCommand="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
@@ -36,8 +39,21 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-
-        <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
+        
+        <Grid WidthRequest="36" Margin="8,0,0,0" HorizontalOptions="Start" 
+              TranslationX="-44" Opacity="0"
+              x:Name="ImageLeftContainer">
+            <Image x:Name="ImageLeft">
+                <Image.Source>
+                    <FontImageSource FontFamily="FontAwesome"
+                                     Glyph="{x:Static theme:IconFont.Circle}"/>
+                </Image.Source>
+            </Image>
+        </Grid>
+        
+        <!-- TEXT AND TIME OF SCAN -->
+        <Grid VerticalOptions="Center" Padding="10, 0, 0, 0"
+              x:Name="InfoContainer">
             <StackLayout Orientation="Vertical">
                 <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
 
@@ -85,9 +101,61 @@
     </Grid>
 
     <!-- SERPARATOR -->
-    <BoxView BackgroundColor="{AppThemeBinding 
-                                                    Dark={StaticResource BackgroundColorDark},
-                                                    Light={StaticResource BackgroundColorLighterAlt}}" 
-                                                     VerticalOptions="End"
-                                                     HeightRequest="2"/>
+    <BoxView BackgroundColor="{AppThemeBinding
+        Dark={StaticResource BackgroundColorDark},
+        Light={StaticResource BackgroundColorLighterAlt}}"
+             VerticalOptions="End"
+             HeightRequest="2"
+             x:Name="Separator"/>
+
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="CommonStates">
+            <VisualState x:Name="Normal">
+                <VisualState.Setters>
+                    <Setter TargetName="MainContainer"
+                            Property="Grid.BackgroundColor"
+                            Value="{AppThemeBinding
+                                    Dark={StaticResource BackgroundColorDarker},
+                                    Light={StaticResource BackgroundColorLighter}}"/>
+                    <Setter TargetName="InnerContainer"
+                            Property="Grid.BackgroundColor"
+                            Value="{AppThemeBinding
+                                    Dark={StaticResource BackgroundColorDarker},
+                                    Light={StaticResource BackgroundColorLighter}}"/>
+                    <Setter TargetName="Separator"
+                            Property="BoxView.BackgroundColor"
+                            Value="{AppThemeBinding
+                                    Dark={StaticResource BackgroundColorDark},
+                                    Light={StaticResource BackgroundColorLighterAlt}}"/>
+                </VisualState.Setters>
+            </VisualState>
+
+            <VisualState x:Name="Selected">
+                <VisualState.Setters>
+                    <Setter TargetName="MainContainer"
+                            Property="Grid.BackgroundColor"
+                            Value="{AppThemeBinding
+                                    Dark={StaticResource BackgroundColorDark},
+                                    Light={StaticResource BackgroundColorLighterAlt}}"/>
+                    <Setter TargetName="InnerContainer"
+                            Property="Grid.BackgroundColor"
+                            Value="{AppThemeBinding
+                                    Dark={StaticResource BackgroundColorDark},
+                                    Light={StaticResource BackgroundColorLighterAlt}}"/>
+                    <Setter TargetName="Separator"
+                            Property="BoxView.BackgroundColor"
+                            Value="{AppThemeBinding
+                                    Dark={StaticResource BackgroundColorDark},
+                                    Light={StaticResource BackgroundColorLighterAlt}}"/>
+                    <Setter TargetName="ImageLeft"
+                            Property="Image.Source">
+                        <Setter.Value>
+                            <FontImageSource FontFamily="FontAwesome"
+                                             Glyph="{x:Static theme:IconFont.CheckCircle}"/>
+                        </Setter.Value>
+                    </Setter>
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
 </Grid>

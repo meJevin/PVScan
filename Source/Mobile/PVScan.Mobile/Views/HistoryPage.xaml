@@ -13,7 +13,7 @@
     xmlns:di="clr-namespace:PVScan.Mobile.DI" 
     xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
     xmlns:controls="clr-namespace:PVScan.Mobile.Controls"
-    xmlns:xtc="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:xtc="http://xamarin.com/schemas/2020/toolkit" xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
     di:ViewModelLocator.AutoWireViewModel="True"
     
     PropertyChanged="ContentView_PropertyChanged"
@@ -50,6 +50,14 @@
                     <CollectionView.Header>
                         <Grid HeightRequest="36"/>
                     </CollectionView.Header>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <datatemplates:NormalBarcodeItem
+                                IsEditable="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                                     Path=BindingContext.IsEditing}" Tapped="Barcode_Tapped"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
 
                     <CollectionView.EmptyView>
                         <Grid BackgroundColor="{AppThemeBinding 
