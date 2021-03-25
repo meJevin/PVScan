@@ -26,13 +26,7 @@
         </ResourceDictionary>
     </Grid.Resources>
 
-    <Grid x:Name="InnerContainer"
-          xtc:TouchEffect.PressedScale="0.95"
-          xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
-          xtc:TouchEffect.AnimationDuration="650"
-          xtc:TouchEffect.LongPressCommand="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
-                                            Path=BindingContext.CopyBarcodeToClipboardCommand}"
-          xtc:TouchEffect.LongPressCommandParameter="{Binding .}">
+    <Grid x:Name="InnerContainer">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -70,7 +64,7 @@
                                                        VerticalOptions="Center"/>
 
                     <Image Grid.Column="1" WidthRequest="20"
-                                                       IsVisible="{Binding ScanLocation, Converter={StaticResource NullBool}}"
+                                                       IsVisible="{Binding ScanLocation, Converter={StaticResource NullBool}, TargetNullValue=false, FallbackValue=false}"
                                                        Opacity="0.5">
                         <Image.Source>
                             <FontImageSource FontFamily="FontAwesome"

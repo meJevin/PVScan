@@ -72,9 +72,9 @@ namespace PVScan.Mobile.Views.DataTemplates
                 InnerContainer.Effects.Clear();
             }
 
-            await InfoContainer.PaddingLeftTo(54, 250, Easing.CubicInOut);
             _ = ImageLeftContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(1, 250, Easing.CubicOut);
+            await InfoContainer.PaddingLeftTo(54, 250, Easing.CubicOut);
         }
 
         public async Task MakeNotEditable()
@@ -91,7 +91,7 @@ namespace PVScan.Mobile.Views.DataTemplates
 
             _ = ImageLeftContainer.TranslateTo(-44, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(0, 250, Easing.CubicOut);
-            await InfoContainer.PaddingLeftTo(10, 250, Easing.CubicInOut);
+            await InfoContainer.PaddingLeftTo(10, 250, Easing.CubicOut);
         }
     }
 }
