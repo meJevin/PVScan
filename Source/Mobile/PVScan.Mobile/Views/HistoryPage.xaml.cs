@@ -372,6 +372,7 @@ namespace PVScan.Mobile.Views
             BarcodeListViewOverlay.InputTransparent = false;
 
             _ = BarcodeListViewOverlay.FadeTo(OverlayMaxOpacity, duration, Easing.CubicOut);
+            _ = HideBarcodeMapsInfo(duration);
             await BarcodeInfo.TranslateTo(0, 1, duration, Easing.CubicOut);
         }
 
@@ -382,6 +383,7 @@ namespace PVScan.Mobile.Views
 
         private async Task ShowBarcodeMapsInfo(uint duration = 250)
         {
+            _ = HideBarcodeInfo(duration);
             await BarcodeMapsInfo.TranslateTo(0, 1, duration, Easing.CubicOut);
         }
 
