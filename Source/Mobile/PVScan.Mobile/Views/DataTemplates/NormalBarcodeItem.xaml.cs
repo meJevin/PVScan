@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -39,23 +38,27 @@ namespace PVScan.Mobile.Views.DataTemplates
             }
         }
 
+        IList<IGestureRecognizer> InnerContainerGestureRecognizers = new List<IGestureRecognizer>();
+
         public NormalBarcodeItem()
         {
             InitializeComponent();
+
+            foreach (var e in InnerContainer.GestureRecognizers)
+            {
+                InnerContainerGestureRecognizers.Add(e);
+            }
         }
 
         private void Barcode_Tapped(object sender, EventArgs e)
         {
-            if (IsEditable)
-            {
-                return;
-            }
-
             Tapped?.Invoke(sender, e);
         }
 
         public async Task MakeEditable()
         {
+            InnerContainer.GestureRecognizers.Clear();
+
             await InfoContainer.PaddingLeftTo(54, 250, Easing.CubicInOut);
             _ = ImageLeftContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(1, 250, Easing.CubicOut);
@@ -63,6 +66,11 @@ namespace PVScan.Mobile.Views.DataTemplates
 
         public async Task MakeNotEditable()
         {
+            foreach (var e in InnerContainerGestureRecognizers)
+            {
+                InnerContainer.GestureRecognizers.Add(e);
+            }
+
             _ = ImageLeftContainer.TranslateTo(-44, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(0, 250, Easing.CubicOut);
             await InfoContainer.PaddingLeftTo(10, 250, Easing.CubicInOut);
