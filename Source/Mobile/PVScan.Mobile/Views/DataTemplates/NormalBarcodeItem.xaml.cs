@@ -1,9 +1,11 @@
-﻿using PVScan.Mobile.Views.Extensions;
+﻿using PVScan.Mobile.ViewModels;
+using PVScan.Mobile.Views.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.Effects;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -44,18 +46,53 @@ namespace PVScan.Mobile.Views.DataTemplates
         }
 
         IGestureRecognizer InnerContainerTapGestureRecognizer;
-        IList<Effect> InnerContainerEffects = new List<Effect>();
 
         public NormalBarcodeItem()
         {
             InitializeComponent();
 
             InnerContainerTapGestureRecognizer = InnerContainer.GestureRecognizers[0];
+        }
 
-            foreach (var e in InnerContainer.Effects)
+        protected override void OnBindingContextChanged()
+        {
+            base.OnBindingContextChanged();
+
+            if (this.BindingContext == null)
             {
-                InnerContainerEffects.Add(e);
+                return;
             }
+
+            AddTouchEffects();
+        }
+
+        private void AddTouchEffects()
+        {
+            Binding longPressBinding = new Binding();
+            longPressBinding.Source = new RelativeBindingSource(RelativeBindingSourceMode.FindAncestorBindingContext,
+                typeof(HistoryPageViewModel), 1);
+            longPressBinding.Path = nameof(HistoryPageViewModel.CopyBarcodeToClipboardCommand);
+
+            Binding longPressCommandBinding = new Binding();
+            longPressCommandBinding.Source = this.BindingContext;
+
+            InnerContainer.SetValue(TouchEffect.PressedScaleProperty, 0.95);
+            InnerContainer.SetValue(TouchEffect.AnimationEasingProperty, Easing.CubicOut);
+            InnerContainer.SetValue(TouchEffect.AnimationDurationProperty, 650);
+            InnerContainer.SetBinding(TouchEffect.LongPressCommandProperty, longPressBinding);
+            InnerContainer.SetBinding(TouchEffect.LongPressCommandParameterProperty, longPressCommandBinding);
+        }
+
+        private void RemoveTouchEffects()
+        {
+            InnerContainer.Effects.Remove(InnerContainer.Effects[0]);
+            InnerContainer.ClearValue(TouchEffect.PressedScaleProperty);
+            InnerContainer.ClearValue(TouchEffect.AnimationEasingProperty);
+            InnerContainer.ClearValue(TouchEffect.AnimationDurationProperty);
+            InnerContainer.RemoveBinding(TouchEffect.LongPressCommandProperty);
+            InnerContainer.ClearValue(TouchEffect.LongPressCommandProperty);
+            InnerContainer.RemoveBinding(TouchEffect.LongPressCommandParameterProperty);
+            InnerContainer.ClearValue(TouchEffect.LongPressCommandParameterProperty);
         }
 
         private void Barcode_Tapped(object sender, EventArgs e)
@@ -66,11 +103,7 @@ namespace PVScan.Mobile.Views.DataTemplates
         public async Task MakeEditable()
         {
             InnerContainer.GestureRecognizers.Remove(InnerContainerTapGestureRecognizer);
-
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                InnerContainer.Effects.Clear();
-            }
+            RemoveTouchEffects();
 
             _ = ImageLeftContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(1, 250, Easing.CubicOut);
@@ -80,14 +113,7 @@ namespace PVScan.Mobile.Views.DataTemplates
         public async Task MakeNotEditable()
         {
             InnerContainer.GestureRecognizers.Add(InnerContainerTapGestureRecognizer);
-
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                foreach (var e in InnerContainerEffects)
-                {
-                    InnerContainer.Effects.Add(e);
-                }
-            }
+            AddTouchEffects();
 
             _ = ImageLeftContainer.TranslateTo(-44, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(0, 250, Easing.CubicOut);
