@@ -55,7 +55,9 @@
                         <DataTemplate>
                             <datatemplates:NormalBarcodeItem
                                 IsEditable="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
-                                                     Path=BindingContext.IsEditing}" Tapped="Barcode_Tapped"/>
+                                                     Path=BindingContext.IsEditing}" Tapped="Barcode_Tapped"
+                                HighlightedBarcode="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                                     Path=BindingContext.HighlightedBarcode}"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
 

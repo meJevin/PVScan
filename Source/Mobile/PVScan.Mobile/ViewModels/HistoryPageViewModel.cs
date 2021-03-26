@@ -186,6 +186,7 @@ namespace PVScan.Mobile.ViewModels
             Barcodes.Clear();
             BarcodesPaged.Clear();
             SelectedBarcodes.Clear();
+            SelectedBarcode = null;
 
             PageCount = 1;
 
@@ -256,5 +257,8 @@ namespace PVScan.Mobile.ViewModels
         public ICommand DeleteSelectedBarcodesCommand { get; set; }
 
         public ObservableCollection<object> SelectedBarcodes { get; set; }
+
+
+        public Barcode HighlightedBarcode { get; set; }
     }
 }

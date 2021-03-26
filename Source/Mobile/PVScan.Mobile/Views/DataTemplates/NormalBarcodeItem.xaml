@@ -33,7 +33,10 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        
+
+        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0"
+              Grid.ColumnSpan="3"/>
+
         <Grid WidthRequest="36" Margin="8,0,0,0" HorizontalOptions="Start" 
               TranslationX="-44" Opacity="0"
               x:Name="ImageLeftContainer">

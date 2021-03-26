@@ -1,4 +1,5 @@
-﻿using PVScan.Mobile.Views.Extensions;
+﻿using PVScan.Mobile.Models;
+using PVScan.Mobile.Views.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,16 @@ namespace PVScan.Mobile.Views.DataTemplates
             set { SetValue(IsEditableProperty, value); }
         }
 
+        public static readonly BindableProperty HighlightedBarcodeProperty =
+            BindableProperty.Create(nameof(HighlightedBarcode), typeof(Barcode), typeof(NormalBarcodeItem), null,
+                propertyChanged: OnHighlightedBarcodeChanged);
+
+        public Barcode HighlightedBarcode
+        {
+            get { return (Barcode)GetValue(HighlightedBarcodeProperty); }
+            set { SetValue(HighlightedBarcodeProperty, value); }
+        }
+
         static async void OnEventNameChanged(BindableObject bindable, object oldValue, object newValue)
         {
             NormalBarcodeItem i = (NormalBarcodeItem)bindable;
@@ -43,34 +54,40 @@ namespace PVScan.Mobile.Views.DataTemplates
             }
         }
 
+        static async void OnHighlightedBarcodeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (newValue == null)
+            {
+                return;
+            }
+
+            NormalBarcodeItem i = (NormalBarcodeItem)bindable;
+
+            if ((Barcode)newValue == i.BindingContext)
+            {
+                await i.Highlight();
+            }
+        }
+
         IGestureRecognizer InnerContainerTapGestureRecognizer;
-        IList<Effect> InnerContainerEffects = new List<Effect>();
 
         public NormalBarcodeItem()
         {
             InitializeComponent();
 
             InnerContainerTapGestureRecognizer = InnerContainer.GestureRecognizers[0];
-
-            foreach (var e in InnerContainer.Effects)
-            {
-                InnerContainerEffects.Add(e);
-            }
         }
 
         private void Barcode_Tapped(object sender, EventArgs e)
         {
             Tapped?.Invoke(sender, e);
+
+            _ = Tap();
         }
 
         public async Task MakeEditable()
         {
             InnerContainer.GestureRecognizers.Remove(InnerContainerTapGestureRecognizer);
-
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                InnerContainer.Effects.Clear();
-            }
 
             _ = ImageLeftContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(1, 250, Easing.CubicOut);
@@ -80,18 +97,25 @@ namespace PVScan.Mobile.Views.DataTemplates
         public async Task MakeNotEditable()
         {
             InnerContainer.GestureRecognizers.Add(InnerContainerTapGestureRecognizer);
-
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                foreach (var e in InnerContainerEffects)
-                {
-                    InnerContainer.Effects.Add(e);
-                }
-            }
-
+            
             _ = ImageLeftContainer.TranslateTo(-44, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(0, 250, Easing.CubicOut);
             await InfoContainer.PaddingLeftTo(10, 250, Easing.CubicOut);
+        }
+
+        public async Task Tap()
+        {
+            await HighlightContainer.FadeTo(0.35, 75, Easing.CubicOut);
+            await HighlightContainer.FadeTo(0, 100, Easing.CubicIn);
+        }
+
+        public async Task Highlight()
+        {
+            await HighlightContainer.FadeTo(0.35, 250, Easing.CubicOut);
+
+            await Task.Delay(4000);
+
+            await HighlightContainer.FadeTo(0, 1000, Easing.Linear);
         }
     }
 }

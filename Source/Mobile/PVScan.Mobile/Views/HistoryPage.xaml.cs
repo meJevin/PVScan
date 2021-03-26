@@ -549,6 +549,9 @@ namespace PVScan.Mobile.Views
             BarcodesCollectionView.ScrollTo(selectedBarcodeIndex, -1, ScrollToPosition.Center);
 
             await Task.Delay(250);
+
+            VM.HighlightedBarcode = VM.SelectedBarcode;
+            VM.HighlightedBarcode = null;
         }
 
         private async void PinMarkerInfoWindow_Clicked(object sender, PinClickedEventArgs e)
