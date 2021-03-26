@@ -86,8 +86,6 @@ namespace PVScan.Mobile.Views.DataTemplates
         private void Barcode_Tapped(object sender, EventArgs e)
         {
             Tapped?.Invoke(sender, e);
-
-            _ = Tap();
         }
 
         public async Task MakeEditable()
@@ -108,17 +106,11 @@ namespace PVScan.Mobile.Views.DataTemplates
             await InfoContainer.PaddingLeftTo(10, 250, Easing.CubicOut);
         }
 
-        public async Task Tap()
-        {
-            await HighlightContainer.FadeTo(0.15, 75, Easing.CubicOut);
-            await HighlightContainer.FadeTo(0, 45, Easing.CubicIn);
-        }
-
         public async Task Highlight()
         {
             await HighlightContainer.FadeTo(0.25, 250, Easing.CubicOut);
 
-            await Task.Delay(750);
+            await Task.Delay(1350);
 
             await HighlightContainer.FadeTo(0, 500, Easing.Linear);
         }
