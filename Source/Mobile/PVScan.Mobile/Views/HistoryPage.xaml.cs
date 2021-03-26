@@ -477,6 +477,8 @@ namespace PVScan.Mobile.Views
 
         private async void BarcodeInfoMapsShowOnList_Clicked(object sender, EventArgs e)
         {
+            VM.HighlightedBarcode = null;
+
             var selectedBarcodeIndex = VM.Barcodes.IndexOf(VM.SelectedBarcode);
 
             while (VM.BarcodesPaged.Count - 1 < selectedBarcodeIndex)
@@ -490,11 +492,12 @@ namespace PVScan.Mobile.Views
 
             await Task.Delay(100);
 
-            BarcodesCollectionView.ScrollTo(selectedBarcodeIndex, -1, ScrollToPosition.Center);
+            BarcodesCollectionView.ScrollTo(selectedBarcodeIndex, -1, ScrollToPosition.Start, false);
 
             await Task.Delay(250);
 
             VM.HighlightedBarcode = VM.SelectedBarcode;
+
             VM.HighlightedBarcode = null;
         }
 

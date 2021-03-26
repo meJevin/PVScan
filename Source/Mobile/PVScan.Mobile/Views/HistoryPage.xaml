@@ -161,6 +161,7 @@
                                 RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
                                 RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}"
                                 SelectedItems="{Binding SelectedBarcodes}"
+                                ItemSizingStrategy="MeasureFirstItem"
                                 x:Name="BarcodesCollectionView">
                     <CollectionView.Header>
                         <Grid HeightRequest="36"/>

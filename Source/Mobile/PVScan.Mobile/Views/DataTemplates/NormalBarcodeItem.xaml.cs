@@ -56,16 +56,21 @@ namespace PVScan.Mobile.Views.DataTemplates
 
         static async void OnHighlightedBarcodeChanged(BindableObject bindable, object oldValue, object newValue)
         {
+            NormalBarcodeItem i = (NormalBarcodeItem)bindable;
+
             if (newValue == null)
             {
+                i.HighlightContainer.Opacity = 0;
                 return;
             }
 
-            NormalBarcodeItem i = (NormalBarcodeItem)bindable;
-
             if ((Barcode)newValue == i.BindingContext)
             {
-                await i.Highlight();
+                _ = i.Highlight();
+            }
+            else
+            {
+                i.HighlightContainer.Opacity = 0;
             }
         }
 
@@ -105,17 +110,17 @@ namespace PVScan.Mobile.Views.DataTemplates
 
         public async Task Tap()
         {
-            await HighlightContainer.FadeTo(0.35, 75, Easing.CubicOut);
-            await HighlightContainer.FadeTo(0, 100, Easing.CubicIn);
+            await HighlightContainer.FadeTo(0.15, 75, Easing.CubicOut);
+            await HighlightContainer.FadeTo(0, 45, Easing.CubicIn);
         }
 
         public async Task Highlight()
         {
-            await HighlightContainer.FadeTo(0.35, 250, Easing.CubicOut);
+            await HighlightContainer.FadeTo(0.25, 250, Easing.CubicOut);
 
-            await Task.Delay(4000);
+            await Task.Delay(750);
 
-            await HighlightContainer.FadeTo(0, 1000, Easing.Linear);
+            await HighlightContainer.FadeTo(0, 500, Easing.Linear);
         }
     }
 }
