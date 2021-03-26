@@ -22,7 +22,7 @@ namespace PVScan.Mobile.Views.DataTemplates
 
         public static readonly BindableProperty IsEditableProperty =
             BindableProperty.Create(nameof(IsEditable), typeof(bool), typeof(NormalBarcodeItem), false,
-                propertyChanged: OnEventNameChanged);
+                propertyChanged: OnIsEditableChanged);
 
         public bool IsEditable
         {
@@ -40,7 +40,7 @@ namespace PVScan.Mobile.Views.DataTemplates
             set { SetValue(HighlightedBarcodeProperty, value); }
         }
 
-        static async void OnEventNameChanged(BindableObject bindable, object oldValue, object newValue)
+        static async void OnIsEditableChanged(BindableObject bindable, object oldValue, object newValue)
         {
             NormalBarcodeItem i = (NormalBarcodeItem)bindable;
 

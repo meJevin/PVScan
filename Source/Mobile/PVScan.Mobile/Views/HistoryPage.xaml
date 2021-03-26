@@ -38,9 +38,124 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <Grid>
+    <Grid RowDefinitions="Auto,*" RowSpacing="0">
+        <!-- UPPER SEARCH/FILTER/VIEW BAR -->
+        <Grid InputTransparent="True" CascadeInputTransparent="False" RowSpacing="0"
+                      x:Name="FilterBarContainer">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout x:Name="FilterBar"
+                    Spacing="0" BackgroundColor="{AppThemeBinding 
+                        Dark={StaticResource BackgroundColorDarker},
+                        Light={StaticResource BackgroundColorLighter}}"
+                             VerticalOptions="Start">
+                <Grid ColumnDefinitions="*, 24" Margin="10">
+                    <Grid>
+                        <Entry Placeholder="Search..." Margin="0,0,5,0"
+                               Text="{Binding Search}"
+                               TextChanged="SearchEntry_TextChanged"
+                               x:Name="SearchEntry"
+                               HeightRequest="35"
+                               Keyboard="Text"
+                               IsTextPredictionEnabled="False"
+                               Focused="SearchEntry_Focused"
+                               Unfocused="SearchEntry_Unfocused">
+                            <Entry.Effects>
+                                <effects:NoEntryVerticalPaddingEffect/>
+                            </Entry.Effects>
+                        </Entry>
+
+                        <Grid HorizontalOptions="End" BackgroundColor="Transparent"
+                              Padding="14,0"
+                              IsVisible="{Binding Search, Converter={StaticResource StringNotEmpty}}">
+                            <Image>
+                                <Image.Source>
+                                    <FontImageSource
+                                                FontFamily="FontAwesome"
+                                                Glyph="{x:Static theme:IconFont.Times}"
+                                                Color="{AppThemeBinding
+                                                Dark={StaticResource TextPrimaryColor_Dark},
+                                                Light={StaticResource TextPrimaryColor_Light}}"
+                                                Size="22"/>
+                                </Image.Source>
+                            </Image>
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ClearSearchCommand}"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </Grid>
+
+                    <ImageButton Grid.Column="1" BackgroundColor="Transparent" Clicked="FilterButton_Clicked">
+                        <ImageButton.Source>
+                            <FontImageSource
+                                        FontFamily="FontAwesome"
+                                        Glyph="{x:Static theme:IconFont.SlidersH}"
+                                        Color="{AppThemeBinding 
+                                        Dark={StaticResource TextPrimaryColor_Dark},
+                                        Light={StaticResource TextPrimaryColor_Light}}" />
+                        </ImageButton.Source>
+                    </ImageButton>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" HeightRequest="40" ColumnSpacing="0">
+                    <Grid Margin="0,0,0,5" Grid.ColumnSpan="2" ColumnSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Text="List" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
+                                Dark={StaticResource TextPrimaryColor_Dark},
+                                Light={StaticResource TextPrimaryColor_Light}}"
+                                x:Name="ListViewButton" Clicked="ListViewButton_Clicked"/>
+                        <Button Text="Map" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
+                                Dark={StaticResource TextPrimaryColor_Dark},
+                                Light={StaticResource TextPrimaryColor_Light}}"
+                                x:Name="MapViewButton" Clicked="MapViewButton_Clicked"/>
+                    </Grid>
+                        
+
+                    <Grid VerticalOptions="End" HeightRequest="2" 
+                              BackgroundColor="{StaticResource ThemePrimary}" 
+                              Opacity="0.75"
+                          x:Name="UpperFilterBarPageIndicator"/>
+                </Grid>
+                <!--<BoxView BackgroundColor="{AppThemeBinding 
+                            Dark={StaticResource TextPrimaryColor_Dark},
+                            Light={StaticResource TextPrimaryColor_Light}}"
+                            VerticalOptions="Center"
+                            HeightRequest="1"/>-->
+            </StackLayout>
+
+            <!--<Grid HeightRequest="30" WidthRequest="60"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Start"
+                                 Grid.Row="1"
+                                 Margin="0" 
+                                 BackgroundColor="{StaticResource BackgroundColorDark}"
+                                 TranslationY="0"
+                                 x:Name="ShowHideFilterBarButton"
+                                 InputTransparent="False">
+                <Image x:Name="ShowHideFilterButtonImage">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontAwesome"
+                                             Glyph="{x:Static theme:IconFont.AngleDown}"
+                                         Color="White">
+                        </FontImageSource>
+                    </Image.Source>
+                </Image>
+
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ShowHideFilterBarButton_Clicked"/>
+                </Grid.GestureRecognizers>
+            </Grid>-->
+        </Grid>
+
         <!-- COLLECTION VIEW OF BARCODES -->
-        <Grid x:Name="BarcodesListContainer">
+        <Grid x:Name="BarcodesListContainer" Grid.Row="1">
             <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding BarcodesPaged}"
                                 RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
@@ -190,7 +305,7 @@
         </Grid>
 
         <!-- MAP VIEW -->
-        <Grid x:Name="MapViewContainer">
+        <Grid x:Name="MapViewContainer" Grid.Row="1">
             <maps:Map x:Name="Map" IsShowingUser="True"
                       ItemsSource="{Binding Barcodes}"
                       MapClicked="Map_MapClicked">
@@ -294,127 +409,15 @@
             </BoxView>
         </Grid>
 
-        <!-- UPPER SEARCH/FILTER/VIEW BAR -->
-        <Grid InputTransparent="True" CascadeInputTransparent="False" RowSpacing="0"
-                      x:Name="FilterBarContainer">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <StackLayout x:Name="FilterBar"
-                    Spacing="0" BackgroundColor="{AppThemeBinding 
-                        Dark={StaticResource BackgroundColorDarker},
-                        Light={StaticResource BackgroundColorLighter}}"
-                             VerticalOptions="Start">
-                <Grid ColumnDefinitions="*, 24" Margin="10">
-                    <Grid>
-                        <Entry Placeholder="Search..." Margin="0,0,5,0"
-                               Text="{Binding Search}"
-                               TextChanged="SearchEntry_TextChanged"
-                               x:Name="SearchEntry"
-                               HeightRequest="35"
-                               Keyboard="Text"
-                               IsTextPredictionEnabled="False"
-                               Focused="SearchEntry_Focused"
-                               Unfocused="SearchEntry_Unfocused">
-                            <Entry.Effects>
-                                <effects:NoEntryVerticalPaddingEffect/>
-                            </Entry.Effects>
-                        </Entry>
-
-                        <Grid HorizontalOptions="End" BackgroundColor="Transparent"
-                              Padding="14,0"
-                              IsVisible="{Binding Search, Converter={StaticResource StringNotEmpty}}">
-                            <Image>
-                                <Image.Source>
-                                    <FontImageSource
-                                                FontFamily="FontAwesome"
-                                                Glyph="{x:Static theme:IconFont.Times}"
-                                                Color="{AppThemeBinding
-                                                Dark={StaticResource TextPrimaryColor_Dark},
-                                                Light={StaticResource TextPrimaryColor_Light}}"
-                                                Size="22"/>
-                                </Image.Source>
-                            </Image>
-
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding ClearSearchCommand}"/>
-                            </Grid.GestureRecognizers>
-                        </Grid>
-                    </Grid>
-
-                    <ImageButton Grid.Column="1" BackgroundColor="Transparent" Clicked="FilterButton_Clicked">
-                        <ImageButton.Source>
-                            <FontImageSource
-                                        FontFamily="FontAwesome"
-                                        Glyph="{x:Static theme:IconFont.SlidersH}"
-                                        Color="{AppThemeBinding 
-                                        Dark={StaticResource TextPrimaryColor_Dark},
-                                        Light={StaticResource TextPrimaryColor_Light}}" />
-                        </ImageButton.Source>
-                    </ImageButton>
-                </Grid>
-
-                <Grid Margin="0,0,0,5" HeightRequest="40">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <Button Text="List" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
-                            Dark={StaticResource TextPrimaryColor_Dark},
-                            Light={StaticResource TextPrimaryColor_Light}}"
-                            x:Name="ListViewButton" Clicked="ListViewButton_Clicked"/>
-                    <Button Text="Map" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
-                            Dark={StaticResource TextPrimaryColor_Dark},
-                            Light={StaticResource TextPrimaryColor_Light}}"
-                            x:Name="MapViewButton" Clicked="MapViewButton_Clicked"/>
-                </Grid>
-
-                <Grid VerticalOptions="Center" HeightRequest="1" 
-                          BackgroundColor="{StaticResource ThemePrimary}" 
-                          Opacity="0.75"/>
-                <!--<BoxView BackgroundColor="{AppThemeBinding 
-                            Dark={StaticResource TextPrimaryColor_Dark},
-                            Light={StaticResource TextPrimaryColor_Light}}"
-                            VerticalOptions="Center"
-                            HeightRequest="1"/>-->
-            </StackLayout>
-
-            <Grid HeightRequest="30" WidthRequest="60"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Start"
-                                 Grid.Row="1"
-                                 Margin="0" 
-                                 BackgroundColor="{StaticResource BackgroundColorDark}"
-                                 TranslationY="0"
-                                 x:Name="ShowHideFilterBarButton"
-                                 InputTransparent="False">
-                <Image x:Name="ShowHideFilterButtonImage">
-                    <Image.Source>
-                        <FontImageSource FontFamily="FontAwesome"
-                                             Glyph="{x:Static theme:IconFont.AngleDown}"
-                                         Color="White">
-                        </FontImageSource>
-                    </Image.Source>
-                </Image>
-
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="ShowHideFilterBarButton_Clicked"/>
-                </Grid.GestureRecognizers>
-            </Grid>
-        </Grid>
-
         <!-- OVERLAY (FILTER PAGE) -->
-        <BoxView x:Name="FilterPageOverlay" BackgroundColor="Black">
+        <BoxView x:Name="FilterPageOverlay" BackgroundColor="Black" Grid.RowSpan="2">
             <BoxView.GestureRecognizers>
                 <TapGestureRecognizer Tapped="FilterPageOverlay_Tapped"/>
             </BoxView.GestureRecognizers>
         </BoxView>
 
         <!-- FILTER PAGE -->
-        <views:FilterPage x:Name="FilterPage" VerticalOptions="End">
+        <views:FilterPage x:Name="FilterPage" VerticalOptions="End" Grid.RowSpan="2">
             <views:FilterPage.GestureRecognizers>
                 <PanGestureRecognizer PanUpdated="FilterViewPanGesture_PanUpdated"/>
             </views:FilterPage.GestureRecognizers>

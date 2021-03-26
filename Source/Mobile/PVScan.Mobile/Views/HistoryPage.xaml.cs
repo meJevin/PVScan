@@ -32,11 +32,6 @@ namespace PVScan.Mobile.Views
         double SearchDelay = 500;
         Timer SearchDelayTimer;
 
-        bool FilterBarHidden;
-
-        // Cancel event flag for when we long press a barcode
-        bool CancelBarcodeTapped = false;
-
         // Map or List view right now?
         bool ShowingListView = false;
 
@@ -49,7 +44,6 @@ namespace PVScan.Mobile.Views
             LayoutChanged += async (s, e) =>
             {
                 _ = ShowListView(0);
-                _ = HideFilterBar(0);
                 _ = HideFilterView(0);
                 _ = HideBarcodeInfo(0);
                 _ = HideBarcodeMapsInfo(0);
@@ -74,7 +68,6 @@ namespace PVScan.Mobile.Views
 
             VM = (BindingContext as HistoryPageViewModel);
 
-            VM.BarcodeCopiedToClipboard += HistoryPage_BarcodeCopiedToClipboard;
             VM.PropertyChanged += VM_PropertyChanged;
             VM.SelectedBarcodes.CollectionChanged += SelectedBarcodes_CollectionChanged;
 
@@ -186,11 +179,6 @@ namespace PVScan.Mobile.Views
             }
         }
 
-        private async void HistoryPage_BarcodeCopiedToClipboard(object sender, Barcode e)
-        {
-            CancelBarcodeTapped = true;
-        }
-
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
         {
             if (e.StatusType == GestureStatus.Running)
@@ -273,49 +261,12 @@ namespace PVScan.Mobile.Views
             SearchDelayTimer.Enabled = true;
         }
 
-        private async Task ShowFilterBar(uint duration = 250)
-        {
-            _ = FilterBarContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
-            _ = ShowHideFilterBarButton.FadeTo(1, duration, Easing.CubicOut);
-            _ = ShowHideFilterBarButton.TranslateTo(0, ShowHideFilterBarButton.Height / -2, duration, Easing.CubicOut);
-
-            _ = BarcodesListContainer.PaddingTopTo(FilterBar.Height, duration, Easing.CubicOut);
-
-            await ShowHideFilterButtonImage.RotateTo(180, duration, Easing.CubicOut);
-
-            FilterBarHidden = false;
-        }
-
-        private async Task HideFilterBar(uint duration = 250)
-        {
-            _ = FilterBarContainer.TranslateTo(0, -FilterBar.Height, duration, Easing.CubicOut);
-            _ = ShowHideFilterBarButton.FadeTo(0.5, duration, Easing.CubicOut);
-            _ = ShowHideFilterBarButton.TranslateTo(0, 0, duration, Easing.CubicOut);
-
-            _ = BarcodesListContainer.PaddingTopTo(0, duration, Easing.CubicOut);
-
-            await ShowHideFilterButtonImage.RotateTo(0, duration, Easing.CubicOut);
-
-            FilterBarHidden = true;
-        }
-
-        private async void ShowHideFilterBarButton_Clicked(object sender, EventArgs e)
-        {
-            if (FilterBarHidden)
-            {
-                await ShowFilterBar();
-            }
-            else
-            {
-                await HideFilterBar();
-            }
-        }
-
         private async Task ShowListView(uint duration = 250)
         {
             ShowingListView = true;
 
             _ = BarcodesListContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
+            _ = UpperFilterBarPageIndicator.TranslateTo(0, 0, duration, Easing.CubicOut);
             await MapViewContainer.TranslateTo(MapViewContainer.Width, 0, duration, Easing.CubicOut);
 
             ListViewButton.Opacity = 1;
@@ -327,6 +278,7 @@ namespace PVScan.Mobile.Views
             ShowingListView = false;
 
             _ = MapViewContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
+            _ = UpperFilterBarPageIndicator.TranslateTo(UpperFilterBarPageIndicator.Width, 0, duration, Easing.CubicOut);
             await BarcodesListContainer.TranslateTo(-BarcodesListContainer.Width, 0, duration, Easing.CubicOut);
 
             MapViewButton.Opacity = 1;
@@ -468,14 +420,6 @@ namespace PVScan.Mobile.Views
 
         private async void Barcode_Tapped(object sender, EventArgs e)
         {
-            var barcodeGrid = sender as Grid;
-
-            if (barcodeGrid == null || CancelBarcodeTapped)
-            {
-                CancelBarcodeTapped = false;
-                return;
-            }
-
             await ShowBarcodeInfo();
         }
 
