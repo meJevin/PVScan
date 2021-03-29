@@ -29,6 +29,7 @@
     <MtouchDebug>true</MtouchDebug>
     <CodesignKey>Apple Development: MIKHAIL SARANDUK (ANL7AR22ZM)</CodesignKey>
     <CodesignProvision>PVScan Development</CodesignProvision>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -38,6 +39,7 @@
     <WarningLevel>4</WarningLevel>
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,6 +58,7 @@
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchFastDev>true</MtouchFastDev>
     <CodesignProvision>PVScan Development</CodesignProvision>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -70,6 +73,7 @@
     <CodesignProvision>PVScan Development</CodesignProvision>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Effects\TooltipEffectiOS.cs" />
@@ -80,6 +84,9 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DI\Bootstrapper.cs" />
+    <Compile Include="Services\FileBarcodeReader.cs" />
+    <Compile Include="Resources\HistoryPageViewModel.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' " />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\1024-1.png">
@@ -112,6 +119,9 @@
     <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy.pdf" />
+    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy-1.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -145,6 +155,9 @@
     <PackageReference Include="ZXing.Net.Mobile.Forms">
       <Version>2.4.1</Version>
     </PackageReference>
+    <PackageReference Include="Autofac">
+      <Version>6.1.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -156,6 +169,14 @@
   <ItemGroup />
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DI\" />
+    <Folder Include="Services\" />
+    <Folder Include="Assets.xcassets\PVScan-Logo-Letters.imageset\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\.DS_Store" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
