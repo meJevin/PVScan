@@ -15,7 +15,7 @@ namespace PVScan.Mobile.Droid.Services
             barcodeReader = new BarcodeReaderGeneric();
         }
 
-        public Task<Result> DecodeAsync(string filePath, Stream stream)
+        public Task<Result> DecodeAsync(string filePath)
         {
             throw new NotImplementedException();
         }

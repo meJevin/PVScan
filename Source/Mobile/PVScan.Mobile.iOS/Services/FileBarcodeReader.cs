@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CoreGraphics;
 using PVScan.Mobile.Services.Interfaces;
 using UIKit;
 using ZXing;
+using ZXing.Mobile;
 
 namespace PVScan.Mobile.iOS.Services
 {
@@ -15,60 +17,69 @@ namespace PVScan.Mobile.iOS.Services
 
         public FileBarcodeReader()
         {
-            barcodeReader = new BarcodeReader();
+            barcodeReader = new BarcodeReaderGeneric();
         }
 
-        public async Task<Result> DecodeAsync(string filePath, Stream stream)
+        public async Task<Result> DecodeAsync(string filePath)
         {
+            // Notice, that this image is rotated 90 degrees! But that's ok
             UIImage image = UIImage.FromFile(filePath);
 
-            var width = (int)image.CGImage.Width;
-            var height = (int)image.CGImage.Height;
+            var lSrc = new RGBLuminanceSourceiOS(image);
 
-            CGImage imageRef = image.CGImage;
-            CGColorSpace colorSpace = CGColorSpace.CreateDeviceRGB();
-            byte[] rawData = new byte[height * width * 4];
-            int bytesPerPixel = 4;
-            int bytesPerRow = bytesPerPixel * width;
-            int bitsPerComponent = 8;
-            CGContext context = new CGBitmapContext(rawData, width, height,
-                            bitsPerComponent, bytesPerRow, colorSpace,
-                            CGBitmapFlags.PremultipliedLast | CGBitmapFlags.ByteOrder32Big);
-            context.DrawImage(new CGRect(0, 0, width, height), imageRef);
+            //CGImage i = LSrcToCGImage((int)image.CGImage.Width, (int)image.CGImage.Height, lSrc.Matrix);
 
-            LuminanceSource lSrc = new RGBALuminanceSource(
-                rawData, rawData.Length, width, height);
-
+            // Decode?
             var result = barcodeReader.Decode(lSrc);
 
             return result;
         }
-    }
 
-    public class RGBALuminanceSource : BaseLuminanceSource
-    {
-        public RGBALuminanceSource(byte[] cvPixelByteArray, int cvPixelByteArrayLength, int width, int height)
-            : base(width, height) => CalculateLuminance(cvPixelByteArray, cvPixelByteArrayLength);
-
-        public RGBALuminanceSource(byte[] luminances, int width, int height) : base(luminances, width, height)
+        private CGImage LSrcToCGImage(int width, int height, byte[] lSrc)
         {
-        }
+            var bytesPerPixel = 4;
+            var bitsPerComponent = 8;
+            var bytesPerUInt32 = sizeof(UInt32) / sizeof(byte);
 
-        void CalculateLuminance(byte[] rgbRawBytes, int bytesLen)
-        {
-            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < bytesLen && luminanceIndex < luminances.Length; luminanceIndex++)
+            var bytesPerRow = bytesPerPixel * width;
+            var numOfBytes = height * width * bytesPerUInt32;
+
+            IntPtr pixelPtr = IntPtr.Zero;
+            try
             {
-                // Calculate luminance cheaply, favoring green.
-                var r = rgbRawBytes[rgbIndex++];
-                var g = rgbRawBytes[rgbIndex++];
-                var b = rgbRawBytes[rgbIndex++];
-                var alpha = rgbRawBytes[rgbIndex++];
-                var luminance = (byte)((RChannelWeight * r + GChannelWeight * g + BChannelWeight * b) >> ChannelWeight);
-                luminances[luminanceIndex] = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
+                pixelPtr = Marshal.AllocHGlobal((int)numOfBytes);
+
+                using (var colorSpace = CGColorSpace.CreateDeviceRGB())
+                {
+                    CGImage newCGImage;
+                    using (var context = new CGBitmapContext(pixelPtr, width, height, bitsPerComponent, bytesPerRow, colorSpace, CGImageAlphaInfo.PremultipliedLast))
+                    {
+                        unsafe
+                        {
+                            var currentPixel = (byte*)pixelPtr.ToPointer();
+                            for (int i = 0; i < height; i++)
+                            {
+                                for (int j = 0; j < width; j++)
+                                {
+                                    // RGBA8888 pixel format
+                                    *currentPixel = lSrc[i * width + j];
+                                    *(currentPixel + 1) = lSrc[i * width + j];
+                                    *(currentPixel + 2) = lSrc[i * width + j];
+                                    *(currentPixel + 3) = 255;
+                                    currentPixel += 4;
+                                }
+                            }
+                        }
+                        newCGImage = context.ToImage();
+                    }
+                    return newCGImage;
+                }
+            }
+            finally
+            {
+                if (pixelPtr != IntPtr.Zero)
+                    Marshal.FreeHGlobal(pixelPtr);
             }
         }
-
-        protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
-            => new RGBALuminanceSource(newLuminances, width, height);
     }
 }
