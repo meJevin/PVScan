@@ -13,7 +13,8 @@ using Plugin.CurrentActivity;
 namespace PVScan.Mobile.Droid
 {
     [Activity(Label = "PVScan",
-        Icon = "@mipmap/icon",
+        Icon = "@mipmap/pv_scan_icon",
+        RoundIcon = "@mipmap/pv_scan_icon_round",
         Theme = "@style/MainTheme",
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
