@@ -8,17 +8,30 @@ using PVScan.Mobile.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 
 namespace PVScan.Mobile
 {
-    public static class Bootstrapper
+    public class Bootstrapper
     {
-        public static void Initialize()
+        protected ContainerBuilder ContainerBuilder
         {
-            var containerBuilder = new ContainerBuilder();
+            get;
+            private set;
+        }
+
+        public Bootstrapper()
+        {
+            Initialize();
+            FinishInitialization();
+        }
+
+        protected virtual void Initialize()
+        {
+            ContainerBuilder = new ContainerBuilder();
 
             // DbContext from EF Core
-            containerBuilder.Register(ctx =>
+            ContainerBuilder.Register(ctx =>
             {
                 var optionsBuilder = new DbContextOptionsBuilder<PVScanMobileDbContext>();
                 optionsBuilder.UseSqlite($"Filename={DataAccss.DatabasePath}");
@@ -29,49 +42,52 @@ namespace PVScan.Mobile
                 .InstancePerLifetimeScope();
 
             // IdentityService singleton
-            containerBuilder.RegisterType<IdentityService>()
+            ContainerBuilder.RegisterType<IdentityService>()
                 .As<IIdentityService>()
                 .SingleInstance();
 
             // Barcodes repository
-            containerBuilder.RegisterType<BarcodesRepository>()
+            ContainerBuilder.RegisterType<BarcodesRepository>()
                 .As<IBarcodesRepository>()
                 .InstancePerLifetimeScope();
 
             // Main page
-            containerBuilder.RegisterType<MainPage>();
+            ContainerBuilder.RegisterType<MainPage>();
 
             // All VMs
-            containerBuilder.RegisterAssemblyTypes(typeof(App).Assembly).
+            ContainerBuilder.RegisterAssemblyTypes(typeof(App).Assembly).
                 Where(t => t.IsSubclassOf(typeof(BaseViewModel)));
 
             // KVP
-            containerBuilder.RegisterType<PreferencesPersistentKVP>()
+            ContainerBuilder.RegisterType<PreferencesPersistentKVP>()
                 .As<IPersistentKVP>()
                 .InstancePerLifetimeScope();
 
             // Filter Service
-            containerBuilder.RegisterType<BarcodesFilter>()
+            ContainerBuilder.RegisterType<BarcodesFilter>()
                 .As<IBarcodesFilter>()
                 .InstancePerLifetimeScope();
 
             // Http factory
 #if DEBUG
-            containerBuilder.RegisterType<DebugCertHttpClientFactory>()
+            ContainerBuilder.RegisterType<DebugCertHttpClientFactory>()
                 .As<IHttpClientFactory>()
                 .InstancePerLifetimeScope();
 #else
-            containerBuilder.RegisterType<HttpClientFactory>()
+            ContainerBuilder.RegisterType<HttpClientFactory>()
                 .As<IHttpClientFactory>()
                 .InstancePerLifetimeScope();
 #endif
 
             // Popup message Service
-            containerBuilder.RegisterType<PopupMessageService>()
+            ContainerBuilder.RegisterType<PopupMessageService>()
                 .As<IPopupMessageService>()
                 .SingleInstance();
+        }
 
-            var container = containerBuilder.Build();
+        private void FinishInitialization()
+        {
+            var container = ContainerBuilder.Build();
             Resolver.Initialize(container);
         }
     }

@@ -15,9 +15,6 @@ namespace PVScan.Mobile
     {
         public App()
         {
-            // Init DI
-            Bootstrapper.Initialize();
-
             InitializeTheme();
 
             InitializeComponent();
