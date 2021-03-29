@@ -119,10 +119,14 @@ namespace PVScan.Mobile.ViewModels
                     Title = "Pick a photo which contans barcode",
                 });
 
-                var photoStream = await pickResult.OpenReadAsync();
+                if (pickResult == null)
+                {
+                    return;
+                }
+
                 var photoPath = pickResult.FullPath;
 
-                var result = await FileBarcodeReader.DecodeAsync(photoPath, photoStream);
+                var result = await FileBarcodeReader.DecodeAsync(photoPath);
             });
 
             IsCameraAllowed = Permissions.CheckStatusAsync<Permissions.Camera>()
