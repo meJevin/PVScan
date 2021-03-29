@@ -28,6 +28,7 @@ namespace PVScan.Mobile.Droid
 
             base.OnCreate(savedInstanceState);
 
+            _ = new DI.Bootstrapper();
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
