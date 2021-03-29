@@ -8,6 +8,6 @@ namespace PVScan.Mobile.Services.Interfaces
     // Takes raw bytes of a picture (hopefully) and spits out a ZXING results
     public interface IFileBarcodeReader
     {
-        Task<Result> DecodeAsync(string filePath, Stream stream);
+        Task<Result> DecodeAsync(string filePath);
     }
 }
