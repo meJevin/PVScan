@@ -492,7 +492,7 @@ namespace PVScan.Mobile.Views
 
             await Task.Delay(100);
 
-            BarcodesCollectionView.ScrollTo(selectedBarcodeIndex, -1, ScrollToPosition.Start, false);
+            BarcodesCollectionView.ScrollTo(selectedBarcodeIndex, -1, ScrollToPosition.Center, false);
 
             await Task.Delay(250);
 
