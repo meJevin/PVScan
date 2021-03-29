@@ -8,6 +8,7 @@
              BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
     xmlns:di="clr-namespace:PVScan.Mobile.DI"
     di:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="vm:ScanPageViewModel"
              >
 
     <ContentView.Resources>
@@ -74,6 +75,16 @@
                 <Label Text="{Binding LastBarcodeType, TargetNullValue=—}" Grid.Column="1"/>
             </Grid>
         </StackLayout>
+
+        <Grid VerticalOptions="End"
+              x:Name="PhotoAndTorchContainer"
+              Margin="40"
+              ColumnSpacing="0"
+              ColumnDefinitions="Auto,*,Auto">
+            <Button Text="Torch"/>
+
+            <Button Text="Local" Grid.Column="2" Command="{Binding PickPhotoToScanCommand}"/>
+        </Grid>
 
         <!-- Lower save button for last scanned barcode -->
         <Grid VerticalOptions="End"

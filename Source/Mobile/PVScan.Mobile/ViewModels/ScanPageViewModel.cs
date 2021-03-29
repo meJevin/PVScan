@@ -17,10 +17,13 @@ namespace PVScan.Mobile.ViewModels
     public class ScanPageViewModel : BaseViewModel
     {
         readonly IBarcodesRepository BarcodesRepository;
+        readonly IFileBarcodeReader FileBarcodeReader;
 
-        public ScanPageViewModel(IBarcodesRepository barcodesRepository)
+        public ScanPageViewModel(IBarcodesRepository barcodesRepository,
+            IFileBarcodeReader fileBarcodeReader)
         {
             BarcodesRepository = barcodesRepository;
+            FileBarcodeReader = fileBarcodeReader;
 
             ScanCommand = new Command(async (object scanResult) =>
             {
@@ -109,6 +112,19 @@ namespace PVScan.Mobile.ViewModels
                 }
             });
 
+            PickPhotoToScanCommand = new Command(async () =>
+            {
+                var pickResult = await MediaPicker.PickPhotoAsync(new MediaPickerOptions()
+                {
+                    Title = "Pick a photo which contans barcode",
+                });
+
+                var photoStream = await pickResult.OpenReadAsync();
+                var photoPath = pickResult.FullPath;
+
+                var result = await FileBarcodeReader.DecodeAsync(photoPath, photoStream);
+            });
+
             IsCameraAllowed = Permissions.CheckStatusAsync<Permissions.Camera>()
                 .GetAwaiter().GetResult() == PermissionStatus.Granted;
 
@@ -142,5 +158,8 @@ namespace PVScan.Mobile.ViewModels
         public event EventHandler Cleared;
         public event EventHandler Saved;
         public event EventHandler CameraAllowed;
+
+
+        public ICommand PickPhotoToScanCommand { get; }
     }
 }
