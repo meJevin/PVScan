@@ -37,9 +37,6 @@ namespace PVScan.Mobile.Views
 
         HistoryPageViewModel VM;
 
-        // Cancel event flag for when we long press a barcode
-        bool CancelBarcodeTapped = false;
-
         public HistoryPage()
         {
             InitializeComponent();
@@ -73,7 +70,6 @@ namespace PVScan.Mobile.Views
 
             VM.PropertyChanged += VM_PropertyChanged;
             VM.SelectedBarcodes.CollectionChanged += SelectedBarcodes_CollectionChanged;
-            VM.BarcodeCopiedToClipboard += HistoryPage_BarcodeCopiedToClipboard;
 
             //InitializeNormalBarcodeItemTemplate();
 
@@ -139,10 +135,6 @@ namespace PVScan.Mobile.Views
                     DeleteButton.FadeTo(1, 250, Easing.CubicOut);
                 }
             }
-        }
-        private async void HistoryPage_BarcodeCopiedToClipboard(object sender, Barcode e)
-        {
-            CancelBarcodeTapped = true;
         }
 
         private async void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -423,14 +415,6 @@ namespace PVScan.Mobile.Views
 
         private async void Barcode_Tapped(object sender, EventArgs e)
         {
-            var barcodeGrid = sender as Grid;
-
-            if (barcodeGrid == null || CancelBarcodeTapped)
-            {
-                CancelBarcodeTapped = false;
-                return;
-            }
-
             await ShowBarcodeInfo();
         }
 
