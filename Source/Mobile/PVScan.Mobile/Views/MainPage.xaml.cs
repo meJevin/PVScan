@@ -105,7 +105,7 @@ namespace PVScan.Mobile.Views
             else if (Device.RuntimePlatform == Device.Android)
             {
                 // Todo: add android specific safe area
-                iOSSafeArea();
+                iOSNoSafeArea();
             }
         }
 
@@ -117,8 +117,8 @@ namespace PVScan.Mobile.Views
 
         private void iOSNoSafeArea()
         {
-            Application.Current.Resources["TabBarCameraButtonMargin"] = new Thickness(0, 0, 0, 12);
-            Application.Current.Resources["TabBarHeight"] = 50;
+            Application.Current.Resources["TabBarCameraButtonMargin"] = new Thickness(0, 0, 0, 10);
+            Application.Current.Resources["TabBarHeight"] = 54;
         }
 
         private async void ContentPage_Appearing(object sender, EventArgs e)
