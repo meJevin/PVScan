@@ -196,7 +196,7 @@
             </RefreshView>
 
             <Grid HeightRequest="32" ColumnDefinitions="Auto,*,Auto" Padding="10, 8, 10, 4"
-                  VerticalOptions="Start">
+                  VerticalOptions="Start" InputTransparent="True" CascadeInputTransparent="False">
                 <Button Text="Delete" Padding="14, 0"
                                     Command="{Binding DeleteSelectedBarcodesCommand}"
                                     Opacity="0" InputTransparent="True"

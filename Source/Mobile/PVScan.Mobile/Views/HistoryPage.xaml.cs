@@ -128,19 +128,11 @@ namespace PVScan.Mobile.Views
             {
                 if (VM.SelectedBarcodes.Count == 0)
                 {
-                    if (!DeleteButton.InputTransparent)
-                    {
-                        DeleteButton.FadeTo(0.5, 250, Easing.CubicOut);
-                        DeleteButton.InputTransparent = true;
-                    }
+                    DeleteButton.FadeTo(0.5, 250, Easing.CubicOut);
                 }
                 else
                 {
-                    if (DeleteButton.InputTransparent)
-                    {
-                        DeleteButton.FadeTo(1, 250, Easing.CubicOut);
-                        DeleteButton.InputTransparent = false;
-                    }
+                    DeleteButton.FadeTo(1, 250, Easing.CubicOut);
                 }
             }
         }
@@ -153,28 +145,31 @@ namespace PVScan.Mobile.Views
                 {
                     EditButton.InputTransparent = true;
 
+                    DoneButton.InputTransparent = false;
+                    DeleteButton.InputTransparent = false;
+
+                    BarcodesCollectionView.SelectionMode = SelectionMode.Multiple;
+
                     _ = DeleteButton.FadeTo(0.5, 250, Easing.CubicOut);
                     _ = DoneButton.FadeTo(1, 250, Easing.CubicOut);
                     _ = await EditButton.FadeTo(0, 250, Easing.CubicOut);
 
-                    DoneButton.InputTransparent = false;
-
                     //InitializeSelectableBarcodeItemTemplate();
-                    BarcodesCollectionView.SelectionMode = SelectionMode.Multiple;
                 }
                 else
                 {
+                    EditButton.InputTransparent = false;
+
                     DoneButton.InputTransparent = true;
                     DeleteButton.InputTransparent = true;
+
+                    BarcodesCollectionView.SelectionMode = SelectionMode.None;
 
                     _ = DeleteButton.FadeTo(0, 250, Easing.CubicOut);
                     _ = DoneButton.FadeTo(0, 250, Easing.CubicOut);
                     _ = await EditButton.FadeTo(1, 250, Easing.CubicOut);
 
-                    EditButton.InputTransparent = false;
-
                     //InitializeNormalBarcodeItemTemplate();
-                    BarcodesCollectionView.SelectionMode = SelectionMode.None;
                 }
             }
         }
