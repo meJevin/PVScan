@@ -71,13 +71,16 @@ namespace PVScan.Mobile.Views.DataTemplates
             else
             {
                 i.HighlightContainer.Opacity = 0;
-                i.HighlightContainerWithTouchEffects.Opacity = 0;
             }
         }
+
+        IGestureRecognizer InnerContainerTapGestureRecognizer;
 
         public NormalBarcodeItem()
         {
             InitializeComponent();
+
+            InnerContainerTapGestureRecognizer = InnerContainer.GestureRecognizers[0];
         }
 
         private void Barcode_Tapped(object sender, EventArgs e)
@@ -87,36 +90,28 @@ namespace PVScan.Mobile.Views.DataTemplates
 
         public async Task MakeEditable()
         {
-            InnerContainerWithTouchEffects.IsVisible = false;
-            InnerContainer.IsVisible = true;
+            InnerContainer.GestureRecognizers.Remove(InnerContainerTapGestureRecognizer);
+
             _ = ImageLeftContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(1, 250, Easing.CubicOut);
-            _ = ImageLeftContainerWithTouchEffects.TranslateTo(0, 0, 250, Easing.CubicOut);
-            _ = ImageLeftContainerWithTouchEffects.FadeTo(1, 250, Easing.CubicOut);
-            _ = InfoContainerWithTouchEffects.PaddingLeftTo(54, 250, Easing.CubicOut);
             await InfoContainer.PaddingLeftTo(54, 250, Easing.CubicOut);
         }
 
         public async Task MakeNotEditable()
         {
-            InnerContainerWithTouchEffects.IsVisible = true;
-            InnerContainer.IsVisible = false;
+            InnerContainer.GestureRecognizers.Add(InnerContainerTapGestureRecognizer);
+            
             _ = ImageLeftContainer.TranslateTo(-44, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(0, 250, Easing.CubicOut);
-            _ = ImageLeftContainerWithTouchEffects.TranslateTo(-44, 0, 250, Easing.CubicOut);
-            _ = ImageLeftContainerWithTouchEffects.FadeTo(0, 250, Easing.CubicOut);
-            _ = InfoContainerWithTouchEffects.PaddingLeftTo(10, 250, Easing.CubicOut);
             await InfoContainer.PaddingLeftTo(10, 250, Easing.CubicOut);
         }
 
         public async Task Highlight()
         {
-            _ = HighlightContainerWithTouchEffects.FadeTo(0.25, 250, Easing.CubicOut);
             await HighlightContainer.FadeTo(0.25, 250, Easing.CubicOut);
 
             await Task.Delay(1350);
 
-            _ = HighlightContainerWithTouchEffects.FadeTo(0, 500, Easing.Linear);
             await HighlightContainer.FadeTo(0, 500, Easing.Linear);
         }
     }
