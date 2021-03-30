@@ -15,7 +15,7 @@ namespace PVScan.Mobile.Droid
     [Activity(Label = "PVScan",
         Icon = "@mipmap/pv_scan_icon",
         RoundIcon = "@mipmap/pv_scan_icon_round",
-        Theme = "@style/MainTheme",
+        Theme = "@style/MainTheme.Splash",
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
