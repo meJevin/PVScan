@@ -111,5 +111,26 @@ namespace PVScan.Mobile.Views.Extensions
 
             return await tcs.Task;
         }
+
+        public static async Task<bool> MarginBottomTo(this Layout layout, double bottom, uint duration = 250, Easing easing = null)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            var paddingAnimation = new Animation(x =>
+            {
+                layout.Margin = new Thickness()
+                {
+                    Top = layout.Margin.Top,
+                    Bottom = x,
+                    Left = layout.Margin.Left,
+                    Right = layout.Margin.Right,
+                };
+            },
+
+            layout.Margin.Bottom, bottom);
+            paddingAnimation.Commit(layout, "PaddingRightAnimation", 10, duration, easing, (finalValue, finished) => { tcs.SetResult(finished); });
+
+            return await tcs.Task;
+        }
     }
 }
