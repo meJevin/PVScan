@@ -18,12 +18,15 @@ namespace PVScan.Mobile.ViewModels
     {
         readonly IBarcodesRepository BarcodesRepository;
         readonly IFileBarcodeReader FileBarcodeReader;
+        readonly IPopupMessageService PopupMessageService;
 
         public ScanPageViewModel(IBarcodesRepository barcodesRepository,
-            IFileBarcodeReader fileBarcodeReader)
+            IFileBarcodeReader fileBarcodeReader,
+            IPopupMessageService popupMessageService)
         {
             BarcodesRepository = barcodesRepository;
             FileBarcodeReader = fileBarcodeReader;
+            PopupMessageService = popupMessageService;
 
             ScanCommand = new Command(async (object scanResult) =>
             {
@@ -127,6 +130,14 @@ namespace PVScan.Mobile.ViewModels
                 var photoPath = pickResult.FullPath;
 
                 var result = await FileBarcodeReader.DecodeAsync(photoPath);
+
+                if (result == null)
+                {
+                    _ = PopupMessageService.ShowMessage("No barcodes detected!");
+                    return;
+                }
+
+                ScanCommand.Execute(result);
             });
 
             IsCameraAllowed = Permissions.CheckStatusAsync<Permissions.Camera>()
@@ -165,5 +176,6 @@ namespace PVScan.Mobile.ViewModels
 
 
         public ICommand PickPhotoToScanCommand { get; }
+        public bool TorchEnabled { get; set; }
     }
 }
