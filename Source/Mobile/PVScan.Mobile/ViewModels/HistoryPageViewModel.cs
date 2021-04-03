@@ -26,6 +26,7 @@ namespace PVScan.Mobile.ViewModels
         readonly IBarcodesRepository BarcodesRepository;
         readonly IBarcodesFilter FilterService;
         readonly IPopupMessageService PopupMessageService;
+
         public HistoryPageViewModel(IBarcodesRepository barcodesRepository,
             IBarcodesFilter filterService, IPopupMessageService popupMessageService)
         {
@@ -115,7 +116,7 @@ namespace PVScan.Mobile.ViewModels
                 HapticFeedback.Perform(HapticFeedbackType.LongPress);
 
                 BarcodeCopiedToClipboard?.Invoke(this, barcode);
-                await PopupMessageService.ShowMessage("Copied to clipboard");
+                await PopupMessageService.ShowMessage("Text copied");
             });
 
             SelectBarcodeCommand = new Command(async (object barcodeObject) =>
