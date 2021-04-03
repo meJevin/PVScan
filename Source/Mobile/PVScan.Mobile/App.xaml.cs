@@ -55,7 +55,7 @@ namespace PVScan.Mobile
         private void InitializePopupService(MainPage mainPage)
         {
             var popupService = (Resolver.Resolve<IPopupMessageService>() as PopupMessageService);
-            popupService.Initialize(mainPage.PopupContainer, mainPage.PopupMessageLabel);
+            popupService.Initialize(mainPage.PopupMessageBox, mainPage.PopupMessageLabel);
         }
 
         protected override async void OnStart()

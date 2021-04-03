@@ -7,16 +7,18 @@ namespace PVScan.Mobile.Services
 {
     public class PopupMessageService : IPopupMessageService
     {
-        Grid PopupContainer;
+        Frame PopupContainer;
         Label PopupMessageLabel;
 
-        public void Initialize(Grid container, Label msgLabel)
+        double ContainerMinScale = 0.925;
+
+        public void Initialize(Frame container, Label msgLabel)
         {
             PopupContainer = container;
             PopupMessageLabel = msgLabel;
 
             PopupContainer.Opacity = 0;
-            PopupContainer.Scale = 0.975;
+            PopupContainer.Scale = ContainerMinScale;
         }
 
         public async Task ShowMessage(string messageText)
@@ -28,7 +30,7 @@ namespace PVScan.Mobile.Services
 
             await Task.Delay(1000);
 
-            _ = PopupContainer.ScaleTo(0.975, 250, Easing.CubicOut);
+            _ = PopupContainer.ScaleTo(ContainerMinScale, 250, Easing.CubicOut);
             await PopupContainer.FadeTo(0, 250, Easing.CubicOut);
         }
     }
