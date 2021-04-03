@@ -18,7 +18,11 @@ namespace PVScan.Mobile.Views.DataTemplates
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NormalBarcodeItem : Grid
     {
+        // Occurs when user taps on the barcode item
         public event EventHandler Tapped;
+
+        // Occurs when user taps on the 'No location' indicator 
+        public event EventHandler NoLocationTapped;
 
         public static readonly BindableProperty IsEditableProperty =
             BindableProperty.Create(nameof(IsEditable), typeof(bool), typeof(NormalBarcodeItem), false,
@@ -86,6 +90,11 @@ namespace PVScan.Mobile.Views.DataTemplates
         private void Barcode_Tapped(object sender, EventArgs e)
         {
             Tapped?.Invoke(sender, e);
+        }
+
+        private void NoLocationButton_Clicked(object sender, EventArgs e)
+        {
+            NoLocationTapped.Invoke(sender, e);
         }
 
         public async Task MakeEditable()

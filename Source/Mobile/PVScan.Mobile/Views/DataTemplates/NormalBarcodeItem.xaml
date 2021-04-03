@@ -28,8 +28,7 @@
 
     <Grid x:Name="InnerContainer">
 
-        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0"
-              Grid.ColumnSpan="3"/>
+        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0"/>
 
         <Grid WidthRequest="36" Margin="8,0,0,0" HorizontalOptions="Start" 
               TranslationX="-44" Opacity="0"
@@ -44,9 +43,8 @@
         </Grid>
 
         <!-- TEXT AND TIME OF SCAN -->
-
         <StackLayout Orientation="Vertical" VerticalOptions="Center" Padding="10, 0"
-                     x:Name="InfoContainer" Grid.ColumnSpan="3">
+                     x:Name="InfoContainer">
             <Grid>
                 <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"
                            xtc:TouchEffect.PressedScale="0.95"
@@ -63,7 +61,7 @@
                            HorizontalOptions="Fill" BackgroundColor="Transparent"/>
             </Grid>
 
-            <StackLayout Orientation="Horizontal" Spacing="0">
+            <StackLayout Orientation="Horizontal" Spacing="0" HeightRequest="20">
                 <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
                                                            FontSize="12"
                                                            Opacity="0.5"
@@ -73,17 +71,18 @@
                                                                        FontSize="12" VerticalOptions="Center"/>
 
 
-                <Image WidthRequest="20" IsVisible="{Binding ScanLocation,
+                <ImageButton WidthRequest="20" HeightRequest="20" IsVisible="{Binding ScanLocation,
                                                         Converter={StaticResource NullBool},
                                                         TargetNullValue=False,
                                                         FallbackValue=False}"
-                           Opacity="0.5" Margin="10, 0">
-                    <Image.Source>
+                             Clicked="NoLocationButton_Clicked"
+                             Opacity="0.5" Margin="10, 0">
+                    <ImageButton.Source>
                         <FontImageSource FontFamily="FontAwesome"
                                              Glyph="{x:Static theme:IconFont.ExclamationCircle}"
                                              Color="Red"/>
-                    </Image.Source>
-                </Image>
+                    </ImageButton.Source>
+                </ImageButton>
             </StackLayout>
         </StackLayout>
 
@@ -124,11 +123,6 @@
                             Value="{AppThemeBinding
                                     Dark={StaticResource BackgroundColorDarker},
                                     Light={StaticResource BackgroundColorLighter}}"/>
-                    <Setter TargetName="InnerContainer"
-                            Property="Grid.BackgroundColor"
-                            Value="{AppThemeBinding
-                                    Dark={StaticResource BackgroundColorDarker},
-                                    Light={StaticResource BackgroundColorLighter}}"/>
                     <Setter TargetName="Separator"
                             Property="BoxView.BackgroundColor"
                             Value="{AppThemeBinding
@@ -140,11 +134,6 @@
             <VisualState x:Name="Selected">
                 <VisualState.Setters>
                     <Setter TargetName="MainContainer"
-                            Property="Grid.BackgroundColor"
-                            Value="{AppThemeBinding
-                                    Dark={StaticResource BackgroundColorDark},
-                                    Light={StaticResource BackgroundColorLighterAlt}}"/>
-                    <Setter TargetName="InnerContainer"
                             Property="Grid.BackgroundColor"
                             Value="{AppThemeBinding
                                     Dark={StaticResource BackgroundColorDark},
