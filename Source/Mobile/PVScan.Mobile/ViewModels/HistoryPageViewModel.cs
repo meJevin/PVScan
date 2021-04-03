@@ -119,6 +119,11 @@ namespace PVScan.Mobile.ViewModels
                 await PopupMessageService.ShowMessage("Text copied");
             });
 
+            BarcodeNoLocationTappedCommand = new Command(async () =>
+            {
+                await PopupMessageService.ShowMessage("No location available for barcode!");
+            });
+
             SelectBarcodeCommand = new Command(async (object barcodeObject) =>
             {
                 Barcode barcode = barcodeObject as Barcode;
@@ -245,6 +250,7 @@ namespace PVScan.Mobile.ViewModels
         public event EventHandler<Barcode> BarcodeCopiedToClipboard;
 
 
+        public ICommand BarcodeNoLocationTappedCommand { get; set; }
         public ICommand SelectBarcodeCommand { get; set; }
         public Barcode SelectedBarcode { get; set; }
 

@@ -527,5 +527,10 @@ namespace PVScan.Mobile.Views
         {
             await HideBarcodeMapsInfo();
         }
+
+        private async void Barcode_NoLocationTapped(object sender, EventArgs e)
+        {
+            VM.BarcodeNoLocationTappedCommand.Execute(null);
+        }
     }
 }

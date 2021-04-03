@@ -171,7 +171,8 @@
                         <DataTemplate>
                             <datatemplates:NormalBarcodeItem
                                 IsEditable="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
-                                                     Path=BindingContext.IsEditing}" Tapped="Barcode_Tapped"
+                                                     Path=BindingContext.IsEditing}"
+                                Tapped="Barcode_Tapped" NoLocationTapped="Barcode_NoLocationTapped"
                                 HighlightedBarcode="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
                                                      Path=BindingContext.HighlightedBarcode}"/>
                         </DataTemplate>
@@ -423,5 +424,6 @@
                 <PanGestureRecognizer PanUpdated="FilterViewPanGesture_PanUpdated"/>
             </views:FilterPage.GestureRecognizers>
         </views:FilterPage>
+
     </Grid>
 </ContentView>
