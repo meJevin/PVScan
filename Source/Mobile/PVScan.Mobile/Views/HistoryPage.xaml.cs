@@ -50,6 +50,7 @@ namespace PVScan.Mobile.Views
                 _ = HideFilterView(0);
                 _ = HideBarcodeInfo(0);
                 _ = HideBarcodeMapsInfo(0);
+                _ = HideNoLocationPopup(0);
             };
 
             SearchDelayTimer = new Timer(SearchDelay);
@@ -530,7 +531,29 @@ namespace PVScan.Mobile.Views
 
         private async void Barcode_NoLocationTapped(object sender, EventArgs e)
         {
-            VM.BarcodeNoLocationTappedCommand.Execute(null);
+            //VM.BarcodeNoLocationTappedCommand.Execute(null);
+            await ShowNoLocationPopup();
+        }
+
+        private async Task HideNoLocationPopup(uint duration = 250)
+        {
+            NoLocationPopupOverlay.InputTransparent = true;
+            _ = NoLocationPopupOverlay.FadeTo(0, duration, Easing.CubicOut);
+            _ = NoLocationPopupContainer.FadeTo(0, duration, Easing.CubicOut);
+            _ = NoLocationPopupContainer.ScaleTo(0.925, duration, Easing.CubicOut);
+        }
+
+        private async Task ShowNoLocationPopup(uint duration = 250)
+        {
+            NoLocationPopupOverlay.InputTransparent = false;
+            _ = NoLocationPopupOverlay.FadeTo(OverlayMaxOpacity / 2, duration, Easing.CubicOut);
+            _ = NoLocationPopupContainer.FadeTo(1, duration, Easing.CubicOut);
+            _ = NoLocationPopupContainer.ScaleTo(1, duration, Easing.CubicOut);
+        }
+
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            await HideNoLocationPopup();
         }
     }
 }
