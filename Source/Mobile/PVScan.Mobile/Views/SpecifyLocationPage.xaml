@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    xmlns:models="clr-namespace:PVScan.Mobile.Models"
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    x:Class="PVScan.Mobile.Views.SpecifyLocationPage"
+    x:DataType="viewmodels:SpecifyLocationPageViewModel"
+    Appearing="ContentPage_Appearing"
+    di:ViewModelLocator.AutoWireViewModel="True">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:CoordinatePositionConverter x:Key="CoordinatePosition"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="*,8*,*">
+        <maps:Map x:Name="Map" MapClicked="Map_MapClicked" ItemsSource="{Binding SelectedCoordinate}" Grid.ColumnSpan="3">
+            <maps:Map.ItemTemplate>
+                <DataTemplate x:DataType="models:Coordinate">
+                    <maps:Pin Label="Your barcode will be here!" Position="{Binding ., Converter={StaticResource CoordinatePosition}}"/>
+                </DataTemplate>
+            </maps:Map.ItemTemplate>
+        </maps:Map>
+
+        <Button Text="Done" Command="{Binding DoneCommand}"
+                VerticalOptions="End" HorizontalOptions="Fill" Grid.Column="1"
+                x:Name="DoneButton"/>
+    </Grid>
+</ContentPage>
