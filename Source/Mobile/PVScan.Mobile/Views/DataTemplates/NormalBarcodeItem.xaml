@@ -76,7 +76,8 @@
                                                         TargetNullValue=False,
                                                         FallbackValue=False}"
                              Clicked="NoLocationButton_Clicked"
-                             Opacity="0.5" Margin="10, 0">
+                             Opacity="0.5" Margin="10, 0"
+                             x:Name="NoLocationButton">
                     <ImageButton.Source>
                         <FontImageSource FontFamily="FontAwesome"
                                              Glyph="{x:Static theme:IconFont.ExclamationCircle}"

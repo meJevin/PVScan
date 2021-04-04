@@ -531,7 +531,7 @@ namespace PVScan.Mobile.Views
 
         private async void Barcode_NoLocationTapped(object sender, EventArgs e)
         {
-            //VM.BarcodeNoLocationTappedCommand.Execute(null);
+            VM.NoLocationSelectedBarcode = (sender as BindableObject).BindingContext as Barcode;
             await ShowNoLocationPopup();
         }
 
@@ -552,6 +552,11 @@ namespace PVScan.Mobile.Views
         }
 
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            await HideNoLocationPopup();
+        }
+
+        private async void SpecifyButton_Clicked(object sender, EventArgs e)
         {
             await HideNoLocationPopup();
         }
