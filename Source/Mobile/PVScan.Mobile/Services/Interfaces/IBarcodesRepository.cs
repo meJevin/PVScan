@@ -18,5 +18,8 @@ namespace PVScan.Mobile.Services.Interfaces
 
         // Delete
         Task Delete(Barcode barcode);
+
+        // Update
+        Task Update(Barcode barcode);
     }
 }

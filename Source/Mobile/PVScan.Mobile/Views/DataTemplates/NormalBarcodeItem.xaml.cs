@@ -18,7 +18,11 @@ namespace PVScan.Mobile.Views.DataTemplates
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NormalBarcodeItem : Grid
     {
+        // Occurs when user taps on the barcode item
         public event EventHandler Tapped;
+
+        // Occurs when user taps on the 'No location' indicator 
+        public event EventHandler NoLocationTapped;
 
         public static readonly BindableProperty IsEditableProperty =
             BindableProperty.Create(nameof(IsEditable), typeof(bool), typeof(NormalBarcodeItem), false,
@@ -88,9 +92,15 @@ namespace PVScan.Mobile.Views.DataTemplates
             Tapped?.Invoke(sender, e);
         }
 
+        private void NoLocationButton_Clicked(object sender, EventArgs e)
+        {
+            NoLocationTapped.Invoke(sender, e);
+        }
+
         public async Task MakeEditable()
         {
             InnerContainer.GestureRecognizers.Remove(InnerContainerTapGestureRecognizer);
+            BarcodeTextLabelOverlay.IsVisible = true;
 
             _ = ImageLeftContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(1, 250, Easing.CubicOut);
@@ -100,7 +110,8 @@ namespace PVScan.Mobile.Views.DataTemplates
         public async Task MakeNotEditable()
         {
             InnerContainer.GestureRecognizers.Add(InnerContainerTapGestureRecognizer);
-            
+            BarcodeTextLabelOverlay.IsVisible = false;
+
             _ = ImageLeftContainer.TranslateTo(-44, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(0, 250, Easing.CubicOut);
             await InfoContainer.PaddingLeftTo(10, 250, Easing.CubicOut);

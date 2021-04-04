@@ -37,6 +37,9 @@ namespace PVScan.Mobile.Views
 
         HistoryPageViewModel VM;
 
+        // Cancel event flag for when we long press a barcode
+        bool CancelBarcodeTapped = false;
+
         public HistoryPage()
         {
             InitializeComponent();
@@ -47,6 +50,7 @@ namespace PVScan.Mobile.Views
                 _ = HideFilterView(0);
                 _ = HideBarcodeInfo(0);
                 _ = HideBarcodeMapsInfo(0);
+                _ = HideNoLocationPopup(0);
             };
 
             SearchDelayTimer = new Timer(SearchDelay);
@@ -70,6 +74,10 @@ namespace PVScan.Mobile.Views
 
             VM.PropertyChanged += VM_PropertyChanged;
             VM.SelectedBarcodes.CollectionChanged += SelectedBarcodes_CollectionChanged;
+            VM.BarcodeCopiedToClipboard += (s, e) =>
+            {
+                CancelBarcodeTapped = true;
+            };
 
             //InitializeNormalBarcodeItemTemplate();
 
@@ -415,6 +423,12 @@ namespace PVScan.Mobile.Views
 
         private async void Barcode_Tapped(object sender, EventArgs e)
         {
+            if (CancelBarcodeTapped)
+            {
+                CancelBarcodeTapped = false;
+                return;
+            }
+
             await ShowBarcodeInfo();
         }
 
@@ -513,6 +527,43 @@ namespace PVScan.Mobile.Views
         private async void Map_MapClicked(object sender, MapClickedEventArgs e)
         {
             await HideBarcodeMapsInfo();
+        }
+
+        private async void Barcode_NoLocationTapped(object sender, EventArgs e)
+        {
+            VM.NoLocationSelectedBarcode = (sender as BindableObject).BindingContext as Barcode;
+            await ShowNoLocationPopup();
+        }
+
+        private async Task HideNoLocationPopup(uint duration = 250)
+        {
+            NoLocationPopupOverlay.InputTransparent = true;
+            _ = NoLocationPopupOverlay.FadeTo(0, duration, Easing.CubicOut);
+            _ = NoLocationPopupContainer.FadeTo(0, duration, Easing.CubicOut);
+            _ = NoLocationPopupContainer.ScaleTo(0.925, duration, Easing.CubicOut);
+        }
+
+        private async Task ShowNoLocationPopup(uint duration = 250)
+        {
+            NoLocationPopupOverlay.InputTransparent = false;
+            _ = NoLocationPopupOverlay.FadeTo(OverlayMaxOpacity / 2, duration, Easing.CubicOut);
+            _ = NoLocationPopupContainer.FadeTo(1, duration, Easing.CubicOut);
+            _ = NoLocationPopupContainer.ScaleTo(1, duration, Easing.CubicOut);
+        }
+
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            await HideNoLocationPopup();
+        }
+
+        private async void SpecifyButton_Clicked(object sender, EventArgs e)
+        {
+            await HideNoLocationPopup();
+        }
+
+        private async void NoLocationPopupCloseButton_Clicked(object sender, EventArgs e)
+        {
+            await HideNoLocationPopup();
         }
     }
 }

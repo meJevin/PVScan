@@ -81,9 +81,19 @@
               Margin="40"
               ColumnSpacing="0"
               ColumnDefinitions="Auto,*,Auto">
-            <Button Text="Torch"/>
-
-            <Button Text="Local" Grid.Column="2" Command="{Binding PickPhotoToScanCommand}"/>
+            <ImageButton Clicked="TorchButton_Clicked">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FontAwesome"
+                                     Glyph="{x:Static theme:IconFont.Lightbulb}"/>
+                </ImageButton.Source>
+            </ImageButton>
+            
+            <ImageButton Grid.Column="2" Command="{Binding PickPhotoToScanCommand}">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FontAwesome"
+                                     Glyph="{x:Static theme:IconFont.Images}"/>
+                </ImageButton.Source>
+            </ImageButton>
         </Grid>
 
         <!-- Lower save button for last scanned barcode -->

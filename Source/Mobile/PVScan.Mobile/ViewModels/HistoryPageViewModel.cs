@@ -4,8 +4,10 @@ using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
+using PVScan.Mobile.ViewModels.Messages;
 using PVScan.Mobile.ViewModels.Messages.Filtering;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
+using PVScan.Mobile.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,6 +28,9 @@ namespace PVScan.Mobile.ViewModels
         readonly IBarcodesRepository BarcodesRepository;
         readonly IBarcodesFilter FilterService;
         readonly IPopupMessageService PopupMessageService;
+
+        readonly SpecifyLocationPage SpecifyLocation;
+
         public HistoryPageViewModel(IBarcodesRepository barcodesRepository,
             IBarcodesFilter filterService, IPopupMessageService popupMessageService)
         {
@@ -37,6 +42,8 @@ namespace PVScan.Mobile.ViewModels
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
 
             SelectedBarcodes = new ObservableCollection<object>();
+
+            SpecifyLocation = new SpecifyLocationPage();
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
@@ -70,6 +77,19 @@ namespace PVScan.Mobile.ViewModels
                     CurrentFilter = args.NewFilter;
 
                     await LoadBarcodesFromDB();
+                });
+
+            MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
+                async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>
+                {
+                    var indx = Barcodes.IndexOf(args.UpdatedBarcode);
+                    var indxPaged = BarcodesPaged.IndexOf(args.UpdatedBarcode);
+
+                    Barcodes.RemoveAt(indx);
+                    BarcodesPaged.RemoveAt(indxPaged);
+
+                    Barcodes.Insert(indx, args.UpdatedBarcode);
+                    BarcodesPaged.Insert(indxPaged, args.UpdatedBarcode);
                 });
 
             RefreshCommand = new Command(async () =>
@@ -115,7 +135,13 @@ namespace PVScan.Mobile.ViewModels
                 HapticFeedback.Perform(HapticFeedbackType.LongPress);
 
                 BarcodeCopiedToClipboard?.Invoke(this, barcode);
-                await PopupMessageService.ShowMessage("Copied to clipboard");
+                await PopupMessageService.ShowMessage("Text copied");
+            });
+
+            SpecifyLocationCommand = new Command(async () =>
+            {
+                SpecifyLocation.Initialize(NoLocationSelectedBarcode);
+                await Application.Current.MainPage.Navigation.PushModalAsync(SpecifyLocation, true);
             });
 
             SelectBarcodeCommand = new Command(async (object barcodeObject) =>
@@ -244,8 +270,10 @@ namespace PVScan.Mobile.ViewModels
         public event EventHandler<Barcode> BarcodeCopiedToClipboard;
 
 
+        public ICommand SpecifyLocationCommand { get; set; }
         public ICommand SelectBarcodeCommand { get; set; }
         public Barcode SelectedBarcode { get; set; }
+        public Barcode NoLocationSelectedBarcode { get; set; }
 
 
         public ICommand DeleteBarcodeCommand { get; set; }

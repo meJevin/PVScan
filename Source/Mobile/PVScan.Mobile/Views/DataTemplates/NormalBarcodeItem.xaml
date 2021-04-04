@@ -28,14 +28,7 @@
 
     <Grid x:Name="InnerContainer">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0"
-              Grid.ColumnSpan="3"/>
+        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0"/>
 
         <Grid WidthRequest="36" Margin="8,0,0,0" HorizontalOptions="Start" 
               TranslationX="-44" Opacity="0"
@@ -43,57 +36,74 @@
             <Image x:Name="ImageLeft">
                 <Image.Source>
                     <FontImageSource FontFamily="FontAwesome"
-                                     Glyph="{x:Static theme:IconFont.Circle}"/>
+                                     Glyph="{x:Static theme:IconFont.Circle}"
+                                     Color="White"/>
                 </Image.Source>
             </Image>
         </Grid>
-        
+
         <!-- TEXT AND TIME OF SCAN -->
-        <Grid VerticalOptions="Center" Padding="10, 0, 0, 0"
-              x:Name="InfoContainer">
-            <StackLayout Orientation="Vertical">
-                <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
+        <StackLayout Orientation="Vertical" VerticalOptions="Center" Padding="10, 0"
+                     x:Name="InfoContainer">
+            <Grid>
+                <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"
+                           xtc:TouchEffect.PressedScale="0.95"
+                           xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
+                           xtc:TouchEffect.AnimationDuration="650"
+                           xtc:TouchEffect.LongPressCommand="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                                            Path=BindingContext.CopyBarcodeToClipboardCommand}"
+                           xtc:TouchEffect.LongPressCommandParameter="{Binding .}"
+                           x:Name="BarcodeTextLabel"
+                           HorizontalOptions="Start"/>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                <Label Text="" FontSize="16" IsVisible="False"
+                           x:Name="BarcodeTextLabelOverlay"
+                           HorizontalOptions="Fill" BackgroundColor="Transparent"/>
+            </Grid>
 
-                    <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
-                                                       FontSize="12"
-                                                       Opacity="0.5"
-                                                       VerticalOptions="Center"/>
+            <StackLayout Orientation="Horizontal" Spacing="0" HeightRequest="20">
+                <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
+                                                           FontSize="12"
+                                                           Opacity="0.5"
+                                                           VerticalOptions="Center"/>
 
-                    <Image Grid.Column="1" WidthRequest="20"
-                                                       IsVisible="{Binding ScanLocation, Converter={StaticResource NullBool}, TargetNullValue=false, FallbackValue=false}"
-                                                       Opacity="0.5">
-                        <Image.Source>
-                            <FontImageSource FontFamily="FontAwesome"
-                                                                         Glyph="{x:Static theme:IconFont.ExclamationCircle}"
-                                                                         Color="Red"/>
-                        </Image.Source>
-                    </Image>
-                </Grid>
+                <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}, StringFormat=', {0}'}"
+                                                                       FontSize="12" VerticalOptions="Center"/>
+
+
+                <ImageButton WidthRequest="20" HeightRequest="20" IsVisible="{Binding ScanLocation,
+                                                        Converter={StaticResource NullBool},
+                                                        TargetNullValue=False,
+                                                        FallbackValue=False}"
+                             Clicked="NoLocationButton_Clicked"
+                             Opacity="0.5" Margin="10, 0"
+                             x:Name="NoLocationButton">
+                    <ImageButton.Source>
+                        <FontImageSource FontFamily="FontAwesome"
+                                             Glyph="{x:Static theme:IconFont.ExclamationCircle}"
+                                             Color="Red"/>
+                    </ImageButton.Source>
+                </ImageButton>
             </StackLayout>
-        </Grid>
+        </StackLayout>
 
-        <Grid Grid.Column="2" Margin="10, 0">
-
-            <StackLayout VerticalOptions="Center" Spacing="0">
-                <Image Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
-
-                <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
-                                                               FontSize="Micro" HorizontalOptions="Center"/>
-            </StackLayout>
-        </Grid>
+        <!--<Grid Grid.Column="1">
+            <ImageButton Clicked="Barcode_Tapped" Padding="10, 0"
+                         Command="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                                                        Path=BindingContext.SelectBarcodeCommand}"
+                                                              CommandParameter="{Binding .}">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FontAwesome"
+                                     Glyph="{x:Static theme:IconFont.EllipsisH}"/>
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>-->
 
         <Grid.GestureRecognizers>
-            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
-                                                                        Path=BindingContext.SelectBarcodeCommand}"
-                                                              CommandParameter="{Binding .}"
-                                                              Tapped="Barcode_Tapped"/>
+            <TapGestureRecognizer Tapped="Barcode_Tapped"
+                                  Command="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                            Path=BindingContext.SelectBarcodeCommand}"
+                                  CommandParameter="{Binding .}"/>
         </Grid.GestureRecognizers>
     </Grid>
 
@@ -114,11 +124,6 @@
                             Value="{AppThemeBinding
                                     Dark={StaticResource BackgroundColorDarker},
                                     Light={StaticResource BackgroundColorLighter}}"/>
-                    <Setter TargetName="InnerContainer"
-                            Property="Grid.BackgroundColor"
-                            Value="{AppThemeBinding
-                                    Dark={StaticResource BackgroundColorDarker},
-                                    Light={StaticResource BackgroundColorLighter}}"/>
                     <Setter TargetName="Separator"
                             Property="BoxView.BackgroundColor"
                             Value="{AppThemeBinding
@@ -134,11 +139,6 @@
                             Value="{AppThemeBinding
                                     Dark={StaticResource BackgroundColorDark},
                                     Light={StaticResource BackgroundColorLighterAlt}}"/>
-                    <Setter TargetName="InnerContainer"
-                            Property="Grid.BackgroundColor"
-                            Value="{AppThemeBinding
-                                    Dark={StaticResource BackgroundColorDark},
-                                    Light={StaticResource BackgroundColorLighterAlt}}"/>
                     <Setter TargetName="Separator"
                             Property="BoxView.BackgroundColor"
                             Value="{AppThemeBinding
@@ -148,7 +148,8 @@
                             Property="Image.Source">
                         <Setter.Value>
                             <FontImageSource FontFamily="FontAwesome"
-                                             Glyph="{x:Static theme:IconFont.CheckCircle}"/>
+                                             Glyph="{x:Static theme:IconFont.CheckCircle}"
+                                             Color="White"/>
                         </Setter.Value>
                     </Setter>
                 </VisualState.Setters>
