@@ -23,6 +23,7 @@ namespace PVScan.Mobile.Services
         {
             // For batch deletions..
             _context.Barcodes.Remove(barcode);
+
             await _context.SaveChangesAsync();
         }
 
@@ -37,6 +38,12 @@ namespace PVScan.Mobile.Services
             await _context.SaveChangesAsync();
 
             return barcode;
+        }
+
+        public async Task Update(Barcode barcode)
+        {
+            _context.Barcodes.Update(barcode);
+            await _context.SaveChangesAsync();
         }
     }
 }
