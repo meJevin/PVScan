@@ -445,14 +445,6 @@
                    HasShadow="False" Opacity="0"
                    CornerRadius="{OnPlatform Android=4, iOS=12}">
                 <Grid RowDefinitions="Auto, *, 45">
-                    <ImageButton HorizontalOptions="End" Clicked="NoLocationPopupCloseButton_Clicked">
-                        <ImageButton.Source>
-                            <FontImageSource FontFamily="FontAwesome"
-                                             Glyph="{x:Static theme:IconFont.Times}"
-                                             Color="White"/>
-                        </ImageButton.Source>
-                    </ImageButton>
-
                     <Label Text="Location is unavailable" FontSize="Large" x:Name="NoLocationDialogTitleLabel"
                            Margin="0,0,0,12" FontAttributes="Bold"
                            TextColor="White"/>
@@ -462,6 +454,15 @@
                            TextColor="White"/>
 
                     <Button Text="Specify" Grid.Row="2" Command="{Binding SpecifyLocationCommand}" Clicked="SpecifyButton_Clicked"/>
+                    
+                    <ImageButton HorizontalOptions="End" Clicked="NoLocationPopupCloseButton_Clicked"
+                                 Padding="10,0" TranslationY="-14" TranslationX="8">
+                        <ImageButton.Source>
+                            <FontImageSource FontFamily="FontAwesome"
+                                             Glyph="{x:Static theme:IconFont.Times}"
+                                             Color="White" Size="24"/>
+                        </ImageButton.Source>
+                    </ImageButton>
                 </Grid>
             </Frame>
         </Grid>
