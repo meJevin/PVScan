@@ -17,8 +17,10 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid ColumnDefinitions="*,8*,*">
-        <maps:Map x:Name="Map" MapClicked="Map_MapClicked" ItemsSource="{Binding SelectedCoordinate}" Grid.ColumnSpan="3">
+    <Grid ColumnDefinitions="*,8*,*"
+          RowDefinitions="*,0.3*">
+        <maps:Map x:Name="Map" MapClicked="Map_MapClicked" ItemsSource="{Binding SelectedCoordinate}"
+                  Grid.ColumnSpan="3" Grid.RowSpan="2">
             <maps:Map.ItemTemplate>
                 <DataTemplate x:DataType="models:Coordinate">
                     <maps:Pin Label="Your barcode will be here!" Position="{Binding ., Converter={StaticResource CoordinatePosition}}"/>
@@ -27,7 +29,8 @@
         </maps:Map>
 
         <Button Text="Done" Command="{Binding DoneCommand}"
-                VerticalOptions="End" HorizontalOptions="Fill" Grid.Column="1"
+                VerticalOptions="Center" HorizontalOptions="Fill"
+                Grid.Column="1" Grid.Row="1"
                 x:Name="DoneButton"/>
     </Grid>
 </ContentPage>

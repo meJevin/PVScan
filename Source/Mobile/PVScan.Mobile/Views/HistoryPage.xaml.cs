@@ -560,5 +560,10 @@ namespace PVScan.Mobile.Views
         {
             await HideNoLocationPopup();
         }
+
+        private async void NoLocationPopupCloseButton_Clicked(object sender, EventArgs e)
+        {
+            await HideNoLocationPopup();
+        }
     }
 }

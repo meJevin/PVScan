@@ -54,10 +54,6 @@ namespace PVScan.Mobile.Views
             {
 
             }
-
-            var safeInsets = On<iOS>().SafeAreaInsets();
-
-            DoneButton.Margin = new Thickness(0, 0, 0, safeInsets.Bottom + 12);
         }
     }
 }
