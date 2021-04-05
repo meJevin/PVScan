@@ -153,11 +153,6 @@ namespace PVScan.Mobile.Views
             (BindingContext as ScanPageViewModel).ScanCommand.Execute(result);
         }
 
-        void TorchButton_Clicked(object sender, EventArgs e)
-        {
-            VM.TorchEnabled = !VM.TorchEnabled;
-        }
-
         // The only way i found to set their TranslationY on stratup
         #region Container Initiialization
         private void BarcodeInfoContainer_PropertyChanged(object sender, PropertyChangedEventArgs e)
