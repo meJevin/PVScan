@@ -538,6 +538,7 @@ namespace PVScan.Mobile.Views
         private async Task HideNoLocationPopup(uint duration = 250)
         {
             NoLocationPopupOverlay.InputTransparent = true;
+            NoLocationPopupContainer.InputTransparent = true;
             _ = NoLocationPopupOverlay.FadeTo(0, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.FadeTo(0, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.ScaleTo(0.925, duration, Easing.CubicOut);
@@ -546,6 +547,7 @@ namespace PVScan.Mobile.Views
         private async Task ShowNoLocationPopup(uint duration = 250)
         {
             NoLocationPopupOverlay.InputTransparent = false;
+            NoLocationPopupContainer.InputTransparent = false;
             _ = NoLocationPopupOverlay.FadeTo(OverlayMaxOpacity / 2, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.FadeTo(1, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.ScaleTo(1, duration, Easing.CubicOut);
