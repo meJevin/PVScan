@@ -113,7 +113,14 @@ namespace PVScan.Mobile.ViewModels
 
             LoadNextPage = new Command(async () =>
             {
-                BarcodesPaged.AddRange(Barcodes.Skip(PageCount * PageSize).Take(PageSize));
+                var newBarcodes = Barcodes.Skip(PageCount * PageSize).Take(PageSize);
+
+                if (newBarcodes.Count() == 0)
+                {
+                    return;
+                }
+
+                BarcodesPaged.AddRange(newBarcodes);
 
                 ++PageCount;
             });
@@ -214,8 +221,7 @@ namespace PVScan.Mobile.ViewModels
             SelectedBarcodes.Clear();
             SelectedBarcode = null;
 
-            PageCount = 1;
-
+            PageCount = 0;
             IsLoading = true;
 
             IEnumerable<Barcode> dbBarcodes = null;
@@ -235,6 +241,7 @@ namespace PVScan.Mobile.ViewModels
             Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
             BarcodesPaged.AddRange(Barcodes.Take(PageSize));
 
+            PageCount = 1;
             IsLoading = false;
         }
 
@@ -248,7 +255,7 @@ namespace PVScan.Mobile.ViewModels
 
 
         // How many pages have we loaded in the list?
-        private int PageCount { get; set; }
+        public int PageCount { get; set; }
         // How many items per page?
         private int PageSize { get; set; } = 50;
 

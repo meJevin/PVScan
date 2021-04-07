@@ -162,7 +162,8 @@
                                 RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}"
                                 SelectedItems="{Binding SelectedBarcodes}"
                                 ItemSizingStrategy="MeasureFirstItem"
-                                x:Name="BarcodesCollectionView">
+                                x:Name="BarcodesCollectionView"
+                                Scrolled="BarcodesCollectionView_Scrolled">
                     <CollectionView.Header>
                         <Grid HeightRequest="36"/>
                     </CollectionView.Header>
@@ -177,6 +178,10 @@
                                                      Path=BindingContext.HighlightedBarcode}"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+
+                    <CollectionView.Footer>
+                        <Grid HeightRequest="86"/>
+                    </CollectionView.Footer>
 
                     <CollectionView.EmptyView>
                         <Grid BackgroundColor="{AppThemeBinding 
@@ -196,6 +201,7 @@
                 </CollectionView>
             </RefreshView>
 
+            <!-- SORTING & FILTER -->
             <Grid HeightRequest="32" ColumnDefinitions="Auto,*,Auto" Padding="10, 8, 10, 4"
                   VerticalOptions="Start" InputTransparent="True" CascadeInputTransparent="False">
                 <Button Text="Delete" Padding="14, 0"
@@ -211,6 +217,17 @@
                                     Command="{Binding DoneEditCommand}"
                                     Opacity="0" InputTransparent="True"
                                     x:Name="DoneButton"/>
+            </Grid>
+
+            <Grid VerticalOptions="End" Padding="0,26" RowDefinitions="36, *"
+                  ColumnDefinitions="32,*,32" x:Name="SortingAndFilterContainer"
+                  InputTransparent="True" CascadeInputTransparent="False">
+                <Grid Grid.Column="1" ColumnSpacing="16"
+                      ColumnDefinitions="2.85*,*">
+                    <Button Text="Sorting" Padding="14, 0" Style="{StaticResource PrimaryButton}"/>
+                    <Button Text="Filter" Padding="14, 0" Grid.Column="1" Style="{StaticResource PrimaryButton}"
+                            Clicked="FilterButton_Clicked"/>
+                </Grid>
             </Grid>
 
             <!-- OVERLAY (BARCODE INFO LIST)-->

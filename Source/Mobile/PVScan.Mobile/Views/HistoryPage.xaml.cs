@@ -180,6 +180,22 @@ namespace PVScan.Mobile.Views
                     //InitializeNormalBarcodeItemTemplate();
                 }
             }
+            else if (e.PropertyName == nameof(VM.PageCount))
+            {
+                Console.WriteLine(VM.PageCount);
+
+                if (VM.PageCount == 1)
+                {
+                    if (VM.BarcodesPaged.Count != 0)
+                    {
+                        await ShowSortingFilter();
+                    }
+                    else
+                    {
+                        await HideSortingFilter();
+                    }
+                }
+            }
         }
 
         private async void FilterViewPanGesture_PanUpdated(object sender, PanUpdatedEventArgs e)
@@ -566,6 +582,34 @@ namespace PVScan.Mobile.Views
         private async void NoLocationPopupCloseButton_Clicked(object sender, EventArgs e)
         {
             await HideNoLocationPopup();
+        }
+
+        private async Task HideSortingFilter(uint duration = 250)
+        {
+            _ = SortingAndFilterContainer.TranslateTo(0, SortingAndFilterContainer.Height, duration, Easing.CubicOut);
+        }
+
+        private async Task ShowSortingFilter(uint duration = 250)
+        {
+            _ = SortingAndFilterContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
+        }
+
+        private async void BarcodesCollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
+        {
+            if (e.VerticalOffset <= 0 ||
+                Math.Abs(e.VerticalDelta) < 2)
+            {
+                return;
+            }
+
+            if (e.VerticalDelta < 0)
+            {
+                _ = ShowSortingFilter(250);
+            }
+            else
+            {
+                _ = HideSortingFilter(250);
+            }
         }
     }
 }
