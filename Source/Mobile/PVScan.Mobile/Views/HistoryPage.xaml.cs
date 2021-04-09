@@ -110,26 +110,6 @@ namespace PVScan.Mobile.Views
             }
         }
 
-        private void InitializeNormalBarcodeItemTemplate()
-        {
-            BarcodesCollectionView.ItemTemplate = new DataTemplate(() =>
-            {
-                var item = new NormalBarcodeItem();
-                item.Tapped += Barcode_Tapped;
-                return item;
-            });
-        }
-
-        private void InitializeSelectableBarcodeItemTemplate()
-        {
-            BarcodesCollectionView.ItemTemplate = new DataTemplate(() =>
-            {
-                var item = new SelectableBarcodeItem();
-                return item;
-            });
-        }
-
-
         private async void SelectedBarcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (VM.IsEditing)

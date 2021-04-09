@@ -271,7 +271,7 @@
                                HeightRequest="6"
                                Padding="0" 
                                HorizontalOptions="Center"
-                               CornerRadius="{OnPlatform Android=12, iOS=4}"/>
+                               CornerRadius="{OnPlatform Android=12, iOS=3}"/>
 
                         <Label HorizontalOptions="Center"
                                FontSize="16"
