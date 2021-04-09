@@ -132,7 +132,7 @@
                                 </StackLayout>
                             </Grid>
 
-                            <Grid ColumnDefinitions="*,*" Margin="8,22,8,8">
+                            <Grid ColumnDefinitions="*,Auto" Margin="8,22,8,8">
                                 <Label FontSize="20">
                                     Barcode Formats
                                 </Label>

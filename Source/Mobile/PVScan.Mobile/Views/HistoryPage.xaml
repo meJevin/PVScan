@@ -200,8 +200,8 @@
                     </CollectionView.EmptyView>
                 </CollectionView>
             </RefreshView>
-
-            <!-- SORTING & FILTER -->
+            
+            <!-- DELETE EDIT/DONE -->
             <Grid HeightRequest="32" ColumnDefinitions="Auto,*,Auto" Padding="10, 8, 10, 4"
                   VerticalOptions="Start" InputTransparent="True" CascadeInputTransparent="False">
                 <Button Text="Delete" Padding="14, 0"
@@ -218,15 +218,16 @@
                                     Opacity="0" InputTransparent="True"
                                     x:Name="DoneButton"/>
             </Grid>
-
+            
+            <!-- SORTING & FILTER -->
             <Grid VerticalOptions="End" Padding="0,26" RowDefinitions="36, *"
                   ColumnDefinitions="32,*,32" x:Name="SortingAndFilterContainer"
                   InputTransparent="True" CascadeInputTransparent="False">
                 <Grid Grid.Column="1" ColumnSpacing="16"
-                      ColumnDefinitions="2.85*,*">
+                      ColumnDefinitions="*,Auto">
                     <Button Text="Sorting" Padding="14, 0" Style="{StaticResource PrimaryButton}"/>
                     <Button Text="Filter" Padding="14, 0" Grid.Column="1" Style="{StaticResource PrimaryButton}"
-                            Clicked="FilterButton_Clicked"/>
+                            Clicked="FilterButton_Clicked" WidthRequest="85"/>
                 </Grid>
             </Grid>
 
@@ -442,13 +443,15 @@
             </views:FilterPage.GestureRecognizers>
         </views:FilterPage>
 
+        <!-- OVERLAY (NO LOCATION POPUP) -->
         <BoxView x:Name="NoLocationPopupOverlay" BackgroundColor="Black" Grid.RowSpan="2"
                  Opacity="0" InputTransparent="True">
             <BoxView.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
             </BoxView.GestureRecognizers>
         </BoxView>
-        
+
+        <!-- NO LOCATION POPUP -->
         <Grid InputTransparent="True" RowDefinitions="8*,*" Grid.Row="1" CascadeInputTransparent="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -461,18 +464,19 @@
                    Padding="22" Grid.Column="1" HeightRequest="200"
                    HasShadow="False" Opacity="0" InputTransparent="True"
                    CornerRadius="{OnPlatform Android=4, iOS=12}">
-                <Grid RowDefinitions="Auto, *, 45">
-                    <Label Text="No location" FontSize="Large" x:Name="NoLocationDialogTitleLabel"
-                           Margin="0,0,0,12" FontAttributes="Bold"
-                           TextColor="White"/>
+                <Grid>
+                    <Grid RowDefinitions="Auto, *, 45">
+                        <Label Text="No location" FontSize="Large" x:Name="NoLocationDialogTitleLabel"
+                               FontAttributes="Bold" TextColor="White"/>
 
-                    <Label Text="Selected barcode has no location available. You can specify it manually by selecting a point on the map"
-                           HorizontalOptions="Fill" Grid.Row="1" FontSize="Medium"
-                           TextColor="White"/>
+                        <Label Text="Selected barcode has no location available. You can specify it manually by selecting a point on the map"
+                               HorizontalOptions="Fill" Grid.Row="1" FontSize="Medium" VerticalTextAlignment="Center"
+                               TextColor="White"/>
 
-                    <Button Text="Specify" Grid.Row="2" Command="{Binding SpecifyLocationCommand}" Clicked="SpecifyButton_Clicked"/>
+                        <Button Text="Specify" Grid.Row="2" Command="{Binding SpecifyLocationCommand}" Clicked="SpecifyButton_Clicked"/>
+                    </Grid>
                     
-                    <ImageButton HorizontalOptions="End" Clicked="NoLocationPopupCloseButton_Clicked"
+                    <ImageButton HorizontalOptions="End" VerticalOptions="Start" Clicked="NoLocationPopupCloseButton_Clicked"
                                  Padding="10,0" TranslationY="-14" TranslationX="8" BackgroundColor="Transparent">
                         <ImageButton.Source>
                             <FontImageSource FontFamily="FontAwesome"
