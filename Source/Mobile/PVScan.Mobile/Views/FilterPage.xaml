@@ -76,7 +76,7 @@
                                 </Label>
 
                                 <Label Text="Reset" TextColor="#349CFC"
-                                       HorizontalOptions="End" VerticalOptions="End" FontSize="18" Grid.Column="1"
+                                       HorizontalOptions="End" VerticalOptions="End" FontSize="16" Grid.Column="1"
                                        xtc:TouchEffect.PressedScale="0.9"
                                        xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
                                        xtc:TouchEffect.AnimationDuration="325">
@@ -138,7 +138,7 @@
                                 </Label>
                                 
                                 <Label Text="Reset" TextColor="#349CFC"
-                                       HorizontalOptions="End" VerticalOptions="End" FontSize="18" Grid.Column="1"
+                                       HorizontalOptions="End" VerticalOptions="End" FontSize="16" Grid.Column="1"
                                        xtc:TouchEffect.PressedScale="0.9"
                                        xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
                                        xtc:TouchEffect.AnimationDuration="325">

@@ -15,9 +15,18 @@ namespace PVScan.Mobile.Converters
             {
                 return null;
             }
+
             BarcodeFormat format = (BarcodeFormat)value;
 
-            return Enum.GetName(typeof(BarcodeFormat), format).Replace('_', ' ');
+            string result = Enum.GetName(typeof(BarcodeFormat), format).Replace('_', ' ');
+
+            // Title Case
+            if (parameter != null && (string)parameter == "TitleCase")
+            {
+                return result.ToLower().ToTitleCase();
+            }
+
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

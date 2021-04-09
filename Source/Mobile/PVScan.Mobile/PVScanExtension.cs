@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ZXing.Mobile;
 
@@ -20,6 +21,11 @@ namespace PVScan.Mobile
             }
 
             return maxResolution;
+        }
+
+        public static string ToTitleCase(this string str)
+        {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str);
         }
     }
 }

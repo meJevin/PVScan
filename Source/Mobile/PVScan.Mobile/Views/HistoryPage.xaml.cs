@@ -230,7 +230,7 @@ namespace PVScan.Mobile.Views
             await HideFilterView();
         }
 
-        private async Task HideFilterView(uint duration = 250)
+        private async Task HideFilterView(uint duration = 350)
         {
             FilterPageOverlay.InputTransparent = true;
 
@@ -238,7 +238,7 @@ namespace PVScan.Mobile.Views
             await FilterPage.TranslateTo(0, FilterPageHeight, duration, Easing.CubicOut);
         }
 
-        private async Task ShowFilterView(uint duration = 250)
+        private async Task ShowFilterView(uint duration = 350)
         {
             FilterPageOverlay.InputTransparent = false;
 

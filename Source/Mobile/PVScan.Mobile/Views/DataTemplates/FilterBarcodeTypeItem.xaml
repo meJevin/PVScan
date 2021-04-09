@@ -15,9 +15,10 @@
         </ResourceDictionary>
     </Grid.Resources>
 
-    <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
+    <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}, ConverterParameter=TitleCase}"
                            FontSize="16" VerticalOptions="Center"
-                           Margin="10,2"/>
+                           Margin="10,2">
+    </Label>
 
     <Image HeightRequest="20" WidthRequest="30" HorizontalOptions="End" VerticalOptions="Center" Margin="10,0"
            Opacity="0" x:Name="CheckImage">

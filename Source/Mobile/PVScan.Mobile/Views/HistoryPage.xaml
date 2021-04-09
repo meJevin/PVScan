@@ -462,7 +462,7 @@
                    HasShadow="False" Opacity="0" InputTransparent="True"
                    CornerRadius="{OnPlatform Android=4, iOS=12}">
                 <Grid RowDefinitions="Auto, *, 45">
-                    <Label Text="Location is unavailable" FontSize="Large" x:Name="NoLocationDialogTitleLabel"
+                    <Label Text="No location" FontSize="Large" x:Name="NoLocationDialogTitleLabel"
                            Margin="0,0,0,12" FontAttributes="Bold"
                            TextColor="White"/>
 
