@@ -140,6 +140,11 @@ namespace PVScan.Mobile.ViewModels
                 ScanCommand.Execute(result);
             });
 
+            ToggleTorchCommand = new Command(() =>
+            {
+                TorchEnabled = !TorchEnabled;
+            });
+
             IsCameraAllowed = Permissions.CheckStatusAsync<Permissions.Camera>()
                 .GetAwaiter().GetResult() == PermissionStatus.Granted;
 
@@ -176,6 +181,7 @@ namespace PVScan.Mobile.ViewModels
 
 
         public ICommand PickPhotoToScanCommand { get; }
+        public ICommand ToggleTorchCommand { get; }
         public bool TorchEnabled { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace PVScan.Mobile.ViewModels
             InitBarcodeFormats();
             InitLastTimeSpans();
 
-            // hmmmm
+            // Todo: this is not really good to be honest
             ResetFilter().GetAwaiter().GetResult();
 
             ApplyFilterCommand = new Command(() =>
@@ -63,6 +63,30 @@ namespace PVScan.Mobile.ViewModels
                 {
                     NewFilter = newFilter,
                 });
+            });
+
+            BarcodeFormatItemTappedCommand = new Command((object newFormatObj) =>
+            {
+                if (SelectedBarcodeFormats.Contains(newFormatObj))
+                {
+                    SelectedBarcodeFormats.Remove(newFormatObj);
+                    return;
+                }
+
+                SelectedBarcodeFormats.Add(newFormatObj);
+            });
+
+            LastTimeSpanItemTappedCommand = new Command((object newLastTimeSpanObj) =>
+            {
+                LastTimeSpan newLastTimeSpan = newLastTimeSpanObj as LastTimeSpan;
+
+                if (newLastTimeSpan == SelectedLastTimeSpan)
+                {
+                    SelectedLastTimeSpan = null;
+                    return;
+                }
+
+                SelectedLastTimeSpan = newLastTimeSpan;
             });
 
             ResetDateFilterCommand = new Command(async () =>
@@ -131,13 +155,15 @@ namespace PVScan.Mobile.ViewModels
             SelectedBarcodeFormats.Clear();
         }
 
-        public int DateFilterTypeIndex { get; set; }
-
         public ICommand ApplyFilterCommand { get; }
 
+        public int DateFilterTypeIndex { get; set; }
+
+        public ICommand BarcodeFormatItemTappedCommand { get; }
         public ObservableRangeCollection<ZXingBarcodeFormat> AvailableBarcodeFormats { get; set; }
         public ObservableRangeCollection<object> SelectedBarcodeFormats { get; set; }
 
+        public ICommand LastTimeSpanItemTappedCommand { get; }
         public ObservableRangeCollection<LastTimeSpan> AvailableLastTimeSpans { get; set; }
         public LastTimeSpan SelectedLastTimeSpan { get; set; }
 

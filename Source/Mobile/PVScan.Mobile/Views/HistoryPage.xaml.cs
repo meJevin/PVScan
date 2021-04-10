@@ -110,26 +110,6 @@ namespace PVScan.Mobile.Views
             }
         }
 
-        private void InitializeNormalBarcodeItemTemplate()
-        {
-            BarcodesCollectionView.ItemTemplate = new DataTemplate(() =>
-            {
-                var item = new NormalBarcodeItem();
-                item.Tapped += Barcode_Tapped;
-                return item;
-            });
-        }
-
-        private void InitializeSelectableBarcodeItemTemplate()
-        {
-            BarcodesCollectionView.ItemTemplate = new DataTemplate(() =>
-            {
-                var item = new SelectableBarcodeItem();
-                return item;
-            });
-        }
-
-
         private async void SelectedBarcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (VM.IsEditing)
@@ -178,6 +158,22 @@ namespace PVScan.Mobile.Views
                     _ = await EditButton.FadeTo(1, 250, Easing.CubicOut);
 
                     //InitializeNormalBarcodeItemTemplate();
+                }
+            }
+            else if (e.PropertyName == nameof(VM.PageCount))
+            {
+                Console.WriteLine(VM.PageCount);
+
+                if (VM.PageCount == 1)
+                {
+                    if (VM.BarcodesPaged.Count != 0)
+                    {
+                        await ShowSortingFilter();
+                    }
+                    else
+                    {
+                        await HideSortingFilter();
+                    }
                 }
             }
         }
@@ -234,7 +230,7 @@ namespace PVScan.Mobile.Views
             await HideFilterView();
         }
 
-        private async Task HideFilterView(uint duration = 250)
+        private async Task HideFilterView(uint duration = 350)
         {
             FilterPageOverlay.InputTransparent = true;
 
@@ -242,7 +238,7 @@ namespace PVScan.Mobile.Views
             await FilterPage.TranslateTo(0, FilterPageHeight, duration, Easing.CubicOut);
         }
 
-        private async Task ShowFilterView(uint duration = 250)
+        private async Task ShowFilterView(uint duration = 350)
         {
             FilterPageOverlay.InputTransparent = false;
 
@@ -538,6 +534,7 @@ namespace PVScan.Mobile.Views
         private async Task HideNoLocationPopup(uint duration = 250)
         {
             NoLocationPopupOverlay.InputTransparent = true;
+            NoLocationPopupContainer.InputTransparent = true;
             _ = NoLocationPopupOverlay.FadeTo(0, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.FadeTo(0, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.ScaleTo(0.925, duration, Easing.CubicOut);
@@ -546,6 +543,7 @@ namespace PVScan.Mobile.Views
         private async Task ShowNoLocationPopup(uint duration = 250)
         {
             NoLocationPopupOverlay.InputTransparent = false;
+            NoLocationPopupContainer.InputTransparent = false;
             _ = NoLocationPopupOverlay.FadeTo(OverlayMaxOpacity / 2, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.FadeTo(1, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.ScaleTo(1, duration, Easing.CubicOut);
@@ -564,6 +562,34 @@ namespace PVScan.Mobile.Views
         private async void NoLocationPopupCloseButton_Clicked(object sender, EventArgs e)
         {
             await HideNoLocationPopup();
+        }
+
+        private async Task HideSortingFilter(uint duration = 250)
+        {
+            _ = SortingAndFilterContainer.TranslateTo(0, SortingAndFilterContainer.Height, duration, Easing.CubicOut);
+        }
+
+        private async Task ShowSortingFilter(uint duration = 250)
+        {
+            _ = SortingAndFilterContainer.TranslateTo(0, 0, duration, Easing.CubicOut);
+        }
+
+        private async void BarcodesCollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
+        {
+            if (e.VerticalOffset <= 0 ||
+                Math.Abs(e.VerticalDelta) < 2)
+            {
+                return;
+            }
+
+            if (e.VerticalDelta < 0)
+            {
+                _ = ShowSortingFilter(250);
+            }
+            else
+            {
+                _ = HideSortingFilter(250);
+            }
         }
     }
 }
