@@ -68,6 +68,11 @@ namespace PVScan.Mobile
                 .As<IBarcodesFilter>()
                 .InstancePerLifetimeScope();
 
+            // Sorter Service
+            ContainerBuilder.RegisterType<BarcodeSorter>()
+                .As<IBarcodeSorter>()
+                .InstancePerLifetimeScope();
+
             // Http factory
 #if DEBUG
             ContainerBuilder.RegisterType<DebugCertHttpClientFactory>()
