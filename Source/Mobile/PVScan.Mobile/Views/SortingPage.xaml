@@ -64,7 +64,7 @@
                 <!-- Main Content -->
                 <Grid Margin="0,16,0,32">
                     <StackLayout>
-                        <Grid ColumnDefinitions="Auto,*,Auto" Margin="9,0" >
+                        <Grid ColumnDefinitions="Auto,*,Auto" Margin="8,0,8,8" >
                             <StackLayout Orientation="Horizontal" Spacing="0">
                                 <Label Text="Sort " FontSize="20"/>
                                 <Label Text="{Binding Descending, Converter={StaticResource BoolSortingOrderString}}" FontSize="20" TextColor="#349CFC">
@@ -75,7 +75,7 @@
                                 <Label Text=" by" FontSize="20"/>
                             </StackLayout>
 
-                            <Label Text="Reset" FontSize="16" Grid.Column="2" TextColor="#349CFC">
+                            <Label Text="Reset" FontSize="16" Grid.Column="2" TextColor="#349CFC" VerticalOptions="End">
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ResetSortingCommand}"/>
                                 </Label.GestureRecognizers>
