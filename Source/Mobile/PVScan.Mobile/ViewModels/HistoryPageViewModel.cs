@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MvvmHelpers;
+using PVScan.Mobile.Converters;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.Services;
@@ -27,15 +28,18 @@ namespace PVScan.Mobile.ViewModels
     {
         readonly IBarcodesRepository BarcodesRepository;
         readonly IBarcodesFilter FilterService;
+        readonly IBarcodeSorter SorterService;
         readonly IPopupMessageService PopupMessageService;
 
         readonly SpecifyLocationPage SpecifyLocation;
 
         public HistoryPageViewModel(IBarcodesRepository barcodesRepository,
-            IBarcodesFilter filterService, IPopupMessageService popupMessageService)
+            IBarcodesFilter filterService, IPopupMessageService popupMessageService,
+            IBarcodeSorter sorterService)
         {
             BarcodesRepository = barcodesRepository;
             FilterService = filterService;
+            SorterService = sorterService;
             PopupMessageService = popupMessageService;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
@@ -75,6 +79,14 @@ namespace PVScan.Mobile.ViewModels
                 async (FilterPageViewModel vm, FilterAppliedMessage args) =>
                 {
                     CurrentFilter = args.NewFilter;
+
+                    await LoadBarcodesFromDB();
+                });
+
+            MessagingCenter.Subscribe(this, nameof(SortingAppliedMessage),
+                async (SortingPageViewModel vm, SortingAppliedMessage args) =>
+                {
+                    CurrentSorting = args.NewSorting;
 
                     await LoadBarcodesFromDB();
                 });
@@ -198,11 +210,7 @@ namespace PVScan.Mobile.ViewModels
                     await barcodesRepository.Delete(b);
 
                     Barcodes.Remove(b);
-
-                    if (BarcodesPaged.Contains(b))
-                    {
-                        BarcodesPaged.Remove(b);
-                    }
+                    BarcodesPaged.Remove(b);
                 }
 
                 SelectedBarcodes.Clear();
@@ -238,7 +246,12 @@ namespace PVScan.Mobile.ViewModels
                 dbBarcodes = FilterService.Search(dbBarcodes, Search);
             }
 
-            Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
+            if (CurrentSorting != null)
+            {
+                dbBarcodes = await SorterService.Sort(dbBarcodes, CurrentSorting);
+            }
+
+            Barcodes.AddRange(dbBarcodes);
             BarcodesPaged.AddRange(Barcodes.Take(PageSize));
 
             PageCount = 1;
@@ -248,7 +261,7 @@ namespace PVScan.Mobile.ViewModels
         public string Search { get; set; }
 
         public Filter CurrentFilter { get; set; }
-
+        public Sorting CurrentSorting { get; set; } = Sorting.Default();
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
         public ObservableRangeCollection<Barcode> BarcodesPaged { get; set; }

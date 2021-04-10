@@ -7,10 +7,10 @@
     xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
     xmlns:xtc="http://xamarin.com/schemas/2020/toolkit"
     x:Class="PVScan.Mobile.Views.FilterPage"
-    
     xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
     di:ViewModelLocator.AutoWireViewModel="True"
-    
+    x:DataType="viewmodels:FilterPageViewModel"
     BackgroundColor="Transparent">
 
     <ContentView.Resources>
