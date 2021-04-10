@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MvvmHelpers;
+using PVScan.Mobile.Converters;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.Services;
@@ -75,6 +76,14 @@ namespace PVScan.Mobile.ViewModels
                 async (FilterPageViewModel vm, FilterAppliedMessage args) =>
                 {
                     CurrentFilter = args.NewFilter;
+
+                    await LoadBarcodesFromDB();
+                });
+
+            MessagingCenter.Subscribe(this, nameof(SortingAppliedMessage),
+                async (SortingPageViewModel vm, SortingAppliedMessage args) =>
+                {
+                    CurrentSorting = args.NewSorting;
 
                     await LoadBarcodesFromDB();
                 });
@@ -238,7 +247,45 @@ namespace PVScan.Mobile.ViewModels
                 dbBarcodes = FilterService.Search(dbBarcodes, Search);
             }
 
-            Barcodes.AddRange(dbBarcodes.OrderByDescending(b => b.ScanTime));
+            if (CurrentSorting != null)
+            {
+                if (CurrentSorting.Field == SortingField.Date)
+                {
+                    if (CurrentSorting.Descending)
+                    {
+                        dbBarcodes = dbBarcodes.OrderByDescending(b => b.ScanTime);
+                    }
+                    else
+                    {
+                        dbBarcodes = dbBarcodes.OrderBy(b => b.ScanTime);
+                    }
+                }
+                else if (CurrentSorting.Field == SortingField.Format)
+                {
+                    if (CurrentSorting.Descending)
+                    {
+                        dbBarcodes = dbBarcodes.OrderByDescending(b => b.Format);
+                    }
+                    else
+                    {
+                        dbBarcodes = dbBarcodes.OrderBy(b => b.Format);
+                    }
+                }
+                else if (CurrentSorting.Field == SortingField.Text)
+                {
+
+                    if (CurrentSorting.Descending)
+                    {
+                        dbBarcodes = dbBarcodes.OrderByDescending(b => b.Text);
+                    }
+                    else
+                    {
+                        dbBarcodes = dbBarcodes.OrderBy(b => b.Text);
+                    }
+                }
+            }
+
+            Barcodes.AddRange(dbBarcodes);
             BarcodesPaged.AddRange(Barcodes.Take(PageSize));
 
             PageCount = 1;
@@ -248,7 +295,7 @@ namespace PVScan.Mobile.ViewModels
         public string Search { get; set; }
 
         public Filter CurrentFilter { get; set; }
-
+        public Sorting CurrentSorting { get; set; } = Sorting.Default();
 
         public ObservableRangeCollection<Barcode> Barcodes { get; set; }
         public ObservableRangeCollection<Barcode> BarcodesPaged { get; set; }

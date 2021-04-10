@@ -17,6 +17,7 @@ using PVScan.Mobile.Effects;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.Views.DataTemplates;
 using System.Collections.Specialized;
+using PVScan.Mobile.ViewModels.Messages;
 
 namespace PVScan.Mobile.Views
 {
@@ -47,7 +48,8 @@ namespace PVScan.Mobile.Views
             LayoutChanged += async (s, e) =>
             {
                 _ = ShowListView(0);
-                _ = HideFilterView(0);
+                _ = HideFilterPage(0);
+                _ = HideSortingPage(0);
                 _ = HideBarcodeInfo(0);
                 _ = HideBarcodeMapsInfo(0);
                 _ = HideNoLocationPopup(0);
@@ -84,7 +86,13 @@ namespace PVScan.Mobile.Views
             MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
                 async (FilterPageViewModel vm, FilterAppliedMessage args) =>
                 {
-                    await HideFilterView();
+                    await HideFilterPage();
+                });
+
+            MessagingCenter.Subscribe(this, nameof(SortingAppliedMessage),
+                async (SortingPageViewModel vm, SortingAppliedMessage args) =>
+                {
+                    await HideSortingPage();
                 });
         }
 
@@ -215,7 +223,7 @@ namespace PVScan.Mobile.Views
                 }
                 else
                 {
-                    await HideFilterView();
+                    await HideFilterPage();
                 }
             }
         }
@@ -227,10 +235,10 @@ namespace PVScan.Mobile.Views
 
         private async void FilterPageOverlay_Tapped(object sender, EventArgs e)
         {
-            await HideFilterView();
+            await HideFilterPage();
         }
 
-        private async Task HideFilterView(uint duration = 350)
+        private async Task HideFilterPage(uint duration = 350)
         {
             FilterPageOverlay.InputTransparent = true;
 
@@ -590,6 +598,76 @@ namespace PVScan.Mobile.Views
             {
                 _ = HideSortingFilter(250);
             }
+        }
+
+        private async Task HideSortingPage(uint duration = 350)
+        {
+            SortingPageOverlay.InputTransparent = true;
+
+            _ = SortingPageOverlay.FadeTo(0, duration, Easing.CubicOut);
+            await SortingPage.TranslateTo(0, SortingPage.Height, duration, Easing.CubicOut);
+        }
+
+        private async Task ShowSortingPage(uint duration = 350)
+        {
+            (SortingPage.BindingContext as SortingPageViewModel).SetStateToCurrentSorting();
+
+            SortingPageOverlay.InputTransparent = false;
+
+            _ = SortingPageOverlay.FadeTo(OverlayMaxOpacity, duration, Easing.CubicOut);
+            await SortingPage.TranslateTo(0, 1, duration, Easing.CubicOut);
+        }
+
+        private async void SortingPage_PanUpdated(object sender, PanUpdatedEventArgs e)
+        {
+            if (e.StatusType == GestureStatus.Running)
+            {
+                double newTranslationY = SortingPage.TranslationY;
+
+                // Because xamarin :L
+                // The interesting thing is that values are actually the same, but android does something weird and we actually have to add, IDK
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    newTranslationY += e.TotalY;
+                }
+                else if (Device.RuntimePlatform == Device.iOS)
+                {
+                    newTranslationY = e.TotalY;
+                }
+
+                if (newTranslationY < 1)
+                {
+                    newTranslationY = 1;
+                }
+
+                double newOverlayOpacity = OverlayMaxOpacity - ((newTranslationY / SortingPage.Height) * OverlayMaxOpacity);
+
+                SortingPage.TranslationY = newTranslationY;
+                SortingPageOverlay.Opacity = newOverlayOpacity;
+
+                //Console.WriteLine($"\nTOTAL_T, NEW_TRANS_Y: {e.TotalY}, {newTranslationY}");
+            }
+            else if (e.StatusType == GestureStatus.Completed)
+            {
+                if (SortingPage.TranslationY < (SortingPage.Height * 0.25))
+                {
+                    await ShowSortingPage();
+                }
+                else
+                {
+                    await HideSortingPage();
+                }
+            }
+        }
+
+        private async void SortingPageOverlay_Tapped(object sender, EventArgs e)
+        {
+            await HideSortingPage();
+        }
+
+        private async void SortingButton_Clicked(object sender, EventArgs e)
+        {
+            await ShowSortingPage();
         }
     }
 }

@@ -225,7 +225,8 @@
                   InputTransparent="True" CascadeInputTransparent="False">
                 <Grid Grid.Column="1" ColumnSpacing="16"
                       ColumnDefinitions="*,Auto">
-                    <Button Text="Sorting" Padding="14, 0" Style="{StaticResource PrimaryButton}"/>
+                    <Button Text="Sorting" Padding="14, 0" Style="{StaticResource PrimaryButton}"
+                            Clicked="SortingButton_Clicked"/>
                     <Button Text="Filter" Padding="14, 0" Grid.Column="1" Style="{StaticResource PrimaryButton}"
                             Clicked="FilterButton_Clicked" WidthRequest="85"/>
                 </Grid>
@@ -442,6 +443,19 @@
                 <PanGestureRecognizer PanUpdated="FilterViewPanGesture_PanUpdated"/>
             </views:FilterPage.GestureRecognizers>
         </views:FilterPage>
+        
+        <BoxView x:Name="SortingPageOverlay" BackgroundColor="Black" Grid.RowSpan="2">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="SortingPageOverlay_Tapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- SORTING PAGE -->
+        <views:SortingPage x:Name="SortingPage" VerticalOptions="End" Grid.RowSpan="2">
+            <views:SortingPage.GestureRecognizers>
+                <PanGestureRecognizer PanUpdated="SortingPage_PanUpdated"/>
+            </views:SortingPage.GestureRecognizers>
+        </views:SortingPage>
 
         <!-- OVERLAY (NO LOCATION POPUP) -->
         <BoxView x:Name="NoLocationPopupOverlay" BackgroundColor="Black" Grid.RowSpan="2"
