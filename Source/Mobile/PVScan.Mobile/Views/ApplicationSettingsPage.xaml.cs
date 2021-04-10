@@ -61,7 +61,6 @@ namespace PVScan.Mobile.Views
                 Format = randomType,
                 ScanLocation = random.NextDouble() > 0.25 ? randomCoord : null,
                 ScanTime = date,
-                ServerSynced = false,
                 Text = Guid.NewGuid().ToString(),
             };
 

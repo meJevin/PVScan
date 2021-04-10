@@ -78,7 +78,6 @@ namespace PVScan.Mobile.ViewModels
                 {
                     Format = LastResult.BarcodeFormat,
                     Text = LastResult.Text,
-                    ServerSynced = false,
                     ScanTime = DateTime.UtcNow,
                 };
 
