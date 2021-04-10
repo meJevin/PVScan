@@ -6,8 +6,9 @@
     xmlns:views="clr-namespace:PVScan.Mobile.Views"
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
     xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    xmlns:models="clr-namespace:PVScan.Mobile.Models"
     x:Class="PVScan.Mobile.Views.DataTemplates.SortingFieldItem"
-    x:DataType="viewmodels:SortingField"
+    x:DataType="models:SortingField"
     HeightRequest="52">
     <Label Text="{Binding .}" FontSize="16" VerticalOptions="Center"
                            Margin="10,2">

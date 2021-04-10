@@ -28,15 +28,18 @@ namespace PVScan.Mobile.ViewModels
     {
         readonly IBarcodesRepository BarcodesRepository;
         readonly IBarcodesFilter FilterService;
+        readonly IBarcodeSorter SorterService;
         readonly IPopupMessageService PopupMessageService;
 
         readonly SpecifyLocationPage SpecifyLocation;
 
         public HistoryPageViewModel(IBarcodesRepository barcodesRepository,
-            IBarcodesFilter filterService, IPopupMessageService popupMessageService)
+            IBarcodesFilter filterService, IPopupMessageService popupMessageService,
+            IBarcodeSorter sorterService)
         {
             BarcodesRepository = barcodesRepository;
             FilterService = filterService;
+            SorterService = sorterService;
             PopupMessageService = popupMessageService;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
@@ -207,11 +210,7 @@ namespace PVScan.Mobile.ViewModels
                     await barcodesRepository.Delete(b);
 
                     Barcodes.Remove(b);
-
-                    if (BarcodesPaged.Contains(b))
-                    {
-                        BarcodesPaged.Remove(b);
-                    }
+                    BarcodesPaged.Remove(b);
                 }
 
                 SelectedBarcodes.Clear();
@@ -249,40 +248,7 @@ namespace PVScan.Mobile.ViewModels
 
             if (CurrentSorting != null)
             {
-                if (CurrentSorting.Field == SortingField.Date)
-                {
-                    if (CurrentSorting.Descending)
-                    {
-                        dbBarcodes = dbBarcodes.OrderByDescending(b => b.ScanTime);
-                    }
-                    else
-                    {
-                        dbBarcodes = dbBarcodes.OrderBy(b => b.ScanTime);
-                    }
-                }
-                else if (CurrentSorting.Field == SortingField.Format)
-                {
-                    if (CurrentSorting.Descending)
-                    {
-                        dbBarcodes = dbBarcodes.OrderByDescending(b => b.Format);
-                    }
-                    else
-                    {
-                        dbBarcodes = dbBarcodes.OrderBy(b => b.Format);
-                    }
-                }
-                else if (CurrentSorting.Field == SortingField.Text)
-                {
-
-                    if (CurrentSorting.Descending)
-                    {
-                        dbBarcodes = dbBarcodes.OrderByDescending(b => b.Text);
-                    }
-                    else
-                    {
-                        dbBarcodes = dbBarcodes.OrderBy(b => b.Text);
-                    }
-                }
+                dbBarcodes = await SorterService.Sort(dbBarcodes, CurrentSorting);
             }
 
             Barcodes.AddRange(dbBarcodes);

@@ -23,27 +23,6 @@ using ZXing;
 
 namespace PVScan.Mobile.ViewModels
 {
-    // Please take these out into a separate service THIS DOESN'T BELONG HERE!!
-    public enum SortingField
-    {
-        None,
-        Date,
-        Text,
-        Format
-    };
-
-    public class Sorting
-    {
-        public SortingField Field { get; set; }
-        public bool Descending { get; set; }
-
-        public static Sorting Default() => new Sorting()
-        {
-            Field = SortingField.Date,
-            Descending = true,
-        };
-    }
-
     public class SortingPageViewModel : BaseViewModel
     {
         public SortingPageViewModel()
