@@ -59,6 +59,7 @@
   <ItemGroup>
     <Folder Include="Common\Assets\" />
     <Folder Include="Views\DataTemplates\" />
+    <Folder Include="ViewModels\Messages\Sorting\" />
   </ItemGroup>
   
   <ItemGroup>
