@@ -84,14 +84,16 @@
             <ImageButton Command="{Binding ToggleTorchCommand}" BackgroundColor="Transparent">
                 <ImageButton.Source>
                     <FontImageSource FontFamily="FontAwesome"
-                                     Glyph="{x:Static theme:IconFont.Lightbulb}"/>
+                                     Glyph="{x:Static theme:IconFont.Lightbulb}"
+                                     Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
                 </ImageButton.Source>
             </ImageButton>
             
             <ImageButton Grid.Column="2" Command="{Binding PickPhotoToScanCommand}" BackgroundColor="Transparent">
                 <ImageButton.Source>
                     <FontImageSource FontFamily="FontAwesome"
-                                     Glyph="{x:Static theme:IconFont.Images}"/>
+                                     Glyph="{x:Static theme:IconFont.Images}"
+                                     Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
                 </ImageButton.Source>
             </ImageButton>
         </Grid>
