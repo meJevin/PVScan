@@ -81,8 +81,7 @@
                                        xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
                                        xtc:TouchEffect.AnimationDuration="325">
                                     <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ResetDateFilterCommand}"
-                                                                      Tapped="ResetDateFilter_Tapped"/>
+                                        <TapGestureRecognizer Command="{Binding ResetDateFilterCommand}"/>
                                     </Label.GestureRecognizers>
                                 </Label>
                             </Grid>
@@ -97,11 +96,11 @@
                                     <Button Text="Last" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
                                             Dark={StaticResource TextPrimaryColor_Dark},
                                             Light={StaticResource TextPrimaryColor_Light}}"
-                                            x:Name="LastViewButton" Clicked="LastDateType_Clicked"/>
+                                            x:Name="LastViewButton" Command="{Binding SwitchToDateLatest}"/>
                                     <Button Text="Range" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
                                             Dark={StaticResource TextPrimaryColor_Dark},
                                             Light={StaticResource TextPrimaryColor_Light}}"
-                                            x:Name="RangeViewButton" Clicked="RangeDateType_Clicked"/>
+                                            x:Name="RangeViewButton" Command="{Binding SwitchToDateRange}"/>
                                 </Grid>
 
 
@@ -157,10 +156,12 @@
                         </StackLayout>
                     </ScrollView>
                     
-                    <Button Text="Apply" Style="{StaticResource PrimaryButton}"
-                                        Command="{Binding ApplyFilterCommand}"
-                                        x:Name="ApplyFilterButton"
-                                        Margin="0,0,0,35" VerticalOptions="End"/>
+                    <Button Text="Apply"
+                            Style="{StaticResource PrimaryButton}"
+                            Command="{Binding ApplyFilterCommand}"
+                            IsEnabled="{Binding ApplyFilterCommandEnabled}"
+                            x:Name="ApplyFilterButton"
+                            Margin="0,0,0,35" VerticalOptions="End"/>
                 </Grid>
             </StackLayout>
         </Grid>
