@@ -28,6 +28,9 @@ namespace PVScan.Mobile.Views
     public partial class HistoryPage : ContentView
     {
         double FilterPageHeight;
+        double BarcodeInfoPageHeight;
+        double MapsBarcodeInfoPageHeight;
+
         double OverlayMaxOpacity = 0.65;
 
         double SearchDelay = 500;
@@ -50,7 +53,7 @@ namespace PVScan.Mobile.Views
                 _ = ShowListView(0);
                 _ = HideFilterPage(0);
                 _ = HideSortingPage(0);
-                _ = HideBarcodeInfo(0);
+                _ = HideBarcodeInfoPage(0);
                 _ = HideBarcodeMapsInfo(0);
                 _ = HideNoLocationPopup(0);
             };
@@ -312,47 +315,56 @@ namespace PVScan.Mobile.Views
                 FilterPageHeight = Height - 50;
                 FilterPage.HeightRequest = FilterPageHeight;
                 FilterPage.TranslationY = FilterPageHeight;
+
+                BarcodeInfoPageHeight = Height * 0.65;
+                MapsBarcodeInfoPageHeight = Height * 0.45;
+
+                if (BarcodeInfoPageHeight < 350)
+                {
+                    BarcodeInfoPageHeight = 350;
+                }
+
+                if (MapsBarcodeInfoPageHeight < 350)
+                {
+                    MapsBarcodeInfoPageHeight = 350;
+                }
+
+                BarcodeInfoPage.HeightRequest = BarcodeInfoPageHeight;
+                BarcodeInfoPage.TranslationY = BarcodeInfoPageHeight;
+
+                MapsBarcodeInfoPage.HeightRequest = MapsBarcodeInfoPageHeight;
+                MapsBarcodeInfoPage.TranslationY = MapsBarcodeInfoPageHeight;
             }
         }
 
         private async void BarcodeListViewOverlay_Tapped(object sender, EventArgs e)
         {
-            await HideBarcodeInfo();
+            await HideBarcodeInfoPage();
         }
 
-        private async Task HideBarcodeInfo(uint duration = 250)
+        private async Task HideBarcodeInfoPage(uint duration = 300)
         {
             BarcodeListViewOverlay.InputTransparent = true;
 
             _ = BarcodeListViewOverlay.FadeTo(0, duration, Easing.CubicOut);
-            await BarcodeInfo.TranslateTo(0, BarcodeInfo.Height, duration, Easing.CubicOut);
+            await BarcodeInfoPage.TranslateTo(0, BarcodeInfoPage.Height, duration, Easing.CubicOut);
         }
 
-        private async Task ShowBarcodeInfo(uint duration = 250)
+        private async Task ShowBarcodeInfoPage(uint duration = 300)
         {
             BarcodeListViewOverlay.InputTransparent = false;
 
             _ = BarcodeListViewOverlay.FadeTo(OverlayMaxOpacity, duration, Easing.CubicOut);
             _ = HideBarcodeMapsInfo(duration);
-            await BarcodeInfo.TranslateTo(0, 1, duration, Easing.CubicOut);
+            await BarcodeInfoPage.ScrollToTop();
+            await BarcodeInfoPage.TranslateTo(0, 1, duration, Easing.CubicOut);
         }
 
-        private async Task HideBarcodeMapsInfo(uint duration = 250)
-        {
-            await BarcodeMapsInfo.TranslateTo(0, BarcodeMapsInfo.Height, duration, Easing.CubicOut);
-        }
-
-        private async Task ShowBarcodeMapsInfo(uint duration = 250)
-        {
-            _ = HideBarcodeInfo(duration);
-            await BarcodeMapsInfo.TranslateTo(0, 1, duration, Easing.CubicOut);
-        }
-
-        private async void BarcodeMapsInfo_PanUpdated(object sender, PanUpdatedEventArgs e)
+        private async void BarcodeInfoPage_PanUpdated(object sender, PanUpdatedEventArgs e)
         {
             if (e.StatusType == GestureStatus.Running)
             {
-                double newTranslationY = BarcodeMapsInfo.TranslationY;
+                double newTranslationY = BarcodeInfoPage.TranslationY;
 
                 // Because xamarin :L
                 // The interesting thing is that values are actually the same, but android does something weird and we actually have to add, IDK
@@ -370,59 +382,22 @@ namespace PVScan.Mobile.Views
                     newTranslationY = 1;
                 }
 
-                BarcodeMapsInfo.TranslationY = newTranslationY;
-            }
-            else if (e.StatusType == GestureStatus.Completed)
-            {
-                if (BarcodeMapsInfo.TranslationY < (BarcodeMapsInfo.Height * 0.25))
-                {
-                    await ShowBarcodeMapsInfo();
-                }
-                else
-                {
-                    await HideBarcodeMapsInfo();
-                }
-            }
-        }
+                double newOverlayOpacity = OverlayMaxOpacity - ((newTranslationY / BarcodeInfoPage.Height) * OverlayMaxOpacity);
 
-        private async void BarcodeInfo_PanUpdated(object sender, PanUpdatedEventArgs e)
-        {
-            if (e.StatusType == GestureStatus.Running)
-            {
-                double newTranslationY = BarcodeInfo.TranslationY;
-
-                // Because xamarin :L
-                // The interesting thing is that values are actually the same, but android does something weird and we actually have to add, IDK
-                if (Device.RuntimePlatform == Device.Android)
-                {
-                    newTranslationY += e.TotalY;
-                }
-                else if (Device.RuntimePlatform == Device.iOS)
-                {
-                    newTranslationY = e.TotalY;
-                }
-
-                if (newTranslationY < 1)
-                {
-                    newTranslationY = 1;
-                }
-
-                double newOverlayOpacity = OverlayMaxOpacity - ((newTranslationY / BarcodeInfo.Height) * OverlayMaxOpacity);
-
-                BarcodeInfo.TranslationY = newTranslationY;
+                BarcodeInfoPage.TranslationY = newTranslationY;
                 BarcodeListViewOverlay.Opacity = newOverlayOpacity;
 
                 //Console.WriteLine($"\nTOTAL_T, NEW_TRANS_Y: {e.TotalY}, {newTranslationY}");
             }
             else if (e.StatusType == GestureStatus.Completed)
             {
-                if (BarcodeInfo.TranslationY < (BarcodeInfo.Height * 0.25))
+                if (BarcodeInfoPage.TranslationY < (BarcodeInfoPage.Height * 0.25))
                 {
-                    await ShowBarcodeInfo();
+                    await ShowBarcodeInfoPage();
                 }
                 else
                 {
-                    await HideBarcodeInfo();
+                    await HideBarcodeInfoPage();
                 }
             }
         }
@@ -435,31 +410,7 @@ namespace PVScan.Mobile.Views
                 return;
             }
 
-            await ShowBarcodeInfo();
-        }
-
-        private async void BarcodeInfoShowOnMap_Clicked(object sender, EventArgs e)
-        {
-            Barcode selectedBarcode = VM.SelectedBarcode;
-            var barcodeLocation = selectedBarcode.ScanLocation;
-
-            if (barcodeLocation == null)
-            {
-                return;
-            }
-
-            await HideBarcodeInfo();
-            await ShowMapView();
-
-            Map.MoveToRegion(MapSpan.FromCenterAndRadius(
-                new Position(barcodeLocation.Latitude.Value, barcodeLocation.Longitude.Value),
-                Distance.FromKilometers(0.1)));
-        }
-
-        private async void BarcodeInfoDelete_Clicked(object sender, EventArgs e)
-        {
-            _ = HideBarcodeInfo();
-            _ = HideBarcodeMapsInfo();
+            await ShowBarcodeInfoPage();
         }
 
         private async void SearchEntry_Focused(object sender, FocusEventArgs e)
@@ -468,7 +419,7 @@ namespace PVScan.Mobile.Views
 
             if (ShowingListView)
             {
-                _ = BarcodeInfo.TranslateTo(0, BarcodeInfo.Height, 250, Easing.CubicOut);
+                _ = BarcodeInfoPage.TranslateTo(0, BarcodeInfoPage.Height, 250, Easing.CubicOut);
                 _ = BarcodeListViewOverlay.FadeTo(OverlayMaxOpacity, 250, Easing.CubicOut);
                 BarcodeListViewOverlay.InputTransparent = false;
             }
@@ -482,38 +433,12 @@ namespace PVScan.Mobile.Views
 
             if (ShowingListView)
             {
-                _ = BarcodeInfo.TranslateTo(0, BarcodeInfo.Height, 250, Easing.CubicOut);
+                _ = BarcodeInfoPage.TranslateTo(0, BarcodeInfoPage.Height, 250, Easing.CubicOut);
                 _ = BarcodeListViewOverlay.FadeTo(0, 250, Easing.CubicOut);
                 BarcodeListViewOverlay.InputTransparent = true;
             }
 
             await BarcodeMapViewOverlay.FadeTo(0, 250, Easing.CubicOut);
-        }
-
-        private async void BarcodeInfoMapsShowOnList_Clicked(object sender, EventArgs e)
-        {
-            VM.HighlightedBarcode = null;
-
-            var selectedBarcodeIndex = VM.Barcodes.IndexOf(VM.SelectedBarcode);
-
-            while (VM.BarcodesPaged.Count - 1 < selectedBarcodeIndex)
-            {
-                // Load required barcodes until paged contains the one we selected on map
-                VM.LoadNextPage.Execute(null);
-            }
-
-            await HideBarcodeMapsInfo();
-            await ShowListView();
-
-            await Task.Delay(100);
-
-            BarcodesCollectionView.ScrollTo(selectedBarcodeIndex, -1, ScrollToPosition.Center, false);
-
-            await Task.Delay(250);
-
-            VM.HighlightedBarcode = VM.SelectedBarcode;
-
-            VM.HighlightedBarcode = null;
         }
 
         private async void PinMarkerInfoWindow_Clicked(object sender, PinClickedEventArgs e)
@@ -670,6 +595,112 @@ namespace PVScan.Mobile.Views
         private async void SortingButton_Clicked(object sender, EventArgs e)
         {
             await ShowSortingPage();
+        }
+
+        private async void BarcodeInfoPage_Deleted(object sender, Barcode e)
+        {
+            await HideBarcodeInfoPage();
+
+            VM.DeleteBarcodeCommand.Execute(VM.SelectedBarcode);
+        }
+
+        private async void BarcodeInfoPage_ShowOnMap(object sender, Barcode e)
+        {
+            Barcode selectedBarcode = VM.SelectedBarcode;
+            var barcodeLocation = selectedBarcode.ScanLocation;
+
+            if (barcodeLocation == null)
+            {
+                return;
+            }
+
+            await HideBarcodeInfoPage();
+            await ShowMapView();
+
+            Map.MoveToRegion(MapSpan.FromCenterAndRadius(
+                new Position(barcodeLocation.Latitude.Value, barcodeLocation.Longitude.Value),
+                Distance.FromKilometers(0.1)));
+        }
+
+        private async Task HideBarcodeMapsInfo(uint duration = 300)
+        {
+            await MapsBarcodeInfoPage.TranslateTo(0, MapsBarcodeInfoPage.Height, duration, Easing.CubicOut);
+        }
+
+        private async Task ShowBarcodeMapsInfo(uint duration = 300)
+        {
+            _ = HideBarcodeInfoPage(duration);
+            await MapsBarcodeInfoPage.TranslateTo(0, 1, duration, Easing.CubicOut);
+        }
+
+        private async void MapsBarcodeInfoPage_Deleted(object sender, Barcode e)
+        {
+            VM.DeleteBarcodeCommand.Execute(VM.SelectedBarcode);
+            _ = HideBarcodeInfoPage();
+            _ = HideBarcodeMapsInfo();
+        }
+
+        private async void MapsBarcodeInfoPage_ShowInList(object sender, Barcode e)
+        {
+            VM.HighlightedBarcode = null;
+
+            var selectedBarcodeIndex = VM.Barcodes.IndexOf(VM.SelectedBarcode);
+
+            while (VM.BarcodesPaged.Count - 1 < selectedBarcodeIndex)
+            {
+                // Load required barcodes until paged contains the one we selected on map
+                VM.LoadNextPage.Execute(null);
+            }
+
+            await HideBarcodeMapsInfo();
+            await ShowListView();
+
+            await Task.Delay(100);
+
+            BarcodesCollectionView.ScrollTo(selectedBarcodeIndex, -1, ScrollToPosition.Center, false);
+
+            await Task.Delay(250);
+
+            VM.HighlightedBarcode = VM.SelectedBarcode;
+
+            VM.HighlightedBarcode = null;
+        }
+
+        private async void MapsBarcodeInfoPage_PanUpdated(object sender, PanUpdatedEventArgs e)
+        {
+            if (e.StatusType == GestureStatus.Running)
+            {
+                double newTranslationY = MapsBarcodeInfoPage.TranslationY;
+
+                // Because xamarin :L
+                // The interesting thing is that values are actually the same, but android does something weird and we actually have to add, IDK
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    newTranslationY += e.TotalY;
+                }
+                else if (Device.RuntimePlatform == Device.iOS)
+                {
+                    newTranslationY = e.TotalY;
+                }
+
+                if (newTranslationY < 1)
+                {
+                    newTranslationY = 1;
+                }
+
+                MapsBarcodeInfoPage.TranslationY = newTranslationY;
+            }
+            else if (e.StatusType == GestureStatus.Completed)
+            {
+                if (MapsBarcodeInfoPage.TranslationY < (MapsBarcodeInfoPage.Height * 0.25))
+                {
+                    await ShowBarcodeMapsInfo();
+                }
+                else
+                {
+                    await HideBarcodeMapsInfo();
+                }
+            }
         }
     }
 }
