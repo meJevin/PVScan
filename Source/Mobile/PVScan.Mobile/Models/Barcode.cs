@@ -11,7 +11,7 @@ namespace PVScan.Mobile.Models
         public BarcodeFormat Format { get; set; }
         public string Text { get; set; }
         public Coordinate ScanLocation { get; set; }
-        public bool ServerSynced { get; set; }
         public DateTime ScanTime { get; set; }
+        public bool Favorite { get; set; }
     }
 }
