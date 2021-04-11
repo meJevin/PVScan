@@ -15,6 +15,7 @@
         <ResourceDictionary>
             <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
             <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
+            <converters:CoordinateStringConverter x:Key="CoordinateString"/>
         </ResourceDictionary>
     </ContentView.Resources>
 
@@ -70,7 +71,8 @@
 
                             <StackLayout Spacing="0">
                                 <Label Text="Location" FontSize="17" Opacity="0.45"/>
-                                <Label Text="{Binding SelectedBarcode.ScanLocation, FallbackValue=Test}" FontSize="15"/>
+                                <Label Text="{Binding SelectedBarcode.ScanLocation, FallbackValue=Test,
+                                    Converter={StaticResource CoordinateString}}" FontSize="15"/>
                             </StackLayout>
                             
                             <StackLayout Spacing="0">
