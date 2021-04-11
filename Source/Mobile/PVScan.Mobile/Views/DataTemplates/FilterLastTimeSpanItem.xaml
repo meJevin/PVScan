@@ -19,14 +19,15 @@
                            FontSize="16" VerticalOptions="Center"
                            Margin="10,0,0,2"/>
 
-    <Image HeightRequest="20" WidthRequest="30" HorizontalOptions="End" VerticalOptions="Center" Margin="10,0"
+    <Image HorizontalOptions="End" VerticalOptions="Center" Margin="10,0"
            Opacity="0" x:Name="CheckImage">
         <Image.Source>
             <FontImageSource FontFamily="FontAwesome"
                                              Glyph="{x:Static theme:IconFont.Check}"
                                              Color="{AppThemeBinding 
                                                         Dark={StaticResource TextPrimaryColor_Dark}, 
-                                                        Light={StaticResource TextPrimaryColor_Light}}"/>
+                                                        Light={StaticResource TextPrimaryColor_Light}}"
+                             Size="18"/>
         </Image.Source>
     </Image>
 

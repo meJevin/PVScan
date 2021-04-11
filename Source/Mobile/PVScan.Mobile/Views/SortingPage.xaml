@@ -67,7 +67,8 @@
                         <Grid ColumnDefinitions="Auto,*,Auto" Margin="8,0,8,8" >
                             <StackLayout Orientation="Horizontal" Spacing="0">
                                 <Label Text="Sort " FontSize="20"/>
-                                <Label Text="{Binding Descending, Converter={StaticResource BoolSortingOrderString}}" FontSize="20" TextColor="#349CFC">
+                                <Label Text="{Binding Descending, Converter={StaticResource BoolSortingOrderString}}" FontSize="20"
+                                       TextColor="#349CFC">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ToggleOrderCommand}"/>
                                     </Label.GestureRecognizers>
