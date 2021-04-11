@@ -40,32 +40,33 @@
 
             </BoxView>
 
-            <StackLayout Margin="15, 15, 15, 0" Spacing="0">
-                <StackLayout Spacing="15" HeightRequest="100">
+            <Grid Margin="15, 15, 15, 0" RowDefinitions="65,*" RowSpacing="0">
+                <Grid>
                     <Frame HasShadow="False" 
                            BackgroundColor="{AppThemeBinding 
-                        Dark={StaticResource TextPrimaryColor_Dark}, 
-                        Light={StaticResource TextPrimaryColor_Light}}"
+                            Dark={StaticResource TextPrimaryColor_Dark}, 
+                            Light={StaticResource TextPrimaryColor_Light}}"
                            WidthRequest="46"
                            HeightRequest="6"
-                           Padding="0" 
+                           Padding="0"
+                           Margin="0"
                            HorizontalOptions="Center"
-                           CornerRadius="{OnPlatform Android=12, iOS=3}"/>
-
-                    <Label HorizontalOptions="Center"
-                       FontSize="22"
-                       Margin="0,0,0,5">
+                           CornerRadius="{OnPlatform Android=12, iOS=3}"
+                           VerticalOptions="Start"/>
+                    
+                    <Label HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="22">
                         Filter Barcodes
                     </Label>
-                </StackLayout>
 
-                <BoxView HeightRequest="1" Color="{AppThemeBinding 
-                    Dark={StaticResource TextPrimaryColor_Dark}, 
-                    Light={StaticResource TextPrimaryColor_Light}}" 
-                         Margin="0,0,0,0"/>
+                    <BoxView HeightRequest="1" Color="{AppThemeBinding 
+                        Dark={StaticResource TextPrimaryColor_Dark}, 
+                        Light={StaticResource TextPrimaryColor_Light}}"
+                             VerticalOptions="End" HorizontalOptions="Fill"/>
+                </Grid>
 
                 <!-- Main Content -->
-                <Grid>
+                <Grid Grid.Row="1">
                     <ScrollView VerticalScrollBarVisibility="Never">
                         <StackLayout>
                             <Grid HeightRequest="16"/>
@@ -163,7 +164,7 @@
                             x:Name="ApplyFilterButton"
                             Margin="0,0,0,35" VerticalOptions="End"/>
                 </Grid>
-            </StackLayout>
+            </Grid>
         </Grid>
     </ContentView.Content>
 </ContentView>

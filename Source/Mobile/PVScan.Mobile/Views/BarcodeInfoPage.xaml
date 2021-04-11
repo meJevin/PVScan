@@ -34,31 +34,32 @@
 
             </BoxView>
 
-            <StackLayout Margin="15, 15, 15, 0" Spacing="0">
-                <StackLayout Spacing="15">
+            <Grid Margin="15, 15, 15, 0" RowDefinitions="65,*" RowSpacing="0">
+                <Grid>
                     <Frame HasShadow="False" 
-                               BackgroundColor="{AppThemeBinding 
-                        Dark={StaticResource TextPrimaryColor_Dark}, 
-                        Light={StaticResource TextPrimaryColor_Light}}"
-                               WidthRequest="46"
-                               HeightRequest="9"
-                               Padding="0" 
-                               HorizontalOptions="Center"
-                               CornerRadius="{OnPlatform Android=12, iOS=3}"/>
+                           BackgroundColor="{AppThemeBinding 
+                            Dark={StaticResource TextPrimaryColor_Dark}, 
+                            Light={StaticResource TextPrimaryColor_Light}}"
+                           WidthRequest="46"
+                           HeightRequest="6"
+                           Padding="0"
+                           Margin="0"
+                           HorizontalOptions="Center"
+                           CornerRadius="{OnPlatform Android=12, iOS=3}"
+                           VerticalOptions="Start"/>
                     
-                    <Label HorizontalOptions="Center"
-                       FontSize="22"
-                       Margin="0,0,0,5">
+                    <Label HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="22">
                         Barcode Information
                     </Label>
-                </StackLayout>
 
-                <BoxView HeightRequest="1" Color="{AppThemeBinding 
-                    Dark={StaticResource TextPrimaryColor_Dark}, 
-                    Light={StaticResource TextPrimaryColor_Light}}" 
-                         Margin="0,12,0,0"/>
+                    <BoxView HeightRequest="1" Color="{AppThemeBinding 
+                        Dark={StaticResource TextPrimaryColor_Dark}, 
+                        Light={StaticResource TextPrimaryColor_Light}}"
+                             VerticalOptions="End" HorizontalOptions="Fill"/>
+                </Grid>
 
-                <Grid>
+                <Grid Grid.Row="1">
                     <ScrollView VerticalScrollBarVisibility="Never"
                                 x:Name="ContentScrollView">
                         <StackLayout Margin="0,18,0,0" Spacing="16" Padding="4,0">
@@ -105,7 +106,7 @@
                         </StackLayout>
                     </ScrollView>
                 </Grid>
-            </StackLayout>
+            </Grid>
         </Grid>
     </ContentView.Content>
 </ContentView>
