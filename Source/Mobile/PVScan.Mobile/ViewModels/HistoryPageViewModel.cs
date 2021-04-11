@@ -70,8 +70,19 @@ namespace PVScan.Mobile.ViewModels
                     var result = tempEnumerable.FirstOrDefault();
                     if (result != null)
                     {
-                        Barcodes.Insert(0, result);
-                        BarcodesPaged.Insert(0, result);
+                        var tempList = Barcodes.ToList();
+                        tempList.Add(result);
+
+                        var newListSorted = (await SorterService.Sort(tempList, CurrentSorting)).ToList();
+
+                        var insertedIndex = newListSorted.IndexOf(result);
+
+                        Barcodes.Insert(insertedIndex, result);
+                        int lastPagedIndex = BarcodesPaged.Count;
+                        if (insertedIndex <= lastPagedIndex)
+                        {
+                            BarcodesPaged.Insert(insertedIndex, result);
+                        }
                     }
                 });
 
