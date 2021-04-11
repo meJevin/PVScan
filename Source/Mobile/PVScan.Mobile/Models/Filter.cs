@@ -20,6 +20,17 @@ namespace PVScan.Mobile.Models
 
         public LastTimeType? LastType { get; set; }
 
-        public IEnumerable<BarcodeFormat> BarcodeFormats { get; set; }
+        public IList<BarcodeFormat> BarcodeFormats { get; set; }
+
+        public static Filter Default()
+        {
+            return new Filter()
+            {
+                BarcodeFormats = new List<BarcodeFormat>(),
+                LastType = null,
+                FromDate = null,
+                ToDate = null,
+            };
+        }
     }
 }
