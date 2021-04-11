@@ -240,89 +240,17 @@
             </BoxView>
             
             <!-- BARCODE INFO PANEL -->
-            <Grid x:Name="BarcodeInfo" HeightRequest="350" VerticalOptions="End">
-                <Frame BackgroundColor="{AppThemeBinding 
-                    Dark={StaticResource BackgroundColorDarker},
-                    Light={StaticResource BackgroundColorLighter}}"
-                       HasShadow="False" CornerRadius="20">
-
-                </Frame>
-
-                <BoxView BackgroundColor="{AppThemeBinding 
-                    Dark={StaticResource BackgroundColorDarker},
-                    Light={StaticResource BackgroundColorLighter}}" 
-                         HeightRequest="20" VerticalOptions="End">
-
-                </BoxView>
-
-                <Grid Margin="15, 15, 15, 35">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <StackLayout Spacing="15">
-                        <Frame HasShadow="False" 
-                               BackgroundColor="{AppThemeBinding 
-                        Dark={StaticResource TextPrimaryColor_Dark}, 
-                        Light={StaticResource TextPrimaryColor_Light}}"
-                               WidthRequest="45"
-                               HeightRequest="6"
-                               Padding="0" 
-                               HorizontalOptions="Center"
-                               CornerRadius="{OnPlatform Android=12, iOS=3}"/>
-
-                        <Label HorizontalOptions="Center"
-                               FontSize="16"
-                               Margin="0,0,0,5"
-                               Text="Barcode Information"/>
-                    </StackLayout>
-
-                    <BoxView Grid.Row="1" HeightRequest="1" Color="{AppThemeBinding 
-                        Dark={StaticResource TextPrimaryColor_Dark}, 
-                        Light={StaticResource TextPrimaryColor_Light}}" 
-                             Margin="0,0,0,4"/>
-
-                    <ScrollView Grid.Row="2">
-                        <StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding SelectedBarcode.Text, FallbackValue=None, StringFormat='Text: {0}'}"/>
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Location:"/>
-                                <Label Text="{Binding SelectedBarcode.ScanLocation.Latitude, FallbackValue=None}"/>
-                                <Label Text="{Binding SelectedBarcode.ScanLocation.Longitude, FallbackValue=None}"/>
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Format:"/>
-                                <Label Text="{Binding SelectedBarcode.Format, Converter={StaticResource BarcodeFormatString}}"/>
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding SelectedBarcode.ScanTime,
-                                    FallbackValue=None, StringFormat='Scan time: {0}',
-                                    Converter={StaticResource DateTimeUTCDateTimeLocal}}"/>
-                            </StackLayout>
-                        </StackLayout>
-                    </ScrollView>
-
-
-                    <Button Text="Show on map" Style="{StaticResource PrimaryButton}" Margin="0, 5" Grid.Row="3"
-                            Clicked="BarcodeInfoShowOnMap_Clicked"/>
-
-                    <Button Text="Delete" Grid.Row="4"
-                            VerticalOptions="End" BackgroundColor="#d61818" TextColor="White"
-                            Command="{Binding DeleteBarcodeCommand}"
-                            CommandParameter="{Binding SelectedBarcode}"
-                            Clicked="BarcodeInfoDelete_Clicked"/>
-                </Grid>
-
-                <Grid.GestureRecognizers>
-                    <PanGestureRecognizer PanUpdated="BarcodeInfo_PanUpdated"/>
-                </Grid.GestureRecognizers>
-            </Grid>
+            <views:BarcodeInfoPage VerticalOptions="End"
+                                   SelectedBarcode="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}}, Path=BindingContext.SelectedBarcode}"
+                                   x:Name="BarcodeInfoPage"
+                                   Deleted="BarcodeInfoPage_Deleted"
+                                   ShowOnMap="BarcodeInfoPage_ShowOnMap"
+                                   ShowInListButtonVisible="False"
+                                   ShowOnMapButtonVisible="True">
+                <views:BarcodeInfoPage.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="BarcodeInfoPage_PanUpdated"/>
+                </views:BarcodeInfoPage.GestureRecognizers>
+            </views:BarcodeInfoPage>
         </Grid>
 
         <!-- MAP VIEW -->
@@ -341,89 +269,17 @@
             </maps:Map>
             
             <!-- BARCODE INFO PANEL -->
-            <Grid x:Name="BarcodeMapsInfo" HeightRequest="350" VerticalOptions="End">
-                <Frame BackgroundColor="{AppThemeBinding 
-                    Dark={StaticResource BackgroundColorDarker},
-                    Light={StaticResource BackgroundColorLighter}}"
-                       HasShadow="False" CornerRadius="20">
-
-                </Frame>
-
-                <BoxView BackgroundColor="{AppThemeBinding 
-                    Dark={StaticResource BackgroundColorDarker},
-                    Light={StaticResource BackgroundColorLighter}}" 
-                         HeightRequest="20" VerticalOptions="End">
-
-                </BoxView>
-
-                <Grid Margin="15, 15, 15, 35">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <StackLayout Spacing="15">
-                        <Frame HasShadow="False" 
-                               BackgroundColor="{AppThemeBinding 
-                        Dark={StaticResource TextPrimaryColor_Dark}, 
-                        Light={StaticResource TextPrimaryColor_Light}}"
-                               WidthRequest="45"
-                               HeightRequest="6"
-                               Padding="0" 
-                               HorizontalOptions="Center"
-                               CornerRadius="{OnPlatform Android=12, iOS=4}"/>
-
-                        <Label HorizontalOptions="Center"
-                               FontSize="16"
-                               Margin="0,0,0,5"
-                               Text="Barcode Information"/>
-                    </StackLayout>
-
-                    <BoxView Grid.Row="1" HeightRequest="1" Color="{AppThemeBinding 
-                        Dark={StaticResource TextPrimaryColor_Dark}, 
-                        Light={StaticResource TextPrimaryColor_Light}}" 
-                             Margin="0,0,0,4"/>
-
-                    <ScrollView Grid.Row="2">
-                        <StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding SelectedBarcode.Text, FallbackValue=None, StringFormat='Text: {0}'}"/>
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Location:"/>
-                                <Label Text="{Binding SelectedBarcode.ScanLocation.Latitude, FallbackValue=None}"/>
-                                <Label Text="{Binding SelectedBarcode.ScanLocation.Longitude, FallbackValue=None}"/>
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Format:"/>
-                                <Label Text="{Binding SelectedBarcode.Format, Converter={StaticResource BarcodeFormatString}}"/>
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding SelectedBarcode.ScanTime,
-                                    FallbackValue=None, StringFormat='Scan time: {0}',
-                                    Converter={StaticResource DateTimeUTCDateTimeLocal}}"/>
-                            </StackLayout>
-                        </StackLayout>
-                    </ScrollView>
-
-
-                    <Button Text="Show in list" Style="{StaticResource PrimaryButton}" Margin="0, 5" Grid.Row="3"
-                            Clicked="BarcodeInfoMapsShowOnList_Clicked"/>
-
-                    <Button Text="Delete" Grid.Row="4"
-                            VerticalOptions="End" BackgroundColor="#d61818" TextColor="White"
-                            Command="{Binding DeleteBarcodeCommand}"
-                            CommandParameter="{Binding SelectedBarcode}"
-                            Clicked="BarcodeInfoDelete_Clicked"/>
-                </Grid>
-
-                <Grid.GestureRecognizers>
-                    <PanGestureRecognizer PanUpdated="BarcodeMapsInfo_PanUpdated"/>
-                </Grid.GestureRecognizers>
-            </Grid>
+            <views:BarcodeInfoPage VerticalOptions="End"
+                                   SelectedBarcode="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}}, Path=BindingContext.SelectedBarcode}"
+                                   x:Name="MapsBarcodeInfoPage"
+                                   Deleted="MapsBarcodeInfoPage_Deleted"
+                                   ShowInList="MapsBarcodeInfoPage_ShowInList"
+                                   ShowInListButtonVisible="True"
+                                   ShowOnMapButtonVisible="False">
+                <views:BarcodeInfoPage.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="MapsBarcodeInfoPage_PanUpdated"/>
+                </views:BarcodeInfoPage.GestureRecognizers>
+            </views:BarcodeInfoPage>
 
             <BoxView x:Name="BarcodeMapViewOverlay" BackgroundColor="Black"
                      Opacity="0" InputTransparent="True">
