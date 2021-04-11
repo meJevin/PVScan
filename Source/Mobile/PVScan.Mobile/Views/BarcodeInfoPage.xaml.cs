@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PVScan.Mobile.Converters;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.ViewModels;
 using Xamarin.Forms;
+using Xamarin.Forms.Svg;
 
 namespace PVScan.Mobile.Views
 {
@@ -41,7 +43,16 @@ namespace PVScan.Mobile.Views
         
         static async void OnSelectedBarcodeChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            (bindable.BindingContext as BarcodeInfoPageViewModel).SelectedBarcode = newValue as Barcode;
+            var VM = (bindable.BindingContext as BarcodeInfoPageViewModel);
+            var newBarcode = newValue as Barcode;
+
+            VM.SelectedBarcode = newValue as Barcode;
+
+            var page = (bindable as BarcodeInfoPage);
+
+            BarcodeImageConverter cnv = new BarcodeImageConverter();
+
+            page.BarcodeImage.Source = (SvgImageSource)cnv.Convert(newBarcode, null, null, null);
         }
         
         static async void OnShowInListButtonVisibleChanged(BindableObject bindable, object oldValue, object newValue)

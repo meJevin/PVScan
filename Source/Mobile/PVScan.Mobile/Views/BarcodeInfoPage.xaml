@@ -87,7 +87,7 @@
                             
                             <StackLayout Spacing="3">
                                 <Label Text="Barcode image" FontSize="17" Opacity="0.45"/>
-                                <Image HeightRequest="125" BackgroundColor="White"/>
+                                <Image x:Name="BarcodeImage" HeightRequest="125" BackgroundColor="White"/>
                             </StackLayout>
 
                             <StackLayout Margin="0,0,0,12" VerticalOptions="End" Spacing="10">
