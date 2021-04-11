@@ -7,6 +7,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+using Xamarin.Forms.Svg;
 using Xamarin.Forms.Xaml;
 
 namespace PVScan.Mobile
@@ -18,6 +19,8 @@ namespace PVScan.Mobile
             InitializeTheme();
 
             InitializeComponent();
+
+            SvgImageSource.RegisterAssembly();
 
             var mainPage = Resolver.Resolve<MainPage>();
 
