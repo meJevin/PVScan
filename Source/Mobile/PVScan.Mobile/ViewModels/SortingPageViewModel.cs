@@ -35,12 +35,13 @@ namespace PVScan.Mobile.ViewModels
             ToggleOrderCommand = new Command(() =>
             {
                 Descending = !Descending;
+
+                ToggleApplySortingEnabled();
             });
 
             ApplySortingCommand = new Command(() =>
             {
-                if (SelectedSortingField == CurrentSorting.Field &&
-                    Descending == CurrentSorting.Descending)
+                if (AppliedAndCurrentSortingSame())
                 {
                     // Do nothing..
                     return;
@@ -51,6 +52,8 @@ namespace PVScan.Mobile.ViewModels
                     Field = SelectedSortingField,
                     Descending = Descending,
                 };
+
+                ToggleApplySortingEnabled();
 
                 // Send message that sorting has been applied
                 MessagingCenter.Send(this, nameof(SortingAppliedMessage), new SortingAppliedMessage()
@@ -66,6 +69,8 @@ namespace PVScan.Mobile.ViewModels
 
                 Descending = defaultSorting.Descending;
                 SelectedSortingField = defaultSorting.Field;
+
+                ToggleApplySortingEnabled();
             });
 
             SortingFieldSelectedCommand = new Command((object newField) =>
@@ -74,6 +79,8 @@ namespace PVScan.Mobile.ViewModels
                 {
                     SelectedSortingField = (SortingField)newField;
                 }
+
+                ToggleApplySortingEnabled();
             });
         }
 
@@ -92,6 +99,23 @@ namespace PVScan.Mobile.ViewModels
             }
         }
 
+        private void ToggleApplySortingEnabled()
+        {
+            if (AppliedAndCurrentSortingSame())
+            {
+                ApplySortingEnabled = false;
+                return;
+            }
+
+            ApplySortingEnabled = true;
+        }
+
+        private bool AppliedAndCurrentSortingSame()
+        {
+            return SelectedSortingField == CurrentSorting.Field &&
+                    Descending == CurrentSorting.Descending;
+        }
+
         private void InitDefaultSorting()
         {
             CurrentSorting = Sorting.Default();
@@ -101,6 +125,8 @@ namespace PVScan.Mobile.ViewModels
         {
             Descending = CurrentSorting.Descending;
             SelectedSortingField = CurrentSorting.Field;
+
+            ToggleApplySortingEnabled();
         }
 
         public Sorting CurrentSorting { get; set; }
@@ -113,6 +139,8 @@ namespace PVScan.Mobile.ViewModels
         public ICommand ToggleOrderCommand { get; set; }
 
         public ICommand ApplySortingCommand { get; set; }
+        public bool ApplySortingEnabled { get; set; }
+
         public ICommand ResetSortingCommand { get; set; }
 
         public ICommand SortingFieldSelectedCommand { get; set; }

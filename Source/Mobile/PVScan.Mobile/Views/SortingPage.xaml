@@ -91,7 +91,7 @@
                         
                         <Button Text="Apply" Style="{StaticResource PrimaryButton}"
                                 VerticalOptions="End"
-                                Command="{Binding ApplySortingCommand}"/>
+                                Command="{Binding ApplySortingCommand}" IsEnabled="{Binding ApplySortingEnabled}"/>
                     </StackLayout>
                 </Grid>
             </StackLayout>

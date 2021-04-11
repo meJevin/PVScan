@@ -244,6 +244,8 @@ namespace PVScan.Mobile.Views
 
             _ = FilterPageOverlay.FadeTo(0, duration, Easing.CubicOut);
             await FilterPage.TranslateTo(0, FilterPageHeight, duration, Easing.CubicOut);
+
+            (FilterPage.BindingContext as FilterPageViewModel).SetStateFromCurrentFilter();
         }
 
         private async Task ShowFilterView(uint duration = 350)
@@ -606,12 +608,12 @@ namespace PVScan.Mobile.Views
 
             _ = SortingPageOverlay.FadeTo(0, duration, Easing.CubicOut);
             await SortingPage.TranslateTo(0, SortingPage.Height, duration, Easing.CubicOut);
+
+            (SortingPage.BindingContext as SortingPageViewModel).SetStateToCurrentSorting();
         }
 
         private async Task ShowSortingPage(uint duration = 350)
         {
-            (SortingPage.BindingContext as SortingPageViewModel).SetStateToCurrentSorting();
-
             SortingPageOverlay.InputTransparent = false;
 
             _ = SortingPageOverlay.FadeTo(OverlayMaxOpacity, duration, Easing.CubicOut);
