@@ -317,7 +317,7 @@ namespace PVScan.Mobile.Views
                 FilterPage.TranslationY = FilterPageHeight;
 
                 BarcodeInfoPageHeight = Height * 0.65;
-                MapsBarcodeInfoPageHeight = Height * 0.45;
+                MapsBarcodeInfoPageHeight = Height * 0.35;
 
                 if (BarcodeInfoPageHeight < 350)
                 {
@@ -348,6 +348,7 @@ namespace PVScan.Mobile.Views
 
             _ = BarcodeListViewOverlay.FadeTo(0, duration, Easing.CubicOut);
             await BarcodeInfoPage.TranslateTo(0, BarcodeInfoPage.Height, duration, Easing.CubicOut);
+            await BarcodeInfoPage.ScrollToTop();
         }
 
         private async Task ShowBarcodeInfoPage(uint duration = 300)
@@ -356,7 +357,6 @@ namespace PVScan.Mobile.Views
 
             _ = BarcodeListViewOverlay.FadeTo(OverlayMaxOpacity, duration, Easing.CubicOut);
             _ = HideBarcodeMapsInfo(duration);
-            await BarcodeInfoPage.ScrollToTop();
             await BarcodeInfoPage.TranslateTo(0, 1, duration, Easing.CubicOut);
         }
 
@@ -625,6 +625,7 @@ namespace PVScan.Mobile.Views
         private async Task HideBarcodeMapsInfo(uint duration = 300)
         {
             await MapsBarcodeInfoPage.TranslateTo(0, MapsBarcodeInfoPage.Height, duration, Easing.CubicOut);
+            await MapsBarcodeInfoPage.ScrollToTop();
         }
 
         private async Task ShowBarcodeMapsInfo(uint duration = 300)
