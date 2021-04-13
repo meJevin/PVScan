@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Input;
 using MvvmHelpers;
 using PVScan.Mobile.Converters;
@@ -12,10 +13,13 @@ namespace PVScan.Mobile.ViewModels
     public class BarcodeInfoPageViewModel : BaseViewModel
     {
         readonly IPopupMessageService PopupMessageService;
+        readonly IMediaService MediaService;
 
-        public BarcodeInfoPageViewModel(IPopupMessageService popupMessageService)
+        public BarcodeInfoPageViewModel(IPopupMessageService popupMessageService,
+            IMediaService mediaService)
         {
             PopupMessageService = popupMessageService;
+            MediaService = mediaService;
 
             TextLongPressCommand = new Command(async () =>
             {
@@ -79,15 +83,24 @@ namespace PVScan.Mobile.ViewModels
 
             BarcodeImageLongPressCommand = new Command(async () =>
             {
-                //if (SelectedBarcode == null)
-                //{
-                //    return;
-                //}
+                if (SelectedBarcode == null)
+                {
+                    return;
+                }
 
-                //var barcodeToImage = new BarcodeImageConverter();
-                //var barcodeImage = (ImageSource)(barcodeToImage.Convert(SelectedBarcode.Format, null, null, null));
+                var barcodeToImage = new BarcodeImageConverter();
+                var barcodeImage = (barcodeToImage.Convert(SelectedBarcode, null, null, null)) as ImageSource;
+                var barcodeImagePath = Path.Combine(FileSystem.CacheDirectory, "PVScan_Temp.png");
 
-                //HapticFeedback.Perform(HapticFeedbackType.LongPress);
+                HapticFeedback.Perform(HapticFeedbackType.LongPress);
+
+                await MediaService.SaveImageToGallery(barcodeImage, barcodeImagePath);
+
+                await Share.RequestAsync(new ShareFileRequest
+                {
+                    Title = Title,
+                    File = new ShareFile(barcodeImagePath),
+                });
 
                 //await PopupMessageService.ShowMessage("Saved barcode image to gallery");
             });
