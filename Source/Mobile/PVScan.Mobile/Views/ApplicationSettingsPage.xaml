@@ -11,7 +11,8 @@
     
     xmlns:di="clr-namespace:PVScan.Mobile.DI"
     di:ViewModelLocator.AutoWireViewModel="True"
-    
+    x:DataType="viewmodels:ApplicationSettingsPageViewModel"
+
     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
     
     <ContentView.Resources>
@@ -35,6 +36,12 @@
                     Dark theme
                 </Label>
                 <Switch Toggled="DarkTheme_Toggled" IsToggled="{Binding IsDarkTheme}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label VerticalTextAlignment="Center">
+                    Preserve alpha on saved barcode images 
+                </Label>
+                <Switch Toggled="KeepAlpha_Toggled" IsToggled="{Binding SaveBarcodeImagesWithAlpha}"/>
             </StackLayout>
             <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked" Text="Add 1"/>
             <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked_1"  Text="Add 10"/>
