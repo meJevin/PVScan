@@ -76,7 +76,7 @@ namespace PVScan.Mobile.Converters
             {
                 writer.Options = new EncodingOptions()
                 {
-                    Width = 1500,
+                    Width = 1800,
                     Height = 600,
                 };
             }
@@ -103,7 +103,7 @@ namespace PVScan.Mobile.Converters
             {
                 writer.Options = new EncodingOptions()
                 {
-                    Width = 1300,
+                    Width = 1600,
                     Height = 600,
                 };
             }
