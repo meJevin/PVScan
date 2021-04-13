@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PVScan.Mobile.Converters;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.ViewModels;
+using PVScan.Mobile.ViewModels.Messages;
 using Xamarin.Forms;
 using Xamarin.Forms.Svg;
 
@@ -50,9 +51,11 @@ namespace PVScan.Mobile.Views
 
             var page = (bindable as BarcodeInfoPage);
 
+            // This can be done through bindings but this is a little cleaner in my opinion
             BarcodeImageConverter cnv = new BarcodeImageConverter();
 
             page.BarcodeImage.Source = (SvgImageSource)cnv.Convert(newBarcode, null, null, null);
+            page.ToggleLocationLabel();
         }
         
         static async void OnShowInListButtonVisibleChanged(BindableObject bindable, object oldValue, object newValue)
@@ -69,12 +72,29 @@ namespace PVScan.Mobile.Views
         public event EventHandler<Barcode> ShowOnMap;
         public event EventHandler<Barcode> ShowInList;
 
+        public event EventHandler<Barcode> NoLocationClicked;
+
         public BarcodeInfoPage()
         {
             InitializeComponent();
 
             ShowOnMapButton.IsVisible = ShowOnMapButtonVisible;
             ShowInListButton.IsVisible = ShowInListButtonVisible;
+        }
+
+        // Shows correct location label respecting the current selected barcode location
+        public void ToggleLocationLabel()
+        {
+            if (SelectedBarcode == null || SelectedBarcode.ScanLocation == null)
+            {
+                ScanLocationAvailableContainer.IsVisible = false;
+                ScanLocationNotAvailableContainer.IsVisible = true;
+            }
+            else
+            {
+                ScanLocationAvailableContainer.IsVisible = true;
+                ScanLocationNotAvailableContainer.IsVisible = false;
+            }
         }
 
         private void ShowOnMap_Clicked(object sender, EventArgs e)
@@ -95,6 +115,11 @@ namespace PVScan.Mobile.Views
         private void ShowInList_Clicked(object sender, EventArgs e)
         {
             ShowInList?.Invoke(this, SelectedBarcode);
+        }
+
+        private void NoLocationLabel_Tapped(object sender, EventArgs e)
+        {
+            NoLocationClicked?.Invoke(this, SelectedBarcode);
         }
     }
 }

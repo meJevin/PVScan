@@ -703,5 +703,11 @@ namespace PVScan.Mobile.Views
                 }
             }
         }
+
+        private async void BarcodeInfoPage_NoLocationClicked(object sender, Barcode e)
+        {
+            VM.NoLocationSelectedBarcode = e;
+            await ShowNoLocationPopup();
+        }
     }
 }
