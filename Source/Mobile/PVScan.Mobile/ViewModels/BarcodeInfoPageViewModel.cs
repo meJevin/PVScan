@@ -17,7 +17,8 @@ namespace PVScan.Mobile.ViewModels
         readonly IMediaService MediaService;
         readonly IPersistentKVP KVP;
 
-        public BarcodeInfoPageViewModel(IPopupMessageService popupMessageService,
+        public BarcodeInfoPageViewModel(
+            IPopupMessageService popupMessageService,
             IMediaService mediaService,
             IPersistentKVP kvp)
         {
@@ -47,7 +48,8 @@ namespace PVScan.Mobile.ViewModels
                 }
 
                 var coordToStr = new CoordinateStringConverter();
-                var coordStr = (string)(coordToStr.Convert(SelectedBarcode.ScanLocation, null, null, null));
+                var coordStr = (string)(coordToStr.Convert(
+                    SelectedBarcode.ScanLocation, null, null, null));
                 await Clipboard.SetTextAsync(coordStr);
 
                 HapticFeedback.Perform(HapticFeedbackType.LongPress);
@@ -63,7 +65,8 @@ namespace PVScan.Mobile.ViewModels
                 }
 
                 var formatToStr = new BarcodeFormatStringConverter();
-                var formatStr = (string)(formatToStr.Convert(SelectedBarcode.Format, null, null, null));
+                var formatStr = (string)(formatToStr.Convert(
+                    SelectedBarcode.Format, null, null, null));
                 await Clipboard.SetTextAsync(formatStr);
 
                 HapticFeedback.Perform(HapticFeedbackType.LongPress);
@@ -95,7 +98,8 @@ namespace PVScan.Mobile.ViewModels
                 bool keepAlpha = KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, true);
 
                 var barcodeToImage = new BarcodeImageConverter();
-                var barcodeImage = (barcodeToImage.Convert(SelectedBarcode, null, null, null)) as SvgImageSource;
+                var barcodeImage = (barcodeToImage.Convert(
+                    SelectedBarcode, null, null, null)) as SvgImageSource;
                 var barcodeImagePath = Path.Combine(FileSystem.CacheDirectory, "PVScan_Temp");
 
                 // PNG supports alpha, otherwise make it a JPEG
@@ -114,7 +118,7 @@ namespace PVScan.Mobile.ViewModels
 
                 await Share.RequestAsync(new ShareFileRequest
                 {
-                    Title = Title,
+                    Title = "Saving barcode image from PVScan",
                     File = new ShareFile(barcodeImagePath),
                 });
 

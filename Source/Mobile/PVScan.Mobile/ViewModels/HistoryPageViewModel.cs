@@ -33,8 +33,10 @@ namespace PVScan.Mobile.ViewModels
 
         readonly SpecifyLocationPage SpecifyLocation;
 
-        public HistoryPageViewModel(IBarcodesRepository barcodesRepository,
-            IBarcodesFilter filterService, IPopupMessageService popupMessageService,
+        public HistoryPageViewModel(
+            IBarcodesRepository barcodesRepository,
+            IBarcodesFilter filterService,
+            IPopupMessageService popupMessageService,
             IBarcodeSorter sorterService)
         {
             BarcodesRepository = barcodesRepository;
