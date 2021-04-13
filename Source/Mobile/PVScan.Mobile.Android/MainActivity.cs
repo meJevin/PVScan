@@ -32,7 +32,7 @@ namespace PVScan.Mobile.Droid
             _ = new DI.Bootstrapper();
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            Xamarin.Forms.Svg.Droid.SvgImage.Init();
+            Xamarin.Forms.Svg.Droid.SvgImage.Init(ApplicationContext);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             Xamarin.FormsMaps.Init(this, savedInstanceState);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
