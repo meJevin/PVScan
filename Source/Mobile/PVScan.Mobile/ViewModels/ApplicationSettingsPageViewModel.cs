@@ -23,22 +23,35 @@ namespace PVScan.Mobile.ViewModels
                 if (IsDarkTheme)
                 {
                     Application.Current.UserAppTheme = OSAppTheme.Dark;
-
                     KVP.Set(StorageKeys.Theme, "Dark");
                 }
                 else
                 {
                     Application.Current.UserAppTheme = OSAppTheme.Light;
-
                     KVP.Set(StorageKeys.Theme, "Light");
                 }
             });
 
+            SwitchSaveBarcodeImagesWithAlphaCommand = new Command(async () =>
+            {
+                if (SaveBarcodeImagesWithAlpha)
+                {
+                    KVP.Set(StorageKeys.SaveBarcodeImagesWithAlpha, true);
+                }
+                else
+                {
+                    KVP.Set(StorageKeys.SaveBarcodeImagesWithAlpha, false);
+                }
+            });
+
             IsDarkTheme = Application.Current.UserAppTheme == OSAppTheme.Dark;
+            SaveBarcodeImagesWithAlpha = KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, true);
         }
 
         public ICommand SwitchThemeCommand { get; }
+        public ICommand SwitchSaveBarcodeImagesWithAlphaCommand { get; }
 
         public bool IsDarkTheme { get; set; }
+        public bool SaveBarcodeImagesWithAlpha { get; set; }
     }
 }

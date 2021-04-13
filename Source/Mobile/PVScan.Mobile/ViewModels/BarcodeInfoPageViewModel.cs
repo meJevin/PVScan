@@ -15,12 +15,15 @@ namespace PVScan.Mobile.ViewModels
     {
         readonly IPopupMessageService PopupMessageService;
         readonly IMediaService MediaService;
+        readonly IPersistentKVP KVP;
 
         public BarcodeInfoPageViewModel(IPopupMessageService popupMessageService,
-            IMediaService mediaService)
+            IMediaService mediaService,
+            IPersistentKVP kvp)
         {
             PopupMessageService = popupMessageService;
             MediaService = mediaService;
+            KVP = kvp;
 
             TextLongPressCommand = new Command(async () =>
             {
@@ -89,9 +92,21 @@ namespace PVScan.Mobile.ViewModels
                     return;
                 }
 
+                bool keepAlpha = KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, true);
+
                 var barcodeToImage = new BarcodeImageConverter();
                 var barcodeImage = (barcodeToImage.Convert(SelectedBarcode, null, null, null)) as SvgImageSource;
-                var barcodeImagePath = Path.Combine(FileSystem.CacheDirectory, "PVScan_Temp.png");
+                var barcodeImagePath = Path.Combine(FileSystem.CacheDirectory, "PVScan_Temp");
+
+                // PNG supports alpha, otherwise make it a JPEG
+                if (keepAlpha)
+                {
+                    barcodeImagePath += ".png";
+                }
+                else
+                {
+                    barcodeImagePath += ".jpeg";
+                }
 
                 HapticFeedback.Perform(HapticFeedbackType.LongPress);
 

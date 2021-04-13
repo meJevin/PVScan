@@ -20,6 +20,7 @@ namespace PVScan.Mobile.Views
     public partial class ApplicationSettingsPage : ContentView
     {
         public event EventHandler BackClicked;
+        ApplicationSettingsPageViewModel VM;
 
         readonly IBarcodesRepository BarcodesRepository;
 
@@ -28,6 +29,8 @@ namespace PVScan.Mobile.Views
             BarcodesRepository = Resolver.Resolve<IBarcodesRepository>();
 
             InitializeComponent();
+
+            VM = BindingContext as ApplicationSettingsPageViewModel;
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -37,7 +40,16 @@ namespace PVScan.Mobile.Views
 
         private void DarkTheme_Toggled(object sender, ToggledEventArgs e)
         {
-            (BindingContext as ApplicationSettingsPageViewModel).SwitchThemeCommand.Execute(null);
+            if (VM == null) return;
+
+            VM.SwitchThemeCommand.Execute(null);
+        }
+
+        private void KeepAlpha_Toggled(object sender, ToggledEventArgs e)
+        {
+            if (VM == null) return;
+
+            VM.SwitchSaveBarcodeImagesWithAlphaCommand.Execute(null);
         }
 
         #region DEBUG STUFF
