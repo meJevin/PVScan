@@ -7,6 +7,6 @@ namespace PVScan.Mobile.Services.Interfaces
 {
     public interface IMediaService
     {
-        Task SaveSvgImageToGallery(SvgImageSource image, string fileName);
+        Task SaveSvgImage(SvgImageSource image, string fileName);
     }
 }
