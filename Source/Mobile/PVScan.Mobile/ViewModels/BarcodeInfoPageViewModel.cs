@@ -7,6 +7,7 @@ using PVScan.Mobile.Models;
 using PVScan.Mobile.Services.Interfaces;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Svg;
 
 namespace PVScan.Mobile.ViewModels
 {
@@ -89,12 +90,12 @@ namespace PVScan.Mobile.ViewModels
                 }
 
                 var barcodeToImage = new BarcodeImageConverter();
-                var barcodeImage = (barcodeToImage.Convert(SelectedBarcode, null, null, null)) as ImageSource;
+                var barcodeImage = (barcodeToImage.Convert(SelectedBarcode, null, null, null)) as SvgImageSource;
                 var barcodeImagePath = Path.Combine(FileSystem.CacheDirectory, "PVScan_Temp.png");
 
                 HapticFeedback.Perform(HapticFeedbackType.LongPress);
 
-                await MediaService.SaveImageToGallery(barcodeImage, barcodeImagePath);
+                await MediaService.SaveSvgImage(barcodeImage, barcodeImagePath);
 
                 await Share.RequestAsync(new ShareFileRequest
                 {
