@@ -91,6 +91,7 @@
     <Compile Include="DI\Bootstrapper.cs" />
     <Compile Include="Services\FileBarcodeReader.cs" />
     <Compile Include="Resources\HistoryPageViewModel.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' " />
+    <Compile Include="Services\MediaService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\1024-1.png">

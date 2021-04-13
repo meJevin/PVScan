@@ -245,6 +245,7 @@
                                    x:Name="BarcodeInfoPage"
                                    Deleted="BarcodeInfoPage_Deleted"
                                    ShowOnMap="BarcodeInfoPage_ShowOnMap"
+                                   NoLocationClicked="BarcodeInfoPage_NoLocationClicked"
                                    ShowInListButtonVisible="False"
                                    ShowOnMapButtonVisible="True">
                 <views:BarcodeInfoPage.GestureRecognizers>

@@ -13,6 +13,9 @@ namespace PVScan.Mobile.iOS.DI
 
             ContainerBuilder.RegisterType<FileBarcodeReader>()
                 .As<IFileBarcodeReader>();
+
+            ContainerBuilder.RegisterType<MediaService>()
+                .As<IMediaService>();
         }
     }
 }

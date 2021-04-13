@@ -105,6 +105,8 @@ namespace PVScan.Mobile.ViewModels
             MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
                 async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>
                 {
+                    // This is done to refresh the UI, for some reason calling OnPropertyChanged doesn't work :(
+
                     var indx = Barcodes.IndexOf(args.UpdatedBarcode);
                     var indxPaged = BarcodesPaged.IndexOf(args.UpdatedBarcode);
 
@@ -113,6 +115,9 @@ namespace PVScan.Mobile.ViewModels
 
                     Barcodes.Insert(indx, args.UpdatedBarcode);
                     BarcodesPaged.Insert(indxPaged, args.UpdatedBarcode);
+
+                    SelectedBarcode = null;
+                    SelectedBarcode = args.UpdatedBarcode;
                 });
 
             RefreshCommand = new Command(async () =>
