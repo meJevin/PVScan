@@ -65,5 +65,10 @@ namespace PVScan.Mobile.Views
             RangeViewButton.Opacity = 1;
             LastViewButton.Opacity = 0.35;
         }
+
+        public async Task ScrollToTop()
+        {
+            await MainContentScrollView.ScrollToAsync(0, 0, false);
+        }
     }
 }
