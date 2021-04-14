@@ -85,7 +85,8 @@
                                 <Label Text="Location" FontSize="17" Opacity="0.45"/>
 
                                 <Label Text="{Binding SelectedBarcode.ScanLocation, FallbackValue=Test,
-                                    Converter={StaticResource CoordinateString}}" FontSize="15"/>
+                                    Converter={StaticResource CoordinateString}}" FontSize="15"
+                                       x:Name="BarcodeLocationLabel"/>
                             </StackLayout>
                             
                             <StackLayout Spacing="16" Orientation="Horizontal"
