@@ -67,7 +67,8 @@
 
                 <!-- Main Content -->
                 <Grid Grid.Row="1">
-                    <ScrollView VerticalScrollBarVisibility="Never">
+                    <ScrollView VerticalScrollBarVisibility="Never"
+                                x:Name="MainContentScrollView">
                         <StackLayout>
                             <Grid HeightRequest="16"/>
 

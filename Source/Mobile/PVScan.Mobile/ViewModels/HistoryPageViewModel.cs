@@ -104,24 +104,6 @@ namespace PVScan.Mobile.ViewModels
                     await LoadBarcodesFromDB();
                 });
 
-            MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
-                async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>
-                {
-                    // This is done to refresh the UI, for some reason calling OnPropertyChanged doesn't work :(
-
-                    var indx = Barcodes.IndexOf(args.UpdatedBarcode);
-                    var indxPaged = BarcodesPaged.IndexOf(args.UpdatedBarcode);
-
-                    Barcodes.RemoveAt(indx);
-                    BarcodesPaged.RemoveAt(indxPaged);
-
-                    Barcodes.Insert(indx, args.UpdatedBarcode);
-                    BarcodesPaged.Insert(indxPaged, args.UpdatedBarcode);
-
-                    SelectedBarcode = null;
-                    SelectedBarcode = args.UpdatedBarcode;
-                });
-
             RefreshCommand = new Command(async () =>
             {
                 IsRefresing = true;
@@ -173,6 +155,26 @@ namespace PVScan.Mobile.ViewModels
 
                 BarcodeCopiedToClipboard?.Invoke(this, barcode);
                 await PopupMessageService.ShowMessage("Text copied");
+            });
+
+            FavoriteCommand = new Command(async (object barcodeObject) =>
+            {
+                Barcode barcode = barcodeObject as Barcode;
+
+                if (barcode == null)
+                {
+                    return;
+                }
+
+                barcode.Favorite = !barcode.Favorite;
+                await BarcodesRepository.Update(barcode);
+                HapticFeedback.Perform(HapticFeedbackType.Click);
+
+                MessagingCenter.Send(this, nameof(BarcodeFavotireToggledMessage),
+                    new BarcodeFavotireToggledMessage()
+                    {
+                        UpdatedBarcode = barcode,
+                    });
             });
 
             SpecifyLocationCommand = new Command(async () =>
@@ -308,6 +310,7 @@ namespace PVScan.Mobile.ViewModels
         public event EventHandler<Barcode> BarcodeCopiedToClipboard;
 
 
+        public ICommand FavoriteCommand { get; set; }
         public ICommand SpecifyLocationCommand { get; set; }
         public ICommand SelectBarcodeCommand { get; set; }
         public Barcode SelectedBarcode { get; set; }

@@ -249,6 +249,7 @@ namespace PVScan.Mobile.Views
             await FilterPage.TranslateTo(0, FilterPageHeight, duration, Easing.CubicOut);
 
             (FilterPage.BindingContext as FilterPageViewModel).SetStateFromCurrentFilter();
+            await FilterPage.ScrollToTop();
         }
 
         private async Task ShowFilterView(uint duration = 350)

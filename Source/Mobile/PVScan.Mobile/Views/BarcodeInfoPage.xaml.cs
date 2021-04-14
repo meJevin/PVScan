@@ -80,6 +80,23 @@ namespace PVScan.Mobile.Views
 
             ShowOnMapButton.IsVisible = ShowOnMapButtonVisible;
             ShowInListButton.IsVisible = ShowInListButtonVisible;
+
+            MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
+                async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>
+                {
+                    if (SelectedBarcode == args.UpdatedBarcode)
+                    {
+                        ToggleLocationLabel();
+
+                        // :((((((( This is horrible but there is no way to update the ui otherwise 
+                        BarcodeLocationLabel.RemoveBinding(Label.TextProperty);
+                        BarcodeLocationLabel.SetBinding(Label.TextProperty, new Binding()
+                        {
+                            Path = "SelectedBarcode.ScanLocation",
+                            Converter = new CoordinateStringConverter(),
+                        });
+                    }
+                });
         }
 
         // Shows correct location label respecting the current selected barcode location

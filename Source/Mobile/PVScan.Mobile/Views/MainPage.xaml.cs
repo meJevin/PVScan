@@ -1,4 +1,6 @@
-﻿using PVScan.Mobile.ViewModels;
+﻿using PVScan.Mobile.Styles;
+using PVScan.Mobile.ViewModels;
+using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,42 @@ namespace PVScan.Mobile.Views
         {
             InitializeSafeArea();
             InitializeComponent();
+
+
+            MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
+                async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
+                {
+                    await StartBarcodeScannedAnimation();
+                });
+        }
+
+        private async Task StartBarcodeScannedAnimation()
+        {
+            Image newImage = new Image()
+            {
+                BackgroundColor = Color.White,
+                HeightRequest = ScannedBarcodeImageContainer.Height,
+                WidthRequest = ScannedBarcodeImageContainer.Height,
+                TranslationY = -16,
+                Scale = 0.5,
+                Opacity = 0,
+            };
+            newImage.Source = new FontImageSource()
+            {
+                FontFamily = "FontAwesome",
+                Glyph = IconFont.Qrcode,
+                Color = Color.Black,
+            };
+
+            ScannedBarcodeImageContainer.Children.Add(newImage);
+
+            _ = newImage.FadeTo(1, 250, Easing.CubicOut);
+            await newImage.ScaleTo(1, 250, Easing.CubicOut);
+            await Task.Delay(800);
+            _ = newImage.TranslateTo(0, 45, 250, Easing.CubicIn);
+            await newImage.ScaleTo(0, 250, Easing.CubicIn);
+
+            ScannedBarcodeImageContainer.Children.Remove(newImage);
         }
 
         private async void HistoryTabItem_TabTapped(object sender, TabTappedEventArgs e)
@@ -113,12 +151,14 @@ namespace PVScan.Mobile.Views
         {
             Application.Current.Resources["TabBarCameraButtonMargin"] = new Thickness(0, 0, 0, 32);
             Application.Current.Resources["TabBarHeight"] = 76;
+            Application.Current.Resources["NegativeTabBarHeight"] = -76;
         }
 
         private void iOSNoSafeArea()
         {
             Application.Current.Resources["TabBarCameraButtonMargin"] = new Thickness(0, 0, 0, 10);
             Application.Current.Resources["TabBarHeight"] = 54;
+            Application.Current.Resources["NegativeTabBarHeight"] = -54;
         }
 
         private async void ContentPage_Appearing(object sender, EventArgs e)
