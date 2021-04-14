@@ -26,10 +26,10 @@
         </ResourceDictionary>
     </Grid.Resources>
 
-    <Grid x:Name="InnerContainer">
+    <Grid x:Name="InnerContainer" ColumnDefinitions="*,50,0">
+        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0" Grid.ColumnSpan="2"/>
 
-        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0"/>
-
+        <!-- HIDDEN IMAGE OF SELECTION -->
         <Grid WidthRequest="36" Margin="8,0,0,0" HorizontalOptions="Start" 
               TranslationX="-44" Opacity="0"
               x:Name="ImageLeftContainer">
@@ -43,7 +43,7 @@
         </Grid>
 
         <!-- TEXT AND TIME OF SCAN -->
-        <StackLayout Orientation="Vertical" VerticalOptions="Center" Padding="10, 0"
+        <StackLayout Orientation="Vertical" VerticalOptions="Center" Padding="10, 0, 0, 0"
                      x:Name="InfoContainer">
             <Grid>
                 <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"
@@ -80,24 +80,27 @@
                              x:Name="NoLocationButton" BackgroundColor="Transparent">
                     <ImageButton.Source>
                         <FontImageSource FontFamily="FontAwesome"
-                                             Glyph="{x:Static theme:IconFont.ExclamationCircle}"
-                                             Color="Red"/>
+                                         Glyph="{x:Static theme:IconFont.ExclamationCircle}"
+                                         Color="Red"/>
                     </ImageButton.Source>
                 </ImageButton>
             </StackLayout>
         </StackLayout>
 
-        <!--<Grid Grid.Column="1">
-            <ImageButton Clicked="Barcode_Tapped" Padding="10, 0"
-                         Command="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
-                                                                        Path=BindingContext.SelectBarcodeCommand}"
-                                                              CommandParameter="{Binding .}">
-                <ImageButton.Source>
-                    <FontImageSource FontFamily="FontAwesome"
-                                     Glyph="{x:Static theme:IconFont.EllipsisH}"/>
-                </ImageButton.Source>
-            </ImageButton>
-        </Grid>-->
+        <ImageButton Grid.Column="1" BackgroundColor="Transparent" Padding="14,0"
+                     HorizontalOptions="Fill" VerticalOptions="Fill"
+                     x:Name="FavoriteButton"
+                     Command="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                            Path=BindingContext.FavoriteCommand}"
+                     CommandParameter="{Binding .}">
+            <ImageButton.Source>
+                <FontImageSource FontFamily="FontAwesome"
+                                 Glyph="{x:Static theme:IconFont.Heart}"
+                                 Color="{AppThemeBinding 
+                                            Dark={StaticResource TextPrimaryColor_Dark}, 
+                                            Light={StaticResource TextPrimaryColor_Light}}"/>
+            </ImageButton.Source>
+        </ImageButton>
 
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Tapped="Barcode_Tapped"

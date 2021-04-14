@@ -1,4 +1,6 @@
 ﻿using PVScan.Mobile.Models;
+using PVScan.Mobile.ViewModels;
+using PVScan.Mobile.ViewModels.Messages;
 using PVScan.Mobile.Views.Extensions;
 using System;
 using System.Collections.Generic;
@@ -85,6 +87,42 @@ namespace PVScan.Mobile.Views.DataTemplates
             InitializeComponent();
 
             InnerContainerTapGestureRecognizer = InnerContainer.GestureRecognizers[0];
+
+            // Initialization, basically
+            BindingContextChanged += (_, _) =>
+            {
+                ToggleFavoriteOpacity();
+            };
+
+            MessagingCenter.Subscribe(this, nameof(BarcodeFavotireToggledMessage),
+                async (HistoryPageViewModel vm, BarcodeFavotireToggledMessage args) =>
+                {
+                    if ((BindingContext as Barcode) == args.UpdatedBarcode)
+                    {
+                        ToggleFavoriteOpacity();
+                    }
+                });
+
+            MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
+                async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>
+                {
+                    if ((BindingContext as Barcode) == args.UpdatedBarcode)
+                    {
+                        NoLocationButton.IsVisible = false;
+                    }
+                });
+        }
+
+        private void ToggleFavoriteOpacity()
+        {
+            if ((BindingContext as Barcode).Favorite)
+            {
+                FavoriteButton.Opacity = 1;
+            }
+            else
+            {
+                FavoriteButton.Opacity = 0.15;
+            }
         }
 
         private void Barcode_Tapped(object sender, EventArgs e)
