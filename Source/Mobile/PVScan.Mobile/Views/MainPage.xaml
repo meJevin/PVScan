@@ -107,6 +107,7 @@
         </Style>
 
     </ContentPage.Resources>
+
     <NavigationPage.TitleView>
         <Grid>
             <Grid.Margin>
@@ -122,6 +123,7 @@
             </Label>
         </Grid>
     </NavigationPage.TitleView>
+
     <Grid>
         <toolkit:TabView IsSwipeEnabled="False" IsTabTransitionEnabled="False"
                          x:Name="MainTabView"
@@ -130,7 +132,8 @@
             <toolkit:TabViewItem
                 TabTapped="HistoryTabItem_TabTapped"
                 ControlTemplate="{StaticResource TabItemTemplate}"
-                Style="{StaticResource TabItemStyle}">
+                Style="{StaticResource TabItemStyle}"
+                x:Name="HistoryTabViewItem">
                 <toolkit:TabViewItem.Icon>
                     <FontImageSource
                         FontFamily="FontAwesome"
@@ -205,6 +208,31 @@
                        TextColor="White"
                        Text="Copied to clipboard"/>
             </Frame>
+        </Grid>
+
+        <Grid ColumnDefinitions="*,*,*" InputTransparent="True">
+            <StackLayout HorizontalOptions="Center" VerticalOptions="End" Spacing="0">
+                
+                <Grid HeightRequest="42" x:Name="ScannedBarcodeImageContainer">
+                    <!--<Image HeightRequest="50" WidthRequest="50" BackgroundColor="White"
+                           x:Name="DummyScannedBarcodeImage" TranslationY="-20">
+                        <Image.Source>
+                            <FontImageSource FontFamily="FontAwesome"
+                                             Glyph="{x:Static theme:IconFont.Qrcode}"
+                                             Color="Black"/>
+                        </Image.Source>
+                    </Image>-->
+                    <!--<Image HeightRequest="50" WidthRequest="50" BackgroundColor="White"
+                           x:Name="DummyScannedBarcodeImage2" TranslationY="45" Scale="0.25">
+                        <Image.Source>
+                            <FontImageSource FontFamily="FontAwesome"
+                                             Glyph="{x:Static theme:IconFont.Qrcode}"
+                                             Color="Black"/>
+                        </Image.Source>
+                    </Image>-->
+                </Grid>
+                <BoxView HeightRequest="{DynamicResource TabBarHeight}"/>
+            </StackLayout>
         </Grid>
     </Grid>
 </ContentPage>
