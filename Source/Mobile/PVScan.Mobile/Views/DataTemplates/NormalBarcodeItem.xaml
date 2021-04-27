@@ -27,7 +27,7 @@
     </Grid.Resources>
 
     <Grid x:Name="InnerContainer" ColumnDefinitions="*,50,0">
-        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0" Grid.ColumnSpan="2"/>
+        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0" Grid.ColumnSpan="3"/>
 
         <!-- HIDDEN IMAGE OF SELECTION -->
         <Grid WidthRequest="36" Margin="8,0,0,0" HorizontalOptions="Start" 
@@ -45,7 +45,7 @@
         <!-- TEXT AND TIME OF SCAN -->
         <StackLayout Orientation="Vertical" VerticalOptions="Center" Padding="10, 0, 0, 0"
                      x:Name="InfoContainer">
-            <Grid>
+            <!--<Grid>
                 <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"
                            xtc:TouchEffect.PressedScale="0.95"
                            xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
@@ -59,7 +59,8 @@
                 <Label Text="" FontSize="16" IsVisible="False"
                            x:Name="BarcodeTextLabelOverlay"
                            HorizontalOptions="Fill" BackgroundColor="Transparent"/>
-            </Grid>
+            </Grid>-->
+            <Label Text="{Binding Text}" FontSize="16" HorizontalOptions="Start" LineBreakMode="MiddleTruncation"/>
 
             <StackLayout Orientation="Horizontal" Spacing="0" HeightRequest="20">
                 <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
