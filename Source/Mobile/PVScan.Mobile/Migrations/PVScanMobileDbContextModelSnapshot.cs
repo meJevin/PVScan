@@ -14,7 +14,7 @@ namespace PVScan.Mobile.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.11");
+                .HasAnnotation("ProductVersion", "5.0.4");
 
             modelBuilder.Entity("PVScan.Mobile.Models.Barcode", b =>
                 {
@@ -22,14 +22,14 @@ namespace PVScan.Mobile.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("Favorite")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Format")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("ScanTime")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("ServerSynced")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
@@ -46,10 +46,10 @@ namespace PVScan.Mobile.Migrations
                             b1.Property<int>("BarcodeId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<double>("Latitude")
+                            b1.Property<double?>("Latitude")
                                 .HasColumnType("REAL");
 
-                            b1.Property<double>("Longitude")
+                            b1.Property<double?>("Longitude")
                                 .HasColumnType("REAL");
 
                             b1.HasKey("BarcodeId");
@@ -59,6 +59,8 @@ namespace PVScan.Mobile.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("BarcodeId");
                         });
+
+                    b.Navigation("ScanLocation");
                 });
 #pragma warning restore 612, 618
         }

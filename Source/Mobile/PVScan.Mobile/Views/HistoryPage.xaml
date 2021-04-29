@@ -10,13 +10,15 @@
     xmlns:views="clr-namespace:PVScan.Mobile.Views"
     xmlns:models="clr-namespace:PVScan.Mobile.Models"
     x:Class="PVScan.Mobile.Views.HistoryPage"
-    
     xmlns:di="clr-namespace:PVScan.Mobile.DI" 
     xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
     xmlns:controls="clr-namespace:PVScan.Mobile.Controls"
+    xmlns:xtc="http://xamarin.com/schemas/2020/toolkit" xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
     di:ViewModelLocator.AutoWireViewModel="True"
     
     PropertyChanged="ContentView_PropertyChanged"
+
+    x:DataType="viewmodels:HistoryPageViewModel"
 
     BackgroundColor="{AppThemeBinding 
     Dark={StaticResource BackgroundColorDarker},
@@ -32,93 +34,15 @@
             <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
             <converters:CoordinatePositionConverter x:Key="CoordinatePosition"/>
             <converters:StringNotEmptyConverter x:Key="StringNotEmpty"/>
+            <converters:NullBoolConverter x:Key="NullBool"/>
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <Grid>
-        <!-- COLLECTION VIEW OF BARCODES -->
-        <Grid x:Name="BarcodesListContainer">
-            <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding BarcodesPaged}" RemainingItemsThreshold="3"
-                                RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:Barcode">
-                            <Grid BackgroundColor="{AppThemeBinding 
-                                            Dark={StaticResource BackgroundColorDarker},
-                                            Light={StaticResource BackgroundColorLighter}}"
-                                              HeightRequest="65">
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Grid VerticalOptions="Center" Padding="10, 0, 0, 0">
-                                    <StackLayout Orientation="Vertical">
-                                        <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"/>
-                                        <Label Text="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}"
-                                                           FontSize="12" Opacity="0.5"/>
-                                    </StackLayout>
-                                </Grid>
-
-                                <Grid Grid.Column="2" Margin="10, 0">
-
-                                    <StackLayout VerticalOptions="Center" Spacing="0">
-                                        <Image Source="{Binding Format, Converter={StaticResource BarcodeFormatImageSource}}"/>
-
-                                        <Label Text="{Binding Format, Converter={StaticResource BarcodeFormatString}}"
-                                                           FontSize="Micro" HorizontalOptions="Center"/>
-                                    </StackLayout>
-                                </Grid>
-
-                                <BoxView BackgroundColor="{AppThemeBinding 
-                                                    Dark={StaticResource BackgroundColorDark},
-                                                    Light={StaticResource BackgroundColorLight}}" 
-                                                     VerticalOptions="End"
-                                                     HeightRequest="2" 
-                                                     Grid.ColumnSpan="3"/>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-
-                    <CollectionView.EmptyView>
-                        <Grid BackgroundColor="{AppThemeBinding 
-                            Dark={StaticResource BackgroundColorDarker},
-                            Light={StaticResource BackgroundColorLighter}}">
-                            <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InverseBool}}">
-                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
-                               Text="No barcodes"/>
-                            </StackLayout>
-
-                            <StackLayout IsVisible="{Binding IsLoading}">
-                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
-                               Text="Loading..."/>
-                            </StackLayout>
-                        </Grid>
-                    </CollectionView.EmptyView>
-                </CollectionView>
-            </RefreshView>
-        </Grid>
-
-        <!-- MAP VIEW -->
-        <Grid x:Name="MapViewContainer">
-            <maps:Map x:Name="Map" IsShowingUser="True"
-                      ItemsSource="{Binding Barcodes}">
-                <maps:Map.ItemTemplate>
-                    <DataTemplate x:DataType="models:Barcode">
-                        <maps:Pin Label="{Binding Text}" Position="{Binding ScanLocation,
-                            Converter={StaticResource CoordinatePosition}}"/>
-                    </DataTemplate>
-                </maps:Map.ItemTemplate>
-            </maps:Map>
-        </Grid>
-
-        <!-- UPPER FILTER BAR -->
+    <Grid RowDefinitions="Auto,*" RowSpacing="0">
+        <!-- UPPER SEARCH/FILTER/VIEW BAR -->
         <Grid InputTransparent="True" CascadeInputTransparent="False" RowSpacing="0"
                       x:Name="FilterBarContainer">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
@@ -129,19 +53,22 @@
                              VerticalOptions="Start">
                 <Grid ColumnDefinitions="*, 24" Margin="10">
                     <Grid>
-                        <Entry Placeholder="Search..." Margin="0,0,5,0" 
-                                       Text="{Binding Search}"
-                                       TextChanged="SearchEntry_TextChanged"
-                                       x:Name="SearchEntry"
-                                   HeightRequest="35"
-                                   Keyboard="Text">
+                        <Entry Placeholder="Search..." Margin="0,0,5,0"
+                               Text="{Binding Search}"
+                               TextChanged="SearchEntry_TextChanged"
+                               x:Name="SearchEntry"
+                               HeightRequest="35"
+                               Keyboard="Text"
+                               IsTextPredictionEnabled="False"
+                               Focused="SearchEntry_Focused"
+                               Unfocused="SearchEntry_Unfocused">
                             <Entry.Effects>
                                 <effects:NoEntryVerticalPaddingEffect/>
                             </Entry.Effects>
                         </Entry>
 
                         <Grid HorizontalOptions="End" BackgroundColor="Transparent"
-                               Padding="14,0"
+                              Padding="14,0"
                               IsVisible="{Binding Search, Converter={StaticResource StringNotEmpty}}">
                             <Image>
                                 <Image.Source>
@@ -173,25 +100,29 @@
                     </ImageButton>
                 </Grid>
 
-                <Grid Margin="0,0,0,5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                <Grid ColumnDefinitions="*,*" HeightRequest="40" ColumnSpacing="0">
+                    <Grid Margin="0,0,0,5" Grid.ColumnSpan="2" ColumnSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-                    <Button Text="List" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
-                            Dark={StaticResource TextPrimaryColor_Dark},
-                            Light={StaticResource TextPrimaryColor_Light}}"
-                            x:Name="ListViewButton" Clicked="ListViewButton_Clicked"/>
-                    <Button Text="Map" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
-                            Dark={StaticResource TextPrimaryColor_Dark},
-                            Light={StaticResource TextPrimaryColor_Light}}"
-                            x:Name="MapViewButton" Clicked="MapViewButton_Clicked"/>
+                        <Button Text="List" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
+                                Dark={StaticResource TextPrimaryColor_Dark},
+                                Light={StaticResource TextPrimaryColor_Light}}"
+                                x:Name="ListViewButton" Clicked="ListViewButton_Clicked"/>
+                        <Button Text="Map" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
+                                Dark={StaticResource TextPrimaryColor_Dark},
+                                Light={StaticResource TextPrimaryColor_Light}}"
+                                x:Name="MapViewButton" Clicked="MapViewButton_Clicked"/>
+                    </Grid>
+                        
+
+                    <Grid VerticalOptions="End" HeightRequest="2" 
+                              BackgroundColor="{StaticResource ThemePrimary}" 
+                              Opacity="0.75"
+                          x:Name="UpperFilterBarPageIndicator"/>
                 </Grid>
-
-                <Grid VerticalOptions="Center" HeightRequest="1" 
-                          BackgroundColor="{StaticResource ThemePrimary}" 
-                          Opacity="0.75"/>
                 <!--<BoxView BackgroundColor="{AppThemeBinding 
                             Dark={StaticResource TextPrimaryColor_Dark},
                             Light={StaticResource TextPrimaryColor_Light}}"
@@ -199,12 +130,12 @@
                             HeightRequest="1"/>-->
             </StackLayout>
 
-            <Grid HeightRequest="30" WidthRequest="60"
+            <!--<Grid HeightRequest="30" WidthRequest="60"
                                  HorizontalOptions="Center"
                                  VerticalOptions="Start"
                                  Grid.Row="1"
                                  Margin="0" 
-                                BackgroundColor="{StaticResource BackgroundColorDark}"
+                                 BackgroundColor="{StaticResource BackgroundColorDark}"
                                  TranslationY="0"
                                  x:Name="ShowHideFilterBarButton"
                                  InputTransparent="False">
@@ -220,20 +151,212 @@
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ShowHideFilterBarButton_Clicked"/>
                 </Grid.GestureRecognizers>
-            </Grid>
+            </Grid>-->
         </Grid>
 
-        <BoxView x:Name="Overlay" BackgroundColor="Black">
+        <!-- COLLECTION VIEW OF BARCODES -->
+        <Grid x:Name="BarcodesListContainer" Grid.Row="1">
+            <RefreshView x:Name="BarcodesRefreshView" IsRefreshing="{Binding IsRefresing}" Command="{Binding RefreshCommand}">
+                <CollectionView ItemsSource="{Binding BarcodesPaged}"
+                                RemainingItemsThreshold="{Binding RemainingBarcodesThreshold}"
+                                RemainingItemsThresholdReachedCommand="{Binding LoadNextPage}"
+                                SelectedItems="{Binding SelectedBarcodes}"
+                                ItemSizingStrategy="MeasureFirstItem"
+                                x:Name="BarcodesCollectionView"
+                                Scrolled="BarcodesCollectionView_Scrolled">
+                    <CollectionView.Header>
+                        <Grid HeightRequest="36"/>
+                    </CollectionView.Header>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <datatemplates:NormalBarcodeItem
+                                IsEditable="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                                     Path=BindingContext.IsEditing}"
+                                Tapped="Barcode_Tapped" NoLocationTapped="Barcode_NoLocationTapped"
+                                HighlightedBarcode="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                                                     Path=BindingContext.HighlightedBarcode}"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.Footer>
+                        <Grid HeightRequest="86"/>
+                    </CollectionView.Footer>
+
+                    <CollectionView.EmptyView>
+                        <Grid BackgroundColor="{AppThemeBinding 
+                            Dark={StaticResource BackgroundColorDarker},
+                            Light={StaticResource BackgroundColorLighter}}">
+                            <StackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InverseBool}}">
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
+                               Text="No barcodes"/>
+                            </StackLayout>
+
+                            <StackLayout IsVisible="{Binding IsLoading}">
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"
+                               Text="Loading..."/>
+                            </StackLayout>
+                        </Grid>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </RefreshView>
+            
+            <!-- DELETE EDIT/DONE -->
+            <Grid HeightRequest="32" ColumnDefinitions="Auto,*,Auto" Padding="10, 8, 10, 4"
+                  VerticalOptions="Start" InputTransparent="True" CascadeInputTransparent="False">
+                <Button Text="Delete" Padding="14, 0"
+                                    Command="{Binding DeleteSelectedBarcodesCommand}"
+                                    Opacity="0" InputTransparent="True"
+                                    x:Name="DeleteButton"/>
+
+                <Button Grid.Column="2" Text="Edit" Padding="14, 0"
+                                    Command="{Binding StartEditCommand}"
+                                    Opacity="1" InputTransparent="False"
+                                    x:Name="EditButton"/>
+                <Button Grid.Column="2" Text="Done" Padding="14, 0"
+                                    Command="{Binding DoneEditCommand}"
+                                    Opacity="0" InputTransparent="True"
+                                    x:Name="DoneButton"/>
+            </Grid>
+            
+            <!-- SORTING & FILTER -->
+            <Grid VerticalOptions="End" Padding="0,26" RowDefinitions="36, *"
+                  ColumnDefinitions="32,*,32" x:Name="SortingAndFilterContainer"
+                  InputTransparent="True" CascadeInputTransparent="False">
+                <Grid Grid.Column="1" ColumnSpacing="16"
+                      ColumnDefinitions="*,Auto">
+                    <Button Text="Sorting" Padding="14, 0" Style="{StaticResource PrimaryButton}"
+                            Clicked="SortingButton_Clicked"/>
+                    <Button Text="Filter" Padding="14, 0" Grid.Column="1" Style="{StaticResource PrimaryButton}"
+                            Clicked="FilterButton_Clicked" WidthRequest="85"/>
+                </Grid>
+            </Grid>
+
+            <!-- OVERLAY (BARCODE INFO LIST)-->
+            <BoxView x:Name="BarcodeListViewOverlay" BackgroundColor="Black">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="BarcodeListViewOverlay_Tapped"/>
+                </BoxView.GestureRecognizers>
+            </BoxView>
+            
+            <!-- BARCODE INFO PANEL -->
+            <views:BarcodeInfoPage VerticalOptions="End"
+                                   SelectedBarcode="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}}, Path=BindingContext.SelectedBarcode}"
+                                   x:Name="BarcodeInfoPage"
+                                   Deleted="BarcodeInfoPage_Deleted"
+                                   ShowOnMap="BarcodeInfoPage_ShowOnMap"
+                                   NoLocationClicked="BarcodeInfoPage_NoLocationClicked"
+                                   ShowInListButtonVisible="False"
+                                   ShowOnMapButtonVisible="True">
+                <views:BarcodeInfoPage.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="BarcodeInfoPage_PanUpdated"/>
+                </views:BarcodeInfoPage.GestureRecognizers>
+            </views:BarcodeInfoPage>
+        </Grid>
+
+        <!-- MAP VIEW -->
+        <Grid x:Name="MapViewContainer" Grid.Row="1">
+            <maps:Map x:Name="Map" IsShowingUser="True"
+                      ItemsSource="{Binding Barcodes}"
+                      MapClicked="Map_MapClicked">
+                <maps:Map.ItemTemplate>
+                    <DataTemplate x:DataType="models:Barcode">
+                        <maps:Pin Label="{Binding Text}" Position="{Binding ScanLocation,
+                            Converter={StaticResource CoordinatePosition}}"
+                                  InfoWindowClicked="PinMarkerInfoWindow_Clicked"
+                                  MarkerClicked="PinMarker_Clicked"/>
+                    </DataTemplate>
+                </maps:Map.ItemTemplate>
+            </maps:Map>
+            
+            <!-- BARCODE INFO PANEL -->
+            <views:BarcodeInfoPage VerticalOptions="End"
+                                   SelectedBarcode="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}}, Path=BindingContext.SelectedBarcode}"
+                                   x:Name="MapsBarcodeInfoPage"
+                                   Deleted="MapsBarcodeInfoPage_Deleted"
+                                   ShowInList="MapsBarcodeInfoPage_ShowInList"
+                                   ShowInListButtonVisible="True"
+                                   ShowOnMapButtonVisible="False">
+                <views:BarcodeInfoPage.GestureRecognizers>
+                    <PanGestureRecognizer PanUpdated="MapsBarcodeInfoPage_PanUpdated"/>
+                </views:BarcodeInfoPage.GestureRecognizers>
+            </views:BarcodeInfoPage>
+
+            <BoxView x:Name="BarcodeMapViewOverlay" BackgroundColor="Black"
+                     Opacity="0" InputTransparent="True">
+            </BoxView>
+        </Grid>
+
+        <!-- OVERLAY (FILTER PAGE) -->
+        <BoxView x:Name="FilterPageOverlay" BackgroundColor="Black" Grid.RowSpan="2">
             <BoxView.GestureRecognizers>
-                <TapGestureRecognizer Tapped="Overlay_Tapped"/>
+                <TapGestureRecognizer Tapped="FilterPageOverlay_Tapped"/>
             </BoxView.GestureRecognizers>
         </BoxView>
 
-        <!-- HIDDEN FILTER PAGE -->
-        <views:FilterPage x:Name="FilterPage" VerticalOptions="End">
+        <!-- FILTER PAGE -->
+        <views:FilterPage x:Name="FilterPage" VerticalOptions="End" Grid.RowSpan="2">
             <views:FilterPage.GestureRecognizers>
                 <PanGestureRecognizer PanUpdated="FilterViewPanGesture_PanUpdated"/>
             </views:FilterPage.GestureRecognizers>
         </views:FilterPage>
+        
+        <BoxView x:Name="SortingPageOverlay" BackgroundColor="Black" Grid.RowSpan="2">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="SortingPageOverlay_Tapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- SORTING PAGE -->
+        <views:SortingPage x:Name="SortingPage" VerticalOptions="End" Grid.RowSpan="2">
+            <views:SortingPage.GestureRecognizers>
+                <PanGestureRecognizer PanUpdated="SortingPage_PanUpdated"/>
+            </views:SortingPage.GestureRecognizers>
+        </views:SortingPage>
+
+        <!-- OVERLAY (NO LOCATION POPUP) -->
+        <BoxView x:Name="NoLocationPopupOverlay" BackgroundColor="Black" Grid.RowSpan="2"
+                 Opacity="0" InputTransparent="True">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- NO LOCATION POPUP -->
+        <Grid InputTransparent="True" RowDefinitions="8*,*" Grid.Row="1" CascadeInputTransparent="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Frame x:Name="NoLocationPopupContainer" BackgroundColor="#D000"
+                   HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+                   Padding="22" Grid.Column="1" HeightRequest="200"
+                   HasShadow="False" Opacity="0" InputTransparent="True"
+                   CornerRadius="{OnPlatform Android=4, iOS=12}">
+                <Grid>
+                    <Grid RowDefinitions="Auto, *, 45">
+                        <Label Text="No location" FontSize="Large" x:Name="NoLocationDialogTitleLabel"
+                               FontAttributes="Bold" TextColor="White"/>
+
+                        <Label Text="Selected barcode has no location available. You can specify it manually by selecting a point on the map"
+                               HorizontalOptions="Fill" Grid.Row="1" FontSize="Medium" VerticalTextAlignment="Center"
+                               TextColor="White"/>
+
+                        <Button Text="Specify" Grid.Row="2" Command="{Binding SpecifyLocationCommand}" Clicked="SpecifyButton_Clicked"/>
+                    </Grid>
+                    
+                    <ImageButton HorizontalOptions="End" VerticalOptions="Start" Clicked="NoLocationPopupCloseButton_Clicked"
+                                 Padding="10,0" TranslationY="-14" TranslationX="8" BackgroundColor="Transparent">
+                        <ImageButton.Source>
+                            <FontImageSource FontFamily="FontAwesome"
+                                             Glyph="{x:Static theme:IconFont.Times}"
+                                             Color="White" Size="24"/>
+                        </ImageButton.Source>
+                    </ImageButton>
+                </Grid>
+            </Frame>
+        </Grid>
     </Grid>
 </ContentView>

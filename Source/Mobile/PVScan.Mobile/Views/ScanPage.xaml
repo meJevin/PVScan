@@ -8,6 +8,7 @@
              BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
     xmlns:di="clr-namespace:PVScan.Mobile.DI"
     di:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="vm:ScanPageViewModel"
              >
 
     <ContentView.Resources>
@@ -20,9 +21,7 @@
         <!-- Screen with allow camera button if user hasn't allowed camera -->
         <Grid IsVisible="{Binding IsCameraAllowed, Converter={StaticResource InverBool}}">
             <StackLayout VerticalOptions="Center" Spacing="24">
-                <Label HorizontalOptions="Center">
-                    Allow camera access in order to scan
-                </Label>
+                <Label HorizontalOptions="Center" Text="Allow camera access in order to scan" />
                 <Button Text="Allow" Command="{Binding AllowCameraCommand}" Style="{StaticResource PrimaryButton}" Margin="20, 0"/>
             </StackLayout>
         </Grid>
@@ -76,6 +75,28 @@
                 <Label Text="{Binding LastBarcodeType, TargetNullValue=—}" Grid.Column="1"/>
             </Grid>
         </StackLayout>
+
+        <Grid VerticalOptions="End"
+              x:Name="PhotoAndTorchContainer"
+              Margin="40"
+              ColumnSpacing="0"
+              ColumnDefinitions="Auto,*,Auto">
+            <ImageButton Command="{Binding ToggleTorchCommand}" BackgroundColor="Transparent">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FontAwesome"
+                                     Glyph="{x:Static theme:IconFont.Lightbulb}"
+                                     Color="{StaticResource TextPrimaryColor_Dark}"/>
+                </ImageButton.Source>
+            </ImageButton>
+            
+            <ImageButton Grid.Column="2" Command="{Binding PickPhotoToScanCommand}" BackgroundColor="Transparent">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="FontAwesome"
+                                     Glyph="{x:Static theme:IconFont.Images}"
+                                     Color="{StaticResource TextPrimaryColor_Dark}"/>
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>
 
         <!-- Lower save button for last scanned barcode -->
         <Grid VerticalOptions="End"

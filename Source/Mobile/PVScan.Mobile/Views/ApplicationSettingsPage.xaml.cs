@@ -20,6 +20,7 @@ namespace PVScan.Mobile.Views
     public partial class ApplicationSettingsPage : ContentView
     {
         public event EventHandler BackClicked;
+        ApplicationSettingsPageViewModel VM;
 
         readonly IBarcodesRepository BarcodesRepository;
 
@@ -28,6 +29,8 @@ namespace PVScan.Mobile.Views
             BarcodesRepository = Resolver.Resolve<IBarcodesRepository>();
 
             InitializeComponent();
+
+            VM = BindingContext as ApplicationSettingsPageViewModel;
         }
 
         private void BackButton_Click(object sender, EventArgs e)
@@ -37,7 +40,16 @@ namespace PVScan.Mobile.Views
 
         private void DarkTheme_Toggled(object sender, ToggledEventArgs e)
         {
-            (BindingContext as ApplicationSettingsPageViewModel).SwitchThemeCommand.Execute(null);
+            if (VM == null) return;
+
+            VM.SwitchThemeCommand.Execute(null);
+        }
+
+        private void KeepAlpha_Toggled(object sender, ToggledEventArgs e)
+        {
+            if (VM == null) return;
+
+            VM.SwitchSaveBarcodeImagesWithAlphaCommand.Execute(null);
         }
 
         #region DEBUG STUFF
@@ -50,16 +62,17 @@ namespace PVScan.Mobile.Views
             DateTime date = DateTime.UtcNow;
             date = date.Subtract(TimeSpan.FromSeconds(random.NextDouble() * 157680000));
 
+            Coordinate randomCoord = new Coordinate()
+            {
+                Latitude = (random.NextDouble() * 180) - 90,
+                Longitude = (random.NextDouble() * 360) - 180,
+            };
+
             var b = new Barcode()
             {
                 Format = randomType,
-                ScanLocation = new Coordinate()
-                {
-                    Latitude = random.NextDouble() * 70,
-                    Longitude = random.NextDouble() * 70,
-                },
+                ScanLocation = random.NextDouble() > 0.25 ? randomCoord : null,
                 ScanTime = date,
-                ServerSynced = false,
                 Text = Guid.NewGuid().ToString(),
             };
 

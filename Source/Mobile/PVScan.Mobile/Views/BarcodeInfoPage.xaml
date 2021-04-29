@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
+    xmlns:xtc="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:views="clr-namespace:PVScan.Mobile.Views"
+    x:Class="PVScan.Mobile.Views.BarcodeInfoPage"
+    di:ViewModelLocator.AutoWireViewModel="True"
+    x:DataType="viewmodels:BarcodeInfoPageViewModel">
+    
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
+            <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
+            <converters:CoordinateStringConverter x:Key="CoordinateString"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <ContentView.Content>
+        <Grid>
+            <Frame BackgroundColor="{AppThemeBinding 
+                    Dark={StaticResource BackgroundColorDarker},
+                    Light={StaticResource BackgroundColorLighter}}"
+                       HasShadow="False" CornerRadius="20">
+
+            </Frame>
+
+            <BoxView BackgroundColor="{AppThemeBinding 
+                    Dark={StaticResource BackgroundColorDarker},
+                    Light={StaticResource BackgroundColorLighter}}" 
+                         HeightRequest="20" VerticalOptions="End">
+
+            </BoxView>
+
+            <Grid Margin="15, 15, 15, 0" RowDefinitions="65,*" RowSpacing="0">
+                <Grid>
+                    <Frame HasShadow="False" 
+                           BackgroundColor="{AppThemeBinding 
+                            Dark={StaticResource TextPrimaryColor_Dark}, 
+                            Light={StaticResource TextPrimaryColor_Light}}"
+                           WidthRequest="46"
+                           HeightRequest="6"
+                           Padding="0"
+                           Margin="0"
+                           HorizontalOptions="Center"
+                           CornerRadius="{OnPlatform Android=12, iOS=3}"
+                           VerticalOptions="Start"/>
+                    
+                    <Label HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="22">
+                        Barcode Information
+                    </Label>
+
+                    <BoxView HeightRequest="1" Color="{AppThemeBinding 
+                        Dark={StaticResource TextPrimaryColor_Dark}, 
+                        Light={StaticResource TextPrimaryColor_Light}}"
+                             VerticalOptions="End" HorizontalOptions="Fill"/>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <ScrollView VerticalScrollBarVisibility="Never"
+                                x:Name="ContentScrollView">
+                        <StackLayout Margin="0,18,0,0" Spacing="16" Padding="4,0">
+                            <StackLayout Spacing="2"
+                                         xtc:TouchEffect.PressedScale="0.95"
+                                         xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
+                                         xtc:TouchEffect.AnimationDuration="650"
+                                         xtc:TouchEffect.LongPressCommand="{Binding TextLongPressCommand}"
+                                         >
+                                <Label Text="Text" FontSize="17" Opacity="0.45"/>
+                                <Label Text="{Binding SelectedBarcode.Text, FallbackValue=Test}" FontSize="15"/>
+                            </StackLayout>
+
+                            <StackLayout Spacing="2"
+                                         xtc:TouchEffect.PressedScale="0.95"
+                                         xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
+                                         xtc:TouchEffect.AnimationDuration="650"
+                                         xtc:TouchEffect.LongPressCommand="{Binding LocationLongPressCommand}"
+                                         x:Name="ScanLocationAvailableContainer">
+                                <Label Text="Location" FontSize="17" Opacity="0.45"/>
+
+                                <Label Text="{Binding SelectedBarcode.ScanLocation, FallbackValue=Test,
+                                    Converter={StaticResource CoordinateString}}" FontSize="15"
+                                       x:Name="BarcodeLocationLabel"/>
+                            </StackLayout>
+                            
+                            <StackLayout Spacing="16" Orientation="Horizontal"
+                                         x:Name="ScanLocationNotAvailableContainer">
+                                <StackLayout Orientation="Vertical" Spacing="2">
+                                    <Label Text="Location" FontSize="17" Opacity="0.45"/>
+
+                                    <Label Text="Not available" FontSize="15"/>
+                                </StackLayout>
+
+                                <Image Opacity="0.5">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="FontAwesome"
+                                                         Glyph="{x:Static theme:IconFont.ExclamationCircle}"
+                                                         Color="Red"
+                                                         Size="24"/>
+                                    </Image.Source>
+                                </Image>
+
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="NoLocationLabel_Tapped"/>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                            
+                            <StackLayout Spacing="2"
+                                         xtc:TouchEffect.PressedScale="0.95"
+                                         xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
+                                         xtc:TouchEffect.AnimationDuration="650"
+                                         xtc:TouchEffect.LongPressCommand="{Binding FormatLongPressCommand}">
+                                <Label Text="Format" FontSize="17" Opacity="0.45"/>
+                                <Label Text="{Binding SelectedBarcode.Format, FallbackValue=Test,
+                                    Converter={StaticResource BarcodeFormatString}}" FontSize="15"/>
+                            </StackLayout>
+                            
+                            <StackLayout Spacing="2"
+                                         xtc:TouchEffect.PressedScale="0.95"
+                                         xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
+                                         xtc:TouchEffect.AnimationDuration="650"
+                                         xtc:TouchEffect.LongPressCommand="{Binding ScanTimeLongPressCommand}">
+                                <Label Text="Scan time" FontSize="17" Opacity="0.45"/>
+                                <Label Text="{Binding SelectedBarcode.ScanTime, FallbackValue=Test,
+                                    Converter={StaticResource DateTimeUTCDateTimeLocal}}" FontSize="15"/>
+                            </StackLayout>
+                            
+                            <StackLayout Spacing="4"
+                                         xtc:TouchEffect.PressedScale="0.95"
+                                         xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
+                                         xtc:TouchEffect.AnimationDuration="650"
+                                         xtc:TouchEffect.LongPressCommand="{Binding BarcodeImageLongPressCommand}">
+                                <Label Text="Barcode image" FontSize="17" Opacity="0.45"/>
+                                <Image x:Name="BarcodeImage" HeightRequest="125" BackgroundColor="White"/>
+                            </StackLayout>
+
+                            <StackLayout Margin="0,0,0,12" VerticalOptions="End" Spacing="10">
+                                <Grid>
+                                    <Button Text="Show on map" Clicked="ShowOnMap_Clicked"
+                                            Style="{StaticResource PrimaryButton}"
+                                            x:Name="ShowOnMapButton"/>
+                                    <Button Text="Show in list" Clicked="ShowInList_Clicked"
+                                            Style="{StaticResource PrimaryButton}"
+                                            x:Name="ShowInListButton"/>
+                                </Grid>
+                        
+                                <Button Text="Delete" BackgroundColor="#D61818"
+                                        TextColor="White" Clicked="Delete_Clicked"/>
+                            </StackLayout>  
+                        </StackLayout>
+                    </ScrollView>
+                </Grid>
+            </Grid>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

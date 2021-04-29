@@ -16,6 +16,7 @@ namespace PVScan.Mobile
         {
             return Container.Resolve<T>();
         }
+
         public static object Resolve(Type type)
         {
             return Container.Resolve(type);

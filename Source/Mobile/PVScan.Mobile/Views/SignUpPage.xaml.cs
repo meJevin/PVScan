@@ -2,6 +2,7 @@
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +17,37 @@ namespace PVScan.Mobile.Views
     {
         public event EventHandler BackClicked;
 
+        SignUpPageViewModel VM;
+
         public SignUpPage()
         {
             InitializeComponent();
 
-            var vm = (BindingContext as SignUpPageViewModel);
+            VM = (BindingContext as SignUpPageViewModel);
 
-            vm.SuccessfulSignUp += Vm_SuccessfulSignUp;
-            vm.FailedSignUp += Vm_FailedSignUp;
+            VM.SuccessfulSignUp += Vm_SuccessfulSignUp;
+            VM.FailedSignUp += Vm_FailedSignUp;
+
+            VM.PropertyChanged += VM_PropertyChanged;
+        }
+
+        private async void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SignUpPageViewModel.IsSigningUp))
+            {
+                if (VM.IsSigningUp)
+                {
+                    // Show spinner
+                    _ = LoadingSpinner.FadeTo(1, 250, Easing.CubicOut);
+                    await LoadingSpinner.ScaleTo(1, 250, Easing.CubicOut);
+                }
+                else
+                {
+                    // Hide spinner
+                    _ = LoadingSpinner.FadeTo(0, 250, Easing.CubicOut);
+                    await LoadingSpinner.ScaleTo(0.75, 250, Easing.CubicOut);
+                }
+            }
         }
 
         private async void Vm_FailedSignUp(object sender, SignUpEventArgs e)

@@ -15,6 +15,7 @@ using Xamarin.Forms.Xaml;
 using ZXing;
 using ZXing.Mobile;
 using ZXing.Net.Mobile.Forms;
+using PVScan.Mobile.Views.Extensions;
 
 namespace PVScan.Mobile.Views
 {
@@ -22,26 +23,40 @@ namespace PVScan.Mobile.Views
     public partial class ScanPage : ContentView
     {
         ZXingScannerView ScannerView;
+        ScanPageViewModel VM;
 
         public ScanPage()
         {
             InitializeComponent();
 
-            var vm = (BindingContext as ScanPageViewModel);
+            VM = (BindingContext as ScanPageViewModel);
 
-            vm.ClearCommand.Execute(null);
+            VM.ClearCommand.Execute(null);
 
-            vm.GotBarcode += (s, e) => { BarcodeAvailable(); };
-            vm.Cleared += (s, e) => { BarcodeUnavailable(); };
-            vm.Saved += (s, e) => {  };
-            vm.CameraAllowed += (s, e) => { CameraAllowedHandler(); };
+            VM.GotBarcode += (s, e) => { BarcodeAvailable(); };
+            VM.Cleared += (s, e) => { BarcodeUnavailable(); };
+            VM.Saved += (s, e) => {  };
+            VM.CameraAllowed += (s, e) => { CameraAllowedHandler(); };
 
-            if (vm.IsCameraAllowed)
+            VM.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(VM.TorchEnabled))
+                {
+                    ScannerView.IsTorchOn = VM.TorchEnabled;
+                }
+            };
+
+            if (VM.IsCameraAllowed)
             {
                 ScannerView = new ZXingScannerView()
                 {
                     IsAnalyzing = true,
                     IsScanning = true,
+                };
+
+                ScannerView.Options.CameraResolutionSelector = (res) =>
+                {
+                    return res.Best();
                 };
 
                 ScannerView.OnScanResult += ScannerView_OnScanResult;
@@ -61,12 +76,16 @@ namespace PVScan.Mobile.Views
         {
             _ = BarcodeInfoContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
             _ = SaveButtonContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
+            _ = PhotoAndTorchContainer.TranslateTo(0, -SaveButtonContainer.Height, 250, Easing.CubicOut);
+            _ = PhotoAndTorchContainer.MarginBottomTo(0, 250, Easing.CubicOut);
         }
 
         private void BarcodeUnavailable()
         {
             _ = BarcodeInfoContainer.TranslateTo(0, -BarcodeInfoContainer.Height, 250, Easing.CubicOut);
             _ = SaveButtonContainer.TranslateTo(0, SaveButtonContainer.Height, 250, Easing.CubicOut);
+            _ = PhotoAndTorchContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
+            _ = PhotoAndTorchContainer.MarginBottomTo(40, 250, Easing.CubicOut);
         }
 
         public async Task Initialize()
@@ -78,6 +97,8 @@ namespace PVScan.Mobile.Views
 
             ScannerView.IsScanning = true;
             ScannerView.IsAnalyzing = true;
+
+            ScannerView.IsTorchOn = VM.TorchEnabled;
         }
 
         public async Task Uninitialize()
@@ -87,8 +108,13 @@ namespace PVScan.Mobile.Views
                 return;
             }
 
-            ScannerView.IsScanning = false;
             ScannerView.IsAnalyzing = false;
+            ScannerView.IsTorchOn = false;
+
+            // Remove this comment if you want slower tab switch speed
+            // for scan page. But camra is actually turned off here
+            // and the device is going to be faster
+            //ScannerView.IsScanning = false;
         }
 
         private async Task CameraAllowedHandler()
@@ -97,6 +123,11 @@ namespace PVScan.Mobile.Views
             {
                 IsAnalyzing = true,
                 IsScanning = true,
+            };
+
+            ScannerView.Options.CameraResolutionSelector = (res) =>
+            {
+                return res.Best();
             };
 
             ScannerView.OnScanResult += ScannerView_OnScanResult;

@@ -15,9 +15,11 @@ namespace PVScan.Mobile.Services.Interfaces
 
         // Read
         Task<IEnumerable<Barcode>> GetAll();
-        Task<IEnumerable<Barcode>> GetAllFiltered(Filter filter);
 
         // Delete
         Task Delete(Barcode barcode);
+
+        // Update
+        Task Update(Barcode barcode);
     }
 }

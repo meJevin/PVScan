@@ -7,11 +7,11 @@ namespace PVScan.Mobile.Tests.Services.Mocks
 {
     public class InMemoryKVP : IPersistentKVP
     {
-        Dictionary<string, object> KVPs;
+        Dictionary<string, string> KVPs;
 
         public InMemoryKVP()
         {
-            KVPs = new Dictionary<string, object>();
+            KVPs = new Dictionary<string, string>();
         }
 
         public void Clear()
@@ -24,9 +24,9 @@ namespace PVScan.Mobile.Tests.Services.Mocks
             return KVPs.ContainsKey(key);
         }
 
-        public dynamic Get(string key, dynamic defaultValue)
+        public string Get(string key, string defaultValue)
         {
-            if (!KVPs.TryGetValue(key, out object result))
+            if (!KVPs.TryGetValue(key, out string result))
             {
                 return null;
             }
@@ -39,7 +39,7 @@ namespace PVScan.Mobile.Tests.Services.Mocks
             KVPs.Remove(key);
         }
 
-        public void Set(string key, dynamic value)
+        public void Set(string key, string value)
         {
             KVPs[key] = value;
         }

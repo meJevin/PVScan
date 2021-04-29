@@ -3,8 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
              x:Class="PVScan.Mobile.Views.LoginPage"
-    xmlns:di="clr-namespace:PVScan.Mobile.DI"
-    di:ViewModelLocator.AutoWireViewModel="True">
+             xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
+             xmlns:di="clr-namespace:PVScan.Mobile.DI"
+             xmlns:controls="clr-namespace:PVScan.Mobile.Views.Controls"
+             xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+             di:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewmodels:LoginPageViewModel">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBool"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
 
     <Grid  Margin="20, 0, 20, 0">
         <Grid.RowDefinitions>
@@ -13,17 +23,29 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Label x:Name="LoginMessageLabel" Opacity="0"
-            VerticalOptions="Center" HorizontalOptions="Center">
+        <Grid BackgroundColor="Transparent"
+              VerticalOptions="Center"
+              HorizontalOptions="Center">
+            <StackLayout>
+                <controls:LoadingSpinner x:Name="LoadingSpinner" Opacity="0" Scale="0.75"/>
+                
+                <Label x:Name="LoginMessageLabel" Opacity="0" Margin="0,16,0,0"
+                    VerticalOptions="Center" HorizontalOptions="Center"
+                       FontSize="18">
             
-        </Label>
+                </Label>
+            </StackLayout>
+        </Grid>
 
         <StackLayout VerticalOptions="Center" Grid.RowSpan="3">
             <Entry Placeholder="Login" HeightRequest="45"
-               IsSpellCheckEnabled="False" Text="{Binding Login}">
+                   IsSpellCheckEnabled="False" Text="{Binding Login}"
+                   IsTextPredictionEnabled="False"
+                   IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBool}}">
             </Entry>
             <Entry Placeholder="Password" HeightRequest="45" IsPassword="True"
-               IsSpellCheckEnabled="False" Text="{Binding Password}">
+                   IsSpellCheckEnabled="False" Text="{Binding Password}"
+                   IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBool}}" >
 
             </Entry>
             <Button Text="Forgot password?" TextColor="{StaticResource ThemePrimary}" HeightRequest="40" HorizontalOptions="End"
@@ -31,7 +53,8 @@
             </Button>
 
             <Button Text="Log in" Style="{StaticResource PrimaryButton}"
-                Command="{Binding LoginCommand}">
+                    Command="{Binding LoginCommand}"
+                    IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBool}}">
             </Button>
 
             <!-- SEPARATOR -->

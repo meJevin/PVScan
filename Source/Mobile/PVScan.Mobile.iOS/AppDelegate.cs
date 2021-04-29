@@ -23,8 +23,10 @@ namespace PVScan.Mobile.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            _ = new DI.Bootstrapper();
             global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
             global::Xamarin.Forms.Forms.Init();
+            Xamarin.Forms.Svg.iOS.SvgImage.Init();
 
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
 

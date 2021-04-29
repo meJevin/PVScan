@@ -17,10 +17,16 @@ namespace PVScan.Mobile.ViewModels
     public class ScanPageViewModel : BaseViewModel
     {
         readonly IBarcodesRepository BarcodesRepository;
+        readonly IFileBarcodeReader FileBarcodeReader;
+        readonly IPopupMessageService PopupMessageService;
 
-        public ScanPageViewModel(IBarcodesRepository barcodesRepository)
+        public ScanPageViewModel(IBarcodesRepository barcodesRepository,
+            IFileBarcodeReader fileBarcodeReader,
+            IPopupMessageService popupMessageService)
         {
             BarcodesRepository = barcodesRepository;
+            FileBarcodeReader = fileBarcodeReader;
+            PopupMessageService = popupMessageService;
 
             ScanCommand = new Command(async (object scanResult) =>
             {
@@ -72,14 +78,17 @@ namespace PVScan.Mobile.ViewModels
                 {
                     Format = LastResult.BarcodeFormat,
                     Text = LastResult.Text,
-                    ServerSynced = false,
-                    ScanLocation = new Coordinate()
-                    {
-                        Latitude = location?.Latitude,
-                        Longitude = location?.Longitude,
-                    },
                     ScanTime = DateTime.UtcNow,
                 };
+
+                if (location != null)
+                {
+                    b.ScanLocation = new Coordinate()
+                    {
+                        Latitude = location.Latitude,
+                        Longitude = location.Longitude,
+                    };
+                }
 
                 b = await BarcodesRepository.Save(b);
 
@@ -103,6 +112,36 @@ namespace PVScan.Mobile.ViewModels
 
                     CameraAllowed?.Invoke(this, new EventArgs());
                 }
+            });
+
+            PickPhotoToScanCommand = new Command(async () =>
+            {
+                var pickResult = await MediaPicker.PickPhotoAsync(new MediaPickerOptions()
+                {
+                    Title = "Pick a photo which contans barcode",
+                });
+
+                if (pickResult == null)
+                {
+                    return;
+                }
+
+                var photoPath = pickResult.FullPath;
+
+                var result = await FileBarcodeReader.DecodeAsync(photoPath);
+
+                if (result == null)
+                {
+                    _ = PopupMessageService.ShowMessage("No barcodes detected!");
+                    return;
+                }
+
+                ScanCommand.Execute(result);
+            });
+
+            ToggleTorchCommand = new Command(() =>
+            {
+                TorchEnabled = !TorchEnabled;
             });
 
             IsCameraAllowed = Permissions.CheckStatusAsync<Permissions.Camera>()
@@ -138,5 +177,10 @@ namespace PVScan.Mobile.ViewModels
         public event EventHandler Cleared;
         public event EventHandler Saved;
         public event EventHandler CameraAllowed;
+
+
+        public ICommand PickPhotoToScanCommand { get; }
+        public ICommand ToggleTorchCommand { get; }
+        public bool TorchEnabled { get; set; }
     }
 }

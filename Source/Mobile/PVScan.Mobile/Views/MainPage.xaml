@@ -12,6 +12,8 @@
              
     ios:NavigationPage.HideNavigationBarSeparator="true"
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
+
+    Appearing="ContentPage_Appearing"
     >
 
     <ContentPage.Resources>
@@ -40,7 +42,7 @@
             x:Key="BasketTabItemTemplate">
             <Grid>
                 <Grid
-                    Margin="0, 0, 0, 36">
+                    Margin="{DynamicResource TabBarCameraButtonMargin}">
                     <ImageButton
                         InputTransparent="True"
                         Source="{TemplateBinding CurrentIcon}"
@@ -95,7 +97,7 @@
                 Value="{AppThemeBinding Dark={StaticResource BackgroundColorDark}, Light=#E6F9F9F9}" />
             <Setter
                 Property="TabStripHeight"
-                Value="74" />
+                Value="{DynamicResource TabBarHeight}"/>
             <Setter
                 Property="TabContentBackgroundColor"
                 Value="#F5F5F5" />
@@ -105,6 +107,7 @@
         </Style>
 
     </ContentPage.Resources>
+
     <NavigationPage.TitleView>
         <Grid>
             <Grid.Margin>
@@ -115,11 +118,13 @@
                 </OnPlatform>
             </Grid.Margin>
             <Label VerticalTextAlignment="Center"
-                   HorizontalTextAlignment="Center">
+                   HorizontalTextAlignment="Center"
+                   FontSize="16">
                 PVScan
             </Label>
         </Grid>
     </NavigationPage.TitleView>
+
     <Grid>
         <toolkit:TabView IsSwipeEnabled="False" IsTabTransitionEnabled="False"
                          x:Name="MainTabView"
@@ -128,7 +133,8 @@
             <toolkit:TabViewItem
                 TabTapped="HistoryTabItem_TabTapped"
                 ControlTemplate="{StaticResource TabItemTemplate}"
-                Style="{StaticResource TabItemStyle}">
+                Style="{StaticResource TabItemStyle}"
+                x:Name="HistoryTabViewItem">
                 <toolkit:TabViewItem.Icon>
                     <FontImageSource
                         FontFamily="FontAwesome"
@@ -188,5 +194,31 @@
                 <views:ProfilePage x:Name="ProfilePage"/>
             </toolkit:TabViewItem>
         </toolkit:TabView>
+
+        <Grid InputTransparent="True" x:Name="PopupContainer"
+              ColumnDefinitions="*,3*,*" RowDefinitions="8*,*" BackgroundColor="Transparent">
+            <Frame x:Name="PopupMessageBox" BackgroundColor="#D000" x:FieldModifier="Public"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   Padding="22" Grid.Column="1"
+                   HasShadow="False"
+                   CornerRadius="{OnPlatform Android=4, iOS=12}"
+                   Opacity="0">
+                <Label x:Name="PopupMessageLabel" x:FieldModifier="Public"
+                       VerticalOptions="Center" HorizontalOptions="Center"
+                       FontSize="22" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                       TextColor="White"
+                       Text="Copied to clipboard"/>
+            </Frame>
+        </Grid>
+
+        <Grid ColumnDefinitions="*,*,*" InputTransparent="True">
+            <StackLayout HorizontalOptions="Center" VerticalOptions="End" Spacing="0">
+                
+                <Grid HeightRequest="42" x:Name="ScannedBarcodeImageContainer">
+                </Grid>
+
+                <BoxView HeightRequest="{DynamicResource TabBarHeight}"/>
+            </StackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

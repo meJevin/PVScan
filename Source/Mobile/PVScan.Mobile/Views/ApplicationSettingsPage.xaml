@@ -11,7 +11,8 @@
     
     xmlns:di="clr-namespace:PVScan.Mobile.DI"
     di:ViewModelLocator.AutoWireViewModel="True"
-    
+    x:DataType="viewmodels:ApplicationSettingsPageViewModel"
+
     BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
     
     <ContentView.Resources>
@@ -21,6 +22,38 @@
     </ContentView.Resources>
 
     <Grid>
+        <ScrollView>
+            <StackLayout Margin="20" Spacing="12">
+                <Grid HeightRequest="28"/>
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Label VerticalTextAlignment="Center">
+                        Dark theme
+                    </Label>
+                    <Switch Grid.Column="2" Toggled="DarkTheme_Toggled" IsToggled="{Binding IsDarkTheme}"/>
+                </Grid>
+
+                <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding
+                            Dark={StaticResource BackgroundColorDark},
+                            Light={StaticResource BackgroundColorLighterAlt}}"/>
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Label VerticalTextAlignment="Center">
+                        Transparency in saved barcode images
+                    </Label>
+                    <Switch Grid.Column="2" Toggled="KeepAlpha_Toggled" IsToggled="{Binding SaveBarcodeImagesWithAlpha}"/>
+                </Grid>
+
+                <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding
+                            Dark={StaticResource BackgroundColorDark},
+                            Light={StaticResource BackgroundColorLighterAlt}}"/>
+
+                <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked" Text="Add 1"/>
+                <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked_1"  Text="Add 10"/>
+                <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked_2" Text="Add 100"/>
+            </StackLayout>
+        </ScrollView>
+        
         <ImageButton HorizontalOptions="Start" VerticalOptions="Start" Padding="14" BackgroundColor="Transparent"
                      Clicked="BackButton_Click">
             <ImageButton.Source>
@@ -28,17 +61,5 @@
                                  Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
             </ImageButton.Source>
         </ImageButton>
-
-        <StackLayout Margin="20, 58, 20, 20" Spacing="12">
-            <StackLayout Orientation="Horizontal">
-                <Label VerticalTextAlignment="Center">
-                    Dark theme
-                </Label>
-                <Switch Toggled="DarkTheme_Toggled" IsToggled="{Binding IsDarkTheme}"/>
-            </StackLayout>
-            <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked" Text="Add 1"/>
-            <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked_1"  Text="Add 10"/>
-            <Button Style="{StaticResource PrimaryButton}" Clicked="Button_Clicked_2" Text="Add 100"/>
-        </StackLayout>
     </Grid>
 </ContentView>

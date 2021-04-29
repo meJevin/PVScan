@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
+    xmlns:views="clr-namespace:PVScan.Mobile.Views"
+    x:Class="PVScan.Mobile.Views.SortingPage"
+    di:ViewModelLocator.AutoWireViewModel="True"
+    x:DataType="viewmodels:SortingPageViewModel">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:BoolSortingOrderStringConverter x:Key="BoolSortingOrderString"/>
+
+            <DataTemplate x:Key="SortingFieldItem">
+                <datatemplates:SortingFieldItem
+                    SelectedSortingField="{Binding Source={RelativeSource AncestorType={x:Type views:SortingPage}}, Path=BindingContext.SelectedSortingField}"/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <ContentView.Content>
+        <Grid>
+            <Frame BackgroundColor="{AppThemeBinding 
+                Dark={StaticResource BackgroundColorDarker},
+                Light={StaticResource BackgroundColorLighter}}"
+                   HasShadow="False" CornerRadius="20">
+
+            </Frame>
+
+            <BoxView BackgroundColor="{AppThemeBinding 
+                Dark={StaticResource BackgroundColorDarker},
+                Light={StaticResource BackgroundColorLighter}}" 
+                     HeightRequest="20" VerticalOptions="End">
+
+            </BoxView>
+
+            <Grid Margin="15, 15, 15, 0" RowDefinitions="65,*" RowSpacing="0">
+                <Grid>
+                    <Frame HasShadow="False" 
+                           BackgroundColor="{AppThemeBinding 
+                            Dark={StaticResource TextPrimaryColor_Dark}, 
+                            Light={StaticResource TextPrimaryColor_Light}}"
+                           WidthRequest="46"
+                           HeightRequest="6"
+                           Padding="0"
+                           Margin="0"
+                           HorizontalOptions="Center"
+                           CornerRadius="{OnPlatform Android=12, iOS=3}"
+                           VerticalOptions="Start"/>
+                    
+                    <Label HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="22">
+                        Sort Barcodes
+                    </Label>
+
+                    <BoxView HeightRequest="1" Color="{AppThemeBinding 
+                        Dark={StaticResource TextPrimaryColor_Dark}, 
+                        Light={StaticResource TextPrimaryColor_Light}}"
+                             VerticalOptions="End" HorizontalOptions="Fill"/>
+                </Grid>
+
+                <!-- Main Content -->
+                <Grid Margin="0,16,0,32" Grid.Row="1">
+                    <StackLayout>
+                        <Grid ColumnDefinitions="Auto,*,Auto" Margin="8,0,8,8" >
+                            <StackLayout Orientation="Horizontal" Spacing="0">
+                                <Label Text="Sort " FontSize="20"/>
+                                <Label Text="{Binding Descending, Converter={StaticResource BoolSortingOrderString}}" FontSize="20"
+                                       TextColor="#349CFC">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ToggleOrderCommand}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label Text=" by" FontSize="20"/>
+                            </StackLayout>
+
+                            <Label Text="Reset" FontSize="16" Grid.Column="2" TextColor="#349CFC" VerticalOptions="End">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ResetSortingCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+
+                            <!--<BoxView HeightRequest="1" Color="Red" HorizontalOptions="Fill" VerticalOptions="End" Grid.ColumnSpan="3"/>-->
+                        </Grid>
+
+                        <StackLayout BindableLayout.ItemsSource="{Binding AvailableSortingFields}"
+                                     BindableLayout.ItemTemplate="{StaticResource SortingFieldItem}"
+                                     Margin="0,0,0,12"/>
+                        
+                        <Button Text="Apply" Style="{StaticResource PrimaryButton}"
+                                VerticalOptions="End"
+                                Command="{Binding ApplySortingCommand}" IsEnabled="{Binding ApplySortingEnabled}"/>
+                    </StackLayout>
+                </Grid>
+            </Grid>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

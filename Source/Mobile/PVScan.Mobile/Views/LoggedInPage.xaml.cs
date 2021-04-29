@@ -22,6 +22,15 @@ namespace PVScan.Mobile.Views
 
             vm.SuccessfulLogout += Vm_SuccessfulLogout;
             vm.FailedLogout += Vm_FailedLogout;
+
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                ProfileRefreshView.RefreshColor = Color.Black;
+            }
+            else if (Device.RuntimePlatform == Device.iOS)
+            {
+                ProfileRefreshView.SetAppThemeColor(RefreshView.RefreshColorProperty, Color.Black, Color.White);
+            }
         }
 
         private void Vm_SuccessfulLogout(object sender, LogoutEventArgs e)

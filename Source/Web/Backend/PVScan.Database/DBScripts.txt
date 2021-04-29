@@ -1,4 +1,9 @@
-﻿dotnet ef database update --startup-project ..\PVScan.Auth --context PersistedGrantDbContext
+﻿dotnet ef migrations add NAME --startup-project ..\PVScan.Auth --context PersistedGrantDbContext -output-dir MigrationsSQL
+dotnet ef migrations add NAME --startup-project ..\PVScan.Auth --context ConfigurationDbContext -output-dir MigrationsSQL
+
+dotnet ef migrations add NAME --startup-project ..\PVScan.Auth --context PVScanDbContext -output-dir MigrationsSQL
+
+dotnet ef database update --startup-project ..\PVScan.Auth --context PersistedGrantDbContext
 dotnet ef database update --startup-project ..\PVScan.Auth --context ConfigurationDbContext
 
 dotnet ef database update --startup-project ..\PVScan.Auth --context PVScanDbContext

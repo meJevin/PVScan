@@ -4,6 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="Common.Styles.DefaultTheme">
 
+    <Thickness x:Key="TabBarCameraButtonMargin"/>
+    <x:Int32 x:Key="TabBarHeight"/>
+
     <!-- COLORS -->
     <Color x:Key="ThemePrimary">#fd7b38</Color>
     <Color x:Key="ThemeLighterAlt">#fff7f5</Color>
@@ -36,6 +39,7 @@
     <Color x:Key="BackgroundColorLight">#f6f6f6</Color>
     <Color x:Key="BackgroundColorLightSeeThrough">#8FFF</Color>
     <Color x:Key="BackgroundColorLighter">#ededed</Color>
+    <Color x:Key="BackgroundColorLighterAlt">#d6d6d6</Color>
     <Color x:Key="TextPrimaryColor_Dark">#FFFFFF</Color>
     <Color x:Key="TextPrimaryColor_Light">#323130</Color>
     <Color x:Key="TextSecondaryColor_Dark">#FFFFFF</Color>
