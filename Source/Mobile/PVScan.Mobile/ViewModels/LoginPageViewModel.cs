@@ -32,7 +32,11 @@ namespace PVScan.Mobile.ViewModels
                     return;
                 }
 
+                IsLoggingIn = true;
+
                 var result = await IdentityService.LoginAsync(Login, Password);
+
+                IsLoggingIn = false;
 
                 if (result)
                 {
@@ -61,5 +65,7 @@ namespace PVScan.Mobile.ViewModels
 
         public string Login { get; set; }
         public string Password { get; set; }
+
+        public bool IsLoggingIn { get; set; }
     }
 }
