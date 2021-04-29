@@ -118,7 +118,8 @@
                 </OnPlatform>
             </Grid.Margin>
             <Label VerticalTextAlignment="Center"
-                   HorizontalTextAlignment="Center">
+                   HorizontalTextAlignment="Center"
+                   FontSize="16">
                 PVScan
             </Label>
         </Grid>
