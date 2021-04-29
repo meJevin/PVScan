@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
+    x:Class="PVScan.Mobile.Views.Controls.LoadingSpinner">
+    <ContentView.Content>
+        <Image x:Name="SpinnerImage">
+            <Image.Source>
+                <FontImageSource FontFamily="FontAwesome"
+                                     Glyph="{x:Static theme:IconFont.Spinner}"
+                                     Size="52"/>
+            </Image.Source>
+        </Image>
+    </ContentView.Content>
+</ContentView>

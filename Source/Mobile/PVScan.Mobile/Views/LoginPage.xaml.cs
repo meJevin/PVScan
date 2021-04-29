@@ -2,6 +2,7 @@
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +17,37 @@ namespace PVScan.Mobile.Views
     {
         public event EventHandler SignUpClicked;
 
+        LoginPageViewModel VM;
+
         public LoginPage()
         {
             InitializeComponent();
 
-            var vm = (BindingContext as LoginPageViewModel);
+            VM = (BindingContext as LoginPageViewModel);
 
-            vm.SuccessfulLogin += Vm_SuccessfulLogin;
-            vm.FailedLogin += Vm_FailedLogin;
+            VM.SuccessfulLogin += Vm_SuccessfulLogin;
+            VM.FailedLogin += Vm_FailedLogin;
+
+            VM.PropertyChanged += Vm_PropertyChanged;
+        }
+
+        private async void Vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(LoginPageViewModel.IsLoggingIn))
+            {
+                if (VM.IsLoggingIn)
+                {
+                    // Show spinner
+                    _ = LoadingSpinner.FadeTo(1, 250, Easing.CubicOut);
+                    await LoadingSpinner.ScaleTo(1, 250, Easing.CubicOut);
+                }
+                else
+                {
+                    // Hide spinner
+                    _ = LoadingSpinner.FadeTo(0, 250, Easing.CubicOut);
+                    await LoadingSpinner.ScaleTo(0.75, 250, Easing.CubicOut);
+                }
+            }
         }
 
         private async void Vm_FailedLogin(object sender, LoginEventArgs e)

@@ -620,7 +620,7 @@ namespace PVScan.Mobile.Views
 
             Map.MoveToRegion(MapSpan.FromCenterAndRadius(
                 new Position(barcodeLocation.Latitude.Value, barcodeLocation.Longitude.Value),
-                Distance.FromKilometers(0.1)));
+                Distance.FromKilometers(0.01)));
         }
 
         private async Task HideBarcodeMapsInfo(uint duration = 300)

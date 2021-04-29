@@ -31,7 +31,7 @@ namespace PVScan.Auth
         // WOW WTF THE ORDER MATTERS OK
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration["DBConnection"];
+            var connectionString = Configuration["MySQLConnection"];
             services.AddPVScanDatabase(connectionString);
             services.ConfigureIdentityServer(connectionString);
 

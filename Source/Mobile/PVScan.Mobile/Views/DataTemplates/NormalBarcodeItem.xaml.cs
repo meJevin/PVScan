@@ -138,7 +138,7 @@ namespace PVScan.Mobile.Views.DataTemplates
         public async Task MakeEditable()
         {
             InnerContainer.GestureRecognizers.Remove(InnerContainerTapGestureRecognizer);
-            BarcodeTextLabelOverlay.IsVisible = true;
+            //BarcodeTextLabelOverlay.IsVisible = true;
 
             _ = ImageLeftContainer.TranslateTo(0, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(1, 250, Easing.CubicOut);
@@ -148,7 +148,7 @@ namespace PVScan.Mobile.Views.DataTemplates
         public async Task MakeNotEditable()
         {
             InnerContainer.GestureRecognizers.Add(InnerContainerTapGestureRecognizer);
-            BarcodeTextLabelOverlay.IsVisible = false;
+            //BarcodeTextLabelOverlay.IsVisible = false;
 
             _ = ImageLeftContainer.TranslateTo(-44, 0, 250, Easing.CubicOut);
             _ = ImageLeftContainer.FadeTo(0, 250, Easing.CubicOut);

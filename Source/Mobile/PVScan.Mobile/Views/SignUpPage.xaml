@@ -3,8 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
              x:Class="PVScan.Mobile.Views.SignUpPage"
-    xmlns:di="clr-namespace:PVScan.Mobile.DI"
-    di:ViewModelLocator.AutoWireViewModel="True">
+             xmlns:di="clr-namespace:PVScan.Mobile.DI"
+             xmlns:controls="clr-namespace:PVScan.Mobile.Views.Controls"
+             xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+             di:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewmodels:SignUpPageViewModel">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBool"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
 
     <Grid Margin="20, 0, 20, 0">
         <Grid.RowDefinitions>
@@ -13,30 +22,43 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Label x:Name="SignUpMessageLabel" Opacity="0"
-               VerticalOptions="Center" HorizontalOptions="Center">
+        
+        <Grid BackgroundColor="Transparent"
+              VerticalOptions="Center"
+              HorizontalOptions="Center">
+            <StackLayout>
+                <controls:LoadingSpinner x:Name="LoadingSpinner" Opacity="0" Scale="0.75"/>
+                
+                <Label x:Name="SignUpMessageLabel" Opacity="0" Margin="0,16,0,0"
+                       FontSize="18">
             
-        </Label>
+                </Label>
+            </StackLayout>
+        </Grid>
         
         <StackLayout Grid.RowSpan="3"
             VerticalOptions="Center">
             <Entry Placeholder="Login" HeightRequest="45"
-               IsSpellCheckEnabled="False" Text="{Binding Login}"
-               IsTextPredictionEnabled="False">
+                   IsSpellCheckEnabled="False" Text="{Binding Login}"
+                   IsTextPredictionEnabled="False"
+                   IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBool}}">
 
             </Entry>
             <Entry Placeholder="Email" HeightRequest="45"
-               IsSpellCheckEnabled="False"
-               Keyboard="Email" Text="{Binding Email}">
+                   IsSpellCheckEnabled="False"
+                   Keyboard="Email" Text="{Binding Email}"
+                   IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBool}}">
 
             </Entry>
             <Entry Placeholder="Password" HeightRequest="45" IsPassword="True"
-               IsSpellCheckEnabled="False" Text="{Binding Password}">
+                   IsSpellCheckEnabled="False" Text="{Binding Password}"
+                   IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBool}}">
 
             </Entry>
 
             <Button Margin="0,20,0,0" Text="Sign up" Style="{StaticResource PrimaryButton}"
-                Command="{Binding SignUpCommand}">
+                    Command="{Binding SignUpCommand}"
+                    IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBool}}">
             </Button>
 
             <Button Text="Back" TextColor="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" HorizontalOptions="Center"

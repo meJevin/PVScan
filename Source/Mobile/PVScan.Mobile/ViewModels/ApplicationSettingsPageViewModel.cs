@@ -45,7 +45,7 @@ namespace PVScan.Mobile.ViewModels
             });
 
             IsDarkTheme = Application.Current.UserAppTheme == OSAppTheme.Dark;
-            SaveBarcodeImagesWithAlpha = KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, true);
+            SaveBarcodeImagesWithAlpha = KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, StorageKeys.Defaults.SaveBarcodeImagesWithAlpha);
         }
 
         public ICommand SwitchThemeCommand { get; }
