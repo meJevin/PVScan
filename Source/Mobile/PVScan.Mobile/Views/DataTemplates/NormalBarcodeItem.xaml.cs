@@ -91,6 +91,11 @@ namespace PVScan.Mobile.Views.DataTemplates
             // Initialization, basically
             BindingContextChanged += (_, _) =>
             {
+                if (BindingContext == null)
+                {
+                    return;
+                }
+
                 ToggleFavoriteOpacity();
             };
 
@@ -109,6 +114,7 @@ namespace PVScan.Mobile.Views.DataTemplates
                     if ((BindingContext as Barcode) == args.UpdatedBarcode)
                     {
                         NoLocationButton.IsVisible = false;
+                        NoLocationButton.InputTransparent = true;
                     }
                 });
         }

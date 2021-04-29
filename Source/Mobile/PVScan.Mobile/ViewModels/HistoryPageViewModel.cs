@@ -31,8 +31,6 @@ namespace PVScan.Mobile.ViewModels
         readonly IBarcodeSorter SorterService;
         readonly IPopupMessageService PopupMessageService;
 
-        readonly SpecifyLocationPage SpecifyLocation;
-
         public HistoryPageViewModel(
             IBarcodesRepository barcodesRepository,
             IBarcodesFilter filterService,
@@ -48,8 +46,6 @@ namespace PVScan.Mobile.ViewModels
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
 
             SelectedBarcodes = new ObservableCollection<object>();
-
-            SpecifyLocation = new SpecifyLocationPage();
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
@@ -175,12 +171,6 @@ namespace PVScan.Mobile.ViewModels
                     {
                         UpdatedBarcode = barcode,
                     });
-            });
-
-            SpecifyLocationCommand = new Command(async () =>
-            {
-                SpecifyLocation.Initialize(NoLocationSelectedBarcode);
-                await Application.Current.MainPage.Navigation.PushModalAsync(SpecifyLocation, true);
             });
 
             SelectBarcodeCommand = new Command(async (object barcodeObject) =>
@@ -311,7 +301,6 @@ namespace PVScan.Mobile.ViewModels
 
 
         public ICommand FavoriteCommand { get; set; }
-        public ICommand SpecifyLocationCommand { get; set; }
         public ICommand SelectBarcodeCommand { get; set; }
         public Barcode SelectedBarcode { get; set; }
         public Barcode NoLocationSelectedBarcode { get; set; }

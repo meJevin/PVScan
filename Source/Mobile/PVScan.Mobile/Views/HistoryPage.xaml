@@ -330,10 +330,10 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Frame x:Name="NoLocationPopupContainer" BackgroundColor="#D000"
+            <Frame x:Name="NoLocationPopupContainer" BackgroundColor="#E4000000"
                    HorizontalOptions="FillAndExpand" VerticalOptions="Center"
                    Padding="22" Grid.Column="1" HeightRequest="200"
-                   HasShadow="False" Opacity="0" InputTransparent="True"
+                   HasShadow="False" Opacity="0" InputTransparent="True" CascadeInputTransparent="True"
                    CornerRadius="{OnPlatform Android=4, iOS=12}">
                 <Grid>
                     <Grid RowDefinitions="Auto, *, 45">
@@ -344,17 +344,9 @@
                                HorizontalOptions="Fill" Grid.Row="1" FontSize="Medium" VerticalTextAlignment="Center"
                                TextColor="White"/>
 
-                        <Button Text="Specify" Grid.Row="2" Command="{Binding SpecifyLocationCommand}" Clicked="SpecifyButton_Clicked"/>
+                        <Button Text="Specify" Grid.Row="2" Clicked="SpecifyButton_Clicked"
+                                x:Name="SpecifyLocationButton"/>
                     </Grid>
-                    
-                    <ImageButton HorizontalOptions="End" VerticalOptions="Start" Clicked="NoLocationPopupCloseButton_Clicked"
-                                 Padding="10,0" TranslationY="-14" TranslationX="8" BackgroundColor="Transparent">
-                        <ImageButton.Source>
-                            <FontImageSource FontFamily="FontAwesome"
-                                             Glyph="{x:Static theme:IconFont.Times}"
-                                             Color="White" Size="24"/>
-                        </ImageButton.Source>
-                    </ImageButton>
                 </Grid>
             </Frame>
         </Grid>

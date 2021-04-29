@@ -38,6 +38,8 @@ namespace PVScan.Mobile.Views
 
         private async void ContentPage_Appearing(object sender, EventArgs e)
         {
+            DoneButton.InputTransparent = false;
+
             try
             {
                 var initialLocation = await Geolocation.GetLocationAsync(new GeolocationRequest()
@@ -54,6 +56,11 @@ namespace PVScan.Mobile.Views
             {
 
             }
+        }
+
+        private void DoneButton_Clicked(object sender, EventArgs e)
+        {
+            DoneButton.InputTransparent = true;
         }
     }
 }
