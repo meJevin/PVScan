@@ -33,7 +33,11 @@ namespace PVScan.Mobile.ViewModels
                     return;
                 }
 
+                IsSigningUp = true;
+
                 var result = await IdentityService.SignUpAsync(Login, Password, Email);
+
+                IsSigningUp = false;
 
                 if (result)
                 {
@@ -60,5 +64,7 @@ namespace PVScan.Mobile.ViewModels
         public string Login { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+
+        public bool IsSigningUp { get; set; }
     }
 }
