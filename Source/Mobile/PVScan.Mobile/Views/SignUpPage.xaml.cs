@@ -38,12 +38,28 @@ namespace PVScan.Mobile.Views
                 if (VM.IsSigningUp)
                 {
                     // Show spinner
+                    LoginEntry.Opacity = 0.5;
+                    EmailEntry.Opacity = 0.5;
+                    PasswordEntry.Opacity = 0.5;
+                    SignUpButton.Opacity = 0.5;
+                    LoginEntry.InputTransparent = true;
+                    EmailEntry.InputTransparent = true;
+                    PasswordEntry.InputTransparent = true;
+                    SignUpButton.InputTransparent = true;
                     _ = LoadingSpinner.FadeTo(1, 250, Easing.CubicOut);
                     await LoadingSpinner.ScaleTo(1, 250, Easing.CubicOut);
                 }
                 else
                 {
                     // Hide spinner
+                    LoginEntry.Opacity = 1;
+                    EmailEntry.Opacity = 1;
+                    PasswordEntry.Opacity =1;
+                    SignUpButton.Opacity = 1;
+                    LoginEntry.InputTransparent = false;
+                    EmailEntry.InputTransparent = false;
+                    PasswordEntry.InputTransparent = false;
+                    SignUpButton.InputTransparent = false;
                     _ = LoadingSpinner.FadeTo(0, 250, Easing.CubicOut);
                     await LoadingSpinner.ScaleTo(0.75, 250, Easing.CubicOut);
                 }

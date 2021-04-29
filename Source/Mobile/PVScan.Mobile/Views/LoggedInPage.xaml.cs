@@ -2,6 +2,7 @@
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +15,16 @@ namespace PVScan.Mobile.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoggedInPage : ContentView
     {
+        LoggedInPageViewModel VM;
+
         public LoggedInPage()
         {
             InitializeComponent();
 
-            var vm = (BindingContext as LoggedInPageViewModel);
+            VM = (BindingContext as LoggedInPageViewModel);
 
-            vm.SuccessfulLogout += Vm_SuccessfulLogout;
-            vm.FailedLogout += Vm_FailedLogout;
+            VM.SuccessfulLogout += Vm_SuccessfulLogout;
+            VM.FailedLogout += Vm_FailedLogout;
 
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -30,6 +33,58 @@ namespace PVScan.Mobile.Views
             else if (Device.RuntimePlatform == Device.iOS)
             {
                 ProfileRefreshView.SetAppThemeColor(RefreshView.RefreshColorProperty, Color.Black, Color.White);
+            }
+
+            VM.PropertyChanged += VM_PropertyChanged;
+        }
+
+        private async void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(LoggedInPageViewModel.IsUpdatingUserInfo))
+            {
+                if (VM.IsUpdatingUserInfo)
+                {
+                    VKLinkEntry.Opacity = 0.5;
+                    IGLinkEntry.Opacity = 0.5;
+                    SaveButton.Opacity = 0.5;
+                    VKLinkEntry.InputTransparent = true;
+                    IGLinkEntry.InputTransparent = true;
+                    SaveButton.InputTransparent = true;
+                }
+                else
+                {
+                    VKLinkEntry.Opacity = 1;
+                    IGLinkEntry.Opacity = 1;
+                    SaveButton.Opacity = 1;
+                    VKLinkEntry.InputTransparent = false;
+                    IGLinkEntry.InputTransparent = false;
+                    SaveButton.InputTransparent = false;
+                }
+            }
+            else if (e.PropertyName == nameof(LoggedInPageViewModel.IsLogginOut))
+            {
+                if (VM.IsLogginOut)
+                {
+                    VKLinkEntry.Opacity = 0.5;
+                    IGLinkEntry.Opacity = 0.5;
+                    SaveButton.Opacity = 0.5;
+                    LogoutButton.Opacity = 0.5;
+                    VKLinkEntry.InputTransparent = true;
+                    IGLinkEntry.InputTransparent = true;
+                    SaveButton.InputTransparent = true;
+                    LogoutButton.InputTransparent = true;
+                }
+                else
+                {
+                    VKLinkEntry.Opacity = 1;
+                    IGLinkEntry.Opacity = 1;
+                    SaveButton.Opacity = 1;
+                    LogoutButton.Opacity = 1;
+                    VKLinkEntry.InputTransparent = false;
+                    IGLinkEntry.InputTransparent = false;
+                    SaveButton.InputTransparent = false;
+                    LogoutButton.InputTransparent = false;
+                }
             }
         }
 

@@ -33,8 +33,9 @@
                       HeightRequest="48" BackgroundColor="Transparent">
                     <Label Text="Username" VerticalOptions="Center" FontSize="18"/>
                     <Entry Text="{Binding UserInfo.Username}" Grid.Column="1" 
-                               BackgroundColor="Transparent" IsReadOnly="True"
-                               HorizontalTextAlignment="End" Opacity="0.65"/>
+                           BackgroundColor="Transparent" IsReadOnly="True"
+                           IsTextPredictionEnabled="False" Keyboard="Text"
+                           HorizontalTextAlignment="End" Opacity="0.65"/>
                 </Grid>
 
                 <BoxView HeightRequest="1" Grid.Row="1"
@@ -48,9 +49,10 @@
                       Style="{StaticResource LabelEntryGrid}"
                       HeightRequest="48" BackgroundColor="Transparent">
                     <Label Text="E-mail" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.Email}" Grid.Column="1" 
-                               BackgroundColor="Transparent" IsReadOnly="True"
-                               HorizontalTextAlignment="End" Opacity="0.65"/>
+                    <Entry Text="{Binding UserInfo.Email}" Grid.Column="1"
+                           BackgroundColor="Transparent" IsReadOnly="True"
+                           IsTextPredictionEnabled="False" Keyboard="Email"
+                           HorizontalTextAlignment="End" Opacity="0.65"/>
                 </Grid>
 
                 <BoxView HeightRequest="1" Grid.Row="1" 
@@ -72,8 +74,9 @@
                       HeightRequest="48" BackgroundColor="Transparent">
 
                     <Label Text="VK" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.VKLink}" Grid.Column="1" 
-                           BackgroundColor="Transparent" IsReadOnly="{Binding IsRefreshing}"
+                    <Entry Text="{Binding UserInfo.VKLink}" Grid.Column="1"
+                           x:Name="VKLinkEntry"
+                           BackgroundColor="Transparent"
                            HorizontalTextAlignment="End" Keyboard="Url"/>
                 </Grid>
                 
@@ -89,8 +92,9 @@
                       HeightRequest="48" BackgroundColor="Transparent">
                     <Label Text="Instagram" VerticalOptions="Center" FontSize="18"/>
                     <Entry Text="{Binding UserInfo.IGLink}" Grid.Column="1" 
-                           BackgroundColor="Transparent" IsReadOnly="{Binding IsRefreshing}"
-                           HorizontalTextAlignment="End" Keyboard="Url"/>
+                           BackgroundColor="Transparent"
+                           HorizontalTextAlignment="End" Keyboard="Url"
+                           x:Name="IGLinkEntry"/>
                 </Grid>
                 
                 <BoxView HeightRequest="1" Grid.Row="1" 
@@ -170,8 +174,9 @@
 
                 <StackLayout Spacing="12">
                     <Button Text="Save" Command="{Binding SaveProfileCommand}" Margin="20,10,20,0" Style="{StaticResource PrimaryButton}"
-                            IsEnabled="{Binding IsRefreshing, Converter={StaticResource InverseBool}}"/>
-                    <Button Text="Log out" Command="{Binding LogoutCommand}" Margin="20,0,20,62"/>
+                            x:Name="SaveButton"/>
+                    <Button Text="Log out" Command="{Binding LogoutCommand}" Margin="20,0,20,62"
+                            x:Name="LogoutButton"/>
                 </StackLayout>
             </StackLayout>
         </ScrollView>

@@ -31,7 +31,9 @@ namespace PVScan.Mobile.ViewModels
 
             LogoutCommand = new Command(async () =>
             {
+                IsLogginOut = true;
                 var result = await IdentityService.LogoutAsync();
+                IsLogginOut = false;
 
                 if (result)
                 {
@@ -54,7 +56,9 @@ namespace PVScan.Mobile.ViewModels
 
                 var content = new StringContent(JsonConvert.SerializeObject(UserInfo), Encoding.UTF8, "application/json");
 
+                IsUpdatingUserInfo = true;
                 var response = await client.PostAsync("api/v1/users/change", content);
+                IsUpdatingUserInfo = false;
 
                 await Initialize();
             });
@@ -72,7 +76,10 @@ namespace PVScan.Mobile.ViewModels
         public async Task Initialize()
         {
             HttpClient httpClient = HttpFactory.ForAPI(IdentityService.AccessToken);
+
+            IsUpdatingUserInfo = true;
             var result = await httpClient.GetAsync("api/v1/users/current");
+            IsUpdatingUserInfo = false;
 
             if (!result.IsSuccessStatusCode)
             {
@@ -96,5 +103,8 @@ namespace PVScan.Mobile.ViewModels
         public event EventHandler<LogoutEventArgs> FailedLogout;
 
         public UserInfo UserInfo { get; set; }
+
+        public bool IsUpdatingUserInfo { get; set; }
+        public bool IsLogginOut { get; set; }
     }
 }

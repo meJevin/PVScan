@@ -41,12 +41,11 @@
             <Entry Placeholder="Login" HeightRequest="45"
                    IsSpellCheckEnabled="False" Text="{Binding Login}"
                    IsTextPredictionEnabled="False"
-                   IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBool}}">
+                   x:Name="LoginEntry">
             </Entry>
             <Entry Placeholder="Password" HeightRequest="45" IsPassword="True"
                    IsSpellCheckEnabled="False" Text="{Binding Password}"
-                   IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBool}}" >
-
+                   x:Name="PasswordEntry">
             </Entry>
             <Button Text="Forgot password?" TextColor="{StaticResource ThemePrimary}" HeightRequest="40" HorizontalOptions="End"
                     BackgroundColor="Transparent">
@@ -54,7 +53,7 @@
 
             <Button Text="Log in" Style="{StaticResource PrimaryButton}"
                     Command="{Binding LoginCommand}"
-                    IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBool}}">
+                    x:Name="LoginButton">
             </Button>
 
             <!-- SEPARATOR -->
