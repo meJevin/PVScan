@@ -7,11 +7,11 @@ namespace PVScan.Mobile.Tests.Services.Mocks
 {
     public class InMemoryKVP : IPersistentKVP
     {
-        Dictionary<string, string> KVPs;
+        Dictionary<string, object> KVPs;
 
         public InMemoryKVP()
         {
-            KVPs = new Dictionary<string, string>();
+            KVPs = new Dictionary<string, object>();
         }
 
         public void Clear()
@@ -26,12 +26,32 @@ namespace PVScan.Mobile.Tests.Services.Mocks
 
         public string Get(string key, string defaultValue)
         {
-            if (!KVPs.TryGetValue(key, out string result))
+            if (!KVPs.TryGetValue(key, out object result))
             {
-                return null;
+                return defaultValue;
             }
 
-            return result;
+            if (!(result is string))
+            {
+                return defaultValue;
+            }
+
+            return (string)result;
+        }
+
+        public bool Get(string key, bool defaultValue)
+        {
+            if (!KVPs.TryGetValue(key, out object result))
+            {
+                return defaultValue;
+            }
+
+            if (!(result is bool))
+            {
+                return defaultValue;
+            }
+
+            return (bool)result;
         }
 
         public void Remove(string key)
@@ -40,6 +60,11 @@ namespace PVScan.Mobile.Tests.Services.Mocks
         }
 
         public void Set(string key, string value)
+        {
+            KVPs[key] = value;
+        }
+
+        public void Set(string key, bool value)
         {
             KVPs[key] = value;
         }
