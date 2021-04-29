@@ -28,16 +28,6 @@ namespace PVScan.API.Controllers
             _expCalc = expCalc;
         }
 
-        [HttpGet]
-        [Route("all")]
-        [AllowAnonymous]
-        public async Task<IActionResult> All()
-        {
-            var barcodes = await _context.Barcodes.ToListAsync();
-
-            return Ok(barcodes);
-        }
-
         [HttpPost]
         [Route("scanned")]
         public async Task<IActionResult> Scanned(ScannedRequestViewModel data)
