@@ -40,5 +40,16 @@ namespace PVScan.Mobile
 
         public static string Theme = nameof(Theme);
         public static string SaveBarcodeImagesWithAlpha = nameof(SaveBarcodeImagesWithAlpha);
+
+        public static class Defaults
+        {
+            public static string AccessToken = null;
+
+            public static string Username = null;
+            public static string Password = null;
+
+            public static string Theme = null;
+            public static bool SaveBarcodeImagesWithAlpha = false;
+        }
     }
 }
