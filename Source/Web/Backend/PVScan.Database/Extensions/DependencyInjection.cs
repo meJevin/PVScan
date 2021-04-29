@@ -18,7 +18,11 @@ namespace PVScan.Database.Extensions
 
             services.AddDbContext<PVScanDbContext>(options =>
             {
-                options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+                //options.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssembly));
+                options.UseMySql(connectionString, new MySqlServerVersion("8.0.23"), sql =>
+                {
+                    sql.MigrationsAssembly(migrationsAssembly);
+                });
             });
 
             return services;
@@ -43,14 +47,20 @@ namespace PVScan.Database.Extensions
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddConfigurationStore(cfg =>
                 {
+                    //cfg.ConfigureDbContext = builder =>
+                    //    builder.UseSqlServer(connectionString, sql =>
+                    //        sql.MigrationsAssembly(migrationAssembly));
                     cfg.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString, sql =>
+                        builder.UseMySql(connectionString, new MySqlServerVersion("8.0.23"), sql =>
                             sql.MigrationsAssembly(migrationAssembly));
                 })
                 .AddOperationalStore(cfg =>
                 {
+                    //cfg.ConfigureDbContext = builder =>
+                    //    builder.UseSqlServer(connectionString, sql =>
+                    //        sql.MigrationsAssembly(migrationAssembly));
                     cfg.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString, sql =>
+                        builder.UseMySql(connectionString, new MySqlServerVersion("8.0.23"), sql =>
                             sql.MigrationsAssembly(migrationAssembly));
 
                     cfg.EnableTokenCleanup = true;

@@ -63,7 +63,7 @@ namespace PVScan.API
                         .AllowAnyMethod()
                         .AllowAnyHeader()));
 
-            var connectionString = Configuration["DBConnection"];
+            var connectionString = Configuration["MySQLConnection"];
 
             services.AddPVScanDatabase(connectionString);
 

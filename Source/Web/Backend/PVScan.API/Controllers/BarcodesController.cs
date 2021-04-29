@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PVScan.API.Controllers.Base;
@@ -25,6 +26,16 @@ namespace PVScan.API.Controllers
         {
             _context = context;
             _expCalc = expCalc;
+        }
+
+        [HttpGet]
+        [Route("all")]
+        [AllowAnonymous]
+        public async Task<IActionResult> All()
+        {
+            var barcodes = await _context.Barcodes.ToListAsync();
+
+            return Ok(barcodes);
         }
 
         [HttpPost]

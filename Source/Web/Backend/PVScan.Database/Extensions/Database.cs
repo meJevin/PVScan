@@ -18,7 +18,7 @@ namespace PVScan.Database.Extensions
 
             var contextMain = scope.ServiceProvider.GetRequiredService<PVScanDbContext>();
 
-            if (contextMain.Database.IsSqlServer())
+            if (contextMain.Database.IsMySql())
             {
                 contextMain.Database.Migrate();
             }
@@ -32,8 +32,8 @@ namespace PVScan.Database.Extensions
             var contextPersistedGrant = scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
             var contextConfiguration = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
 
-            if (contextPersistedGrant.Database.IsSqlServer()
-                && contextConfiguration.Database.IsSqlServer())
+            if (contextPersistedGrant.Database.IsMySql()
+                && contextConfiguration.Database.IsMySql())
             {
                 contextPersistedGrant.Database.Migrate();
                 contextConfiguration.Database.Migrate();
