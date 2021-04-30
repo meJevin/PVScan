@@ -88,6 +88,11 @@ namespace PVScan.Mobile
             ContainerBuilder.RegisterType<PopupMessageService>()
                 .As<IPopupMessageService>()
                 .SingleInstance();
+
+            // PVSCan API
+            ContainerBuilder.RegisterType<PVScanAPI>()
+                .As<IPVScanAPI>()
+                .InstancePerLifetimeScope();
         }
 
         private void FinishInitialization()
