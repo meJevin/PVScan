@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PVScan.API.ViewModels.Barcodes
 {
-    public class ScannedResponseViewModel
+    public class ScannedResponse
     {
         public double ExperienceGained { get; set; }
         public int LevelsGained { get; set; }
