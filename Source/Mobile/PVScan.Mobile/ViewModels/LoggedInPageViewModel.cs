@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using Newtonsoft.Json;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Models.API;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Auth;
@@ -22,17 +23,20 @@ namespace PVScan.Mobile.ViewModels
     public class LoggedInPageViewModel : BaseViewModel
     {
         readonly IIdentityService IdentityService;
-        readonly IHttpClientFactory HttpFactory;
+        readonly IPVScanAPI API;
 
-        public LoggedInPageViewModel(IIdentityService identityService, IHttpClientFactory httpFactory)
+        public LoggedInPageViewModel(IIdentityService identityService, IPVScanAPI api)
         {
             IdentityService = identityService;
-            HttpFactory = httpFactory;
+            API = api;
 
             LogoutCommand = new Command(async () =>
             {
                 IsLogginOut = true;
+
                 var result = await IdentityService.LogoutAsync();
+                UserInfo = null;
+
                 IsLogginOut = false;
 
                 if (result)
@@ -51,16 +55,26 @@ namespace PVScan.Mobile.ViewModels
 
             SaveProfileCommand = new Command(async () =>
             {
-                // Update profile
-                var client = HttpFactory.ForAPI(IdentityService.AccessToken);
-
-                var content = new StringContent(JsonConvert.SerializeObject(UserInfo), Encoding.UTF8, "application/json");
+                string prevIGLink = UserInfo.IGLink;
+                string prevVKLink = UserInfo.VKLink;
 
                 IsUpdatingUserInfo = true;
-                var response = await client.PostAsync("api/v1/users/change", content);
+                
+                var result = await API.ChangeUserInfo(new ChangeUserInfoRequest 
+                {
+                    IGLink = UserInfo.IGLink,
+                    VKLink = UserInfo.VKLink,
+                });
+
                 IsUpdatingUserInfo = false;
 
-                await Initialize();
+                if (result == null)
+                {
+                    // Whoops, something went wrong ...
+                    UserInfo.VKLink = prevIGLink;
+                    UserInfo.IGLink = prevIGLink;
+                    return;
+                }
             });
 
             RefreshCommand = new Command(async () =>
@@ -75,21 +89,23 @@ namespace PVScan.Mobile.ViewModels
 
         public async Task Initialize()
         {
-            HttpClient httpClient = HttpFactory.ForAPI(IdentityService.AccessToken);
-
             IsUpdatingUserInfo = true;
-            var result = await httpClient.GetAsync("api/v1/users/current");
-            IsUpdatingUserInfo = false;
 
-            if (!result.IsSuccessStatusCode)
+            var user = await API.GetUserInfo(new GetUserInfoRequest() { });
+
+            UserInfo = new UserInfo()
             {
-                // Send message to UI that there's an error
-                return;
-            }
+                BarcodeFormatsScanned = user.BarcodeFormatsScanned,
+                BarcodesScanned = user.BarcodesScanned,
+                Email = user.Email,
+                Experience = user.Experience,
+                IGLink = user.IGLink,
+                VKLink = user.VKLink,
+                Level = user.Level,
+                Username = user.Username,
+            };
 
-            var strContent = await result.Content.ReadAsStringAsync();
-
-            UserInfo = JsonConvert.DeserializeObject<UserInfo>(strContent);
+            IsUpdatingUserInfo = false;
         }
 
         public bool IsRefreshing { get; set; }
