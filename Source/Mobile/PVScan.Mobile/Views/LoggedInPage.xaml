@@ -4,7 +4,7 @@
              xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
              x:Class="PVScan.Mobile.Views.LoggedInPage"
              xmlns:di="clr-namespace:PVScan.Mobile.DI"
-             xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+             xmlns:converters="clr-namespace:PVScan.Mobile.Converters" xmlns:controls="clr-namespace:PVScan.Mobile.Views.Controls"
              di:ViewModelLocator.AutoWireViewModel="True"
              x:DataType="viewmodels:LoggedInPageViewModel">
     
@@ -16,168 +16,176 @@
 
     <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}"
                  x:Name="ProfileRefreshView">
-        <ScrollView>
+        <ScrollView x:Name="MainScrollView">
             <StackLayout HorizontalOptions="Fill" Spacing="0">
-
+                
                 <Label Text="Profile" HorizontalOptions="Center" FontSize="24" Margin="16"/>
 
-                <Label Text="Information" Margin="16, 16, 16, 8" FontSize="20" FontAttributes="Bold"/>
+                <Grid>
+                    <StackLayout x:Name="ProfileContainer" Spacing="0" Opacity="0">
+                        <Label Text="Information" Margin="16, 16, 16, 8" FontSize="20" FontAttributes="Bold"/>
 
-                <BoxView HeightRequest="1" Opacity="0.25" Grid.Row="1"
-                         Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
+                        <BoxView HeightRequest="1" Opacity="0.25" Grid.Row="1"
+                                 Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
 
-                <!-- Username -->
-                <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Padding="16, 0"
-                      ColumnSpacing="0" RowSpacing="0"
-                      Style="{StaticResource LabelEntryGrid}"
-                      HeightRequest="48" BackgroundColor="Transparent">
-                    <Label Text="Username" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.Username}" Grid.Column="1" 
-                           BackgroundColor="Transparent" IsReadOnly="True"
-                           IsTextPredictionEnabled="False" Keyboard="Text"
-                           HorizontalTextAlignment="End" Opacity="0.65"/>
+                        <!-- Username -->
+                        <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Padding="16, 0"
+                              ColumnSpacing="0" RowSpacing="0"
+                              Style="{StaticResource LabelEntryGrid}"
+                              HeightRequest="48" BackgroundColor="Transparent">
+                            <Label Text="Username" VerticalOptions="Center" FontSize="18"/>
+                            <Entry Text="{Binding UserInfo.Username}" Grid.Column="1" 
+                                   BackgroundColor="Transparent" IsReadOnly="True"
+                                   IsTextPredictionEnabled="False" Keyboard="Text"
+                                   HorizontalTextAlignment="End" Opacity="0.65"/>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Grid.Row="1"
+                                 Color="{AppThemeBinding
+                                                        Dark={StaticResource BackgroundColorDark},
+                                                        Light={StaticResource BackgroundColorLighterAlt}}"/>
+                
+                        <!-- E-mail -->
+                        <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Padding="16, 0"
+                              ColumnSpacing="0" RowSpacing="0"
+                              Style="{StaticResource LabelEntryGrid}"
+                              HeightRequest="48" BackgroundColor="Transparent">
+                            <Label Text="E-mail" VerticalOptions="Center" FontSize="18"/>
+                            <Entry Text="{Binding UserInfo.Email}" Grid.Column="1"
+                                   BackgroundColor="Transparent" IsReadOnly="True"
+                                   IsTextPredictionEnabled="False" Keyboard="Email"
+                                   HorizontalTextAlignment="End" Opacity="0.65"/>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Grid.Row="1" 
+                                 Color="{AppThemeBinding
+                                                        Dark={StaticResource BackgroundColorDark},
+                                                        Light={StaticResource BackgroundColorLighterAlt}}"
+                                 Margin="0,0,0,48"/>
+
+                
+                        <Label Text="Social" Margin="16, 8" FontSize="20" FontAttributes="Bold"/>
+
+                        <BoxView HeightRequest="1" Opacity="0.25" Grid.Row="1"
+                                 Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
+
+                        <!-- VK -->
+                        <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Padding="16, 0"
+                              ColumnSpacing="0" RowSpacing="0"
+                              Style="{StaticResource LabelEntryGrid}"
+                              HeightRequest="48" BackgroundColor="Transparent">
+
+                            <Label Text="VK" VerticalOptions="Center" FontSize="18"/>
+                            <Entry Text="{Binding UserInfo.VKLink}" Grid.Column="1"
+                                   x:Name="VKLinkEntry"
+                                   BackgroundColor="Transparent"
+                                   HorizontalTextAlignment="End" Keyboard="Url"/>
+                        </Grid>
+                
+                        <BoxView HeightRequest="1" Grid.Row="1"
+                                 Color="{AppThemeBinding
+                                                        Dark={StaticResource BackgroundColorDark},
+                                                        Light={StaticResource BackgroundColorLighterAlt}}"/>
+                
+                        <!-- Instagram -->
+                        <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
+                              ColumnDefinitions="Auto,*" Padding="16, 0"
+                              Style="{StaticResource LabelEntryGrid}"
+                              HeightRequest="48" BackgroundColor="Transparent">
+                            <Label Text="Instagram" VerticalOptions="Center" FontSize="18"/>
+                            <Entry Text="{Binding UserInfo.IGLink}" Grid.Column="1" 
+                                   BackgroundColor="Transparent"
+                                   HorizontalTextAlignment="End" Keyboard="Url"
+                                   x:Name="IGLinkEntry"/>
+                        </Grid>
+                
+                        <BoxView HeightRequest="1" Grid.Row="1" 
+                                 Color="{AppThemeBinding
+                                                        Dark={StaticResource BackgroundColorDark},
+                                                        Light={StaticResource BackgroundColorLighterAlt}}"
+                                 Margin="0,0,0,48"/>
+                
+                        <Label Text="Statistics" Margin="16, 8" FontSize="20" FontAttributes="Bold"/>
+                        <BoxView HeightRequest="1" Opacity="0.25" Grid.Row="1"
+                                 Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
+                
+                        <!-- Barcode Stats -->
+
+                        <!-- Scanned -->
+                        <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
+                              ColumnDefinitions="Auto,*" Padding="16, 0"
+                              Style="{StaticResource LabelEntryGrid}"
+                              HeightRequest="48" BackgroundColor="Transparent">
+                            <Label Text="Scanned" VerticalOptions="Center" FontSize="18"/>
+                            <Entry Text="{Binding UserInfo.BarcodesScanned}" Grid.Column="1" 
+                                       BackgroundColor="Transparent" IsReadOnly="True"
+                                       HorizontalTextAlignment="End" Opacity="0.65"/>
+                        </Grid>
+                
+                        <BoxView HeightRequest="1" Grid.Row="1"
+                                 Color="{AppThemeBinding
+                                                        Dark={StaticResource BackgroundColorDark},
+                                                        Light={StaticResource BackgroundColorLighterAlt}}"/>
+
+                        <!-- Formats -->
+                        <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
+                              ColumnDefinitions="Auto,*" Padding="16, 0"
+                              Style="{StaticResource LabelEntryGrid}"
+                              HeightRequest="48" BackgroundColor="Transparent">
+                            <Label Text="Formats" VerticalOptions="Center" FontSize="18"/>
+                            <Entry Text="{Binding UserInfo.BarcodeFormatsScanned}" Grid.Column="1" 
+                                       BackgroundColor="Transparent" IsReadOnly="True"
+                                       HorizontalTextAlignment="End" Opacity="0.65"/>
+                        </Grid>
+                
+                        <BoxView HeightRequest="1" Grid.Row="1"
+                                 Color="{AppThemeBinding
+                                                        Dark={StaticResource BackgroundColorDark},
+                                                        Light={StaticResource BackgroundColorLighterAlt}}"/>
+
+                        <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
+                              ColumnDefinitions="Auto,*" Padding="16, 0"
+                              Style="{StaticResource LabelEntryGrid}"
+                              HeightRequest="48" BackgroundColor="Transparent">
+                            <Label Text="Experience" VerticalOptions="Center" FontSize="18"/>
+                            <Entry Text="{Binding UserInfo.Experience}" Grid.Column="1" 
+                                       BackgroundColor="Transparent" IsReadOnly="True"
+                                       HorizontalTextAlignment="End" Opacity="0.65"/>
+                        </Grid>
+                
+                        <BoxView HeightRequest="1" Opacity="1" Grid.Row="1" 
+                                 Color="{AppThemeBinding
+                                                        Dark={StaticResource BackgroundColorDark},
+                                                        Light={StaticResource BackgroundColorLighterAlt}}"/>
+
+                        <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
+                              ColumnDefinitions="Auto,*" Padding="16, 0"
+                              Style="{StaticResource LabelEntryGrid}"
+                              HeightRequest="48" BackgroundColor="Transparent">
+                            <Label Text="Level" VerticalOptions="Center" FontSize="18"/>
+                            <Entry Text="{Binding UserInfo.Level}" Grid.Column="1" 
+                                       BackgroundColor="Transparent" IsReadOnly="True"
+                                       HorizontalTextAlignment="End" Opacity="0.65"/>
+                        </Grid>
+                
+                        <BoxView HeightRequest="1" Opacity="1" Grid.Row="1"
+                                 Color="{AppThemeBinding
+                                                        Dark={StaticResource BackgroundColorDark},
+                                                        Light={StaticResource BackgroundColorLighterAlt}}"
+                                 Margin="0,0,0,50"/>
+
+                        <StackLayout Spacing="12">
+                            <Button Text="Save" Command="{Binding SaveProfileCommand}" Margin="20,10,20,0" Style="{StaticResource PrimaryButton}"
+                                    x:Name="SaveButton"/>
+                            <Button Text="Log out" Command="{Binding LogoutCommand}" Margin="20,0,20,62"
+                                    x:Name="LogoutButton"/>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <controls:LoadingSpinner x:Name="InitializingSpinner" Opacity="0" Scale="0.75"
+                                             Margin="0,24,0,0"
+                                             HorizontalOptions="Center" VerticalOptions="Start"/>
                 </Grid>
-
-                <BoxView HeightRequest="1" Grid.Row="1"
-                         Color="{AppThemeBinding
-                                                Dark={StaticResource BackgroundColorDark},
-                                                Light={StaticResource BackgroundColorLighterAlt}}"/>
-                
-                <!-- E-mail -->
-                <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Padding="16, 0"
-                      ColumnSpacing="0" RowSpacing="0"
-                      Style="{StaticResource LabelEntryGrid}"
-                      HeightRequest="48" BackgroundColor="Transparent">
-                    <Label Text="E-mail" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.Email}" Grid.Column="1"
-                           BackgroundColor="Transparent" IsReadOnly="True"
-                           IsTextPredictionEnabled="False" Keyboard="Email"
-                           HorizontalTextAlignment="End" Opacity="0.65"/>
-                </Grid>
-
-                <BoxView HeightRequest="1" Grid.Row="1" 
-                         Color="{AppThemeBinding
-                                                Dark={StaticResource BackgroundColorDark},
-                                                Light={StaticResource BackgroundColorLighterAlt}}"
-                         Margin="0,0,0,48"/>
-
-                
-                <Label Text="Social" Margin="16, 8" FontSize="20" FontAttributes="Bold"/>
-
-                <BoxView HeightRequest="1" Opacity="0.25" Grid.Row="1"
-                         Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
-
-                <!-- VK -->
-                <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Padding="16, 0"
-                      ColumnSpacing="0" RowSpacing="0"
-                      Style="{StaticResource LabelEntryGrid}"
-                      HeightRequest="48" BackgroundColor="Transparent">
-
-                    <Label Text="VK" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.VKLink}" Grid.Column="1"
-                           x:Name="VKLinkEntry"
-                           BackgroundColor="Transparent"
-                           HorizontalTextAlignment="End" Keyboard="Url"/>
-                </Grid>
-                
-                <BoxView HeightRequest="1" Grid.Row="1"
-                         Color="{AppThemeBinding
-                                                Dark={StaticResource BackgroundColorDark},
-                                                Light={StaticResource BackgroundColorLighterAlt}}"/>
-                
-                <!-- Instagram -->
-                <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
-                      ColumnDefinitions="Auto,*" Padding="16, 0"
-                      Style="{StaticResource LabelEntryGrid}"
-                      HeightRequest="48" BackgroundColor="Transparent">
-                    <Label Text="Instagram" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.IGLink}" Grid.Column="1" 
-                           BackgroundColor="Transparent"
-                           HorizontalTextAlignment="End" Keyboard="Url"
-                           x:Name="IGLinkEntry"/>
-                </Grid>
-                
-                <BoxView HeightRequest="1" Grid.Row="1" 
-                         Color="{AppThemeBinding
-                                                Dark={StaticResource BackgroundColorDark},
-                                                Light={StaticResource BackgroundColorLighterAlt}}"
-                         Margin="0,0,0,48"/>
-                
-                <Label Text="Statistics" Margin="16, 8" FontSize="20" FontAttributes="Bold"/>
-                <BoxView HeightRequest="1" Opacity="0.25" Grid.Row="1"
-                         Color="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}"/>
-                
-                <!-- Barcode Stats -->
-
-                <!-- Scanned -->
-                <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
-                      ColumnDefinitions="Auto,*" Padding="16, 0"
-                      Style="{StaticResource LabelEntryGrid}"
-                      HeightRequest="48" BackgroundColor="Transparent">
-                    <Label Text="Scanned" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.BarcodesScanned}" Grid.Column="1" 
-                               BackgroundColor="Transparent" IsReadOnly="True"
-                               HorizontalTextAlignment="End" Opacity="0.65"/>
-                </Grid>
-                
-                <BoxView HeightRequest="1" Grid.Row="1"
-                         Color="{AppThemeBinding
-                                                Dark={StaticResource BackgroundColorDark},
-                                                Light={StaticResource BackgroundColorLighterAlt}}"/>
-
-                <!-- Formats -->
-                <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
-                      ColumnDefinitions="Auto,*" Padding="16, 0"
-                      Style="{StaticResource LabelEntryGrid}"
-                      HeightRequest="48" BackgroundColor="Transparent">
-                    <Label Text="Formats" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.BarcodeFormatsScanned}" Grid.Column="1" 
-                               BackgroundColor="Transparent" IsReadOnly="True"
-                               HorizontalTextAlignment="End" Opacity="0.65"/>
-                </Grid>
-                
-                <BoxView HeightRequest="1" Grid.Row="1"
-                         Color="{AppThemeBinding
-                                                Dark={StaticResource BackgroundColorDark},
-                                                Light={StaticResource BackgroundColorLighterAlt}}"/>
-
-                <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
-                      ColumnDefinitions="Auto,*" Padding="16, 0"
-                      Style="{StaticResource LabelEntryGrid}"
-                      HeightRequest="48" BackgroundColor="Transparent">
-                    <Label Text="Experience" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.Experience}" Grid.Column="1" 
-                               BackgroundColor="Transparent" IsReadOnly="True"
-                               HorizontalTextAlignment="End" Opacity="0.65"/>
-                </Grid>
-                
-                <BoxView HeightRequest="1" Opacity="1" Grid.Row="1" 
-                         Color="{AppThemeBinding
-                                                Dark={StaticResource BackgroundColorDark},
-                                                Light={StaticResource BackgroundColorLighterAlt}}"/>
-
-                <Grid RowDefinitions="*,Auto" ColumnSpacing="0" RowSpacing="0"
-                      ColumnDefinitions="Auto,*" Padding="16, 0"
-                      Style="{StaticResource LabelEntryGrid}"
-                      HeightRequest="48" BackgroundColor="Transparent">
-                    <Label Text="Level" VerticalOptions="Center" FontSize="18"/>
-                    <Entry Text="{Binding UserInfo.Level}" Grid.Column="1" 
-                               BackgroundColor="Transparent" IsReadOnly="True"
-                               HorizontalTextAlignment="End" Opacity="0.65"/>
-                </Grid>
-                
-                <BoxView HeightRequest="1" Opacity="1" Grid.Row="1"
-                         Color="{AppThemeBinding
-                                                Dark={StaticResource BackgroundColorDark},
-                                                Light={StaticResource BackgroundColorLighterAlt}}"
-                         Margin="0,0,0,50"/>
-
-                <StackLayout Spacing="12">
-                    <Button Text="Save" Command="{Binding SaveProfileCommand}" Margin="20,10,20,0" Style="{StaticResource PrimaryButton}"
-                            x:Name="SaveButton"/>
-                    <Button Text="Log out" Command="{Binding LogoutCommand}" Margin="20,0,20,62"
-                            x:Name="LogoutButton"/>
-                </StackLayout>
             </StackLayout>
         </ScrollView>
     </RefreshView>

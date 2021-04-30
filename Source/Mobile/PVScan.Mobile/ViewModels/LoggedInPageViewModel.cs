@@ -35,6 +35,13 @@ namespace PVScan.Mobile.ViewModels
                 IsLogginOut = true;
 
                 var result = await IdentityService.LogoutAsync();
+
+                if (result == false)
+                {
+                    // Could not logout :(
+                    return;
+                }
+
                 UserInfo = null;
 
                 IsLogginOut = false;
@@ -90,8 +97,15 @@ namespace PVScan.Mobile.ViewModels
         public async Task Initialize()
         {
             IsUpdatingUserInfo = true;
+            IsInitializing = true;
 
             var user = await API.GetUserInfo(new GetUserInfoRequest() { });
+
+            if (user == null)
+            {
+                // Could not get user info :(
+                return;
+            }
 
             UserInfo = new UserInfo()
             {
@@ -105,6 +119,7 @@ namespace PVScan.Mobile.ViewModels
                 Username = user.Username,
             };
 
+            IsInitializing = false;
             IsUpdatingUserInfo = false;
         }
 
@@ -122,5 +137,6 @@ namespace PVScan.Mobile.ViewModels
 
         public bool IsUpdatingUserInfo { get; set; }
         public bool IsLogginOut { get; set; }
+        public bool IsInitializing { get; set; }
     }
 }

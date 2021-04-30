@@ -86,6 +86,39 @@ namespace PVScan.Mobile.Views
                     LogoutButton.InputTransparent = false;
                 }
             }
+            else if (e.PropertyName == nameof(LoggedInPageViewModel.IsInitializing))
+            {
+                if (VM.IsInitializing)
+                {
+                    _ = ProfileContainer.FadeTo(0, 250, Easing.CubicOut);
+                    _ = InitializingSpinner.FadeTo(1, 250, Easing.CubicOut);
+                    await InitializingSpinner.ScaleTo(1, 250, Easing.CubicOut);
+                }
+                else
+                {
+                    _ = ProfileContainer.FadeTo(1, 250, Easing.CubicOut);
+                    _ = InitializingSpinner.FadeTo(0, 250, Easing.CubicOut);
+                    await InitializingSpinner.ScaleTo(0.75, 250, Easing.CubicOut);
+                }
+            }
+        }
+
+        public async Task Initialize()
+        {
+            ProfileContainer.Opacity = 0;
+            IsVisible = true;
+            _ = this.FadeTo(1, 250, Easing.CubicOut);
+            _ = InitializingSpinner.FadeTo(1, 250, Easing.CubicOut);
+            await InitializingSpinner.ScaleTo(1, 250, Easing.CubicOut);
+            await (BindingContext as LoggedInPageViewModel).Initialize();
+        }
+
+        public async Task Uninitialize()
+        {
+            _ = this.FadeTo(0, 250, Easing.CubicOut);
+            this.IsVisible = false;
+            ProfileContainer.Opacity = 0;
+            MainScrollView.ScrollToAsync(0, 0, false);
         }
 
         private void Vm_SuccessfulLogout(object sender, LogoutEventArgs e)
