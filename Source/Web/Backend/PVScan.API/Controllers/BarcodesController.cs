@@ -40,7 +40,7 @@ namespace PVScan.API.Controllers
 
         [HttpPost]
         [Route("scanned")]
-        public async Task<IActionResult> Scanned(ScannedRequestViewModel data)
+        public async Task<IActionResult> Scanned(ScannedRequest data)
         {
             // Create barcode
             var barcodeScanned = new Barcode()
@@ -83,7 +83,7 @@ namespace PVScan.API.Controllers
             await _context.SaveChangesAsync();
 
             // Form response and send back
-            ScannedResponseViewModel response = new ScannedResponseViewModel()
+            ScannedResponse response = new ScannedResponse()
             {
                 ExperienceGained = experienceGained,
                 LevelsGained = lvlsGained,
