@@ -29,7 +29,7 @@ namespace PVScan.Mobile
             }
         }
 
-        public static TimeSpan WebRequestTimeout = TimeSpan.FromSeconds(5);
+        public static TimeSpan WebRequestTimeout = TimeSpan.FromSeconds(10);
     }
 
     public static class StorageKeys
