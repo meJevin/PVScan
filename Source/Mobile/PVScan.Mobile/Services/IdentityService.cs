@@ -72,7 +72,12 @@ namespace PVScan.Mobile.Services
                 {
                     Address = Auth.Authority,
                     Policy = { RequireHttps = false },
-                });
+                }).WithTimeout(DataAccss.WebRequestTimeout);
+
+            if (discoveryDocument == null || discoveryDocument.IsError)
+            {
+                return false;
+            }
 
             var token = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest()
             {
@@ -82,9 +87,9 @@ namespace PVScan.Mobile.Services
                 Scope = "openid profile PVScan.API",
                 Password = password,
                 UserName = username,
-            });
+            }).WithTimeout(DataAccss.WebRequestTimeout);
 
-            if (token.AccessToken == null)
+            if (token == null || token.AccessToken == null)
             {
                 return false;
             }
@@ -108,7 +113,12 @@ namespace PVScan.Mobile.Services
                 {
                     Address = Auth.Authority,
                     Policy = { RequireHttps = false },
-                });
+                }).WithTimeout(DataAccss.WebRequestTimeout);
+
+            if (discoveryDocument == null || discoveryDocument.IsError)
+            {
+                return false;
+            }
 
             // Todo: this for some reason can not find token on IS4 auth server but logout still happens
             var revoke = await httpClient.RevokeTokenAsync(new TokenRevocationRequest()
@@ -117,9 +127,9 @@ namespace PVScan.Mobile.Services
                 ClientId = Auth.ClientId,
                 Token = _accessToken,
                 TokenTypeHint = TokenTypes.AccessToken,
-            });
+            }).WithTimeout(DataAccss.WebRequestTimeout);
 
-            if (revoke.IsError)
+            if (revoke == null || revoke.IsError)
             {
                 return false;
             }
@@ -149,7 +159,9 @@ namespace PVScan.Mobile.Services
 
             try
             {
-                var result = await httpClient.PostAsync("/Auth/Register", content);
+                var result = await httpClient
+                    .PostAsync("/Auth/Register", content)
+                    .WithTimeout(DataAccss.WebRequestTimeout); ;
 
                 if (!result.IsSuccessStatusCode)
                 {
@@ -177,9 +189,11 @@ namespace PVScan.Mobile.Services
 
             try
             {
-                var result = await httpClient.GetAsync("api/v1/users/current");
+                var result = await httpClient
+                    .GetAsync("api/v1/users/current")
+                    .WithTimeout(DataAccss.WebRequestTimeout);
 
-                if (!result.IsSuccessStatusCode)
+                if (result == null || !result.IsSuccessStatusCode)
                 {
                     return false;
                 }
