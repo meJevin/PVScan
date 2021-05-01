@@ -90,10 +90,10 @@ namespace PVScan.Mobile.Views
             {
                 if (VM.IsInitializing)
                 {
+                    ProfileContainer.IsVisible = false;
                     _ = ProfileContainer.FadeTo(0, 250, Easing.CubicOut);
                     _ = InitializingSpinner.FadeTo(1, 250, Easing.CubicOut);
                     await InitializingSpinner.ScaleTo(1, 250, Easing.CubicOut);
-                    ProfileContainer.IsVisible = false;
                 }
                 else if (!VM.IsError)
                 {
@@ -107,10 +107,10 @@ namespace PVScan.Mobile.Views
             {
                 if (VM.IsError)
                 {
+                    ProfileContainer.IsVisible = false;
                     _ = ProfileContainer.FadeTo(0, 250, Easing.CubicOut);
                     _ = SomethingWentWrongContainer.FadeTo(1, 250, Easing.CubicOut);
                     await SomethingWentWrongContainer.ScaleTo(1, 250, Easing.CubicOut);
-                    ProfileContainer.IsVisible = false;
                 }
                 else
                 {
