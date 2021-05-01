@@ -12,16 +12,16 @@ This application also allows users to create an optional profile via its backend
 # Front-end
 
 ## Mobile
-Mobile clients (iOS & Anroid) are implemented via Xamarin.Forms
+Mobile clients (iOS & Anroid) are implemented via Xamarin.Forms (C#)
 
 ## Web
-Web client is implemented via React
+Web client is implemented via React (TypeScript)
 
 ## Desktop
-Desktop client is implemented via WPF
+Desktop client is implemented via WPF (C#)
 
 # Back-end
-Backend which supports an optional creation of user profile to sync barcodes across devices is implemented via ASP.NET
+Backend which supports an optional creation of user profile to sync barcodes across devices is implemented via ASP.NET (C#)
 
 ## Authorization server
 IdentityServer 4 is used on authorization server to provide OAuth + OpenIDConnect support.
