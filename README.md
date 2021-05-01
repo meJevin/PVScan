@@ -3,8 +3,6 @@ PVScan is a mobile, desktop, and web application which allows users to scan barc
 
 This application also allows users to create an optional profile via its backend server and sync barcodes across multiple devices.
 
-This application is being built by a single person (me). Despite that I'm trying to follow the best practices in all things possible.
-
 # Goals
 * Easy to use
 * Free & Open-Source
