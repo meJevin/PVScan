@@ -34,11 +34,15 @@ namespace PVScan.Mobile.ViewModels
             {
                 IsLogginOut = true;
 
+                IsError = false;
+
                 var result = await IdentityService.LogoutAsync();
 
                 if (result == false)
                 {
                     // Could not logout :(
+                    IsLogginOut = false;
+                    IsError = true;
                     return;
                 }
 
@@ -66,7 +70,9 @@ namespace PVScan.Mobile.ViewModels
                 string prevVKLink = UserInfo.VKLink;
 
                 IsUpdatingUserInfo = true;
-                
+
+                IsError = false;
+
                 var result = await API.ChangeUserInfo(new ChangeUserInfoRequest 
                 {
                     IGLink = UserInfo.IGLink,
@@ -80,6 +86,7 @@ namespace PVScan.Mobile.ViewModels
                     // Whoops, something went wrong ...
                     UserInfo.VKLink = prevIGLink;
                     UserInfo.IGLink = prevIGLink;
+                    IsError = true;
                     return;
                 }
             });
@@ -99,11 +106,17 @@ namespace PVScan.Mobile.ViewModels
             IsUpdatingUserInfo = true;
             IsInitializing = true;
 
+            IsError = false;
+
             var user = await API.GetUserInfo(new GetUserInfoRequest() { });
 
             if (user == null)
             {
                 // Could not get user info :(
+                IsInitializing = false;
+                IsUpdatingUserInfo = false;
+                IsError = true;
+
                 return;
             }
 
@@ -138,5 +151,7 @@ namespace PVScan.Mobile.ViewModels
         public bool IsUpdatingUserInfo { get; set; }
         public bool IsLogginOut { get; set; }
         public bool IsInitializing { get; set; }
+
+        public bool IsError { get; set; }
     }
 }

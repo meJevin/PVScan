@@ -185,6 +185,17 @@
                     <controls:LoadingSpinner x:Name="InitializingSpinner" Opacity="0" Scale="0.75"
                                              Margin="0,24,0,0"
                                              HorizontalOptions="Center" VerticalOptions="Start"/>
+
+                    <StackLayout x:Name="SomethingWentWrongContainer"
+                                 Margin="0,24,0,0" WidthRequest="300" Opacity="0" Scale="0.75"
+                                 HorizontalOptions="Center" VerticalOptions="Start">
+
+                        <Label Text="Whoops!" FontSize="30" FontAttributes="Bold"
+                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+
+                        <Label Text="Something went wrong, try refreshing this page." FontSize="20"
+                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                    </StackLayout>
                 </Grid>
             </StackLayout>
         </ScrollView>

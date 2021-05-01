@@ -51,7 +51,7 @@ namespace PVScan.Mobile.Views
                     IGLinkEntry.InputTransparent = true;
                     SaveButton.InputTransparent = true;
                 }
-                else
+                else if (!VM.IsError)
                 {
                     VKLinkEntry.Opacity = 1;
                     IGLinkEntry.Opacity = 1;
@@ -74,7 +74,7 @@ namespace PVScan.Mobile.Views
                     SaveButton.InputTransparent = true;
                     LogoutButton.InputTransparent = true;
                 }
-                else
+                else if (!VM.IsError)
                 {
                     VKLinkEntry.Opacity = 1;
                     IGLinkEntry.Opacity = 1;
@@ -93,12 +93,29 @@ namespace PVScan.Mobile.Views
                     _ = ProfileContainer.FadeTo(0, 250, Easing.CubicOut);
                     _ = InitializingSpinner.FadeTo(1, 250, Easing.CubicOut);
                     await InitializingSpinner.ScaleTo(1, 250, Easing.CubicOut);
+                    ProfileContainer.IsVisible = false;
                 }
-                else
+                else if (!VM.IsError)
                 {
+                    ProfileContainer.IsVisible = true;
                     _ = ProfileContainer.FadeTo(1, 250, Easing.CubicOut);
                     _ = InitializingSpinner.FadeTo(0, 250, Easing.CubicOut);
                     await InitializingSpinner.ScaleTo(0.75, 250, Easing.CubicOut);
+                }
+            }
+            else if (e.PropertyName == nameof(LoggedInPageViewModel.IsError))
+            {
+                if (VM.IsError)
+                {
+                    _ = ProfileContainer.FadeTo(0, 250, Easing.CubicOut);
+                    _ = SomethingWentWrongContainer.FadeTo(1, 250, Easing.CubicOut);
+                    await SomethingWentWrongContainer.ScaleTo(1, 250, Easing.CubicOut);
+                    ProfileContainer.IsVisible = false;
+                }
+                else
+                {
+                    _ = SomethingWentWrongContainer.FadeTo(0, 250, Easing.CubicOut);
+                    await SomethingWentWrongContainer.ScaleTo(0.75, 250, Easing.CubicOut);
                 }
             }
         }
