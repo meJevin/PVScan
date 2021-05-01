@@ -33,12 +33,16 @@ namespace PVScan.Mobile.Services
             }
         }
 
+        private DiscoveryDocumentResponse DiscoveryDocument = null;
+
         public async Task Initialize()
         {
             // Check auth token in storage and check it's validity
 
             // Todo: change to secure storage
             _accessToken = KVP.Get(StorageKeys.AccessToken, null);
+
+            DiscoveryDocument = await GetDiscoveryDocument();
 
             if (!await ValidateToken(_accessToken))
             {
@@ -58,7 +62,7 @@ namespace PVScan.Mobile.Services
 
         public async Task<bool> LoginAsync(string username, string password)
         {
-            if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password))
+            if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || DiscoveryDocument == null)
             {
                 return false;
             }
@@ -66,22 +70,9 @@ namespace PVScan.Mobile.Services
             // Login via token endpoint using password flow
             HttpClient httpClient = HttpFactory.Default();
 
-            // Todo: enable https in production
-            DiscoveryDocumentResponse discoveryDocument =
-                await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
-                {
-                    Address = Auth.Authority,
-                    Policy = { RequireHttps = false },
-                }).WithTimeout(DataAccss.WebRequestTimeout);
-
-            if (discoveryDocument == null || discoveryDocument.IsError)
-            {
-                return false;
-            }
-
             var token = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest()
             {
-                Address = discoveryDocument.TokenEndpoint,
+                Address = DiscoveryDocument.TokenEndpoint,
                 ClientId = Auth.ClientId,
                 GrantType = GrantTypes.Password,
                 Scope = "openid profile PVScan.API",
@@ -105,32 +96,47 @@ namespace PVScan.Mobile.Services
 
         public async Task<bool> LogoutAsync()
         {
-            // Logout via logout endpoint and clear local storage
-            HttpClient httpClient = HttpFactory.Default();
-
-            DiscoveryDocumentResponse discoveryDocument =
-                await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
-                {
-                    Address = Auth.Authority,
-                    Policy = { RequireHttps = false },
-                }).WithTimeout(DataAccss.WebRequestTimeout);
-
-            if (discoveryDocument == null || discoveryDocument.IsError)
+            if (DiscoveryDocument == null)
             {
                 return false;
             }
 
-            // Todo: this for some reason can not find token on IS4 auth server but logout still happens
-            var revoke = await httpClient.RevokeTokenAsync(new TokenRevocationRequest()
-            {
-                Address = discoveryDocument.RevocationEndpoint,
-                ClientId = Auth.ClientId,
-                Token = _accessToken,
-                TokenTypeHint = TokenTypes.AccessToken,
-            }).WithTimeout(DataAccss.WebRequestTimeout);
+            //// Logout via logout endpoint and clear local storage
+            //HttpClient httpClient = HttpFactory.Default();
 
-            if (revoke == null || revoke.IsError)
+            //// Todo: this for some reason can not find token on IS4 auth server but logout still happens
+            //var revoke = await httpClient.RevokeTokenAsync(new TokenRevocationRequest()
+            //{
+            //    Address = DiscoveryDocument.RevocationEndpoint,
+            //    ClientId = Auth.ClientId,
+            //    Token = _accessToken,
+            //    TokenTypeHint = TokenTypes.AccessToken,
+            //}).WithTimeout(DataAccss.WebRequestTimeout);
+
+            //if (revoke == null || revoke.IsError)
+            //{
+            //    return false;
+            //}
+
+            HttpClient httpClient = HttpFactory.Default();
+            httpClient.DefaultRequestHeaders.Authorization
+                = new AuthenticationHeaderValue("Bearer", _accessToken);
+            httpClient.BaseAddress = new Uri(Auth.Authority);
+
+            try
             {
+                var result = await httpClient
+                    .GetAsync("/Auth/Logout")
+                    .WithTimeout(DataAccss.WebRequestTimeout);
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                // We need proper error messages!!
                 return false;
             }
 
@@ -161,7 +167,7 @@ namespace PVScan.Mobile.Services
             {
                 var result = await httpClient
                     .PostAsync("/Auth/Register", content)
-                    .WithTimeout(DataAccss.WebRequestTimeout); ;
+                    .WithTimeout(DataAccss.WebRequestTimeout);
 
                 if (!result.IsSuccessStatusCode)
                 {
@@ -187,13 +193,14 @@ namespace PVScan.Mobile.Services
             // Make a test request to the backend
             HttpClient httpClient = HttpFactory.ForAPI(token);
 
+            // Todo: This should be done in a different way
             try
             {
                 var result = await httpClient
                     .GetAsync("api/v1/users/current")
                     .WithTimeout(DataAccss.WebRequestTimeout);
 
-                if (result == null || !result.IsSuccessStatusCode)
+                if (result == null )
                 {
                     return false;
                 }
@@ -205,6 +212,26 @@ namespace PVScan.Mobile.Services
             }
 
             return true;
+        }
+
+        private async Task<DiscoveryDocumentResponse> GetDiscoveryDocument()
+        {
+            HttpClient httpClient = HttpFactory.Default();
+
+            // Todo: enable https in production
+            DiscoveryDocumentResponse discoveryDocument =
+                await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
+                {
+                    Address = Auth.Authority,
+                    Policy = { RequireHttps = false },
+                }).WithTimeout(DataAccss.WebRequestTimeout);
+
+            if (discoveryDocument == null || discoveryDocument.IsError)
+            {
+                return null;
+            }
+
+            return discoveryDocument;
         }
     }
 }
