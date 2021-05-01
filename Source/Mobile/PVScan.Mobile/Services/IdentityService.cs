@@ -127,7 +127,7 @@ namespace PVScan.Mobile.Services
                     .GetAsync("/Auth/Logout")
                     .WithTimeout(DataAccss.WebRequestTimeout);
 
-                if (!result.IsSuccessStatusCode)
+                if (result == null || !result.IsSuccessStatusCode)
                 {
                     return false;
                 }
@@ -167,7 +167,7 @@ namespace PVScan.Mobile.Services
                     .PostAsync("/Auth/Register", content)
                     .WithTimeout(DataAccss.WebRequestTimeout);
 
-                if (!result.IsSuccessStatusCode)
+                if (result == null || !result.IsSuccessStatusCode)
                 {
                     return false;
                 }
@@ -198,7 +198,7 @@ namespace PVScan.Mobile.Services
                     .GetAsync("api/v1/users/current")
                     .WithTimeout(DataAccss.WebRequestTimeout);
 
-                if (result == null )
+                if (result == null || !result.IsSuccessStatusCode)
                 {
                     return false;
                 }
