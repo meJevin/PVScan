@@ -53,6 +53,10 @@ namespace PVScan.Mobile.ViewModels
                         Message = "Failed to sign up!",
                     });
                 }
+
+                Login = "";
+                Email = "";
+                Password = "";
             });
         }
 
