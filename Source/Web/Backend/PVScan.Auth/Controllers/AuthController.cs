@@ -35,6 +35,11 @@ namespace PVScan.Auth.Controllers
         {
             await _signInManager.SignOutAsync();
 
+            if (logoutId == null)
+            {
+                return Ok();
+            }
+
             var logoutRequest = await _interactionService.GetLogoutContextAsync(logoutId);
 
             if (string.IsNullOrEmpty(logoutRequest.PostLogoutRedirectUri))
