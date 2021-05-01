@@ -38,6 +38,9 @@ namespace PVScan.Mobile.ViewModels
 
                 IsLoggingIn = false;
 
+                Login = "";
+                Password = "";
+
                 if (result)
                 {
                     SuccessfulLogin?.Invoke(this, new LoginEventArgs()
