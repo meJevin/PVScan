@@ -33,7 +33,6 @@ namespace PVScan.Mobile.Services
             }
         }
 
-        private DiscoveryDocumentResponse DiscoveryDocument = null;
 
         public async Task Initialize()
         {
@@ -41,8 +40,6 @@ namespace PVScan.Mobile.Services
 
             // Todo: change to secure storage
             _accessToken = KVP.Get(StorageKeys.AccessToken, null);
-
-            DiscoveryDocument = await GetDiscoveryDocument();
 
             if (!await ValidateToken(_accessToken))
             {
@@ -62,7 +59,13 @@ namespace PVScan.Mobile.Services
 
         public async Task<bool> LoginAsync(string username, string password)
         {
-            if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password) || DiscoveryDocument == null)
+            if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password))
+            {
+                return false;
+            }
+
+            DiscoveryDocumentResponse DiscoveryDocument = await GetDiscoveryDocument();
+            if (DiscoveryDocument == null)
             {
                 return false;
             }
@@ -96,11 +99,6 @@ namespace PVScan.Mobile.Services
 
         public async Task<bool> LogoutAsync()
         {
-            if (DiscoveryDocument == null)
-            {
-                return false;
-            }
-
             //// Logout via logout endpoint and clear local storage
             //HttpClient httpClient = HttpFactory.Default();
 

@@ -29,10 +29,10 @@
             <StackLayout>
                 <controls:LoadingSpinner x:Name="LoadingSpinner" Opacity="0" Scale="0.75"/>
                 
-                <Label x:Name="SignUpMessageLabel" Opacity="0" Margin="0,16,0,0"
+                <!--<Label x:Name="SignUpMessageLabel" Opacity="0" Margin="0,16,0,0"
                        FontSize="18">
             
-                </Label>
+                </Label>-->
             </StackLayout>
         </Grid>
         

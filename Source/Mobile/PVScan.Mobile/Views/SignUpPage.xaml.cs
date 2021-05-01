@@ -68,24 +68,24 @@ namespace PVScan.Mobile.Views
 
         private async void Vm_FailedSignUp(object sender, SignUpEventArgs e)
         {
-            SignUpMessageLabel.Text = e.Message;
+            //SignUpMessageLabel.Text = e.Message;
 
-            // Update UI for successful Sign Up
+            //// Update UI for successful Sign Up
 
-            await SignUpMessageLabel.FadeTo(1);
-            await Task.Delay(1500);
-            await SignUpMessageLabel.FadeTo(0);
+            //await SignUpMessageLabel.FadeTo(1);
+            //await Task.Delay(1500);
+            //await SignUpMessageLabel.FadeTo(0);
         }
 
         private async void Vm_SuccessfulSignUp(object sender, SignUpEventArgs e)
         {
-            SignUpMessageLabel.Text = e.Message;
+            //SignUpMessageLabel.Text = e.Message;
 
-            // Update UI for failed Sign Up
+            //// Update UI for failed Sign Up
 
-            await SignUpMessageLabel.FadeTo(1);
-            await Task.Delay(1500);
-            await SignUpMessageLabel.FadeTo(0);
+            //await SignUpMessageLabel.FadeTo(1);
+            //await Task.Delay(1500);
+            //await SignUpMessageLabel.FadeTo(0);
         }
 
         private async void BackClicked_Handler(object sender, EventArgs e)
