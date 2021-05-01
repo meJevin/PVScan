@@ -22,43 +22,58 @@ namespace PVScan.Mobile.Services
 
         public async Task<ChangeUserInfoResponse> ChangeUserInfo(ChangeUserInfoRequest req)
         {
-            var client = HttpClientFactory.ForAPI(IdentityService.AccessToken);
-            var contentToSend = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
-
-            var apiResponse = await client
-                .PostAsync("api/v1/users/change", contentToSend)
-                .WithTimeout(DataAccss.WebRequestTimeout);
-
-            if (!apiResponse.IsSuccessStatusCode)
+            try
             {
-                // Could also throw an exception :)
+                var client = HttpClientFactory.ForAPI(IdentityService.AccessToken);
+                var contentToSend = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+
+                var apiResponse = await client
+                    .PostAsync("api/v1/users/change", contentToSend)
+                    .WithTimeout(DataAccss.WebRequestTimeout);
+
+                if (!apiResponse.IsSuccessStatusCode)
+                {
+                    // Could also throw an exception :)
+                    return null;
+                }
+
+                var responseText = await apiResponse.Content.ReadAsStringAsync();
+                var responseObject = JsonConvert.DeserializeObject<ChangeUserInfoResponse>(responseText);
+
+                return responseObject;
+            }
+            catch
+            {
                 return null;
             }
-            
-            var responseText = await apiResponse.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<ChangeUserInfoResponse>(responseText);
-
-            return responseObject;
         }
 
         public async Task<GetUserInfoResponse> GetUserInfo(GetUserInfoRequest req)
         {
-            HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
-
-            var apiResponse = await httpClient
-                .GetAsync("api/v1/users/current")
-                .WithTimeout(DataAccss.WebRequestTimeout);
-
-            if (!apiResponse.IsSuccessStatusCode)
+            try
             {
-                // Could also throw an exception :)
+                HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
+
+                var apiResponse = await httpClient
+                    .GetAsync("api/v1/users/current")
+                    .WithTimeout(DataAccss.WebRequestTimeout);
+
+                if (!apiResponse.IsSuccessStatusCode)
+                {
+                    // Could also throw an exception :)
+                    return null;
+                }
+
+                var responseText = await apiResponse.Content.ReadAsStringAsync();
+                var responseObject = JsonConvert.DeserializeObject<GetUserInfoResponse>(responseText);
+
+                return responseObject;
+            }
+            catch
+            {
+                // Could also throw a meaningful exception :)
                 return null;
             }
-
-            var responseText = await apiResponse.Content.ReadAsStringAsync();
-            var responseObject = JsonConvert.DeserializeObject<GetUserInfoResponse>(responseText);
-
-            return responseObject;
         }
     }
 }
