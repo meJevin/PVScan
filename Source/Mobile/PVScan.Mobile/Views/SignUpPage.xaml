@@ -29,10 +29,10 @@
             <StackLayout>
                 <controls:LoadingSpinner x:Name="LoadingSpinner" Opacity="0" Scale="0.75"/>
                 
-                <Label x:Name="SignUpMessageLabel" Opacity="0" Margin="0,16,0,0"
+                <!--<Label x:Name="SignUpMessageLabel" Opacity="0" Margin="0,16,0,0"
                        FontSize="18">
             
-                </Label>
+                </Label>-->
             </StackLayout>
         </Grid>
         
@@ -41,24 +41,24 @@
             <Entry Placeholder="Login" HeightRequest="45"
                    IsSpellCheckEnabled="False" Text="{Binding Login}"
                    IsTextPredictionEnabled="False"
-                   IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBool}}">
+                   x:Name="LoginEntry">
 
             </Entry>
             <Entry Placeholder="Email" HeightRequest="45"
                    IsSpellCheckEnabled="False"
                    Keyboard="Email" Text="{Binding Email}"
-                   IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBool}}">
+                   x:Name="EmailEntry">
 
             </Entry>
             <Entry Placeholder="Password" HeightRequest="45" IsPassword="True"
                    IsSpellCheckEnabled="False" Text="{Binding Password}"
-                   IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBool}}">
+                   x:Name="PasswordEntry">
 
             </Entry>
 
             <Button Margin="0,20,0,0" Text="Sign up" Style="{StaticResource PrimaryButton}"
                     Command="{Binding SignUpCommand}"
-                    IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBool}}">
+                    x:Name="SignUpButton">
             </Button>
 
             <Button Text="Back" TextColor="{AppThemeBinding Dark={StaticResource TextPrimaryColor_Dark}, Light={StaticResource TextPrimaryColor_Light}}" HorizontalOptions="Center"

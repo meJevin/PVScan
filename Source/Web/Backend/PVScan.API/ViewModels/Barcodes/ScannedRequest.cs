@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PVScan.API.ViewModels.Barcodes
 {
-    public class ScannedRequestViewModel
+    public class ScannedRequest
     {
         public string Text { get; set; }
         public BarcodeFormat Format { get; set; }

@@ -28,14 +28,14 @@ namespace PVScan.API.Tests.Controllers
             _context.SaveChanges();
 
             // Act
-            var result = (await controller.Scanned(new ScannedRequestViewModel()
+            var result = (await controller.Scanned(new ScannedRequest()
             {
                 Format = Domain.Enums.BarcodeFormat.QR_CODE,
                 Latitude = 30,
                 Longitude = 50,
                 Text = "test",
             }) as ObjectResult);
-            var resultObject = result.Value as ScannedResponseViewModel;
+            var resultObject = result.Value as ScannedResponse;
 
             // Assert
             Assert.NotNull(resultObject);
@@ -63,8 +63,8 @@ namespace PVScan.API.Tests.Controllers
             _context.SaveChanges();
 
             // Act
-            var result = (await controller.Scanned(new ScannedRequestViewModel(){ }) as ObjectResult);
-            var resultObject = result.Value as ScannedResponseViewModel;
+            var result = (await controller.Scanned(new ScannedRequest(){ }) as ObjectResult);
+            var resultObject = result.Value as ScannedResponse;
 
             // Assert
             Assert.NotNull(resultObject);
@@ -94,8 +94,8 @@ namespace PVScan.API.Tests.Controllers
             _context.SaveChanges();
 
             // Act
-            var result = (await controller.Scanned(new ScannedRequestViewModel() { }) as ObjectResult);
-            var resultObject = result.Value as ScannedResponseViewModel;
+            var result = (await controller.Scanned(new ScannedRequest() { }) as ObjectResult);
+            var resultObject = result.Value as ScannedResponse;
 
             
             // Assert
@@ -126,8 +126,8 @@ namespace PVScan.API.Tests.Controllers
             _context.SaveChanges();
 
             // Act
-            var result = (await controller.Scanned(new ScannedRequestViewModel() { }) as ObjectResult);
-            var resultObject = result.Value as ScannedResponseViewModel;
+            var result = (await controller.Scanned(new ScannedRequest() { }) as ObjectResult);
+            var resultObject = result.Value as ScannedResponse;
 
             // Assert
             Assert.NotNull(resultObject);
@@ -157,8 +157,8 @@ namespace PVScan.API.Tests.Controllers
             _context.SaveChanges();
 
             // Act
-            var result = (await controller.Scanned(new ScannedRequestViewModel() { }) as ObjectResult);
-            var resultObject = result.Value as ScannedResponseViewModel;
+            var result = (await controller.Scanned(new ScannedRequest() { }) as ObjectResult);
+            var resultObject = result.Value as ScannedResponse;
 
             // Assert
             Assert.NotNull(resultObject);

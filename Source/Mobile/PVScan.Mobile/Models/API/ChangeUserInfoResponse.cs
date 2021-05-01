@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace PVScan.API.ViewModels.Users
+namespace PVScan.Mobile.Models.API
 {
-    public class CurrentResponseViewModel
+    public class ChangeUserInfoResponse
     {
         public int BarcodesScanned { get; set; }
         public int BarcodeFormatsScanned { get; set; }
@@ -13,7 +12,5 @@ namespace PVScan.API.ViewModels.Users
         public int Level { get; set; }
         public string VKLink { get; set; }
         public string IGLink { get; set; }
-        public string Email { get; set; }
-        public string Username { get; set; }
     }
 }

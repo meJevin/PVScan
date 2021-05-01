@@ -41,13 +41,13 @@ namespace PVScan.API.Controllers
                 return NotFound();
             }
 
-            return Ok(new CurrentResponseViewModel() 
+            return Ok(new CurrentResponse() 
             {
                 BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
                 BarcodesScanned = userInfo.BarcodesScanned,
                 Experience = userInfo.Experience,
-                Level = userInfo.Level,
                 IGLink = userInfo.IGLink,
+                Level = userInfo.Level,
                 VKLink = userInfo.VKLink,
                 Email = aspUser.Email,
                 Username = aspUser.UserName,
@@ -56,7 +56,7 @@ namespace PVScan.API.Controllers
 
         [HttpPost]
         [Route("change")]
-        public async Task<IActionResult> Change(ChangeRequestViewModel data)
+        public async Task<IActionResult> Change(ChangeRequest data)
         {
             var userInfo = await _context.UserInfos
                 .Where(u => u.UserId == UserId)
@@ -72,7 +72,15 @@ namespace PVScan.API.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(new ChangeResponse()
+            {
+                BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
+                BarcodesScanned = userInfo.BarcodesScanned,
+                Experience = userInfo.Experience,
+                IGLink = userInfo.IGLink,
+                Level = userInfo.Level,
+                VKLink = userInfo.VKLink,
+            });
         }
     }
 }

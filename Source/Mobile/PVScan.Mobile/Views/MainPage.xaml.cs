@@ -167,6 +167,8 @@ namespace PVScan.Mobile.Views
 
             await HistoryPage.Initialize();
             await ProfilePage.Initialize();
+
+            this.Appearing -= ContentPage_Appearing;
         }
     }
 }

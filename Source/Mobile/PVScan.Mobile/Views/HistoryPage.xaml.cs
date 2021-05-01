@@ -44,6 +44,8 @@ namespace PVScan.Mobile.Views
         // Cancel event flag for when we long press a barcode
         bool CancelBarcodeTapped = false;
 
+        readonly SpecifyLocationPage SpecifyLocation;
+
         public HistoryPage()
         {
             InitializeComponent();
@@ -97,6 +99,8 @@ namespace PVScan.Mobile.Views
                 {
                     await HideSortingPage();
                 });
+
+            SpecifyLocation = new SpecifyLocationPage();
         }
 
         public async Task Initialize()
@@ -469,6 +473,7 @@ namespace PVScan.Mobile.Views
 
         private async Task HideNoLocationPopup(uint duration = 250)
         {
+            SpecifyLocationButton.InputTransparent = true;
             NoLocationPopupOverlay.InputTransparent = true;
             NoLocationPopupContainer.InputTransparent = true;
             _ = NoLocationPopupOverlay.FadeTo(0, duration, Easing.CubicOut);
@@ -478,9 +483,10 @@ namespace PVScan.Mobile.Views
 
         private async Task ShowNoLocationPopup(uint duration = 250)
         {
+            SpecifyLocationButton.InputTransparent = false;
             NoLocationPopupOverlay.InputTransparent = false;
             NoLocationPopupContainer.InputTransparent = false;
-            _ = NoLocationPopupOverlay.FadeTo(OverlayMaxOpacity / 2, duration, Easing.CubicOut);
+            _ = NoLocationPopupOverlay.FadeTo(OverlayMaxOpacity / 1.5, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.FadeTo(1, duration, Easing.CubicOut);
             _ = NoLocationPopupContainer.ScaleTo(1, duration, Easing.CubicOut);
         }
@@ -492,11 +498,9 @@ namespace PVScan.Mobile.Views
 
         private async void SpecifyButton_Clicked(object sender, EventArgs e)
         {
-            await HideNoLocationPopup();
-        }
-
-        private async void NoLocationPopupCloseButton_Clicked(object sender, EventArgs e)
-        {
+            SpecifyLocationButton.InputTransparent = true;
+            SpecifyLocation.Initialize(VM.NoLocationSelectedBarcode);
+            await Application.Current.MainPage.Navigation.PushModalAsync(SpecifyLocation, true);
             await HideNoLocationPopup();
         }
 

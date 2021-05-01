@@ -38,12 +38,28 @@ namespace PVScan.Mobile.Views
                 if (VM.IsSigningUp)
                 {
                     // Show spinner
+                    LoginEntry.Opacity = 0.5;
+                    EmailEntry.Opacity = 0.5;
+                    PasswordEntry.Opacity = 0.5;
+                    SignUpButton.Opacity = 0.5;
+                    LoginEntry.InputTransparent = true;
+                    EmailEntry.InputTransparent = true;
+                    PasswordEntry.InputTransparent = true;
+                    SignUpButton.InputTransparent = true;
                     _ = LoadingSpinner.FadeTo(1, 250, Easing.CubicOut);
                     await LoadingSpinner.ScaleTo(1, 250, Easing.CubicOut);
                 }
                 else
                 {
                     // Hide spinner
+                    LoginEntry.Opacity = 1;
+                    EmailEntry.Opacity = 1;
+                    PasswordEntry.Opacity =1;
+                    SignUpButton.Opacity = 1;
+                    LoginEntry.InputTransparent = false;
+                    EmailEntry.InputTransparent = false;
+                    PasswordEntry.InputTransparent = false;
+                    SignUpButton.InputTransparent = false;
                     _ = LoadingSpinner.FadeTo(0, 250, Easing.CubicOut);
                     await LoadingSpinner.ScaleTo(0.75, 250, Easing.CubicOut);
                 }
@@ -52,24 +68,24 @@ namespace PVScan.Mobile.Views
 
         private async void Vm_FailedSignUp(object sender, SignUpEventArgs e)
         {
-            SignUpMessageLabel.Text = e.Message;
+            //SignUpMessageLabel.Text = e.Message;
 
-            // Update UI for successful Sign Up
+            //// Update UI for successful Sign Up
 
-            await SignUpMessageLabel.FadeTo(1);
-            await Task.Delay(1500);
-            await SignUpMessageLabel.FadeTo(0);
+            //await SignUpMessageLabel.FadeTo(1);
+            //await Task.Delay(1500);
+            //await SignUpMessageLabel.FadeTo(0);
         }
 
         private async void Vm_SuccessfulSignUp(object sender, SignUpEventArgs e)
         {
-            SignUpMessageLabel.Text = e.Message;
+            //SignUpMessageLabel.Text = e.Message;
 
-            // Update UI for failed Sign Up
+            //// Update UI for failed Sign Up
 
-            await SignUpMessageLabel.FadeTo(1);
-            await Task.Delay(1500);
-            await SignUpMessageLabel.FadeTo(0);
+            //await SignUpMessageLabel.FadeTo(1);
+            //await Task.Delay(1500);
+            //await SignUpMessageLabel.FadeTo(0);
         }
 
         private async void BackClicked_Handler(object sender, EventArgs e)

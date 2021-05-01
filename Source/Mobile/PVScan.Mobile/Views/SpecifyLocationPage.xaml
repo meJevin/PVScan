@@ -31,6 +31,7 @@
         <Button Text="Done" Command="{Binding DoneCommand}"
                 VerticalOptions="Center" HorizontalOptions="Fill"
                 Grid.Column="1" Grid.Row="1"
-                x:Name="DoneButton"/>
+                x:Name="DoneButton"
+                Clicked="DoneButton_Clicked"/>
     </Grid>
 </ContentPage>

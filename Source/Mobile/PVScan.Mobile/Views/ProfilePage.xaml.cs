@@ -46,9 +46,6 @@ namespace PVScan.Mobile.Views
             if (vm.IsLoggedIn)
             {
                 // Logged in already, show current profile page
-                LoggedInPage.IsVisible = true;
-                LoggedInPage.Opacity = 0;
-
                 SignUpPage.TranslationY = _transY;
                 SignUpPage.Opacity = 0;
                 SignUpPage.IsVisible = false;
@@ -57,10 +54,9 @@ namespace PVScan.Mobile.Views
                 LoginPage.Opacity = 0;
                 LoginPage.IsVisible = false;
 
+                await LoginPage.FadeTo(0, _animSpeed, Easing.CubicOut);
 
-                await (LoggedInPage.BindingContext as LoggedInPageViewModel).Initialize();
-
-                await LoggedInPage.FadeTo(1, _animSpeed, Easing.CubicOut);
+                await LoggedInPage.Initialize();
             }
             else
             {
@@ -74,8 +70,7 @@ namespace PVScan.Mobile.Views
                     LoginPage.Opacity = 0;
                     LoginPage.IsVisible = false;
 
-                    LoggedInPage.Opacity = 0;
-                    LoggedInPage.IsVisible = false;
+                    LoggedInPage.Uninitialize();
 
                     LoginPage.IsVisible = true;
 

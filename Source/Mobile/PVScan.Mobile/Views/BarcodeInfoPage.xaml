@@ -18,6 +18,7 @@
             <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
             <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
             <converters:CoordinateStringConverter x:Key="CoordinateString"/>
+            <converters:NullBoolConverter x:Key="NullBool"/>
         </ResourceDictionary>
     </ContentView.Resources>
 

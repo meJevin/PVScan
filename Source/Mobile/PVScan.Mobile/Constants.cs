@@ -28,8 +28,9 @@ namespace PVScan.Mobile
                 return System.IO.Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
             }
         }
-    }
 
+        public static TimeSpan WebRequestTimeout = TimeSpan.FromSeconds(10);
+    }
 
     public static class StorageKeys
     {
