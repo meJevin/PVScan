@@ -12,5 +12,7 @@ namespace PVScan.Mobile.Services.Interfaces
         Task<GetUserInfoResponse> GetUserInfo(GetUserInfoRequest req);
 
         Task<ChangeUserInfoResponse> ChangeUserInfo(ChangeUserInfoRequest req);
+
+        Task<ScannedBarcodeResponse> ScannedBarcode(ScannedBarcodeRequest req);
     }
 }

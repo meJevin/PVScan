@@ -75,5 +75,35 @@ namespace PVScan.Mobile.Services
                 return null;
             }
         }
+
+        public async Task<ScannedBarcodeResponse> ScannedBarcode(ScannedBarcodeRequest req)
+        {
+            try
+            {
+                HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
+
+                var contentToSend = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+
+                var apiResponse = await httpClient
+                    .PostAsync("api/v1/barcodes/scanned", contentToSend)
+                    .WithTimeout(DataAccss.WebRequestTimeout);
+
+                if (!apiResponse.IsSuccessStatusCode)
+                {
+                    // Could also throw an exception :)
+                    return null;
+                }
+
+                var responseText = await apiResponse.Content.ReadAsStringAsync();
+                var responseObject = JsonConvert.DeserializeObject<ScannedBarcodeResponse>(responseText);
+
+                return responseObject;
+            }
+            catch
+            {
+                // Could also throw a meaningful exception :)
+                return null;
+            }
+        }
     }
 }
