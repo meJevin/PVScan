@@ -27,7 +27,11 @@
     </Grid.Resources>
 
     <Grid x:Name="InnerContainer" ColumnDefinitions="*,50,0">
-        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0" Grid.ColumnSpan="3"/>
+        <Grid x:Name="HighlightContainer" 
+              BackgroundColor="{AppThemeBinding
+                                Dark=White,
+                                Light=Black}"
+              Opacity="0" Grid.ColumnSpan="3"/>
 
         <!-- HIDDEN IMAGE OF SELECTION -->
         <Grid WidthRequest="36" Margin="8,0,0,0" HorizontalOptions="Start" 
