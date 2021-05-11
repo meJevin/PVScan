@@ -13,5 +13,6 @@ namespace PVScan.Mobile.Models
         public Coordinate ScanLocation { get; set; }
         public DateTime ScanTime { get; set; }
         public bool Favorite { get; set; }
+        public string GUID { get; set; }
     }
 }
