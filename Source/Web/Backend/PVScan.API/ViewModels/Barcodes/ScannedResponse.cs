@@ -12,6 +12,7 @@ namespace PVScan.API.ViewModels.Barcodes
         public int LevelsGained { get; set; }
         public double UserExperience { get; set; }
         public int UserLevel { get; set; }
-        public Barcode Barcode { get; set; }
+        public int UserBarcodesScanned { get; set; }
+        public int UserBarcodeFormatsScanned { get; set; }
     }
 }

@@ -10,7 +10,8 @@ namespace PVScan.API.ViewModels.Barcodes
     {
         public string Text { get; set; }
         public BarcodeFormat Format { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public DateTime ScanTime { get; set; }
     }
 }

@@ -36,10 +36,21 @@ namespace PVScan.API.Controllers
             var barcodeScanned = new Barcode()
             {
                 Format = data.Format,
-                ScanLocation = new Coordinate() { Latitude = data.Latitude, Longitude = data.Longitude },
+                ScanLocation = null,
                 Text = data.Text,
                 UserId = UserId,
+                ScanTime = data.ScanTime,
+                Favorite = false,
             };
+
+            if (data.Latitude.HasValue && data.Longitude.HasValue)
+            {
+                barcodeScanned.ScanLocation = new Coordinate() 
+                {
+                    Latitude = data.Latitude.Value, 
+                    Longitude = data.Longitude.Value 
+                };
+            }
 
             // Add it to DB
             await _context.Barcodes.AddAsync(barcodeScanned);
@@ -72,14 +83,30 @@ namespace PVScan.API.Controllers
 
             await _context.SaveChangesAsync();
 
+            var userScannedBarcodes = await _context.Barcodes
+                .Where(b => b.UserId == UserId)
+                .CountAsync();
+
+            var userScannedBarcodeFormats = await _context.Barcodes
+                .Select(b => b.Format)
+                .Distinct()
+                .CountAsync();
+
+            userInfo.BarcodesScanned = userScannedBarcodes;
+            userInfo.BarcodeFormatsScanned = userScannedBarcodeFormats;
+
+            _context.UserInfos.Update(userInfo);
+            await _context.SaveChangesAsync();
+
             // Form response and send back
             ScannedResponse response = new ScannedResponse()
             {
                 ExperienceGained = experienceGained,
                 LevelsGained = lvlsGained,
-                Barcode = barcodeScanned,
                 UserExperience = userInfo.Experience,
-                UserLevel = userInfo.Level
+                UserLevel = userInfo.Level,
+                UserBarcodesScanned = userScannedBarcodes,
+                UserBarcodeFormatsScanned = userScannedBarcodeFormats,
             };
 
             return Ok(response);
