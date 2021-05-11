@@ -16,5 +16,7 @@ namespace PVScan.Domain.Entities
         public Coordinate ScanLocation { get; set; }
 
         public string UserId { get; set; }
+        public DateTime ScanTime { get; set; }
+        public bool Favorite { get; set; }
     }
 }
