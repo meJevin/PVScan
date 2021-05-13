@@ -83,6 +83,8 @@ namespace PVScan.Mobile.ViewModels
                     Format = LastResult.BarcodeFormat,
                     Text = LastResult.Text,
                     ScanTime = DateTime.UtcNow,
+                    ScanLocation = null,
+                    Favorite = false,
                 };
 
                 if (location != null)
@@ -105,6 +107,7 @@ namespace PVScan.Mobile.ViewModels
 
                 ClearCommand.Execute(null);
 
+                // Todo: move this somewhere else. Possibly in the IBarcodesRepository?
                 await PVScanAPI.ScannedBarcode(new ScannedBarcodeRequest()
                 {
                     Format = b.Format,
