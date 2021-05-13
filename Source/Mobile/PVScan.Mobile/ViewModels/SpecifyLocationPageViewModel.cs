@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using MvvmHelpers;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Models.API;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages;
 using Xamarin.Forms;
@@ -12,10 +13,14 @@ namespace PVScan.Mobile.ViewModels
     public class SpecifyLocationPageViewModel : BaseViewModel
     {
         readonly IBarcodesRepository BarcodesRepository;
+        readonly IPVScanAPI PVScanAPI;
 
-        public SpecifyLocationPageViewModel(IBarcodesRepository barcodesRepository)
+        public SpecifyLocationPageViewModel(
+            IBarcodesRepository barcodesRepository,
+            IPVScanAPI pVScanAPI)
         {
             BarcodesRepository = barcodesRepository;
+            PVScanAPI = pVScanAPI;
 
             SelectedCoordinate = new ObservableCollection<Coordinate>();
 
@@ -40,12 +45,21 @@ namespace PVScan.Mobile.ViewModels
                 SelectedBarcode.ScanLocation = newCoord;
                 await BarcodesRepository.Update(SelectedBarcode);
 
-                MessagingCenter.Send(this, nameof(BarcodeLocationSpecifiedMessage), new BarcodeLocationSpecifiedMessage()
-                {
-                    UpdatedBarcode = SelectedBarcode,
-                });
+                MessagingCenter.Send(this, nameof(BarcodeLocationSpecifiedMessage),
+                    new BarcodeLocationSpecifiedMessage()
+                    {
+                        UpdatedBarcode = SelectedBarcode,
+                    });
 
                 await Application.Current.MainPage.Navigation.PopModalAsync(true);
+
+                await PVScanAPI.UpdatedBarcode(new UpdatedBarcodeRequest()
+                {
+                    GUID = SelectedBarcode.GUID,
+                    Latitude = SelectedBarcode.ScanLocation.Latitude,
+                    Longitude = SelectedBarcode.ScanLocation.Longitude,
+                    Favorite = SelectedBarcode.Favorite,
+                });
             });
         }
 

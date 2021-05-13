@@ -108,13 +108,16 @@ namespace PVScan.Mobile.ViewModels
                 ClearCommand.Execute(null);
 
                 // Todo: move this somewhere else. Possibly in the IBarcodesRepository?
-                await PVScanAPI.ScannedBarcode(new ScannedBarcodeRequest()
+                _ = PVScanAPI.ScannedBarcode(new ScannedBarcodeRequest()
                 {
                     Format = b.Format,
                     Latitude = b.ScanLocation.Latitude,
                     Longitude = b.ScanLocation.Longitude,
                     ScanTime = b.ScanTime,
                     Text = b.Text,
+                    Favorite = b.Favorite,
+                    GUID = b.GUID,
+                    Hash = b.Hash,
                 });
             });
 

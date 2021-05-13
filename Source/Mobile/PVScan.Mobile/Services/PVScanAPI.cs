@@ -76,6 +76,7 @@ namespace PVScan.Mobile.Services
             }
         }
 
+
         public async Task<ScannedBarcodeResponse> ScannedBarcode(ScannedBarcodeRequest req)
         {
             try
@@ -96,6 +97,66 @@ namespace PVScan.Mobile.Services
 
                 var responseText = await apiResponse.Content.ReadAsStringAsync();
                 var responseObject = JsonConvert.DeserializeObject<ScannedBarcodeResponse>(responseText);
+
+                return responseObject;
+            }
+            catch
+            {
+                // Could also throw a meaningful exception :)
+                return null;
+            }
+        }
+
+        public async Task<UpdatedBarcodeResponse> UpdatedBarcode(UpdatedBarcodeRequest req)
+        {
+            try
+            {
+                HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
+
+                var contentToSend = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+
+                var apiResponse = await httpClient
+                    .PostAsync("api/v1/barcodes/changed", contentToSend)
+                    .WithTimeout(DataAccss.WebRequestTimeout);
+
+                if (!apiResponse.IsSuccessStatusCode)
+                {
+                    // Could also throw an exception :)
+                    return null;
+                }
+
+                var responseText = await apiResponse.Content.ReadAsStringAsync();
+                var responseObject = JsonConvert.DeserializeObject<UpdatedBarcodeResponse>(responseText);
+
+                return responseObject;
+            }
+            catch
+            {
+                // Could also throw a meaningful exception :)
+                return null;
+            }
+        }
+
+        public async Task<DeletedBarcodeRequest> DeletedBarcode(DeletedBarcodeRequest req)
+        {
+            try
+            {
+                HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
+
+                var contentToSend = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+
+                var apiResponse = await httpClient
+                    .PostAsync("api/v1/barcodes/deleted", contentToSend)
+                    .WithTimeout(DataAccss.WebRequestTimeout);
+
+                if (!apiResponse.IsSuccessStatusCode)
+                {
+                    // Could also throw an exception :)
+                    return null;
+                }
+
+                var responseText = await apiResponse.Content.ReadAsStringAsync();
+                var responseObject = JsonConvert.DeserializeObject<DeletedBarcodeRequest>(responseText);
 
                 return responseObject;
             }

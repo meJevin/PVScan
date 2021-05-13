@@ -3,6 +3,7 @@ using MvvmHelpers;
 using PVScan.Mobile.Converters;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Models.API;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages;
@@ -30,17 +31,20 @@ namespace PVScan.Mobile.ViewModels
         readonly IBarcodesFilter FilterService;
         readonly IBarcodeSorter SorterService;
         readonly IPopupMessageService PopupMessageService;
+        readonly IPVScanAPI PVScanAPI;
 
         public HistoryPageViewModel(
             IBarcodesRepository barcodesRepository,
             IBarcodesFilter filterService,
             IPopupMessageService popupMessageService,
-            IBarcodeSorter sorterService)
+            IBarcodeSorter sorterService,
+            IPVScanAPI pVScanAPI)
         {
             BarcodesRepository = barcodesRepository;
             FilterService = filterService;
             SorterService = sorterService;
             PopupMessageService = popupMessageService;
+            PVScanAPI = pVScanAPI;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
@@ -171,6 +175,14 @@ namespace PVScan.Mobile.ViewModels
                     {
                         UpdatedBarcode = barcode,
                     });
+
+                _ = PVScanAPI.UpdatedBarcode(new UpdatedBarcodeRequest()
+                {
+                    GUID = barcode.GUID,
+                    Latitude = barcode.ScanLocation.Latitude,
+                    Longitude = barcode.ScanLocation.Longitude,
+                    Favorite = barcode.Favorite,
+                });
             });
 
             SelectBarcodeCommand = new Command(async (object barcodeObject) =>
@@ -198,6 +210,11 @@ namespace PVScan.Mobile.ViewModels
 
                 BarcodesPaged.Remove(barcode);
                 Barcodes.Remove(barcode);
+
+                _ = PVScanAPI.DeletedBarcode(new DeletedBarcodeRequest()
+                {
+                    GUID = barcode.GUID,
+                });
             });
 
             StartEditCommand = new Command(() =>
@@ -218,6 +235,11 @@ namespace PVScan.Mobile.ViewModels
                 foreach (var b in sb)
                 {
                     await barcodesRepository.Delete(b);
+
+                    _ = PVScanAPI.DeletedBarcode(new DeletedBarcodeRequest()
+                    {
+                        GUID = b.GUID,
+                    });
 
                     Barcodes.Remove(b);
                     BarcodesPaged.Remove(b);

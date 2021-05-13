@@ -125,9 +125,15 @@
     <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy.pdf" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy-1.pdf" />
+    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy-1.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
