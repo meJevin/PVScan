@@ -1,12 +1,11 @@
-﻿using PVScan.Domain.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
+using ZXing;
 
-namespace PVScan.API.ViewModels.Barcodes
+namespace PVScan.Mobile.Models.API
 {
-    public class ScannedRequest
+    public class ScannedBarcodeRequest
     {
         public string Text { get; set; }
         public BarcodeFormat Format { get; set; }

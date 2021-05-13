@@ -6,6 +6,7 @@ using PVScan.API.Services.Interfaces;
 using PVScan.API.ViewModels.Barcodes;
 using PVScan.Domain.Entities;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -34,15 +35,26 @@ namespace PVScan.API.Tests.Controllers
                 Latitude = 30,
                 Longitude = 50,
                 Text = "test",
+                Favorite = false,
+                GUID = "something1",
+                Hash = "something2",
+                ScanTime = new DateTime(2000, 1, 1),
             }) as ObjectResult);
             var resultObject = result.Value as ScannedResponse;
 
+
             // Assert
-            Assert.NotNull(resultObject);
-            Assert.Equal(30, resultObject.Barcode.ScanLocation.Latitude);
-            Assert.Equal(50, resultObject.Barcode.ScanLocation.Longitude);
-            Assert.Equal("test", resultObject.Barcode.Text);
-            Assert.Equal(Domain.Enums.BarcodeFormat.QR_CODE, resultObject.Barcode.Format);
+            var gotBarcode = _context.Barcodes.Where(b => b.Text == "test").FirstOrDefault();
+
+            Assert.NotNull(gotBarcode);
+            Assert.Equal(30, gotBarcode.ScanLocation.Latitude);
+            Assert.Equal(50, gotBarcode.ScanLocation.Longitude);
+            Assert.Equal(new DateTime(2000, 1, 1), gotBarcode.ScanTime);
+            Assert.Equal("something1", gotBarcode.GUID);
+            Assert.Equal("something2", gotBarcode.Hash);
+            Assert.Equal("test", gotBarcode.Text);
+            Assert.False(gotBarcode.Favorite);
+            Assert.Equal(Domain.Enums.BarcodeFormat.QR_CODE, gotBarcode.Format);
         }
 
         [Fact]
@@ -164,6 +176,143 @@ namespace PVScan.API.Tests.Controllers
             Assert.NotNull(resultObject);
             Assert.Equal(7, resultObject.UserExperience);
             Assert.Equal(7, userInfo.Experience);
+        }
+
+        [Fact]
+        public async Task Can_Update_Existing_Barcode()
+        {
+            // Arrange
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            controller.ControllerContext = _mockControlerContext;
+
+            var barcodeGUID = Guid.NewGuid().ToString();
+
+            _context.UserInfos.Add(new UserInfo()
+            {
+                UserId = MockUserId,
+                BarcodesScanned = 10,
+            });
+            _context.Barcodes.Add(new Barcode()
+            {
+                UserId = MockUserId,
+                GUID = barcodeGUID,
+                Text = "test",
+                Favorite = false,
+                ScanLocation = new Coordinate()
+                {
+                    Latitude = 0,
+                    Longitude = 0,
+                }
+            });
+            _context.SaveChanges();
+
+            // Act
+            var result = (await controller.Updated(new UpdatedRequest()
+            {
+                GUID = barcodeGUID,
+                Favorite = true,
+                Latitude = 42,
+                Longitude = 69,
+            }));
+
+            // Assert
+            var updatedBarcode = _context.Barcodes.Where(b => b.GUID == barcodeGUID).FirstOrDefault();
+
+            Assert.True(result is OkObjectResult);
+            Assert.NotNull(updatedBarcode);
+            Assert.True(updatedBarcode.Favorite);
+            Assert.Equal(42, updatedBarcode.ScanLocation.Latitude);
+            Assert.Equal(69, updatedBarcode.ScanLocation.Longitude);
+        }
+
+        [Fact]
+        public async Task Can_Not_Update_Non_Existing_Barcode()
+        {
+            // Arrange
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            controller.ControllerContext = _mockControlerContext;
+
+            var barcodeGUID = Guid.NewGuid().ToString();
+
+            _context.UserInfos.Add(new UserInfo()
+            {
+                UserId = MockUserId,
+            });
+            _context.SaveChanges();
+
+            // Act
+            var result = (await controller.Updated(new UpdatedRequest()
+            {
+                GUID = barcodeGUID,
+                Favorite = true,
+            }));
+
+            Assert.True(result is NotFoundResult);
+        }
+
+        [Fact]
+        public async Task Can_Delete_Existing_Barcode()
+        {
+            // Arrange
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            controller.ControllerContext = _mockControlerContext;
+
+            var barcodeGUID = Guid.NewGuid().ToString();
+
+            _context.UserInfos.Add(new UserInfo()
+            {
+                UserId = MockUserId,
+                BarcodesScanned = 10,
+            });
+            _context.Barcodes.Add(new Barcode()
+            {
+                UserId = MockUserId,
+                GUID = barcodeGUID,
+                Text = "test",
+                Favorite = false,
+                ScanLocation = new Coordinate()
+                {
+                    Latitude = 0,
+                    Longitude = 0,
+                }
+            });
+            _context.SaveChanges();
+
+            // Act
+            var result = (await controller.Deleted(new DeletedRequest()
+            {
+                GUID = barcodeGUID,
+            }));
+
+            // Assert
+            var deletedBarcode = _context.Barcodes.Where(b => b.GUID == barcodeGUID).FirstOrDefault();
+
+            Assert.True(result is OkObjectResult);
+            Assert.Null(deletedBarcode);
+        }
+
+        [Fact]
+        public async Task Can_Not_Delete_Non_Existing_Barcode()
+        {
+            // Arrange
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            controller.ControllerContext = _mockControlerContext;
+
+            var barcodeGUID = Guid.NewGuid().ToString();
+
+            _context.UserInfos.Add(new UserInfo()
+            {
+                UserId = MockUserId,
+            });
+            _context.SaveChanges();
+
+            // Act
+            var result = (await controller.Deleted(new DeletedRequest()
+            {
+                GUID = barcodeGUID,
+            }));
+
+            Assert.True(result is NotFoundResult);
         }
     }
 }

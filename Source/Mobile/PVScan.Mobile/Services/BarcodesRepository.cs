@@ -34,6 +34,9 @@ namespace PVScan.Mobile.Services
 
         public async Task<Barcode> Save(Barcode barcode)
         {
+            barcode.GUID = Guid.NewGuid().ToString();
+            barcode.Hash = Barcode.HashOf(barcode);
+
             _context.Barcodes.Add(barcode);
             await _context.SaveChangesAsync();
 
@@ -42,6 +45,8 @@ namespace PVScan.Mobile.Services
 
         public async Task Update(Barcode barcode)
         {
+            barcode.Hash = Barcode.HashOf(barcode);
+
             _context.Barcodes.Update(barcode);
             await _context.SaveChangesAsync();
         }

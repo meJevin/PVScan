@@ -110,10 +110,12 @@
                         <Button Text="List" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
                                 Dark={StaticResource TextPrimaryColor_Dark},
                                 Light={StaticResource TextPrimaryColor_Light}}"
+                                Padding="-4"
                                 x:Name="ListViewButton" Clicked="ListViewButton_Clicked"/>
                         <Button Text="Map" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
                                 Dark={StaticResource TextPrimaryColor_Dark},
                                 Light={StaticResource TextPrimaryColor_Light}}"
+                                Padding="-4"
                                 x:Name="MapViewButton" Clicked="MapViewButton_Clicked"/>
                     </Grid>
                         

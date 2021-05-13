@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PVScan.Database;
 
 namespace PVScan.Database.MigrationsMySQL
 {
     [DbContext(typeof(PVScanDbContext))]
-    partial class PVScanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210505172652_AddScanTimeAndFavorites")]
+    partial class AddScanTimeAndFavorites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,12 +222,6 @@ namespace PVScan.Database.MigrationsMySQL
 
                     b.Property<int>("Format")
                         .HasColumnType("int");
-
-                    b.Property<string>("GUID")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Hash")
-                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("ScanTime")
                         .HasColumnType("datetime(6)");

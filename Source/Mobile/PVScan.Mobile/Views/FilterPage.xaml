@@ -98,10 +98,12 @@
                                     <Button Text="Last" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
                                             Dark={StaticResource TextPrimaryColor_Dark},
                                             Light={StaticResource TextPrimaryColor_Light}}"
+                                            Padding="-4"
                                             x:Name="LastViewButton" Command="{Binding SwitchToDateLatest}"/>
                                     <Button Text="Range" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
                                             Dark={StaticResource TextPrimaryColor_Dark},
                                             Light={StaticResource TextPrimaryColor_Light}}"
+                                            Padding="-4"
                                             x:Name="RangeViewButton" Command="{Binding SwitchToDateRange}"/>
                                 </Grid>
 

@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Models.API;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
@@ -19,14 +20,17 @@ namespace PVScan.Mobile.ViewModels
         readonly IBarcodesRepository BarcodesRepository;
         readonly IFileBarcodeReader FileBarcodeReader;
         readonly IPopupMessageService PopupMessageService;
+        readonly IPVScanAPI PVScanAPI;
 
         public ScanPageViewModel(IBarcodesRepository barcodesRepository,
             IFileBarcodeReader fileBarcodeReader,
-            IPopupMessageService popupMessageService)
+            IPopupMessageService popupMessageService, 
+            IPVScanAPI pVScanAPI)
         {
             BarcodesRepository = barcodesRepository;
             FileBarcodeReader = fileBarcodeReader;
             PopupMessageService = popupMessageService;
+            PVScanAPI = pVScanAPI;
 
             ScanCommand = new Command(async (object scanResult) =>
             {
@@ -79,6 +83,8 @@ namespace PVScan.Mobile.ViewModels
                     Format = LastResult.BarcodeFormat,
                     Text = LastResult.Text,
                     ScanTime = DateTime.UtcNow,
+                    ScanLocation = null,
+                    Favorite = false,
                 };
 
                 if (location != null)
@@ -100,6 +106,19 @@ namespace PVScan.Mobile.ViewModels
                 });
 
                 ClearCommand.Execute(null);
+
+                // Todo: move this somewhere else. Possibly in the IBarcodesRepository?
+                _ = PVScanAPI.ScannedBarcode(new ScannedBarcodeRequest()
+                {
+                    Format = b.Format,
+                    Latitude = b.ScanLocation.Latitude,
+                    Longitude = b.ScanLocation.Longitude,
+                    ScanTime = b.ScanTime,
+                    Text = b.Text,
+                    Favorite = b.Favorite,
+                    GUID = b.GUID,
+                    Hash = b.Hash,
+                });
             });
 
             AllowCameraCommand = new Command(async () =>

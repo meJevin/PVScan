@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PVScan.Mobile.DAL;
 
 namespace PVScan.Mobile.Migrations
 {
     [DbContext(typeof(PVScanMobileDbContext))]
-    partial class PVScanMobileDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210513074515_Barcode Hash added")]
+    partial class BarcodeHashadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

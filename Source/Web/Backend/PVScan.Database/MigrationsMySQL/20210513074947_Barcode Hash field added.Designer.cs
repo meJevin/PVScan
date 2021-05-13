@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PVScan.Database;
 
 namespace PVScan.Database.MigrationsMySQL
 {
     [DbContext(typeof(PVScanDbContext))]
-    partial class PVScanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210513074947_Barcode Hash field added")]
+    partial class BarcodeHashfieldadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

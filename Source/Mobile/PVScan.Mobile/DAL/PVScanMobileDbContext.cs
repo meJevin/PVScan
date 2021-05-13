@@ -9,6 +9,16 @@ namespace PVScan.Mobile.DAL
 {
     public class PVScanMobileDbContext : DbContext
     {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite();
+        }
+
+        public PVScanMobileDbContext() : base()
+        {
+
+        }
+
         public PVScanMobileDbContext(DbContextOptions<PVScanMobileDbContext> options) 
             : base(options)
         {
