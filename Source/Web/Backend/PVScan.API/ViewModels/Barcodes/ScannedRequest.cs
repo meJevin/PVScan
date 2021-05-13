@@ -13,5 +13,8 @@ namespace PVScan.API.ViewModels.Barcodes
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public DateTime ScanTime { get; set; }
+        public bool Favorite { get; set; }
+        public string Hash { get; set; }
+        public string GUID { get; set; }
     }
 }

@@ -48,7 +48,7 @@ namespace PVScan.API.Tests.Controllers
             _context.SaveChanges();
 
             // Act
-            var result = (await controller.Change(new ChangeRequest() { IGLink = "test" }) as OkResult);
+            var result = (await controller.Change(new ChangeRequest() { IGLink = "test" }) as ObjectResult).Value as ChangeResponse;
             var resultObject = await _context.UserInfos.FirstOrDefaultAsync(u => u.UserId == MockUserId);
 
             // Assert
