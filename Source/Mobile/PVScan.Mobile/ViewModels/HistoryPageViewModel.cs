@@ -285,14 +285,16 @@ namespace PVScan.Mobile.ViewModels
 
             if (indxPaged != -1)
             {
-                BarcodesPaged.Remove(localBarcode);
-                BarcodesPaged.Insert(indxPaged, localBarcode);
+                BarcodesPaged[indxPaged] = localBarcode;
+                //BarcodesPaged.Remove(localBarcode);
+                //BarcodesPaged.Insert(indxPaged, localBarcode);
             }
 
             if (indxTotal != -1)
             {
-                Barcodes.Remove(localBarcode);
-                Barcodes.Insert(indxTotal, localBarcode);
+                Barcodes[indxTotal] = localBarcode;
+                //Barcodes.Remove(localBarcode);
+                //Barcodes.Insert(indxTotal, localBarcode);
             }
         }
 
