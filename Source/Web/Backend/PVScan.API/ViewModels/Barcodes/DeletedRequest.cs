@@ -8,6 +8,6 @@ namespace PVScan.API.ViewModels.Barcodes
 {
     public class DeletedRequest
     {
-        public string GUID;
+        public string GUID { get; set; }
     }
 }

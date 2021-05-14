@@ -17,6 +17,8 @@ namespace PVScan.Mobile
     {
         public static string BaseAddress = 
             DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:1337" : "https://localhost:1337";
+
+        public static string BarcodesHub = "/hubs/barcodes";
     }
 
     public static class DataAccss
