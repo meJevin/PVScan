@@ -16,23 +16,21 @@ namespace PVScan.Mobile.ViewModels
     {
         readonly IIdentityService IdentityService;
         readonly IPopupMessageService PopupMessageService;
+        readonly IAPIBarcodeHub BarcodeHub;
 
         public LoginPageViewModel(
             IIdentityService identityService,
-            IPopupMessageService popupMessageService)
+            IPopupMessageService popupMessageService, 
+            IAPIBarcodeHub barcodeHub)
         {
             IdentityService = identityService;
             PopupMessageService = popupMessageService;
+            BarcodeHub = barcodeHub;
 
             LoginCommand = new Command(async () =>
             {
                 if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password))
                 {
-                    //FailedLogin?.Invoke(this, new LoginEventArgs()
-                    //{
-                    //    Message = "Please fill in all fields!",
-                    //});
-
                     _ = PopupMessageService.ShowMessage("Please fill in all fields!");
 
                     return;
@@ -49,20 +47,13 @@ namespace PVScan.Mobile.ViewModels
 
                 if (result)
                 {
-                    //SuccessfulLogin?.Invoke(this, new LoginEventArgs()
-                    //{
-                    //    Message = "You've succesfuly logged in!",
-                    //});
-
                     // Profile view responds to this changing the UI
                     MessagingCenter.Send(this, nameof(SuccessfulLoginMessage), new SuccessfulLoginMessage() { });
+
+                    await BarcodeHub.Connect();
                 }
                 else
                 {
-                    //FailedLogin?.Invoke(this, new LoginEventArgs()
-                    //{
-                    //    Message = "Failed to login!",
-                    //});
                     _ = PopupMessageService.ShowMessage("Failed to login!");
                 }
             });

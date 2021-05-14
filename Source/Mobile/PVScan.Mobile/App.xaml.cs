@@ -66,7 +66,13 @@ namespace PVScan.Mobile
             using var scope = Resolver.Container.BeginLifetimeScope();
 
             var identity = scope.Resolve<IIdentityService>();
+            var barcodeHub = scope.Resolve<IAPIBarcodeHub>();
             await identity.Initialize();
+
+            if (identity.AccessToken != null)
+            {
+                await barcodeHub.Connect();
+            }
         }
 
         protected override void OnSleep()
