@@ -22,11 +22,11 @@ namespace PVScan.Mobile.Models
             string input = "";
             input += barcode.Format.ToString() + " ";
             input += barcode.Text.ToString() + " ";
-            input += barcode.ScanLocation.Latitude.ToString() + " ";
-            input += barcode.ScanLocation.Longitude.ToString() + " ";
+            input += barcode.ScanLocation.Latitude?.ToString() + " ";
+            input += barcode.ScanLocation.Longitude?.ToString() + " ";
             input += barcode.ScanTime.Ticks.ToString() + " ";
             input += barcode.Favorite.ToString() + " ";
-            input += barcode.GUID.ToString() + " ";
+            input += barcode.GUID?.ToString() + " ";
 
             using HashAlgorithm algorithm = SHA256.Create();
             var hashBytes = algorithm.ComputeHash(Encoding.UTF8.GetBytes(input));

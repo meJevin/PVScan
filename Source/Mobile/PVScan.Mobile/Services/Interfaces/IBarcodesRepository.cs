@@ -21,5 +21,7 @@ namespace PVScan.Mobile.Services.Interfaces
 
         // Update
         Task Update(Barcode barcode);
+
+        Task<Barcode> FindByGUID(string GUID);
     }
 }

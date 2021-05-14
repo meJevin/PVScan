@@ -27,6 +27,13 @@ namespace PVScan.Mobile.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<Barcode> FindByGUID(string GUID)
+        {
+            var result = _context.Barcodes.Where(b => b.GUID == GUID).FirstOrDefault();
+
+            return result;
+        }
+
         public async Task<IEnumerable<Barcode>> GetAll()
         {
             return _context.Barcodes.AsQueryable();
@@ -34,7 +41,11 @@ namespace PVScan.Mobile.Services
 
         public async Task<Barcode> Save(Barcode barcode)
         {
-            barcode.GUID = Guid.NewGuid().ToString();
+            if (string.IsNullOrEmpty(barcode.GUID))
+            {
+                barcode.GUID = Guid.NewGuid().ToString();
+            }
+
             barcode.Hash = Barcode.HashOf(barcode);
 
             _context.Barcodes.Add(barcode);

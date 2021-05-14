@@ -14,13 +14,16 @@ namespace PVScan.Mobile.ViewModels
     {
         readonly IBarcodesRepository BarcodesRepository;
         readonly IPVScanAPI PVScanAPI;
+        readonly IAPIBarcodeHub BarcodeHub;
 
         public SpecifyLocationPageViewModel(
             IBarcodesRepository barcodesRepository,
-            IPVScanAPI pVScanAPI)
+            IPVScanAPI pVScanAPI,
+            IAPIBarcodeHub barcodeHub)
         {
             BarcodesRepository = barcodesRepository;
             PVScanAPI = pVScanAPI;
+            BarcodeHub = barcodeHub;
 
             SelectedCoordinate = new ObservableCollection<Coordinate>();
 
@@ -53,13 +56,16 @@ namespace PVScan.Mobile.ViewModels
 
                 await Application.Current.MainPage.Navigation.PopModalAsync(true);
 
-                await PVScanAPI.UpdatedBarcode(new UpdatedBarcodeRequest()
+                var req = new UpdatedBarcodeRequest()
                 {
                     GUID = SelectedBarcode.GUID,
                     Latitude = SelectedBarcode.ScanLocation.Latitude,
                     Longitude = SelectedBarcode.ScanLocation.Longitude,
                     Favorite = SelectedBarcode.Favorite,
-                });
+                };
+                await PVScanAPI.UpdatedBarcode(req);
+
+                await BarcodeHub.Updated(req);
             });
         }
 

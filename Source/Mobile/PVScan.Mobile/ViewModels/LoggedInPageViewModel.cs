@@ -24,11 +24,13 @@ namespace PVScan.Mobile.ViewModels
     {
         readonly IIdentityService IdentityService;
         readonly IPVScanAPI API;
+        readonly IAPIBarcodeHub BarcodeHub;
 
-        public LoggedInPageViewModel(IIdentityService identityService, IPVScanAPI api)
+        public LoggedInPageViewModel(IIdentityService identityService, IPVScanAPI api, IAPIBarcodeHub barcodeHub)
         {
             IdentityService = identityService;
             API = api;
+            BarcodeHub = barcodeHub;
 
             LogoutCommand = new Command(async () =>
             {
@@ -47,7 +49,6 @@ namespace PVScan.Mobile.ViewModels
                 }
 
                 UserInfo = null;
-
                 IsLogginOut = false;
 
                 if (result)
@@ -57,6 +58,8 @@ namespace PVScan.Mobile.ViewModels
                     MessagingCenter.Send(this, nameof(SuccessfulLogoutMessage), new SuccessfulLogoutMessage()
                     {
                     });
+
+                    await BarcodeHub.Disconnect();
                 }
                 else
                 {
@@ -73,7 +76,7 @@ namespace PVScan.Mobile.ViewModels
 
                 IsError = false;
 
-                var result = await API.ChangeUserInfo(new ChangeUserInfoRequest 
+                var result = await API.ChangeUserInfo(new ChangeUserInfoRequest
                 {
                     IGLink = UserInfo.IGLink,
                     VKLink = UserInfo.VKLink,

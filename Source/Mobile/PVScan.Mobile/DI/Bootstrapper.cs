@@ -93,6 +93,11 @@ namespace PVScan.Mobile
             ContainerBuilder.RegisterType<PVScanAPI>()
                 .As<IPVScanAPI>()
                 .InstancePerLifetimeScope();
+
+            // API Barcodes HUB
+            ContainerBuilder.RegisterType<APIBarcodeHub>()
+                .As<IAPIBarcodeHub>()
+                .SingleInstance();
         }
 
         private void FinishInitialization()
