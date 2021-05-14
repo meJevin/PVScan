@@ -30,28 +30,35 @@ namespace PVScan.Mobile.Services
 
         private void SetupConnection()
         {
-            connection = new HubConnectionBuilder()
-                .WithAutomaticReconnect(new TimeSpan[] 
-                { 
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(3),
-                    TimeSpan.FromSeconds(5),
-                    TimeSpan.FromSeconds(10),
-                })
-                .WithUrl(API.BaseAddress + API.BarcodesHub,
-                    o =>
+            try
+            {
+                connection = new HubConnectionBuilder()
+                    .WithAutomaticReconnect(new TimeSpan[]
                     {
-                        o.AccessTokenProvider = () => { return Task.FromResult(IdentityService.AccessToken); };
-                        o.WebSocketConfiguration = conf =>
-                        {
-                            conf.RemoteCertificateValidationCallback = (m, c, ch, e) => { return true; };
-                        };
-                        o.HttpMessageHandlerFactory = factory => new HttpClientHandler
-                        {
-                            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; }
-                        };
+                        TimeSpan.FromSeconds(1),
+                        TimeSpan.FromSeconds(3),
+                        TimeSpan.FromSeconds(5),
+                        TimeSpan.FromSeconds(10),
                     })
-                .Build();
+                    .WithUrl(API.BaseAddress + API.BarcodesHub,
+                        o =>
+                        {
+                            o.AccessTokenProvider = () => { return Task.FromResult(IdentityService.AccessToken); };
+                            o.WebSocketConfiguration = conf =>
+                            {
+                                conf.RemoteCertificateValidationCallback = (m, c, ch, e) => { return true; };
+                            };
+                            o.HttpMessageHandlerFactory = factory => new HttpClientHandler
+                            {
+                                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; }
+                            };
+                        })
+                    .Build();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
             connection.On<ScannedBarcodeRequest>("Scanned", (req) =>
             {
@@ -88,7 +95,7 @@ namespace PVScan.Mobile.Services
             }
             catch (Exception ex)
             {
-
+                throw ex;
             }
         }
 
@@ -105,7 +112,7 @@ namespace PVScan.Mobile.Services
             }
             catch (Exception ex)
             {
-
+                throw ex;
             }
         }
 
