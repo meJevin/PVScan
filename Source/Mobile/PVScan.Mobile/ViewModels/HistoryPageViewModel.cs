@@ -239,6 +239,9 @@ namespace PVScan.Mobile.ViewModels
                 SelectedBarcodes.Clear();
             });
 
+            // Todo: this can actually be called twice in offline mode when
+            // the user is waiting for previous API request (deleted)
+            // Look at 
             DeleteSelectedBarcodesCommand = new Command(async () =>
             {
                 var sb = SelectedBarcodes.Select(b => b as Barcode);
