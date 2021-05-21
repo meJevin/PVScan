@@ -270,6 +270,7 @@ namespace PVScan.Mobile.ViewModels
                         GUID = b.GUID,
                     };
 
+                    // Todo: Possibly BarcodesHub wants to go into the PVSCanAPI?
                     if (await PVScanAPI.DeletedBarcode(req) != null)
                     {
                         await BarcodeHub.Deleted(req);
