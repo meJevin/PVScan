@@ -22,6 +22,11 @@ namespace PVScan.Mobile.Services
 
         public async Task<ChangeUserInfoResponse> ChangeUserInfo(ChangeUserInfoRequest req)
         {
+            if (IdentityService.AccessToken == null)
+            {
+                return null;
+            }
+
             try
             {
                 var client = HttpClientFactory.ForAPI(IdentityService.AccessToken);
@@ -50,6 +55,11 @@ namespace PVScan.Mobile.Services
 
         public async Task<GetUserInfoResponse> GetUserInfo(GetUserInfoRequest req)
         {
+            if (IdentityService.AccessToken == null)
+            {
+                return null;
+            }
+
             try
             {
                 HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
@@ -79,6 +89,11 @@ namespace PVScan.Mobile.Services
 
         public async Task<ScannedBarcodeResponse> ScannedBarcode(ScannedBarcodeRequest req)
         {
+            if (IdentityService.AccessToken == null)
+            {
+                return null;
+            }
+
             try
             {
                 HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
@@ -109,6 +124,11 @@ namespace PVScan.Mobile.Services
 
         public async Task<UpdatedBarcodeResponse> UpdatedBarcode(UpdatedBarcodeRequest req)
         {
+            if (IdentityService.AccessToken == null)
+            {
+                return null;
+            }
+
             try
             {
                 HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
@@ -139,6 +159,11 @@ namespace PVScan.Mobile.Services
 
         public async Task<DeletedBarcodeRequest> DeletedBarcode(DeletedBarcodeRequest req)
         {
+            if (IdentityService.AccessToken == null)
+            {
+                return null;
+            }
+
             try
             {
                 HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
