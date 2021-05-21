@@ -17,15 +17,17 @@ namespace PVScan.Mobile.ViewModels
         readonly IIdentityService IdentityService;
         readonly IPopupMessageService PopupMessageService;
         readonly IAPIBarcodeHub BarcodeHub;
+        readonly IAPIUserInfoHub UserInfoHub;
 
         public LoginPageViewModel(
             IIdentityService identityService,
-            IPopupMessageService popupMessageService, 
-            IAPIBarcodeHub barcodeHub)
+            IPopupMessageService popupMessageService,
+            IAPIBarcodeHub barcodeHub, IAPIUserInfoHub userInfoHub)
         {
             IdentityService = identityService;
             PopupMessageService = popupMessageService;
             BarcodeHub = barcodeHub;
+            UserInfoHub = userInfoHub;
 
             LoginCommand = new Command(async () =>
             {
@@ -51,6 +53,7 @@ namespace PVScan.Mobile.ViewModels
                     MessagingCenter.Send(this, nameof(SuccessfulLoginMessage), new SuccessfulLoginMessage() { });
 
                     await BarcodeHub.Connect();
+                    await UserInfoHub.Connect();
                 }
                 else
                 {
