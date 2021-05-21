@@ -190,8 +190,10 @@ namespace PVScan.Mobile.ViewModels
                     Favorite = barcode.Favorite,
                 };
 
-                await PVScanAPI.UpdatedBarcode(req);
-                await BarcodeHub.Updated(req);
+                if (await PVScanAPI.UpdatedBarcode(req) != null)
+                {
+                    await BarcodeHub.Updated(req);
+                }
             });
 
             SelectBarcodeCommand = new Command(async (object barcodeObject) =>
@@ -224,8 +226,11 @@ namespace PVScan.Mobile.ViewModels
                 {
                     GUID = barcode.GUID,
                 };
-                await PVScanAPI.DeletedBarcode(req);
-                await BarcodeHub.Deleted(req);
+
+                if (await PVScanAPI.DeletedBarcode(req) != null)
+                {
+                    await BarcodeHub.Deleted(req);
+                }
             });
 
             StartEditCommand = new Command(() =>
@@ -250,15 +255,29 @@ namespace PVScan.Mobile.ViewModels
                 {
                     await barcodesRepository.Delete(b);
 
+                    if (Barcodes.Contains(b))
+                    {
+                        Barcodes.Remove(b);
+                    }
+
+                    if (BarcodesPaged.Contains(b))
+                    {
+                        BarcodesPaged.Remove(b);
+                    }
+                }
+
+                foreach (var b in sb)
+                {
                     var req = new DeletedBarcodeRequest()
                     {
                         GUID = b.GUID,
                     };
-                    await PVScanAPI.DeletedBarcode(req);
-                    await BarcodeHub.Deleted(req);
 
-                    Barcodes.Remove(b);
-                    BarcodesPaged.Remove(b);
+                    // Todo: Possibly BarcodesHub wants to go into the PVSCanAPI?
+                    if (await PVScanAPI.DeletedBarcode(req) != null)
+                    {
+                        await BarcodeHub.Deleted(req);
+                    }
                 }
 
                 SelectedBarcodes.Clear();
@@ -289,15 +308,11 @@ namespace PVScan.Mobile.ViewModels
             if (indxPaged != -1)
             {
                 BarcodesPaged[indxPaged] = localBarcode;
-                //BarcodesPaged.Remove(localBarcode);
-                //BarcodesPaged.Insert(indxPaged, localBarcode);
             }
 
             if (indxTotal != -1)
             {
                 Barcodes[indxTotal] = localBarcode;
-                //Barcodes.Remove(localBarcode);
-                //Barcodes.Insert(indxTotal, localBarcode);
             }
         }
 
