@@ -224,6 +224,7 @@ namespace PVScan.Mobile.ViewModels
                 {
                     GUID = barcode.GUID,
                 };
+
                 await PVScanAPI.DeletedBarcode(req);
                 await BarcodeHub.Deleted(req);
             });
@@ -247,15 +248,19 @@ namespace PVScan.Mobile.ViewModels
                 {
                     await barcodesRepository.Delete(b);
 
+                    Barcodes.Remove(b);
+                    BarcodesPaged.Remove(b);
+                }
+
+                foreach (var b in sb)
+                {
                     var req = new DeletedBarcodeRequest()
                     {
                         GUID = b.GUID,
                     };
+
                     await PVScanAPI.DeletedBarcode(req);
                     await BarcodeHub.Deleted(req);
-
-                    Barcodes.Remove(b);
-                    BarcodesPaged.Remove(b);
                 }
 
                 SelectedBarcodes.Clear();
