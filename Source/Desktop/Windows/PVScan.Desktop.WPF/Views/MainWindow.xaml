@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels"
         xmlns:local="clr-namespace:PVScan.Desktop.WPF"
-        mc:Ignorable="d"
+        xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI" 
+        di:ViewModelLocator.AutoWireViewModel="True"
         Title="PVScan" Height="450" Width="800"
-        WindowStyle="None">
+        WindowStyle="None"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        mc:Ignorable="d">
 
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="6"
@@ -31,7 +35,7 @@
                         
                     </Grid>
                 </TabItem>
-                <TabItem Header="SOMETHING2">
+                <TabItem Header="{Binding Message}">
                     <Grid Background="Bisque">
 
                     </Grid>

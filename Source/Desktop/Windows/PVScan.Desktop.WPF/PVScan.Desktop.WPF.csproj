@@ -6,18 +6,33 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>PVScanIcon.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <Configurations>Debug;Release;Desktop_Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|AnyCPU'">
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|x64'">
+    <DefineConstants>TRACE;DESKTOP_WINDOWS;</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|x86'">
+    <DefineConstants>TRACE;DESKTOP_WINDOWS;</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="DI\" />
-    <Folder Include="DAL\" />
-    <Folder Include="Services\" />
     <Folder Include="Resources\Fonts\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\PVScan.Core\PVScan.Core.csproj" />
   </ItemGroup>
 
 </Project>

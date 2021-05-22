@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PVScan.Desktop.WPF
+namespace PVScan.Desktop.WPF.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
