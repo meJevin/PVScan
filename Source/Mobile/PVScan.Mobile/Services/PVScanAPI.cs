@@ -136,7 +136,7 @@ namespace PVScan.Mobile.Services
                 var contentToSend = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
 
                 var apiResponse = await httpClient
-                    .PostAsync("api/v1/barcodes/changed", contentToSend)
+                    .PostAsync("api/v1/barcodes/updated", contentToSend)
                     .WithTimeout(DataAccss.WebRequestTimeout);
 
                 if (!apiResponse.IsSuccessStatusCode)
