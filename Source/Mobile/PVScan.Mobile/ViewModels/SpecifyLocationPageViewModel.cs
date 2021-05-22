@@ -59,8 +59,8 @@ namespace PVScan.Mobile.ViewModels
                 var req = new UpdatedBarcodeRequest()
                 {
                     GUID = SelectedBarcode.GUID,
-                    Latitude = SelectedBarcode.ScanLocation.Latitude,
-                    Longitude = SelectedBarcode.ScanLocation.Longitude,
+                    Latitude = SelectedBarcode.ScanLocation?.Latitude,
+                    Longitude = SelectedBarcode.ScanLocation?.Longitude,
                     Favorite = SelectedBarcode.Favorite,
                 };
                 await PVScanAPI.UpdatedBarcode(req);

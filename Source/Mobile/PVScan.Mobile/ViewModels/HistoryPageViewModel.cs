@@ -110,6 +110,24 @@ namespace PVScan.Mobile.ViewModels
                     await LoadBarcodesFromDB();
                 });
 
+            MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
+                async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>
+                {
+                    // This is required to update the map, so that the marker appears
+                    var indexTotal = Barcodes.IndexOf(args.UpdatedBarcode);
+                    var indexPaged = BarcodesPaged.IndexOf(args.UpdatedBarcode);
+
+                    if (indexTotal != -1)
+                    {
+                        Barcodes[indexTotal] = args.UpdatedBarcode;
+                    }
+
+                    if (indexPaged != -1)
+                    {
+                        BarcodesPaged[indexPaged] = args.UpdatedBarcode;
+                    }
+                });
+
             RefreshCommand = new Command(async () =>
             {
                 IsRefresing = true;
@@ -185,8 +203,8 @@ namespace PVScan.Mobile.ViewModels
                 var req = new UpdatedBarcodeRequest()
                 {
                     GUID = barcode.GUID,
-                    Latitude = barcode.ScanLocation.Latitude,
-                    Longitude = barcode.ScanLocation.Longitude,
+                    Latitude = barcode.ScanLocation?.Latitude,
+                    Longitude = barcode.ScanLocation?.Longitude,
                     Favorite = barcode.Favorite,
                 };
 
