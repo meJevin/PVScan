@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
-             x:Class="PVScan.Mobile.Views.LoggedInPage"
-             xmlns:di="clr-namespace:PVScan.Mobile.DI"
-             xmlns:converters="clr-namespace:PVScan.Mobile.Converters" xmlns:controls="clr-namespace:PVScan.Mobile.Views.Controls"
-             di:ViewModelLocator.AutoWireViewModel="True"
-             x:DataType="viewmodels:LoggedInPageViewModel">
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    x:Class="PVScan.Mobile.Views.LoggedInPage"
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    xmlns:converters="clr-namespace:PVScan.Mobile.Converters" 
+    xmlns:controls="clr-namespace:PVScan.Mobile.Views.Controls"
+    di:ViewModelLocator.AutoWireViewModel="True"
+    x:DataType="viewmodels:LoggedInPageViewModel">
     
     <ContentView.Resources>
         <ResourceDictionary>
@@ -200,4 +202,5 @@
             </StackLayout>
         </ScrollView>
     </RefreshView>
+    
 </ContentView>

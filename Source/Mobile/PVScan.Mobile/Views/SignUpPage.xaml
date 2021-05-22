@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
-             x:Class="PVScan.Mobile.Views.SignUpPage"
-             xmlns:di="clr-namespace:PVScan.Mobile.DI"
-             xmlns:controls="clr-namespace:PVScan.Mobile.Views.Controls"
-             xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
-             di:ViewModelLocator.AutoWireViewModel="True"
-             x:DataType="viewmodels:SignUpPageViewModel">
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    x:Class="PVScan.Mobile.Views.SignUpPage"
+    xmlns:di="clr-namespace:PVScan.Mobile.DI"
+    xmlns:controls="clr-namespace:PVScan.Mobile.Views.Controls"
+    xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    di:ViewModelLocator.AutoWireViewModel="True"
+    x:DataType="viewmodels:SignUpPageViewModel">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -28,11 +29,6 @@
               HorizontalOptions="Center">
             <StackLayout>
                 <controls:LoadingSpinner x:Name="LoadingSpinner" Opacity="0" Scale="0.75"/>
-                
-                <!--<Label x:Name="SignUpMessageLabel" Opacity="0" Margin="0,16,0,0"
-                       FontSize="18">
-            
-                </Label>-->
             </StackLayout>
         </Grid>
         
@@ -66,4 +62,5 @@
             </Button>
         </StackLayout>
     </Grid>
+    
 </ContentView>
