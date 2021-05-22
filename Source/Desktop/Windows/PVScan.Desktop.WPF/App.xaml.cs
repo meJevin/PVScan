@@ -19,17 +19,38 @@ namespace PVScan.Desktop.WPF
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            DataAccess.Init(
-                Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PVScan.db3")
-                );
+            InitializeDatabasePath();
 
-            _ = new Bootstrapper();
+            InitializeDependencyInjection();
 
+            ShowMainWindow();
+        }
+
+        private void ShowMainWindow()
+        {
             var mainWindow = Resolver.Resolve<MainWindow>();
 
             MainWindow = mainWindow;
             MainWindow.Show();
+        }
+
+        private void InitializeDatabasePath()
+        {
+            var localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+            var dbDirectory = Path.Combine(localAppDataFolder, "PVScan");
+
+            if (!Directory.Exists(dbDirectory))
+            {
+                Directory.CreateDirectory(dbDirectory);
+            }
+
+            DataAccess.Init(Path.Combine(dbDirectory, "PVScan.db3"));
+        }
+
+        private void InitializeDependencyInjection()
+        {
+            _ = new Bootstrapper();
         }
     }
 }
