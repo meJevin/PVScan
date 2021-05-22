@@ -189,14 +189,19 @@ namespace PVScan.Mobile.ViewModels
                 Format = b.Format,
                 GUID = b.GUID,
                 Hash = b.Hash,
-                ScanLocation = new Coordinate()
-                {
-                    Latitude = b.Latitude,
-                    Longitude = b.Longitude
-                },
+                ScanLocation = null,
                 ScanTime = b.ScanTime,
                 Text = b.Text,
             };
+
+            if (b.Latitude.HasValue && b.Longitude.HasValue)
+            {
+                newBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = b.Latitude,
+                    Longitude = b.Longitude
+                };
+            }
 
             newBarcode = await BarcodesRepository.Save(newBarcode);
 
