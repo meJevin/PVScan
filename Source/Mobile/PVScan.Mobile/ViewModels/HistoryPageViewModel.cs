@@ -264,10 +264,7 @@ namespace PVScan.Mobile.ViewModels
                     {
                         BarcodesPaged.Remove(b);
                     }
-                }
 
-                foreach (var b in sb)
-                {
                     var req = new DeletedBarcodeRequest()
                     {
                         GUID = b.GUID,
