@@ -33,6 +33,7 @@ namespace PVScan.Mobile.Services
             }
         }
 
+
         public async Task Initialize()
         {
             // Check auth token in storage and check it's validity
@@ -63,28 +64,26 @@ namespace PVScan.Mobile.Services
                 return false;
             }
 
+            DiscoveryDocumentResponse DiscoveryDocument = await GetDiscoveryDocument();
+            if (DiscoveryDocument == null)
+            {
+                return false;
+            }
+
             // Login via token endpoint using password flow
             HttpClient httpClient = HttpFactory.Default();
 
-            // Todo: enable https in production
-            DiscoveryDocumentResponse discoveryDocument =
-                await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
-                {
-                    Address = Auth.Authority,
-                    Policy = { RequireHttps = false },
-                });
-
             var token = await httpClient.RequestPasswordTokenAsync(new PasswordTokenRequest()
             {
-                Address = discoveryDocument.TokenEndpoint,
+                Address = DiscoveryDocument.TokenEndpoint,
                 ClientId = Auth.ClientId,
                 GrantType = GrantTypes.Password,
                 Scope = "openid profile PVScan.API",
                 Password = password,
                 UserName = username,
-            });
+            }).WithTimeout(DataAccss.WebRequestTimeout);
 
-            if (token.AccessToken == null)
+            if (token == null || token.AccessToken == null)
             {
                 return false;
             }
@@ -100,27 +99,42 @@ namespace PVScan.Mobile.Services
 
         public async Task<bool> LogoutAsync()
         {
-            // Logout via logout endpoint and clear local storage
+            //// Logout via logout endpoint and clear local storage
+            //HttpClient httpClient = HttpFactory.Default();
+
+            //// Todo: this for some reason can not find token on IS4 auth server but logout still happens
+            //var revoke = await httpClient.RevokeTokenAsync(new TokenRevocationRequest()
+            //{
+            //    Address = DiscoveryDocument.RevocationEndpoint,
+            //    ClientId = Auth.ClientId,
+            //    Token = _accessToken,
+            //    TokenTypeHint = TokenTypes.AccessToken,
+            //}).WithTimeout(DataAccss.WebRequestTimeout);
+
+            //if (revoke == null || revoke.IsError)
+            //{
+            //    return false;
+            //}
+
             HttpClient httpClient = HttpFactory.Default();
+            httpClient.DefaultRequestHeaders.Authorization
+                = new AuthenticationHeaderValue("Bearer", _accessToken);
+            httpClient.BaseAddress = new Uri(Auth.Authority);
 
-            DiscoveryDocumentResponse discoveryDocument =
-                await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
+            try
+            {
+                var result = await httpClient
+                    .GetAsync("/Auth/Logout")
+                    .WithTimeout(DataAccss.WebRequestTimeout);
+
+                if (result == null || !result.IsSuccessStatusCode)
                 {
-                    Address = Auth.Authority,
-                    Policy = { RequireHttps = false },
-                });
-
-            // Todo: this for some reason can not find token on IS4 auth server but logout still happens
-            var revoke = await httpClient.RevokeTokenAsync(new TokenRevocationRequest()
+                    return false;
+                }
+            }
+            catch (Exception e)
             {
-                Address = discoveryDocument.RevocationEndpoint,
-                ClientId = Auth.ClientId,
-                Token = _accessToken,
-                TokenTypeHint = TokenTypes.AccessToken,
-            });
-
-            if (revoke.IsError)
-            {
+                // We need proper error messages!!
                 return false;
             }
 
@@ -149,9 +163,11 @@ namespace PVScan.Mobile.Services
 
             try
             {
-                var result = await httpClient.PostAsync("/Auth/Register", content);
+                var result = await httpClient
+                    .PostAsync("/Auth/Register", content)
+                    .WithTimeout(DataAccss.WebRequestTimeout);
 
-                if (!result.IsSuccessStatusCode)
+                if (result == null || !result.IsSuccessStatusCode)
                 {
                     return false;
                 }
@@ -175,11 +191,14 @@ namespace PVScan.Mobile.Services
             // Make a test request to the backend
             HttpClient httpClient = HttpFactory.ForAPI(token);
 
+            // Todo: This should be done in a different way
             try
             {
-                var result = await httpClient.GetAsync("api/v1/users/current");
+                var result = await httpClient
+                    .GetAsync("api/v1/users/current")
+                    .WithTimeout(DataAccss.WebRequestTimeout);
 
-                if (!result.IsSuccessStatusCode)
+                if (result == null || !result.IsSuccessStatusCode)
                 {
                     return false;
                 }
@@ -191,6 +210,26 @@ namespace PVScan.Mobile.Services
             }
 
             return true;
+        }
+
+        private async Task<DiscoveryDocumentResponse> GetDiscoveryDocument()
+        {
+            HttpClient httpClient = HttpFactory.Default();
+
+            // Todo: enable https in production
+            DiscoveryDocumentResponse discoveryDocument =
+                await httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest()
+                {
+                    Address = Auth.Authority,
+                    Policy = { RequireHttps = false },
+                }).WithTimeout(DataAccss.WebRequestTimeout);
+
+            if (discoveryDocument == null || discoveryDocument.IsError)
+            {
+                return null;
+            }
+
+            return discoveryDocument;
         }
     }
 }

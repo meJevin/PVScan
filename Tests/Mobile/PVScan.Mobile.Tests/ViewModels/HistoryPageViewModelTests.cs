@@ -25,7 +25,7 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void Can_Create_Empty()
         {
             // Arrange + Act
-            HistoryPageViewModel vm = new HistoryPageViewModel(null, null, null);
+            HistoryPageViewModel vm = new HistoryPageViewModel(null, new BarcodesFilter(), null, new BarcodeSorter());
 
             // Assert
             Assert.Empty(vm.Barcodes);
@@ -56,7 +56,7 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null);
+            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
 
             // Act
             await vm.LoadBarcodesFromDB();
@@ -91,7 +91,7 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null);
+            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
             vm.CurrentFilter = new Filter()
             {
                 BarcodeFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
@@ -136,10 +136,10 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null);
+            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
             vm.CurrentFilter = new Filter()
             {
-                BarcodeFormats = Enumerable.Empty<ZXing.BarcodeFormat>(),
+                BarcodeFormats = Enumerable.Empty<ZXing.BarcodeFormat>().ToList(),
                 LastType = LastTimeType.Week
             };
 
@@ -176,10 +176,10 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null);
+            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
             vm.CurrentFilter = new Filter()
             {
-                BarcodeFormats = Enumerable.Empty<ZXing.BarcodeFormat>(),
+                BarcodeFormats = Enumerable.Empty<ZXing.BarcodeFormat>().ToList(),
                 FromDate = new DateTime(2000, 1, 1),
                 ToDate = new DateTime(2004, 1, 1),
             };
@@ -220,7 +220,7 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null);
+            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
             vm.CurrentFilter = new Filter()
             {
                 BarcodeFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
@@ -271,7 +271,7 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null);
+            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
             vm.CurrentFilter = new Filter()
             {
                 BarcodeFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
@@ -313,7 +313,7 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null);
+            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
             vm.Search = "B2";
 
             // Act

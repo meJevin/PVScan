@@ -28,6 +28,12 @@ namespace PVScan.Mobile.Migrations
                     b.Property<int>("Format")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("GUID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Hash")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("ScanTime")
                         .HasColumnType("TEXT");
 

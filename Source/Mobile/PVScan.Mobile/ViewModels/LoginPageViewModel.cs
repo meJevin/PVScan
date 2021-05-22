@@ -15,19 +15,25 @@ namespace PVScan.Mobile.ViewModels
     public class LoginPageViewModel : BaseViewModel
     {
         readonly IIdentityService IdentityService;
+        readonly IPopupMessageService PopupMessageService;
+        readonly IAPIBarcodeHub BarcodeHub;
+        readonly IAPIUserInfoHub UserInfoHub;
 
-        public LoginPageViewModel(IIdentityService identityService)
+        public LoginPageViewModel(
+            IIdentityService identityService,
+            IPopupMessageService popupMessageService,
+            IAPIBarcodeHub barcodeHub, IAPIUserInfoHub userInfoHub)
         {
             IdentityService = identityService;
+            PopupMessageService = popupMessageService;
+            BarcodeHub = barcodeHub;
+            UserInfoHub = userInfoHub;
 
             LoginCommand = new Command(async () =>
             {
                 if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password))
                 {
-                    FailedLogin?.Invoke(this, new LoginEventArgs()
-                    {
-                        Message = "Please fill in all fields!",
-                    });
+                    _ = PopupMessageService.ShowMessage("Please fill in all fields!");
 
                     return;
                 }
@@ -38,22 +44,20 @@ namespace PVScan.Mobile.ViewModels
 
                 IsLoggingIn = false;
 
+                Login = "";
+                Password = "";
+
                 if (result)
                 {
-                    SuccessfulLogin?.Invoke(this, new LoginEventArgs()
-                    {
-                        Message = "You've succesfuly logged in!",
-                    });
-
                     // Profile view responds to this changing the UI
                     MessagingCenter.Send(this, nameof(SuccessfulLoginMessage), new SuccessfulLoginMessage() { });
+
+                    await BarcodeHub.Connect();
+                    await UserInfoHub.Connect();
                 }
                 else
                 {
-                    FailedLogin?.Invoke(this, new LoginEventArgs()
-                    {
-                        Message = "Failed to login!",
-                    });
+                    _ = PopupMessageService.ShowMessage("Failed to login!");
                 }
             });
         }

@@ -3,6 +3,7 @@ using MvvmHelpers;
 using PVScan.Mobile.Converters;
 using PVScan.Mobile.DAL;
 using PVScan.Mobile.Models;
+using PVScan.Mobile.Models.API;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages;
@@ -30,26 +31,31 @@ namespace PVScan.Mobile.ViewModels
         readonly IBarcodesFilter FilterService;
         readonly IBarcodeSorter SorterService;
         readonly IPopupMessageService PopupMessageService;
-
-        readonly SpecifyLocationPage SpecifyLocation;
+        readonly IPVScanAPI PVScanAPI;
+        readonly IAPIBarcodeHub BarcodeHub;
 
         public HistoryPageViewModel(
             IBarcodesRepository barcodesRepository,
             IBarcodesFilter filterService,
             IPopupMessageService popupMessageService,
-            IBarcodeSorter sorterService)
+            IBarcodeSorter sorterService,
+            IPVScanAPI pVScanAPI,
+            IAPIBarcodeHub barcodeHub)
         {
             BarcodesRepository = barcodesRepository;
             FilterService = filterService;
             SorterService = sorterService;
             PopupMessageService = popupMessageService;
+            PVScanAPI = pVScanAPI;
+            BarcodeHub = barcodeHub;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
 
             SelectedBarcodes = new ObservableCollection<object>();
 
-            SpecifyLocation = new SpecifyLocationPage();
+            BarcodeHub.OnDeleted += BarcodeHub_OnDeleted;
+            BarcodeHub.OnUpdated += BarcodeHub_OnUpdated;
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
@@ -102,6 +108,24 @@ namespace PVScan.Mobile.ViewModels
                     CurrentSorting = args.NewSorting;
 
                     await LoadBarcodesFromDB();
+                });
+
+            MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
+                async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>
+                {
+                    // This is required to update the map, so that the marker appears
+                    var indexTotal = Barcodes.IndexOf(args.UpdatedBarcode);
+                    var indexPaged = BarcodesPaged.IndexOf(args.UpdatedBarcode);
+
+                    if (indexTotal != -1)
+                    {
+                        Barcodes[indexTotal] = args.UpdatedBarcode;
+                    }
+
+                    if (indexPaged != -1)
+                    {
+                        BarcodesPaged[indexPaged] = args.UpdatedBarcode;
+                    }
                 });
 
             RefreshCommand = new Command(async () =>
@@ -175,12 +199,19 @@ namespace PVScan.Mobile.ViewModels
                     {
                         UpdatedBarcode = barcode,
                     });
-            });
 
-            SpecifyLocationCommand = new Command(async () =>
-            {
-                SpecifyLocation.Initialize(NoLocationSelectedBarcode);
-                await Application.Current.MainPage.Navigation.PushModalAsync(SpecifyLocation, true);
+                var req = new UpdatedBarcodeRequest()
+                {
+                    GUID = barcode.GUID,
+                    Latitude = barcode.ScanLocation?.Latitude,
+                    Longitude = barcode.ScanLocation?.Longitude,
+                    Favorite = barcode.Favorite,
+                };
+
+                if (await PVScanAPI.UpdatedBarcode(req) != null)
+                {
+                    await BarcodeHub.Updated(req);
+                }
             });
 
             SelectBarcodeCommand = new Command(async (object barcodeObject) =>
@@ -208,6 +239,16 @@ namespace PVScan.Mobile.ViewModels
 
                 BarcodesPaged.Remove(barcode);
                 Barcodes.Remove(barcode);
+
+                var req = new DeletedBarcodeRequest()
+                {
+                    GUID = barcode.GUID,
+                };
+
+                if (await PVScanAPI.DeletedBarcode(req) != null)
+                {
+                    await BarcodeHub.Deleted(req);
+                }
             });
 
             StartEditCommand = new Command(() =>
@@ -221,6 +262,9 @@ namespace PVScan.Mobile.ViewModels
                 SelectedBarcodes.Clear();
             });
 
+            // Todo: this can actually be called twice in offline mode when
+            // the user is waiting for previous API request (deleted)
+            // Look at 
             DeleteSelectedBarcodesCommand = new Command(async () =>
             {
                 var sb = SelectedBarcodes.Select(b => b as Barcode);
@@ -229,12 +273,84 @@ namespace PVScan.Mobile.ViewModels
                 {
                     await barcodesRepository.Delete(b);
 
-                    Barcodes.Remove(b);
-                    BarcodesPaged.Remove(b);
+                    if (Barcodes.Contains(b))
+                    {
+                        Barcodes.Remove(b);
+                    }
+
+                    if (BarcodesPaged.Contains(b))
+                    {
+                        BarcodesPaged.Remove(b);
+                    }
+
+                    var req = new DeletedBarcodeRequest()
+                    {
+                        GUID = b.GUID,
+                    };
+
+                    // Todo: Possibly BarcodesHub wants to go into the PVSCanAPI?
+                    if (await PVScanAPI.DeletedBarcode(req) != null)
+                    {
+                        await BarcodeHub.Deleted(req);
+                    }
                 }
 
                 SelectedBarcodes.Clear();
             });
+        }
+
+        private async void BarcodeHub_OnUpdated(object sender, UpdatedBarcodeRequest req)
+        {
+            var localBarcode = await BarcodesRepository.FindByGUID(req.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            localBarcode.ScanLocation = new Coordinate()
+            {
+                Latitude = req.Latitude,
+                Longitude = req.Longitude,
+            };
+            localBarcode.Favorite = req.Favorite;
+
+            await BarcodesRepository.Update(localBarcode);
+
+            var indxPaged = BarcodesPaged.IndexOf(localBarcode);
+            var indxTotal = Barcodes.IndexOf(localBarcode);
+
+            if (indxPaged != -1)
+            {
+                BarcodesPaged[indxPaged] = localBarcode;
+            }
+
+            if (indxTotal != -1)
+            {
+                Barcodes[indxTotal] = localBarcode;
+            }
+        }
+
+        private async void BarcodeHub_OnDeleted(object sender, DeletedBarcodeRequest req)
+        {
+            Barcode barcode = await BarcodesRepository.FindByGUID(req.GUID);
+
+            if (barcode == null)
+            {
+                return;
+            }
+
+            await BarcodesRepository.Delete(barcode);
+
+            if (BarcodesPaged.Contains(barcode))
+            {
+                BarcodesPaged.Remove(barcode);
+            }
+
+            if (Barcodes.Contains(barcode))
+            {
+                Barcodes.Remove(barcode);
+            }
         }
 
         public async Task LoadBarcodesFromDB()
@@ -311,7 +427,6 @@ namespace PVScan.Mobile.ViewModels
 
 
         public ICommand FavoriteCommand { get; set; }
-        public ICommand SpecifyLocationCommand { get; set; }
         public ICommand SelectBarcodeCommand { get; set; }
         public Barcode SelectedBarcode { get; set; }
         public Barcode NoLocationSelectedBarcode { get; set; }

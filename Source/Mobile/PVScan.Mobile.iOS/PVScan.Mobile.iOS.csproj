@@ -125,9 +125,15 @@
     <ImageAsset Include="Assets.xcassets\PVScan-Normal.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy.pdf" />
-    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy-1.pdf" />
+    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\PVScan-Logo-Letters.imageset\belye_bukvy-1.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -192,4 +198,13 @@
       <UserProperties TriggeredFromHotReload="False" />
     </VisualStudio>
   </ProjectExtensions>
+
+  <ItemGroup>
+    <PackageReference Include="System.Memory" Version="4.5.4">
+      <IncludeAssets>none</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Buffers" Version="4.5.1">
+      <IncludeAssets>none</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

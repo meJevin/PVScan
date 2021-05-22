@@ -16,19 +16,25 @@ namespace PVScan.Mobile.ViewModels
     public class SignUpPageViewModel : BaseViewModel
     {
         readonly IIdentityService IdentityService;
+        readonly IPopupMessageService PopupMessageService;
 
-        public SignUpPageViewModel(IIdentityService identityService)
+        public SignUpPageViewModel(
+            IIdentityService identityService,
+            IPopupMessageService popupMessageService)
         {
             IdentityService = identityService;
+            PopupMessageService = popupMessageService;
 
             SignUpCommand = new Command(async () =>
             {
                 if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Email))
                 {
-                    FailedSignUp?.Invoke(this, new SignUpEventArgs()
-                    {
-                        Message = "Please fill in all fields!",
-                    });
+                    //FailedSignUp?.Invoke(this, new SignUpEventArgs()
+                    //{
+                    //    Message = "Please fill in all fields!",
+                    //});
+
+                    _ = PopupMessageService.ShowMessage("Please fill in all fields!");
 
                     return;
                 }
@@ -41,18 +47,24 @@ namespace PVScan.Mobile.ViewModels
 
                 if (result)
                 {
-                    SuccessfulSignUp?.Invoke(this, new SignUpEventArgs()
-                    {
-                        Message = "You've successfuly signed up",
-                    });
+                    //SuccessfulSignUp?.Invoke(this, new SignUpEventArgs()
+                    //{
+                    //    Message = "You've successfuly signed up",
+                    //});
+                    _ = PopupMessageService.ShowMessage("You've successfuly signed up!");
                 }
                 else
                 {
-                    FailedSignUp?.Invoke(this, new SignUpEventArgs()
-                    {
-                        Message = "Failed to sign up!",
-                    });
+                    //FailedSignUp?.Invoke(this, new SignUpEventArgs()
+                    //{
+                    //    Message = "Failed to sign up!",
+                    //});
+                    _ = PopupMessageService.ShowMessage("Failed to sign up!");
                 }
+
+                Login = "";
+                Email = "";
+                Password = "";
             });
         }
 

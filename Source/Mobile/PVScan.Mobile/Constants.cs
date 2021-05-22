@@ -9,14 +9,17 @@ namespace PVScan.Mobile
     public static class Auth
     {
         public static string Authority = 
-            DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:1488" : "https://localhost:1488";
+            DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:1488" : "https://192.168.1.23:1488";
         public const string ClientId = "PVScan.Auth.Mobile";
     }
 
     public static class API
     {
         public static string BaseAddress = 
-            DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:1337" : "https://localhost:1337";
+            DeviceInfo.Platform == DevicePlatform.Android ? "https://10.0.2.2:1337" : "https://192.168.1.23:1337";
+
+        public static string BarcodesHub = "/hubs/barcodes";
+        public static string UserInfoHub = "/hubs/userInfo";
     }
 
     public static class DataAccss
@@ -28,8 +31,9 @@ namespace PVScan.Mobile
                 return System.IO.Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3");
             }
         }
-    }
 
+        public static TimeSpan WebRequestTimeout = TimeSpan.FromSeconds(10);
+    }
 
     public static class StorageKeys
     {

@@ -1,19 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Grid xmlns="http://xamarin.com/schemas/2014/forms"
-      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-      x:Class="PVScan.Mobile.Views.DataTemplates.NormalBarcodeItem"
-      xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
-      xmlns:views="clr-namespace:PVScan.Mobile.Views"
-      xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
-      xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
-      xmlns:xtc="http://xamarin.com/schemas/2020/toolkit"
-      xmlns:models="clr-namespace:PVScan.Mobile.Models"
-      HeightRequest="65"
-      x:DataType="models:Barcode"
-      x:Name="MainContainer"
-      BackgroundColor="{AppThemeBinding
-        Dark={StaticResource BackgroundColorDarker},
-        Light={StaticResource BackgroundColorLighter}}">
+<Grid 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PVScan.Mobile.Views.DataTemplates.NormalBarcodeItem"
+    xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
+    xmlns:views="clr-namespace:PVScan.Mobile.Views"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
+    xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
+    xmlns:xtc="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:models="clr-namespace:PVScan.Mobile.Models"
+    HeightRequest="65"
+    x:DataType="models:Barcode"
+    x:Name="MainContainer"
+    BackgroundColor="{AppThemeBinding 
+    Dark={StaticResource BackgroundColorDarker},
+    Light={StaticResource BackgroundColorLighter}}">
+    
     <Grid.Resources>
         <ResourceDictionary>
             <converters:InverseBoolConverter x:Key="InverseBool"/>
@@ -27,7 +29,11 @@
     </Grid.Resources>
 
     <Grid x:Name="InnerContainer" ColumnDefinitions="*,50,0">
-        <Grid x:Name="HighlightContainer" BackgroundColor="White" Opacity="0" Grid.ColumnSpan="3"/>
+        <Grid x:Name="HighlightContainer" 
+              BackgroundColor="{AppThemeBinding
+                                Dark=White,
+                                Light=Black}"
+              Opacity="0" Grid.ColumnSpan="3"/>
 
         <!-- HIDDEN IMAGE OF SELECTION -->
         <Grid WidthRequest="36" Margin="8,0,0,0" HorizontalOptions="Start" 
@@ -45,21 +51,6 @@
         <!-- TEXT AND TIME OF SCAN -->
         <StackLayout Orientation="Vertical" VerticalOptions="Center" Padding="10, 0, 0, 0"
                      x:Name="InfoContainer">
-            <!--<Grid>
-                <Label Text="{Binding Text}" FontSize="16" LineBreakMode="MiddleTruncation"
-                           xtc:TouchEffect.PressedScale="0.95"
-                           xtc:TouchEffect.AnimationEasing="{x:Static Easing.CubicOut}"
-                           xtc:TouchEffect.AnimationDuration="650"
-                           xtc:TouchEffect.LongPressCommand="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
-                                                            Path=BindingContext.CopyBarcodeToClipboardCommand}"
-                           xtc:TouchEffect.LongPressCommandParameter="{Binding .}"
-                           x:Name="BarcodeTextLabel"
-                           HorizontalOptions="Start"/>
-
-                <Label Text="" FontSize="16" IsVisible="False"
-                           x:Name="BarcodeTextLabelOverlay"
-                           HorizontalOptions="Fill" BackgroundColor="Transparent"/>
-            </Grid>-->
             <Label Text="{Binding Text}" FontSize="16" HorizontalOptions="Start" LineBreakMode="MiddleTruncation"/>
 
             <StackLayout Orientation="Horizontal" Spacing="0" HeightRequest="20">
