@@ -8,42 +8,20 @@
         xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI" 
         di:ViewModelLocator.AutoWireViewModel="True"
         Title="PVScan" Height="450" Width="800"
-        WindowStyle="None"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d">
-
-    <WindowChrome.WindowChrome>
-        <WindowChrome ResizeBorderThickness="6"
-                      CaptionHeight="20"
-                      CornerRadius="20"
-                      GlassFrameThickness="0"
-                       >
-            
-        </WindowChrome>
-    </WindowChrome.WindowChrome>
-    
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="1.5*" MinWidth="250"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="1">
-            <TabControl  Background="Red">
-                <TabItem Header="SOMETHING">
-                    <Grid Background="Honeydew">
-                        
-                    </Grid>
-                </TabItem>
-                <TabItem Header="{Binding Message}">
-                    <Grid Background="Bisque">
-
-                    </Grid>
-                </TabItem>
-            </TabControl>
+        <Grid Background="Red">
+            
         </Grid>
 
-        <Grid Background="Green">
+        <Grid Grid.Column="1" Background="Blue">
+            
         </Grid>
     </Grid>
 </Window>

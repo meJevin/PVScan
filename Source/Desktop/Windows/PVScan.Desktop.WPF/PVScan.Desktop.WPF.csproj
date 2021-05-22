@@ -6,20 +6,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>PVScanIcon.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
-    <Configurations>Debug;Release;Desktop_Debug</Configurations>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|AnyCPU'">
-    <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|x64'">
-    <DefineConstants>TRACE;DESKTOP_WINDOWS;</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|x86'">
-    <DefineConstants>TRACE;DESKTOP_WINDOWS;</DefineConstants>
+    <Configurations>Debug;Release;Dekstop_Debug;Desktop_Debug</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

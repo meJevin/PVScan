@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|AnyCPU'">
-    <DefineConstants>TRACE;DESKTOP_WINDOWS;</DefineConstants>
+    <DefineConstants>TRACE;DESKTOP_WINDOWS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
