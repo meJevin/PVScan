@@ -1,9 +1,9 @@
 ﻿using MvvmHelpers;
 using Newtonsoft.Json;
-using PVScan.Mobile.Models;
-using PVScan.Mobile.Models.API;
+using PVScan.Core.Models;
+using PVScan.Core.Models.API;
 using PVScan.Mobile.Services;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
 using System.Collections.Generic;

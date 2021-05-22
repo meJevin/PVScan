@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using Moq.Protected;
 using System.Threading;
 using System.Net.Http.Headers;
+using PVScan.Core.Services.Interfaces;
+using PVScan.Core;
+using PVScan.Core.Services;
 
 namespace PVScan.Mobile.Tests.Services
 {

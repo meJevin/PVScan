@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Services;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels;
@@ -43,7 +45,7 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void Can_Login_With_Valid_Credentials()
         {
             // Arrange
-            LoginPageViewModel vm = new LoginPageViewModel(mockIdentityService.Object);
+            LoginPageViewModel vm = new LoginPageViewModel(mockIdentityService.Object, null, null, null);
             bool loggedIn = false;
 
             vm.Login = ValidLogin;
@@ -66,7 +68,7 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void Can_Not_Login_With_Invalid_Credentials(string login, string password)
         {
             // Arrange
-            LoginPageViewModel vm = new LoginPageViewModel(mockIdentityService.Object);
+            LoginPageViewModel vm = new LoginPageViewModel(mockIdentityService.Object, null, null, null);
             bool loggedIn = true;
 
             vm.Login = login;
@@ -90,7 +92,7 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void Login_With_Empty_Credentials_Authentication_Not_Requested(string login, string password)
         {
             // Arrange
-            LoginPageViewModel vm = new LoginPageViewModel(mockIdentityService.Object);
+            LoginPageViewModel vm = new LoginPageViewModel(mockIdentityService.Object, null, null, null);
 
             vm.Login = login;
             vm.Password = password;

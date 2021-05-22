@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using PVScan.Mobile.Models;
+using PVScan.Core.Models;
 using PVScan.Mobile.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;

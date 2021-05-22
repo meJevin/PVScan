@@ -8,7 +8,7 @@
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
     xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
     xmlns:xtc="http://xamarin.com/schemas/2020/toolkit"
-    xmlns:models="clr-namespace:PVScan.Mobile.Models"
+    xmlns:models="clr-namespace:PVScan.Core.Models;assembly=PVScan.Core"
     HeightRequest="65"
     x:DataType="models:Barcode"
     x:Name="MainContainer"

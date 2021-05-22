@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="DI\" />
+    <Folder Include="DAL\" />
+    <Folder Include="Services\" />
     <Folder Include="Resources\Fonts\" />
   </ItemGroup>
 

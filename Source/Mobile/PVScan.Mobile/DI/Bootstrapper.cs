@@ -1,14 +1,18 @@
 ﻿using Autofac;
 using Microsoft.EntityFrameworkCore;
 using MvvmHelpers;
-using PVScan.Mobile.DAL;
+using PVScan.Core.DAL;
 using PVScan.Mobile.Services;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xamarin.Forms;
+using PVScan.Core;
+using PVScan.Core.Services;
+using PVScan.Mobile.Services.Interfaces;
+using System.Reflection;
 
 namespace PVScan.Mobile
 {
@@ -33,10 +37,16 @@ namespace PVScan.Mobile
             // DbContext from EF Core
             ContainerBuilder.Register(ctx =>
             {
-                var optionsBuilder = new DbContextOptionsBuilder<PVScanMobileDbContext>();
-                optionsBuilder.UseSqlite($"Filename={DataAccss.DatabasePath}");
+                var optionsBuilder = new DbContextOptionsBuilder<PVScanDbContext>();
 
-                return new PVScanMobileDbContext(optionsBuilder.Options);
+                optionsBuilder.UseSqlite(
+                    $"Filename={DataAccess.DatabasePath}",
+                    sqliteOptions =>
+                    {
+                        var migrationsAssembly = typeof(PVScanDbContext).GetTypeInfo().Assembly.GetName().Name;
+                    });
+
+                return new PVScanDbContext(optionsBuilder.Options);
             })
                 .AsSelf()
                 .InstancePerLifetimeScope();

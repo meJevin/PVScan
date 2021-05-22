@@ -1,7 +1,8 @@
 ﻿using MvvmHelpers;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
-using PVScan.Mobile.Models.API;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Models.API;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;

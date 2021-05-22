@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PVScan.Mobile.Models;
+using PVScan.Core.Models;
 using PVScan.Mobile.ViewModels;
 using Xamarin.Forms;
 

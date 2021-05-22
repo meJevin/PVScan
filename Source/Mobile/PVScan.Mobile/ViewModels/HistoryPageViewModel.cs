@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MvvmHelpers;
 using PVScan.Mobile.Converters;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
-using PVScan.Mobile.Models.API;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Models.API;
 using PVScan.Mobile.Services;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages;
 using PVScan.Mobile.ViewModels.Messages.Filtering;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
@@ -22,6 +22,7 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using ZXing;
+using PVScan.Mobile.Services.Interfaces;
 
 namespace PVScan.Mobile.ViewModels
 {

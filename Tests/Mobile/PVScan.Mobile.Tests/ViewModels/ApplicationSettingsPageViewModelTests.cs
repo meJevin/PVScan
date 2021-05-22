@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
+using PVScan.Core;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.Tests.Services.Mocks;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services.Interfaces;
 using Xamarin.Forms;
 

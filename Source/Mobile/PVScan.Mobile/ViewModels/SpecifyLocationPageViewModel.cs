@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using MvvmHelpers;
-using PVScan.Mobile.Models;
-using PVScan.Mobile.Models.API;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Models;
+using PVScan.Core.Models.API;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages;
 using Xamarin.Forms;
 

@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <Configurations>Debug;Release;IOS_Device_Debug;IOS_Simulator_Debug;Android_Simulator_Debug</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Source\Core\PVScan.Core\PVScan.Core.csproj" />
     <ProjectReference Include="..\..\..\Source\Mobile\PVScan.Mobile\PVScan.Mobile.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels;
@@ -38,7 +39,7 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void Can_SignUp_With_Valid_Credentials(string login, string password, string email)
         {
             // Arrange
-            SignUpPageViewModel vm = new SignUpPageViewModel(mockIdentityService.Object);
+            SignUpPageViewModel vm = new SignUpPageViewModel(mockIdentityService.Object, null);
             bool signedUp = false;
 
             vm.Login = login;
@@ -67,7 +68,7 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void SignUp_With_Empty_Credentials_SignUp_Not_Requested(string login, string password, string email)
         {
             // Arrange
-            SignUpPageViewModel vm = new SignUpPageViewModel(mockIdentityService.Object);
+            SignUpPageViewModel vm = new SignUpPageViewModel(mockIdentityService.Object, null);
 
             vm.Login = login;
             vm.Password = password;

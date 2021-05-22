@@ -1,4 +1,5 @@
 ﻿using MvvmHelpers;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;

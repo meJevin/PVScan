@@ -14,7 +14,7 @@ using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
 using PVScan.Mobile.Views.Extensions;
 using PVScan.Mobile.Effects;
-using PVScan.Mobile.Models;
+using PVScan.Core.Models;
 using PVScan.Mobile.Views.DataTemplates;
 using System.Collections.Specialized;
 using PVScan.Mobile.ViewModels.Messages;

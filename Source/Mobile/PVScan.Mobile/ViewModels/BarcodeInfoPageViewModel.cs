@@ -3,11 +3,13 @@ using System.IO;
 using System.Windows.Input;
 using MvvmHelpers;
 using PVScan.Mobile.Converters;
-using PVScan.Mobile.Models;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Models;
+using PVScan.Core.Services.Interfaces;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Svg;
+using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core;
 
 namespace PVScan.Mobile.ViewModels
 {

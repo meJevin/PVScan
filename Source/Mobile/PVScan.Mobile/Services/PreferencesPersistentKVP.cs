@@ -1,4 +1,5 @@
-﻿using PVScan.Mobile.Services.Interfaces;
+﻿using PVScan.Core.Services.Interfaces;
+using PVScan.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
