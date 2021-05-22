@@ -138,7 +138,7 @@ namespace PVScan.Mobile.Views.DataTemplates
 
         private void NoLocationButton_Clicked(object sender, EventArgs e)
         {
-            NoLocationTapped.Invoke(sender, e);
+            NoLocationTapped?.Invoke(sender, e);
         }
 
         public async Task MakeEditable()

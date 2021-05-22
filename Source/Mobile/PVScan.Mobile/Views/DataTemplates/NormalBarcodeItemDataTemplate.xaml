@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<DataTemplate 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:views="clr-namespace:PVScan.Mobile.Views"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
+    x:Class="PVScan.Mobile.Views.DataTemplates.NormalBarcodeItemDataTemplate">
+    
+    <datatemplates:NormalBarcodeItem
+        IsEditable="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                             Path=BindingContext.IsEditing}"
+        Tapped="Barcode_Tapped" NoLocationTapped="Barcode_NoLocationTapped"
+        HighlightedBarcode="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
+                             Path=BindingContext.HighlightedBarcode}"/>
+    
+</DataTemplate>

@@ -139,14 +139,9 @@
                     </CollectionView.Header>
 
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <datatemplates:NormalBarcodeItem
-                                IsEditable="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
-                                                     Path=BindingContext.IsEditing}"
-                                Tapped="Barcode_Tapped" NoLocationTapped="Barcode_NoLocationTapped"
-                                HighlightedBarcode="{Binding Source={RelativeSource AncestorType={x:Type views:HistoryPage}},
-                                                     Path=BindingContext.HighlightedBarcode}"/>
-                        </DataTemplate>
+                        <datatemplates:NormalBarcodeItemDataTemplateSelector
+                            Tapped="Barcode_Tapped"
+                            NoLocationTapped="Barcode_NoLocationTapped"/>
                     </CollectionView.ItemTemplate>
 
                     <CollectionView.Footer>
