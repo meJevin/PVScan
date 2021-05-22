@@ -135,6 +135,8 @@ namespace PVScan.Mobile.ViewModels
                 IGLink = newUserInfo.IGLink,
                 VKLink = newUserInfo.VKLink,
                 Level = newUserInfo.Level,
+                Email = UserInfo.Email,
+                Username = UserInfo.Username,
             };
         }
 
