@@ -7,9 +7,8 @@
     <ContentView.Content>
         <Image x:Name="SpinnerImage">
             <Image.Source>
-                <FontImageSource FontFamily="FontAwesome"
+                <FontImageSource FontFamily="FontAwesome" Size="52"
                                  Glyph="{x:Static theme:IconFont.Spinner}"
-                                 Size="52"
                                  Color="{AppThemeBinding Dark=White, Light=Black}"/>
             </Image.Source>
         </Image>

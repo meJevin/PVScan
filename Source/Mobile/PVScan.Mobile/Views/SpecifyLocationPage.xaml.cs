@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using PVScan.Mobile.Models;
 using PVScan.Mobile.ViewModels;
 using Xamarin.Essentials;
@@ -18,8 +20,30 @@ namespace PVScan.Mobile.Views
         {
             InitializeComponent();
 
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                BackButton.TextColor = Color.Black;
+            }
+
             VM = BindingContext as SpecifyLocationPageViewModel;
+
+            VM.SelectedCoordinate.CollectionChanged += SelectedCoordinate_CollectionChanged;
         }
+
+        private void SelectedCoordinate_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (VM.SelectedCoordinate.Count == 0)
+            {
+                DoneButton.InputTransparent = true;
+                _ = DoneButton.FadeTo(0.5, 250, Easing.CubicOut);
+            }
+            else
+            {
+                DoneButton.InputTransparent = false;
+                _ = DoneButton.FadeTo(1, 250, Easing.CubicOut);
+            }
+        }
+
 
         public void Initialize(Barcode barcode)
         {
@@ -39,6 +63,7 @@ namespace PVScan.Mobile.Views
         private async void ContentPage_Appearing(object sender, EventArgs e)
         {
             DoneButton.InputTransparent = false;
+            BackButton.InputTransparent = false;
 
             try
             {
@@ -61,6 +86,11 @@ namespace PVScan.Mobile.Views
         private void DoneButton_Clicked(object sender, EventArgs e)
         {
             DoneButton.InputTransparent = true;
+        }
+
+        private void BackButton_Clicked(object sender, EventArgs e)
+        {
+            BackButton.InputTransparent = true;
         }
     }
 }

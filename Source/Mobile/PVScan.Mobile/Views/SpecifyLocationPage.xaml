@@ -10,6 +10,7 @@
     x:Class="PVScan.Mobile.Views.SpecifyLocationPage"
     x:DataType="viewmodels:SpecifyLocationPageViewModel"
     Appearing="ContentPage_Appearing"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles"
     di:ViewModelLocator.AutoWireViewModel="True">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -18,7 +19,7 @@
     </ContentPage.Resources>
 
     <Grid ColumnDefinitions="*,8*,*"
-          RowDefinitions="*,0.3*">
+          RowDefinitions="*,0.35*">
         <maps:Map x:Name="Map" MapClicked="Map_MapClicked" ItemsSource="{Binding SelectedCoordinate}"
                   Grid.ColumnSpan="3" Grid.RowSpan="2">
             <maps:Map.ItemTemplate>
@@ -28,10 +29,22 @@
             </maps:Map.ItemTemplate>
         </maps:Map>
 
-        <Button Text="Done" Command="{Binding DoneCommand}"
-                VerticalOptions="Center" HorizontalOptions="Fill"
-                Grid.Column="1" Grid.Row="1"
-                x:Name="DoneButton"
-                Clicked="DoneButton_Clicked"/>
+        <Grid Grid.Column="1" Grid.Row="1" BackgroundColor="Transparent">
+            <StackLayout VerticalOptions="Center" HorizontalOptions="Fill" Spacing="12">
+                <Button Text="Done" Command="{Binding DoneCommand}"
+                    x:Name="DoneButton"
+                    Clicked="DoneButton_Clicked"/>
+
+                <Label Text="Back" FontSize="22" FontAttributes="Bold" HorizontalTextAlignment="Center"
+                       TextColor="{AppThemeBinding Dark=White, Light=Black}"
+                       x:Name="BackButton">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="BackButton_Clicked"
+                                              Command="{Binding BackCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+        </Grid>
     </Grid>
+    
 </ContentPage>

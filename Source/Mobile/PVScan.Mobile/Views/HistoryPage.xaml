@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView 
     xmlns="http://xamarin.com/schemas/2014/forms" 
-            
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
     xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
@@ -13,17 +12,14 @@
     xmlns:di="clr-namespace:PVScan.Mobile.DI" 
     xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
     xmlns:controls="clr-namespace:PVScan.Mobile.Controls"
-    xmlns:xtc="http://xamarin.com/schemas/2020/toolkit" xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
+    xmlns:xtc="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
     di:ViewModelLocator.AutoWireViewModel="True"
-    
-    PropertyChanged="ContentView_PropertyChanged"
-
     x:DataType="viewmodels:HistoryPageViewModel"
-
     BackgroundColor="{AppThemeBinding 
     Dark={StaticResource BackgroundColorDarker},
     Light={StaticResource BackgroundColorLighter}}"
-    
+    PropertyChanged="ContentView_PropertyChanged"
     x:Name="HistoryView">
 
     <ContentView.Resources>
@@ -118,42 +114,14 @@
                                 Padding="-4"
                                 x:Name="MapViewButton" Clicked="MapViewButton_Clicked"/>
                     </Grid>
-                        
+
 
                     <Grid VerticalOptions="End" HeightRequest="2" 
                               BackgroundColor="{StaticResource ThemePrimary}" 
                               Opacity="0.75"
                           x:Name="UpperFilterBarPageIndicator"/>
                 </Grid>
-                <!--<BoxView BackgroundColor="{AppThemeBinding 
-                            Dark={StaticResource TextPrimaryColor_Dark},
-                            Light={StaticResource TextPrimaryColor_Light}}"
-                            VerticalOptions="Center"
-                            HeightRequest="1"/>-->
             </StackLayout>
-
-            <!--<Grid HeightRequest="30" WidthRequest="60"
-                                 HorizontalOptions="Center"
-                                 VerticalOptions="Start"
-                                 Grid.Row="1"
-                                 Margin="0" 
-                                 BackgroundColor="{StaticResource BackgroundColorDark}"
-                                 TranslationY="0"
-                                 x:Name="ShowHideFilterBarButton"
-                                 InputTransparent="False">
-                <Image x:Name="ShowHideFilterButtonImage">
-                    <Image.Source>
-                        <FontImageSource FontFamily="FontAwesome"
-                                             Glyph="{x:Static theme:IconFont.AngleDown}"
-                                         Color="White">
-                        </FontImageSource>
-                    </Image.Source>
-                </Image>
-
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="ShowHideFilterBarButton_Clicked"/>
-                </Grid.GestureRecognizers>
-            </Grid>-->
         </Grid>
 
         <!-- COLLECTION VIEW OF BARCODES -->

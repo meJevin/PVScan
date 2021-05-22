@@ -31,8 +31,14 @@ namespace PVScan.Mobile.ViewModels
             {
                 var newCoord = newCoordinate as Coordinate;
 
-                SelectedCoordinate.Clear();
-                SelectedCoordinate.Add(newCoord);
+                if (SelectedCoordinate.Count == 1)
+                {
+                    SelectedCoordinate[0] = newCoord;
+                }
+                else
+                {
+                    SelectedCoordinate.Add(newCoord);
+                }
             });
 
             DoneCommand = new Command(async () =>
@@ -67,14 +73,22 @@ namespace PVScan.Mobile.ViewModels
 
                 await BarcodeHub.Updated(req);
             });
+
+            BackCommand = new Command(async () =>
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync(true);
+            });
         }
 
         public Barcode SelectedBarcode { get; set; }
 
+        // This is in a collection so that Forms.Maps ItemSource won't be complaining :)
         public ObservableCollection<Coordinate> SelectedCoordinate { get; set; }
 
         public ICommand ChangeSelectedCoordianteCommand { get; }
 
         public ICommand DoneCommand { get; }
+
+        public ICommand BackCommand { get; }
     }
 }
