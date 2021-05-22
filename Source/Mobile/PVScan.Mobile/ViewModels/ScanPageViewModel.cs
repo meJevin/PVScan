@@ -116,8 +116,8 @@ namespace PVScan.Mobile.ViewModels
                 var req = new ScannedBarcodeRequest()
                 {
                     Format = b.Format,
-                    Latitude = b.ScanLocation.Latitude,
-                    Longitude = b.ScanLocation.Longitude,
+                    Latitude = b.ScanLocation?.Latitude,
+                    Longitude = b.ScanLocation?.Longitude,
                     ScanTime = b.ScanTime,
                     Text = b.Text,
                     Favorite = b.Favorite,

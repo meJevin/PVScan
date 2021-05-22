@@ -110,6 +110,12 @@ namespace PVScan.Mobile.ViewModels
                     await LoadBarcodesFromDB();
                 });
 
+            MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
+                async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>
+                {
+                    OnPropertyChanged(nameof(Barcodes));
+                });
+
             RefreshCommand = new Command(async () =>
             {
                 IsRefresing = true;
@@ -185,8 +191,8 @@ namespace PVScan.Mobile.ViewModels
                 var req = new UpdatedBarcodeRequest()
                 {
                     GUID = barcode.GUID,
-                    Latitude = barcode.ScanLocation.Latitude,
-                    Longitude = barcode.ScanLocation.Longitude,
+                    Latitude = barcode.ScanLocation?.Latitude,
+                    Longitude = barcode.ScanLocation?.Longitude,
                     Favorite = barcode.Favorite,
                 };
 
