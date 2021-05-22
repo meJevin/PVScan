@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PVScan.API.Controllers.Base;
+using PVScan.API.Hubs;
 using PVScan.API.Services.Interfaces;
 using PVScan.API.ViewModels.Barcodes;
+using PVScan.API.ViewModels.Users;
 using PVScan.Database;
 using PVScan.Domain.Entities;
 using System;
@@ -20,13 +23,17 @@ namespace PVScan.API.Controllers
     public class BarcodesController : APIBaseController
     {
         // Maybe don't use Context directly :)
-        PVScanDbContext _context;
-        IExperienceCalculator _expCalc;
+        readonly IHubContext<UserInfoHub> _userInfoHub;
+        readonly PVScanDbContext _context;
+        readonly IExperienceCalculator _expCalc;
 
-        public BarcodesController(PVScanDbContext context, IExperienceCalculator expCalc)
+        public BarcodesController(PVScanDbContext context, 
+            IExperienceCalculator expCalc,
+            IHubContext<UserInfoHub> userInfoHub)
         {
             _context = context;
             _expCalc = expCalc;
+            _userInfoHub = userInfoHub;
         }
 
         [HttpPost]
@@ -100,6 +107,18 @@ namespace PVScan.API.Controllers
 
             _context.UserInfos.Update(userInfo);
             await _context.SaveChangesAsync();
+
+            await _userInfoHub.Clients
+                .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .SendAsync("Changed", new CurrentResponse()
+                {
+                    BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
+                    BarcodesScanned = userInfo.BarcodesScanned,
+                    Experience = userInfo.Experience,
+                    IGLink = userInfo.IGLink,
+                    Level = userInfo.Level,
+                    VKLink = userInfo.VKLink,
+                });
 
             // Form response and send back
             ScannedResponse response = new ScannedResponse()
@@ -179,6 +198,18 @@ namespace PVScan.API.Controllers
 
             _context.UserInfos.Update(userInfo);
             await _context.SaveChangesAsync();
+
+            await _userInfoHub.Clients
+                .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .SendAsync("Changed", new CurrentResponse()
+                {
+                    BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
+                    BarcodesScanned = userInfo.BarcodesScanned,
+                    Experience = userInfo.Experience,
+                    IGLink = userInfo.IGLink,
+                    Level = userInfo.Level,
+                    VKLink = userInfo.VKLink,
+                });
 
             return Ok(new DeletedResponse() { });
         }

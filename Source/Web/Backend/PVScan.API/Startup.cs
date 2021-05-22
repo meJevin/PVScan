@@ -86,6 +86,7 @@ namespace PVScan.API
             {
                 endpoints.MapControllers().RequireAuthorization();
                 endpoints.MapHub<BarcodesHub>("/hubs/barcodes").RequireAuthorization();
+                endpoints.MapHub<UserInfoHub>("/hubs/userInfo").RequireAuthorization();
             });
         }
     }

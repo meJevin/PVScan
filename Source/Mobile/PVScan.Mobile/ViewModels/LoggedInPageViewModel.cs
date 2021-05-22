@@ -25,12 +25,15 @@ namespace PVScan.Mobile.ViewModels
         readonly IIdentityService IdentityService;
         readonly IPVScanAPI API;
         readonly IAPIBarcodeHub BarcodeHub;
+        readonly IAPIUserInfoHub UserInfoHub;
 
-        public LoggedInPageViewModel(IIdentityService identityService, IPVScanAPI api, IAPIBarcodeHub barcodeHub)
+        public LoggedInPageViewModel(IIdentityService identityService, IPVScanAPI api,
+            IAPIBarcodeHub barcodeHub, IAPIUserInfoHub userInfoHub)
         {
             IdentityService = identityService;
             API = api;
             BarcodeHub = barcodeHub;
+            UserInfoHub = userInfoHub;
 
             LogoutCommand = new Command(async () =>
             {
@@ -60,6 +63,7 @@ namespace PVScan.Mobile.ViewModels
                     });
 
                     await BarcodeHub.Disconnect();
+                    await UserInfoHub.Disconnect();
                 }
                 else
                 {
@@ -102,6 +106,23 @@ namespace PVScan.Mobile.ViewModels
 
                 IsRefreshing = false;
             });
+
+            UserInfoHub.OnChanged += UserInfoHub_OnChanged;
+        }
+
+        private void UserInfoHub_OnChanged(object sender, GetUserInfoResponse newUserInfo)
+        {
+            UserInfo = new UserInfo()
+            {
+                BarcodeFormatsScanned = newUserInfo.BarcodeFormatsScanned,
+                BarcodesScanned = newUserInfo.BarcodesScanned,
+                Email = newUserInfo.Email,
+                Experience = newUserInfo.Experience,
+                IGLink = newUserInfo.IGLink,
+                VKLink = newUserInfo.VKLink,
+                Level = newUserInfo.Level,
+                Username = newUserInfo.Username,
+            };
         }
 
         public async Task Initialize()

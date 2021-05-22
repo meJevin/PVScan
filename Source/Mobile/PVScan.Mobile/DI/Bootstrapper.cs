@@ -98,6 +98,11 @@ namespace PVScan.Mobile
             ContainerBuilder.RegisterType<APIBarcodeHub>()
                 .As<IAPIBarcodeHub>()
                 .SingleInstance();
+
+            // API User Info HUB
+            ContainerBuilder.RegisterType<APIUserInfoHub>()
+                .As<IAPIUserInfoHub>()
+                .SingleInstance();
         }
 
         private void FinishInitialization()

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PVScan.API.Controllers.Base;
+using PVScan.API.Hubs;
 using PVScan.API.ViewModels.Users;
 using PVScan.Database;
 using PVScan.Domain.Entities;
@@ -17,11 +19,14 @@ namespace PVScan.API.Controllers
     [Route("api/v1/[controller]")]
     public class UsersController : APIBaseController
     {
-        PVScanDbContext _context;
+        readonly PVScanDbContext _context;
+        readonly IHubContext<UserInfoHub> _userInfoHub;
 
-        public UsersController(PVScanDbContext context)
+        public UsersController(PVScanDbContext context, 
+            IHubContext<UserInfoHub> userInfoHub)
         {
             _context = context;
+            _userInfoHub = userInfoHub;
         }
 
         [HttpGet]
