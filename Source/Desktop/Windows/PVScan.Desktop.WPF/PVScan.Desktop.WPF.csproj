@@ -10,11 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Fonts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.2" />
   </ItemGroup>
 
