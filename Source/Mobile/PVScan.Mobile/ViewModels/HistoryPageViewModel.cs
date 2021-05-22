@@ -113,7 +113,19 @@ namespace PVScan.Mobile.ViewModels
             MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
                 async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>
                 {
-                    OnPropertyChanged(nameof(Barcodes));
+                    // This is required to update the map, so that the marker appears
+                    var indexTotal = Barcodes.IndexOf(args.UpdatedBarcode);
+                    var indexPaged = BarcodesPaged.IndexOf(args.UpdatedBarcode);
+
+                    if (indexTotal != -1)
+                    {
+                        Barcodes[indexTotal] = args.UpdatedBarcode;
+                    }
+
+                    if (indexPaged != -1)
+                    {
+                        BarcodesPaged[indexPaged] = args.UpdatedBarcode;
+                    }
                 });
 
             RefreshCommand = new Command(async () =>
