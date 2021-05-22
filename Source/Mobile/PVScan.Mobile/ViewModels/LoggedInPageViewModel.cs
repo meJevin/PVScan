@@ -86,6 +86,21 @@ namespace PVScan.Mobile.ViewModels
                     VKLink = UserInfo.VKLink,
                 });
 
+                if (result != null)
+                {
+                    await UserInfoHub.Changed(new GetUserInfoResponse()
+                    {
+                        BarcodeFormatsScanned = UserInfo.BarcodeFormatsScanned,
+                        BarcodesScanned = UserInfo.BarcodesScanned,
+                        Email = UserInfo.Email,
+                        Experience = UserInfo.Experience,
+                        IGLink = UserInfo.IGLink,
+                        VKLink = UserInfo.VKLink,
+                        Level = UserInfo.Level,
+                        Username = UserInfo.Username,
+                    });
+                }
+
                 IsUpdatingUserInfo = false;
 
                 if (result == null)
@@ -116,12 +131,10 @@ namespace PVScan.Mobile.ViewModels
             {
                 BarcodeFormatsScanned = newUserInfo.BarcodeFormatsScanned,
                 BarcodesScanned = newUserInfo.BarcodesScanned,
-                Email = newUserInfo.Email,
                 Experience = newUserInfo.Experience,
                 IGLink = newUserInfo.IGLink,
                 VKLink = newUserInfo.VKLink,
                 Level = newUserInfo.Level,
-                Username = newUserInfo.Username,
             };
         }
 
