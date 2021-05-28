@@ -27,24 +27,56 @@ namespace PVScan.Desktop.WPF.Views
         Storyboard showScannedBarcodeInfo;
         Storyboard hideScannedBarcodeInfo;
 
+        DoubleAnimation showAnimation;
+        DoubleAnimation hideAnimation;
+
         public ScanPage()
         {
             InitializeComponent();
 
-            var showAnimation = new DoubleAnimation()
+            showAnimation = new DoubleAnimation()
             {
                 From = -350,
                 To = 0,
-                EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut },
-                AutoReverse = false,
                 Duration = new Duration(TimeSpan.FromMilliseconds(250)),
+                EasingFunction = new CubicEase()
+                {
+                    EasingMode = EasingMode.EaseOut,
+                }
             };
+
+            hideAnimation = new DoubleAnimation()
+            {
+                From = 0,
+                To = -350,
+                Duration = new Duration(TimeSpan.FromMilliseconds(250)),
+                EasingFunction = new CubicEase()
+                {
+                    EasingMode = EasingMode.EaseOut,
+                }
+            };
+
             showScannedBarcodeInfo = new Storyboard();
             showScannedBarcodeInfo.Children.Add(showAnimation);
             Storyboard.SetTarget(showScannedBarcodeInfo, BarcodeInfoCardTransform);
             Storyboard.SetTargetProperty(showScannedBarcodeInfo, new PropertyPath("X"));
 
-            showScannedBarcodeInfo.Begin();
+            hideScannedBarcodeInfo = new Storyboard();
+            hideScannedBarcodeInfo.Children.Add(hideAnimation);
+            Storyboard.SetTarget(hideScannedBarcodeInfo, BarcodeInfoCardTransform);
+            Storyboard.SetTargetProperty(hideScannedBarcodeInfo, new PropertyPath("X"));
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            BarcodeInfoCardTransform.BeginAnimation(TranslateTransform.XProperty, showAnimation);
+            //showScannedBarcodeInfo.Begin();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            BarcodeInfoCardTransform.BeginAnimation(TranslateTransform.XProperty, hideAnimation);
+            //hideScannedBarcodeInfo.Begin();
         }
     }
 }
