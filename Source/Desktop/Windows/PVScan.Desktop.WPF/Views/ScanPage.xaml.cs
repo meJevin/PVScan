@@ -32,6 +32,8 @@ namespace PVScan.Desktop.WPF.Views
         {
             InitializeComponent();
 
+            BarcodeInfoCard.TranslateTo(-350, 0, TimeSpan.FromMilliseconds(0));
+
             VM = (DataContext as ScanPageViewModel);
 
             VM.GotBarcode += VM_GotBarcode;

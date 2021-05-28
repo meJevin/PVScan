@@ -20,13 +20,12 @@ namespace PVScan.Desktop.WPF.ViewModels
     public class ScanPageViewModel : BaseViewModel
     {
         readonly IBarcodeReaderImage BarcodeReader;
+        readonly IBarcodesRepository BarcodesRepository;
 
-        VideoCapture capture;
-        Mat frame;
-
-        public ScanPageViewModel(IBarcodeReaderImage barcodeReader)
+        public ScanPageViewModel(IBarcodeReaderImage barcodeReader, IBarcodesRepository repository)
         {
             BarcodeReader = barcodeReader;
+            BarcodesRepository = repository;
 
             frame = new Mat();
 
@@ -43,6 +42,18 @@ namespace PVScan.Desktop.WPF.ViewModels
                     });
                 }
             };
+
+            ClearCommand = new Command(() => 
+            {
+                LastScanResult = null;
+
+                Cleared?.Invoke(this, new EventArgs());
+            });
+
+            SaveCommand = new Command(() => 
+            {
+                
+            });
         }
 
         private void VideoCapture_ImageGrabbed()
@@ -68,5 +79,9 @@ namespace PVScan.Desktop.WPF.ViewModels
         public event EventHandler GotBarcode;
         public event EventHandler Saved;
         public event EventHandler Cleared;
+
+
+        VideoCapture capture;
+        Mat frame;
     }
 }
