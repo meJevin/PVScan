@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -36,10 +37,7 @@ namespace PVScan.Desktop.WPF.ViewModels
             {
                 if (capture.Retrieve(frame, 0))
                 {
-                    Dispatcher.CurrentDispatcher.Invoke(() =>
-                    {
-                        VideoCapture_ImageGrabbed();
-                    });
+                    VideoCapture_ImageGrabbed();
                 }
             };
 
@@ -66,7 +64,10 @@ namespace PVScan.Desktop.WPF.ViewModels
             {
                 LastScanResult = tempResult;
 
-                GotBarcode?.Invoke(this, new EventArgs());
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    GotBarcode?.Invoke(this, new EventArgs());
+                });
             }
         }
 
