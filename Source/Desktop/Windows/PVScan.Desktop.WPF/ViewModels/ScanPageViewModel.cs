@@ -51,11 +51,11 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             if (tempResult != null)
             {
-                LastScannedBarcode = tempResult;
+                LastScanResult = tempResult;
             }
         }
 
-        public ZXing.Result LastScannedBarcode { get; set; }
+        public ZXing.Result LastScanResult { get; set; }
         public ImageSource CurrentFrameImage { get; set; }
     }
 }

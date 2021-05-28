@@ -6,11 +6,46 @@
       xmlns:local="clr-namespace:PVScan.Desktop.WPF.Views"
       xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI"
       di:ViewModelLocator.AutoWireViewModel="True"
-      xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels"
+      xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       d:DataContext="{d:DesignInstance Type=viewmodels:ScanPageViewModel}"
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="800">
+    <ContentControl.Resources>
+        <Storyboard x:Key="ShowBarcodeInfoAnimation"
+                    Storyboard.TargetName="LastScannedBarcodeInfoCard"
+                    Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.X)">
+            <DoubleAnimation From="-350" To="0" Duration="0:0:0.250">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut">
+                    </CubicEase>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+    </ContentControl.Resources>
+
     <Grid>
         <Image Source="{Binding CurrentFrameImage}"/>
+
+        <materialDesign:Card Width="300" Height="200" x:Name="LastScannedBarcodeInfoCard"
+                             HorizontalAlignment="Left" VerticalAlignment="Top"
+                             Margin="25" Padding="10">
+            <StackPanel>
+                <TextBlock TextWrapping="Wrap">
+                    <Run FontSize="16">Format: </Run>
+                    <Run Text="{Binding LastScanResult.BarcodeFormat, FallbackValue='—'}" FontWeight="Bold"></Run>
+                </TextBlock>
+                
+                <TextBlock TextWrapping="Wrap">
+                    <Run FontSize="16">Text: </Run>
+                    <Run Text="{Binding LastScanResult.Text, FallbackValue='—'}" FontWeight="Bold"></Run>
+                </TextBlock>
+            </StackPanel>
+
+            <materialDesign:Card.RenderTransform>
+                <TranslateTransform x:Name="BarcodeInfoCardTransform">
+                </TranslateTransform>
+            </materialDesign:Card.RenderTransform>
+        </materialDesign:Card>
     </Grid>
 </ContentControl>

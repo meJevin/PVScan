@@ -27,10 +27,6 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Background="#2e2e2e">
-            <views:HistoryPage/>
-        </Grid>
-
         <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                       Background="#2f2f2f"/>
 
@@ -40,6 +36,10 @@
             
             <views:MapPage Visibility="Hidden"
                            x:Name="MapPageView"/>
+        </Grid>
+
+        <Grid Background="#2e2e2e">
+            <views:HistoryPage/>
         </Grid>
     </Grid>
 </Window>
