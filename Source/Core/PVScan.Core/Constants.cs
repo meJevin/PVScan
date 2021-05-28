@@ -73,4 +73,9 @@ namespace PVScan.Core
             public static bool SaveBarcodeImagesWithAlpha = false;
         }
     }
+
+    public static class Animations
+    {
+        public static TimeSpan DefaultDuration = TimeSpan.FromMilliseconds(250);
+    }
 }

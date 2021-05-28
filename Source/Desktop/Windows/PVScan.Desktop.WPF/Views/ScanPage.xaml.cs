@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using MaterialDesignThemes.Wpf;
+using PVScan.Core;
 using PVScan.Desktop.WPF.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace PVScan.Desktop.WPF.Views
         {
             InitializeComponent();
 
-            BarcodeInfoCard.TranslateTo(-350, 0, TimeSpan.FromMilliseconds(0));
+            HidebarcodeInfoCard(TimeSpan.Zero);
 
             VM = (DataContext as ScanPageViewModel);
 
@@ -42,22 +43,31 @@ namespace PVScan.Desktop.WPF.Views
 
         private void VM_Cleared(object sender, EventArgs e)
         {
-            HidebarcodeInfoCard();
+            HidebarcodeInfoCard(Animations.DefaultDuration);
         }
 
         private void VM_GotBarcode(object sender, EventArgs e)
         {
-            ShowBarcodeInfoCard();
+            ShowBarcodeInfoCard(Animations.DefaultDuration);
         }
 
-        private void ShowBarcodeInfoCard()
+        private void ShowBarcodeInfoCard(TimeSpan duration)
         {
-            BarcodeInfoCard.TranslateTo(0, 0, TimeSpan.FromMilliseconds(250));
+            BarcodeInfoCard.TranslateTo(0, 0, duration);
+            SaveButton.TranslateTo(0, 0, duration);
         }
 
-        private void HidebarcodeInfoCard()
+        private void HidebarcodeInfoCard(TimeSpan duration)
         {
-            BarcodeInfoCard.TranslateTo(-350, 0, TimeSpan.FromMilliseconds(250));
+            BarcodeInfoCard.TranslateTo(
+                -(BarcodeInfoCard.Width + 
+                BarcodeInfoCard.Margin.Left + 
+                BarcodeInfoCard.Margin.Right), 0, duration);
+
+            SaveButton.TranslateTo(0, 
+                SaveButton.Height + 
+                SaveButton.Margin.Top + 
+                SaveButton.Margin.Bottom, duration);
         }
     }
 }

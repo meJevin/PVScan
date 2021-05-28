@@ -52,16 +52,23 @@ namespace PVScan.Desktop.WPF
             {
                 transform = element.RenderTransform as TranslateTransform;
             }
-            else if (element.RenderTransform is TransformGroup)
+            else if (element.RenderTransform is TransformGroup grp)
             {
                 transform = (element.RenderTransform as TransformGroup).Children
                     .FirstOrDefault(t => t is TranslateTransform) as TranslateTransform;
-            }
 
-            if (transform == null)
+                if (transform == null)
+                {
+                    grp.Children.Add(new TranslateTransform());
+                    transform = grp.Children.Last() as TranslateTransform;
+                }
+            }
+            else if (element.RenderTransform is MatrixTransform)
             {
-                Console.WriteLine("Could not translate element because it has no translate transform");
-                return;
+                var group = new TransformGroup();
+                group.Children.Add(new TranslateTransform());
+                element.RenderTransform = group;
+                transform = group.Children.Last() as TranslateTransform;
             }
 
             xAnimation.From = transform.X;

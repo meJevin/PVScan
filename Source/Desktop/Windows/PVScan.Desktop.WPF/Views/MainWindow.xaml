@@ -27,9 +27,6 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                      Background="#2f2f2f"/>
-
         <Grid Grid.Column="2" Background="#262626">
             <views:ScanPage Visibility="Visible"
                             x:Name="ScanPageView"/>
@@ -38,6 +35,9 @@
                            x:Name="MapPageView"/>
         </Grid>
 
+        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                      Background="#2f2f2f"/>
+        
         <Grid Background="#2e2e2e">
             <views:HistoryPage/>
         </Grid>
