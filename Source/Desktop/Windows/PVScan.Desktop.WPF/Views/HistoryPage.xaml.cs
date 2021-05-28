@@ -18,7 +18,7 @@ namespace PVScan.Desktop.WPF.Views
     /// <summary>
     /// Interaction logic for HistoryPage.xaml
     /// </summary>
-    public partial class HistoryPage : Page
+    public partial class HistoryPage : ContentControl
     {
         public HistoryPage()
         {

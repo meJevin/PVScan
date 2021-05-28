@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Emgu.CV;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +20,7 @@ namespace PVScan.Desktop.WPF.Views
     /// <summary>
     /// Interaction logic for ScanPage.xaml
     /// </summary>
-    public partial class ScanPage : Page
+    public partial class ScanPage : ContentControl
     {
         public ScanPage()
         {

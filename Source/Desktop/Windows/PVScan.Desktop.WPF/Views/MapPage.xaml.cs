@@ -18,7 +18,7 @@ namespace PVScan.Desktop.WPF.Views
     /// <summary>
     /// Interaction logic for MapPage.xaml
     /// </summary>
-    public partial class MapPage : Page
+    public partial class MapPage : ContentControl
     {
         public MapPage()
         {

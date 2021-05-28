@@ -7,9 +7,11 @@
         xmlns:local="clr-namespace:PVScan.Desktop.WPF"
         xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI" 
         di:ViewModelLocator.AutoWireViewModel="True"
-        Title="PVScan" Height="450" Width="800"
+        Title="PVScan" Height="600" Width="1100"
+        MinHeight="450" MinWidth="750"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:views="clr-namespace:PVScan.Desktop.WPF.Views"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -26,68 +28,18 @@
         </Grid.ColumnDefinitions>
 
         <Grid Background="#2e2e2e">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Grid Background="#2e2e2e">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <materialDesign:PackIcon Kind="Filter" Foreground="DarkGray"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"
-                                         Width="30" Height="30"
-                                         Cursor="Hand"/>
-
-                <Border Grid.Column="1"
-                        Margin="0,0,6,0"
-                    Background="White"
-                    MaxHeight="30"
-                    CornerRadius="3"
-                    ToolTip="Enter to search, ignore case">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button
-                            x:Name="SearchButton"
-                            Style="{DynamicResource MaterialDesignToolButton}"
-                            Height="24"
-                            Width="24">
-                            <materialDesign:PackIcon
-                                Kind="Magnify"
-                                Opacity=".56"/>
-                        </Button>
-
-                        <TextBox
-                            Grid.Column="1"
-                            Margin="5 0 0 0"
-                            materialDesign:HintAssist.Hint="Search" x:Name="SearchBox"
-                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                            BorderThickness="0"
-                            MinWidth="200"
-                            VerticalAlignment="Center"/>
-                    </Grid>
-                </Border>
-            </Grid>
-
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <ListView>
-                </ListView>
-            </ScrollViewer>
+            <views:HistoryPage/>
         </Grid>
 
         <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                       Background="#2f2f2f"/>
 
         <Grid Grid.Column="2" Background="#262626">
+            <views:ScanPage Visibility="Visible"
+                            x:Name="ScanPageView"/>
             
+            <views:MapPage Visibility="Hidden"
+                           x:Name="MapPageView"/>
         </Grid>
     </Grid>
 </Window>

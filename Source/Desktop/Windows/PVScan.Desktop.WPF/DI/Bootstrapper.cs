@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PVScan.Core.DAL;
 using PVScan.Core.Services.Interfaces;
+using PVScan.Desktop.WPF.Services.Interfaces;
+using PVScan.Desktop.WPF.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -110,6 +112,11 @@ namespace PVScan.Desktop.WPF.DI
             ContainerBuilder.RegisterType<APIUserInfoHub>()
                 .As<IAPIUserInfoHub>()
                 .SingleInstance();
+
+            // Barcode Image Reader
+            ContainerBuilder.RegisterType<BarcodeReaderImage>()
+                .As<IBarcodeReaderImage>()
+                .InstancePerLifetimeScope();
         }
 
         private void FinishInitialization()
