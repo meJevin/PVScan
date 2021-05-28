@@ -12,6 +12,7 @@ using PVScan.Core.Services;
 using System.Reflection;
 using PVScan.Desktop.WPF.ViewModels;
 using PVScan.Desktop.WPF.Views;
+using Microsoft.Extensions.Configuration;
 
 namespace PVScan.Desktop.WPF.DI
 {
@@ -117,6 +118,16 @@ namespace PVScan.Desktop.WPF.DI
             ContainerBuilder.RegisterType<BarcodeReaderImage>()
                 .As<IBarcodeReaderImage>()
                 .InstancePerLifetimeScope();
+
+            // IConfiguration
+            ContainerBuilder.Register<IConfiguration>(ctx =>
+            {
+                var builder = new ConfigurationBuilder();
+                builder.AddUserSecrets<App>();
+                var cfg = builder.Build();
+
+                return cfg;
+            });
         }
 
         private void FinishInitialization()
