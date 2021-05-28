@@ -57,6 +57,7 @@ namespace PVScan.Mobile.ViewModels
 
             BarcodeHub.OnDeleted += BarcodeHub_OnDeleted;
             BarcodeHub.OnUpdated += BarcodeHub_OnUpdated;
+            BarcodeHub.OnScanned += BarcodeHub_OnScanned;
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
@@ -352,6 +353,36 @@ namespace PVScan.Mobile.ViewModels
             {
                 Barcodes.Remove(barcode);
             }
+        }
+
+        private async void BarcodeHub_OnScanned(object sender, ScannedBarcodeRequest b)
+        {
+            Barcode newBarcode = new Barcode()
+            {
+                Favorite = b.Favorite,
+                Format = b.Format,
+                GUID = b.GUID,
+                Hash = b.Hash,
+                ScanLocation = null,
+                ScanTime = b.ScanTime,
+                Text = b.Text,
+            };
+
+            if (b.Latitude.HasValue && b.Longitude.HasValue)
+            {
+                newBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = b.Latitude,
+                    Longitude = b.Longitude
+                };
+            }
+
+            newBarcode = await BarcodesRepository.Save(newBarcode);
+
+            MessagingCenter.Send(this, nameof(BarcodeScannedMessage), new BarcodeScannedMessage()
+            {
+                ScannedBarcode = newBarcode,
+            });
         }
 
         public async Task LoadBarcodesFromDB()
