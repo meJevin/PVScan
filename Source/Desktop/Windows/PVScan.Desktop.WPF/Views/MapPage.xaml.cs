@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Wpf.UI.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,11 @@ namespace PVScan.Desktop.WPF.Views
         public MapPage()
         {
             InitializeComponent();
+
+            MapControl map = new MapControl();
+            map.MapServiceToken = App.MapServiceToken;
+
+            MainContainer.Children.Add(map);
         }
     }
 }

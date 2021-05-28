@@ -1,4 +1,5 @@
-﻿using PVScan.Core;
+﻿using Microsoft.Extensions.Configuration;
+using PVScan.Core;
 using PVScan.Desktop.WPF.DI;
 using PVScan.Desktop.WPF.Views;
 using System;
@@ -20,8 +21,8 @@ namespace PVScan.Desktop.WPF
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             InitializeDatabasePath();
-
             InitializeDependencyInjection();
+            InitializeMapsServiceToken();
 
             ShowMainWindow();
         }
@@ -52,5 +53,13 @@ namespace PVScan.Desktop.WPF
         {
             _ = new Bootstrapper();
         }
+
+        private void InitializeMapsServiceToken()
+        {
+            var cfg = Resolver.Resolve<IConfiguration>();
+            MapServiceToken = cfg.GetSection("Maps:BingMapsKey").Value;
+        }
+
+        public static string MapServiceToken;
     }
 }

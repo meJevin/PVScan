@@ -8,10 +8,10 @@
       di:ViewModelLocator.AutoWireViewModel="True"
       xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels"
       d:DataContext="{d:DesignInstance Type=viewmodels:MapPageViewModel}"
+      xmlns:Maps="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid>
-        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36">Map Page</Label>
+    <Grid x:Name="MainContainer">
     </Grid>
 </ContentControl>

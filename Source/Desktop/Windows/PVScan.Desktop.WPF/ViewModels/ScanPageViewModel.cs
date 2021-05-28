@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Windows.Devices.Geolocation;
 using ZXing;
 
 namespace PVScan.Desktop.WPF.ViewModels
@@ -59,6 +60,24 @@ namespace PVScan.Desktop.WPF.ViewModels
                     Text = LastScanResult.Text,
                     ScanLocation = null,
                 };
+
+                // TOdo: get this into a service!
+                var geolocationStatus = await Geolocator.RequestAccessAsync();
+
+                if (geolocationStatus == GeolocationAccessStatus.Allowed)
+                {
+                    Geolocator geolocator = new Geolocator()
+                    {
+                        DesiredAccuracy = PositionAccuracy.High,
+                    };
+                    var location = await geolocator.GetGeopositionAsync();
+
+                    barcodeToSave.ScanLocation = new Coordinate()
+                    {
+                        Latitude = location.Coordinate.Latitude,
+                        Longitude = location.Coordinate.Longitude,
+                    };
+                }
 
                 await BarcodesRepository.Save(barcodeToSave);
 
