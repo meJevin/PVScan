@@ -14,7 +14,7 @@
     <Grid>
         <!--<Image Source="{Binding CurrentFrameImage}"/>-->
 
-        <materialDesign:Card Width="300" Height="200"
+        <materialDesign:Card Width="300" Height="200" x:Name="BarcodeInfoCard"
                              HorizontalAlignment="Left" VerticalAlignment="Top"
                              Margin="25" Padding="10">
             <StackPanel>
@@ -30,7 +30,7 @@
             </StackPanel>
 
             <materialDesign:Card.RenderTransform>
-                <TranslateTransform x:Name="BarcodeInfoCardTransform">
+                <TranslateTransform>
                 </TranslateTransform>
             </materialDesign:Card.RenderTransform>
         </materialDesign:Card>

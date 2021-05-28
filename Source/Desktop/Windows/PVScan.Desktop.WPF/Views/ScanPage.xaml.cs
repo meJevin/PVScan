@@ -24,9 +24,6 @@ namespace PVScan.Desktop.WPF.Views
     /// </summary>
     public partial class ScanPage : ContentControl
     {
-        Storyboard showScannedBarcodeInfo;
-        Storyboard hideScannedBarcodeInfo;
-
         DoubleAnimation showAnimation;
         DoubleAnimation hideAnimation;
 
@@ -55,28 +52,16 @@ namespace PVScan.Desktop.WPF.Views
                     EasingMode = EasingMode.EaseOut,
                 }
             };
-
-            showScannedBarcodeInfo = new Storyboard();
-            showScannedBarcodeInfo.Children.Add(showAnimation);
-            Storyboard.SetTarget(showScannedBarcodeInfo, BarcodeInfoCardTransform);
-            Storyboard.SetTargetProperty(showScannedBarcodeInfo, new PropertyPath("X"));
-
-            hideScannedBarcodeInfo = new Storyboard();
-            hideScannedBarcodeInfo.Children.Add(hideAnimation);
-            Storyboard.SetTarget(hideScannedBarcodeInfo, BarcodeInfoCardTransform);
-            Storyboard.SetTargetProperty(hideScannedBarcodeInfo, new PropertyPath("X"));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            BarcodeInfoCardTransform.BeginAnimation(TranslateTransform.XProperty, showAnimation);
-            //showScannedBarcodeInfo.Begin();
+            BarcodeInfoCard.TranslateTo(0, 0, TimeSpan.FromMilliseconds(250));
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            BarcodeInfoCardTransform.BeginAnimation(TranslateTransform.XProperty, hideAnimation);
-            //hideScannedBarcodeInfo.Begin();
+            BarcodeInfoCard.TranslateTo(-350, 0, TimeSpan.FromMilliseconds(250));
         }
     }
 }
