@@ -12,7 +12,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="800">
     <Grid>
-        <!--<Image Source="{Binding CurrentFrameImage}"/>-->
+        <Image Source="{Binding CurrentFrameImage}"/>
 
         <materialDesign:Card Width="300" Height="200" x:Name="BarcodeInfoCard"
                              HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -34,10 +34,5 @@
                 </TranslateTransform>
             </materialDesign:Card.RenderTransform>
         </materialDesign:Card>
-
-        <StackPanel>
-            <Button Click="Button_Click">Show</Button>
-            <Button Click="Button_Click_1">Hide</Button>
-        </StackPanel>
     </Grid>
 </ContentControl>

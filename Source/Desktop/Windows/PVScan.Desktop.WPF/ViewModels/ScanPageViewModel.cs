@@ -10,8 +10,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using ZXing;
 
 namespace PVScan.Desktop.WPF.ViewModels
 {
@@ -52,10 +54,19 @@ namespace PVScan.Desktop.WPF.ViewModels
             if (tempResult != null)
             {
                 LastScanResult = tempResult;
+
+                GotBarcode?.Invoke(this, new EventArgs());
             }
         }
 
-        public ZXing.Result LastScanResult { get; set; }
+        public ICommand ClearCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
+
+        public Result LastScanResult { get; set; }
         public ImageSource CurrentFrameImage { get; set; }
+
+        public event EventHandler GotBarcode;
+        public event EventHandler Saved;
+        public event EventHandler Cleared;
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Emgu.CV;
 using MaterialDesignThemes.Wpf;
+using PVScan.Desktop.WPF.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,42 +26,34 @@ namespace PVScan.Desktop.WPF.Views
     /// </summary>
     public partial class ScanPage : ContentControl
     {
-        DoubleAnimation showAnimation;
-        DoubleAnimation hideAnimation;
+        ScanPageViewModel VM;
 
         public ScanPage()
         {
             InitializeComponent();
 
-            showAnimation = new DoubleAnimation()
-            {
-                From = -350,
-                To = 0,
-                Duration = new Duration(TimeSpan.FromMilliseconds(250)),
-                EasingFunction = new CubicEase()
-                {
-                    EasingMode = EasingMode.EaseOut,
-                }
-            };
+            VM = (DataContext as ScanPageViewModel);
 
-            hideAnimation = new DoubleAnimation()
-            {
-                From = 0,
-                To = -350,
-                Duration = new Duration(TimeSpan.FromMilliseconds(250)),
-                EasingFunction = new CubicEase()
-                {
-                    EasingMode = EasingMode.EaseOut,
-                }
-            };
+            VM.GotBarcode += VM_GotBarcode;
+            VM.Cleared += VM_Cleared;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void VM_Cleared(object sender, EventArgs e)
+        {
+            HidebarcodeInfoCard();
+        }
+
+        private void VM_GotBarcode(object sender, EventArgs e)
+        {
+            ShowBarcodeInfoCard();
+        }
+
+        private void ShowBarcodeInfoCard()
         {
             BarcodeInfoCard.TranslateTo(0, 0, TimeSpan.FromMilliseconds(250));
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void HidebarcodeInfoCard()
         {
             BarcodeInfoCard.TranslateTo(-350, 0, TimeSpan.FromMilliseconds(250));
         }
