@@ -28,11 +28,14 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="2" Background="#262626">
-            <views:ScanPage Visibility="Hidden"
-                            x:Name="ScanPageView"/>
+            <views:MapPage x:Name="MapPageView"/>
             
-            <views:MapPage Visibility="Visible"
-                           x:Name="MapPageView"/>
+            <views:ScanPage x:Name="ScanPageView"/>
+
+            <Button Foreground="White" Content="Map" Width="150"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Margin="15" x:Name="ToggleScanMapPagesButton"
+                    Command="{Binding ToggleMapScanPages}"/>
         </Grid>
 
         <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"

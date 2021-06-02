@@ -27,7 +27,26 @@ namespace PVScan.Desktop.WPF
             return image;
         }
 
-        public static void TranslateTo(this UIElement element, double? X, double? Y, TimeSpan duration)
+        public static async Task FadeTo(this UIElement element, double opacity, TimeSpan duration)
+        {
+            DoubleAnimation opacityAnimation = new DoubleAnimation()
+            {
+                EasingFunction = new CubicEase()
+                {
+                    EasingMode = EasingMode.EaseOut
+                },
+                Duration = duration,
+            };
+
+            opacityAnimation.From = element.Opacity;
+            opacityAnimation.To = opacity;
+
+            element.BeginAnimation(UIElement.OpacityProperty, opacityAnimation);
+
+            await Task.Delay(duration);
+        }
+
+        public static async Task TranslateTo(this UIElement element, double? X, double? Y, TimeSpan duration)
         {
             DoubleAnimation xAnimation = new DoubleAnimation()
             {
@@ -84,6 +103,8 @@ namespace PVScan.Desktop.WPF
             // Run animation on X and Y proper
             transform.BeginAnimation(TranslateTransform.XProperty, xAnimation);
             transform.BeginAnimation(TranslateTransform.YProperty, yAnimation);
+
+            await Task.Delay(duration);
         }
     }
 }
