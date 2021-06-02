@@ -81,7 +81,8 @@
                           HorizontalContentAlignment="Stretch">
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:Barcode}">
-                            <datatemplates:NormalBarcodeItem FavoriteCommand="{Binding RelativeSource={RelativeSource AncestorType=local:HistoryPage}, Path=DataContext.FavoriteCommand}"/>
+                            <datatemplates:NormalBarcodeItem 
+                                FavoriteCommand="{Binding RelativeSource={RelativeSource AncestorType=local:HistoryPage}, Path=DataContext.FavoriteCommand}"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

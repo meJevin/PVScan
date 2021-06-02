@@ -33,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Messages\" />
     <Folder Include="Views\Controls\" />
   </ItemGroup>
 

@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using PVScan.Core.Models;
 using PVScan.Core.Services.Interfaces;
+using PVScan.Desktop.WPF.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -78,6 +79,45 @@ namespace PVScan.Desktop.WPF.ViewModels
                     Barcodes[indxTotal] = barcode;
                 }
             });
+
+
+            MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
+                async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
+                {
+                    var tempEnumerable = new List<Barcode>() { args.ScannedBarcode };
+
+                    if (CurrentFilter != null)
+                    {
+                        tempEnumerable = FilterService
+                                            .Filter(tempEnumerable, CurrentFilter)
+                                            .ToList();
+                    }
+
+                    if (!String.IsNullOrEmpty(Search))
+                    {
+                        tempEnumerable = FilterService
+                                            .Search(tempEnumerable, Search)
+                                            .ToList();
+                    }
+
+                    var result = tempEnumerable.FirstOrDefault();
+                    if (result != null)
+                    {
+                        var tempList = Barcodes.ToList();
+                        tempList.Add(result);
+
+                        var newListSorted = (await SorterService.Sort(tempList, CurrentSorting)).ToList();
+
+                        var insertedIndex = newListSorted.IndexOf(result);
+
+                        Barcodes.Insert(insertedIndex, result);
+                        int lastPagedIndex = BarcodesPaged.Count;
+                        if (insertedIndex <= lastPagedIndex)
+                        {
+                            BarcodesPaged.Insert(insertedIndex, result);
+                        }
+                    }
+                });
 
             _ = LoadBarcodesFromDB();
         }

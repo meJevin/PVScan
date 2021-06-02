@@ -4,7 +4,7 @@ using Emgu.CV.Structure;
 using PVScan.Core.Models;
 using PVScan.Core.Services.Interfaces;
 using PVScan.Desktop.WPF.Services.Interfaces;
-
+using PVScan.Desktop.WPF.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,6 +81,11 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                 await BarcodesRepository.Save(barcodeToSave);
 
+                MessagingCenter.Send(this, nameof(BarcodeScannedMessage), new BarcodeScannedMessage()
+                {
+                    ScannedBarcode = barcodeToSave,
+                });
+
                 ClearCommand.Execute(null);
             });
 
@@ -119,7 +124,6 @@ namespace PVScan.Desktop.WPF.ViewModels
         public event EventHandler GotBarcode;
         public event EventHandler Saved;
         public event EventHandler Cleared;
-
 
         VideoCapture capture;
         Mat frame;
