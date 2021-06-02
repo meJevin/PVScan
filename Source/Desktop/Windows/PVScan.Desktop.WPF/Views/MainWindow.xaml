@@ -22,7 +22,7 @@
         mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1.75*" MinWidth="150" MaxWidth="400"/>
+            <ColumnDefinition Width="1.75*" MinWidth="225" MaxWidth="600"/>
             <ColumnDefinition Width="4"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>

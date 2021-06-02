@@ -38,9 +38,17 @@ namespace PVScan.Desktop.WPF.ViewModels
                     return;
                 }
 
-                BarcodesPaged.AddRange(newBarcodes);
+                foreach (var b in newBarcodes)
+                {
+                    BarcodesPaged.Add(b);
+                }
 
                 ++PageCount;
+            });
+
+            SearchCommand = new Command(async () =>
+            {
+                await LoadBarcodesFromDB();
             });
 
             _ = LoadBarcodesFromDB();
@@ -78,8 +86,15 @@ namespace PVScan.Desktop.WPF.ViewModels
                 dbBarcodes = await SorterService.Sort(dbBarcodes, CurrentSorting);
             }
 
-            Barcodes.AddRange(dbBarcodes);
-            BarcodesPaged.AddRange(Barcodes.Take(PageSize));
+            foreach (var b in dbBarcodes)
+            {
+                Barcodes.Add(b);
+            }
+
+            foreach (var b in Barcodes.Take(PageSize))
+            {
+                BarcodesPaged.Add(b);
+            }
 
             PageCount = 1;
             IsLoading = false;
@@ -91,14 +106,16 @@ namespace PVScan.Desktop.WPF.ViewModels
         public Sorting CurrentSorting { get; set; } = Sorting.Default();
 
 
-        public ObservableRangeCollection<Barcode> Barcodes { get; set; }
-        public ObservableRangeCollection<Barcode> BarcodesPaged { get; set; }
+        public ObservableCollection<Barcode> Barcodes { get; set; }
+        public ObservableCollection<Barcode> BarcodesPaged { get; set; }
 
 
         public int PageCount { get; set; }
         private int PageSize { get; set; } = 50;
 
         public ICommand LoadNextPage { get; set; }
+
+        public ICommand SearchCommand { get; set; }
 
         public bool IsLoading { get; set; }
     }
