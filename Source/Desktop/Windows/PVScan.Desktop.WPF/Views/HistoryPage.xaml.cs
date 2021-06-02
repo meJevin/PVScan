@@ -1,4 +1,6 @@
-﻿using PVScan.Desktop.WPF.ViewModels;
+﻿using PVScan.Core;
+using PVScan.Desktop.WPF.ViewModels;
+using PVScan.Desktop.WPF.ViewModels.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +24,13 @@ namespace PVScan.Desktop.WPF.Views
     /// </summary>
     public partial class HistoryPage : ContentControl
     {
+        double SortingPageHeight = -1;
         double SearchDelay = 500;
         Timer SearchDelayTimer;
 
         HistoryPageViewModel VM;
+
+        double OverlayMaxOpacity = 0.65;
 
         public HistoryPage()
         {
@@ -37,6 +42,15 @@ namespace PVScan.Desktop.WPF.Views
             SearchDelayTimer.AutoReset = false;
 
             VM = DataContext as HistoryPageViewModel;
+
+            SortingPage.SizeChanged += async (_, _) =>
+            {
+                if (SortingPage.ActualHeight != SortingPageHeight)
+                {
+                    SortingPageHeight = SortingPage.ActualHeight;
+                    await HideSortingPage(TimeSpan.Zero);
+                }
+            };
         }
 
         private void SearchDelayTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -71,6 +85,32 @@ namespace PVScan.Desktop.WPF.Views
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
             e.Handled = true;
+        }
+
+        private async Task HideSortingPage(TimeSpan duration)
+        {
+            SortingPageOverlay.IsHitTestVisible = false;
+
+            _ = SortingPage.TranslateTo(0, SortingPage.ActualHeight, duration);
+            await SortingPageOverlay.FadeTo(0, duration);
+        }
+
+        private async Task ShowSortingPage(TimeSpan duration)
+        {
+            SortingPageOverlay.IsHitTestVisible = true;
+
+            _ = SortingPageOverlay.FadeTo(OverlayMaxOpacity, duration);
+            await SortingPage.TranslateTo(0, 0, duration);
+        }
+
+        private async void SortingButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ShowSortingPage(Animations.DefaultDuration);
+        }
+
+        private async void SortingPageOverlay_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await HideSortingPage(Animations.DefaultDuration);
         }
     }
 }

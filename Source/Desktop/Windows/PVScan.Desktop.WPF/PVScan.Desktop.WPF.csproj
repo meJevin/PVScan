@@ -36,4 +36,35 @@
     <Folder Include="Views\Controls\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\DataTemplates\NormalBarcodeItem - Copy %282%29 - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>NormalBarcodeItem - Copy (2).xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DataTemplates\NormalBarcodeItem - Copy %282%29.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>NormalBarcodeItem.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DataTemplates\NormalBarcodeItem - Copy %283%29.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>NormalBarcodeItem.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DataTemplates\NormalBarcodeItem - Copy - Copy %282%29.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>NormalBarcodeItem - Copy.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DataTemplates\NormalBarcodeItem - Copy - Copy - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>NormalBarcodeItem - Copy - Copy.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DataTemplates\NormalBarcodeItem - Copy - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>NormalBarcodeItem - Copy.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DataTemplates\NormalBarcodeItem - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>NormalBarcodeItem.xaml.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

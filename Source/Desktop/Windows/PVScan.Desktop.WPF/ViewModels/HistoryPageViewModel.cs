@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using PVScan.Core.Models;
 using PVScan.Core.Services.Interfaces;
+using PVScan.Desktop.WPF.ViewModels.Messages;
 using PVScan.Desktop.WPF.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
@@ -117,6 +118,22 @@ namespace PVScan.Desktop.WPF.ViewModels
                             BarcodesPaged.Insert(insertedIndex, result);
                         }
                     }
+                });
+
+            MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
+                async (FilterPageViewModel vm, FilterAppliedMessage args) =>
+                {
+                    CurrentFilter = args.NewFilter;
+
+                    await LoadBarcodesFromDB();
+                });
+
+            MessagingCenter.Subscribe(this, nameof(SortingAppliedMessage),
+                async (SortingPageViewModel vm, SortingAppliedMessage args) =>
+                {
+                    CurrentSorting = args.NewSorting;
+
+                    await LoadBarcodesFromDB();
                 });
 
             _ = LoadBarcodesFromDB();
