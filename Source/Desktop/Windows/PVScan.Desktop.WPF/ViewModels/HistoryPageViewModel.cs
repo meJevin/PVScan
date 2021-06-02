@@ -51,6 +51,34 @@ namespace PVScan.Desktop.WPF.ViewModels
                 await LoadBarcodesFromDB();
             });
 
+            FavoriteCommand = new Command(async (object barcodeObject) =>
+            {
+                Barcode barcode = barcodeObject as Barcode;
+
+                if (barcode == null)
+                {
+                    return;
+                }
+
+                barcode.Favorite = !barcode.Favorite;
+                await BarcodesRepository.Update(barcode);
+
+                var indxPaged = BarcodesPaged.IndexOf(barcode);
+                var indxTotal = Barcodes.IndexOf(barcode);
+
+                if (indxPaged != -1)
+                {
+                    BarcodesPaged[indxPaged] = null;
+                    BarcodesPaged[indxPaged] = barcode;
+                }
+
+                if (indxTotal != -1)
+                {
+                    Barcodes[indxPaged] = null;
+                    Barcodes[indxTotal] = barcode;
+                }
+            });
+
             _ = LoadBarcodesFromDB();
         }
 
@@ -118,5 +146,7 @@ namespace PVScan.Desktop.WPF.ViewModels
         public ICommand SearchCommand { get; set; }
 
         public bool IsLoading { get; set; }
+
+        public ICommand FavoriteCommand { get; set; }
     }
 }

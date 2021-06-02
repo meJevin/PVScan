@@ -9,6 +9,7 @@
     <Configurations>Debug;Release;Dekstop_Debug;Desktop_Debug</Configurations>
     <UserSecretsId>48193f25-445f-4379-a568-bc7347ddf24f</UserSecretsId>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +30,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\PVScan.Core\PVScan.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Messages\" />
+    <Folder Include="Views\Controls\" />
   </ItemGroup>
 
 </Project>
