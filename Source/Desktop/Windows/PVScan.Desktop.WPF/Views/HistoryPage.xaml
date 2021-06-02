@@ -73,7 +73,10 @@
             </Border>
         </Grid>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      x:Name="BarecodesScrollViewer"
+                      ScrollChanged="BarcodesScrollViewer_ScrollChanged"
+                      PreviewMouseWheel="BarecodesScrollViewer_PreviewMouseWheel">
             <StackPanel>
                 <ListView x:Name="LoadedBarcodesListView"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"

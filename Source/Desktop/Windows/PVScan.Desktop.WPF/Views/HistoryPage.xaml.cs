@@ -52,5 +52,25 @@ namespace PVScan.Desktop.WPF.Views
             SearchDelayTimer.Interval = SearchDelay;
             SearchDelayTimer.Enabled = true;
         }
+
+        private void BarcodesScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (BarecodesScrollViewer.ScrollableHeight < 50)
+            {
+                return;
+            }
+
+            if (e.VerticalOffset >= BarecodesScrollViewer.ScrollableHeight - 50)
+            {
+                VM.LoadNextPage.Execute(null);
+            }
+        }
+
+        private void BarecodesScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
     }
 }
