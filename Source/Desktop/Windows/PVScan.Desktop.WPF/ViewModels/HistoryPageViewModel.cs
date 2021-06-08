@@ -196,7 +196,7 @@ namespace PVScan.Desktop.WPF.ViewModels
 
 
         public int PageCount { get; set; }
-        private int PageSize { get; set; } = 10;
+        private int PageSize { get; set; } = 35;
 
         public ICommand LoadNextPage { get; set; }
 
