@@ -12,6 +12,7 @@
 
     <UserControl.Resources>
         <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
+        <converters:LastTimeTypeStringConverter x:Key="LastTimeTypeString"/>
     </UserControl.Resources>
     
     <Grid Margin="4, 0">

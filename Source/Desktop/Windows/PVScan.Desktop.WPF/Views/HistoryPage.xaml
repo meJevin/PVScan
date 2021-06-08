@@ -33,7 +33,8 @@
                     Style="{DynamicResource MaterialDesignToolButton}"
                     Height="28"
                     Width="28"
-                    Padding="0">
+                    Padding="0"
+                    Click="FilterButton_Click">
                 <materialDesign:PackIcon Kind="Filter"
                                          Opacity=".56"
                                          Foreground="White"
@@ -100,6 +101,12 @@
                    MouseDown="SortingPageOverlay_MouseDown"/>
 
         <local:SortingPage Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="12,0,12,0"
-                           x:Name="SortingPage"/>
+                           x:Name="SortingPage" MaxWidth="375"/>
+
+        <Rectangle x:Name="FilterPageOverlay" Fill="Black" Grid.RowSpan="2" Opacity="0" IsHitTestVisible="False"
+                   MouseDown="FilterPageOverlay_MouseDown"/>
+
+        <local:FilterPage Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="12,68,12,0"
+                          x:Name="FilterPage" MaxWidth="375"/>
     </Grid>
 </ContentControl>

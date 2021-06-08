@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PVScan.Desktop.WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,9 +19,26 @@ namespace PVScan.Desktop.WPF.Views
     /// </summary>
     public partial class FilterPage : ContentControl
     {
+        FilterPageViewModel VM;
+
         public FilterPage()
         {
             InitializeComponent();
+
+            VM = DataContext as FilterPageViewModel;
+
+            AvailableBarcodeFormatsListView.SelectionChanged += BarcodeFormatListView_SelectionChanged;
+            AvailableLastTimeSpansListView.SelectionChanged += LastTimeListView_SelectionChanged;
+        }
+
+        private void BarcodeFormatListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            VM.ToggleApplyFilterEnabled();
+        }
+
+        private void LastTimeListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            VM.ToggleApplyFilterEnabled();
         }
     }
 }

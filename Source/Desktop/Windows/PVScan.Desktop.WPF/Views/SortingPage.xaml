@@ -73,6 +73,7 @@
                     <ListView ItemsSource="{Binding AvailableSortingFields}"
                               SelectedItem="{Binding SelectedSortingField}"
                               SelectionChanged="AvailiableSortingFieldsListView_SelectionChanged"
+                              HorizontalContentAlignment="Stretch"
                               x:Name="AvailiableSortingFieldsListView">
                         <ListView.ItemTemplate>
                             <DataTemplate>

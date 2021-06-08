@@ -25,6 +25,7 @@ namespace PVScan.Desktop.WPF.Views
     public partial class HistoryPage : ContentControl
     {
         double SortingPageHeight = -1;
+        double FilterPageHeight = -1;
         double SearchDelay = 500;
         Timer SearchDelayTimer;
 
@@ -45,10 +46,21 @@ namespace PVScan.Desktop.WPF.Views
 
             SortingPage.SizeChanged += async (_, _) =>
             {
-                if (SortingPage.ActualHeight != SortingPageHeight)
+                if (SortingPage.ActualHeight != SortingPageHeight &&
+                    SortingPageOverlay.Opacity != OverlayMaxOpacity)
                 {
                     SortingPageHeight = SortingPage.ActualHeight;
                     await HideSortingPage(TimeSpan.Zero);
+                }
+            };
+
+            FilterPage.SizeChanged += async (_, _) =>
+            {
+                if (FilterPage.ActualHeight != FilterPageHeight &&
+                    FilterPageOverlay.Opacity != OverlayMaxOpacity)
+                {
+                    FilterPageHeight = FilterPage.ActualHeight;
+                    await HideFilterPage(TimeSpan.Zero);
                 }
             };
         }
@@ -103,14 +115,40 @@ namespace PVScan.Desktop.WPF.Views
             await SortingPage.TranslateTo(0, 0, duration);
         }
 
+        private async void SortingPageOverlay_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await HideSortingPage(Animations.DefaultDuration);
+        }
+
+        private async Task HideFilterPage(TimeSpan duration)
+        {
+            FilterPageOverlay.IsHitTestVisible = false;
+
+            _ = FilterPage.TranslateTo(0, FilterPage.ActualHeight, duration);
+            await FilterPageOverlay.FadeTo(0, duration);
+        }
+
+        private async Task ShowFilterPage(TimeSpan duration)
+        {
+            FilterPageOverlay.IsHitTestVisible = true;
+
+            _ = FilterPageOverlay.FadeTo(OverlayMaxOpacity, duration);
+            await FilterPage.TranslateTo(0, 0, duration);
+        }
+
+        private async void FilterPageOverlay_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await HideFilterPage(Animations.DefaultDuration);
+        }
+
         private async void SortingButton_Click(object sender, RoutedEventArgs e)
         {
             await ShowSortingPage(Animations.DefaultDuration);
         }
 
-        private async void SortingPageOverlay_MouseDown(object sender, MouseButtonEventArgs e)
+        private async void FilterButton_Click(object sender, RoutedEventArgs e)
         {
-            await HideSortingPage(Animations.DefaultDuration);
+            await ShowFilterPage(Animations.DefaultDuration);
         }
     }
 }
