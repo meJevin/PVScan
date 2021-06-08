@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
         <converters:LastTimeTypeStringConverter x:Key="LastTimeTypeString"/>
+        <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
     </UserControl.Resources>
     
     <Grid Margin="4, 0">
@@ -31,7 +32,7 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Content="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}" 
                    Foreground="White" Opacity="0.45" Padding="0,4"/>
-            <Label Content="{Binding Format}" ContentStringFormat=", {0}" Foreground="White" Padding="0,4"/>
+            <Label Content="{Binding Format, Converter={StaticResource BarcodeFormatString}}" ContentStringFormat=", {0}" Foreground="White" Padding="0,4"/>
         </StackPanel>
 
         <Button Width="22" Height="22" Grid.Column="1" Grid.RowSpan="2" Click="FavoriteButton_Click"
