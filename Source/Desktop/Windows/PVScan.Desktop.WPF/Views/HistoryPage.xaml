@@ -82,7 +82,8 @@
                 <ListView x:Name="LoadedBarcodesListView"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           ItemsSource="{Binding BarcodesPaged}"
-                          HorizontalContentAlignment="Stretch">
+                          HorizontalContentAlignment="Stretch"
+                          SelectionChanged="LoadedBarcodesListView_SelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:Barcode}">
                             <datatemplates:NormalBarcodeItem 
@@ -106,7 +107,13 @@
         <Rectangle x:Name="FilterPageOverlay" Fill="Black" Grid.RowSpan="2" Opacity="0" IsHitTestVisible="False"
                    MouseDown="FilterPageOverlay_MouseDown"/>
 
-        <local:FilterPage Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="12,68,12,0"
-                          x:Name="FilterPage"/>
+        <local:FilterPage Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="24,84,24,0"
+                          x:Name="FilterPage" MaxWidth="475"/>
+
+        <Rectangle x:Name="BarcodeInfoPageOverlay" Fill="Black" Grid.RowSpan="2" Opacity="0" IsHitTestVisible="False"
+                   MouseDown="BarcodeInfoPageOverlay_MouseDown"/>
+
+        <local:BarcodeInfoPage Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="24,84,24,0"
+                          x:Name="BarcodeInfoPage" MaxWidth="475"/>
     </Grid>
 </ContentControl>

@@ -26,14 +26,11 @@
     <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls" Version="6.1.2" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.2" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+    <PackageReference Include="SharpVectors" Version="1.7.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\PVScan.Core\PVScan.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Controls\" />
   </ItemGroup>
 
 </Project>

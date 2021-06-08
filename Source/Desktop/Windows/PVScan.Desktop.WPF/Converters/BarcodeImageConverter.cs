@@ -6,6 +6,11 @@ using PVScan.Core.Models;
 using System.Windows.Data;
 using ZXing;
 using ZXing.Common;
+using static ZXing.Rendering.SvgRenderer;
+using System.Windows.Controls;
+using SharpVectors.Converters;
+using SharpVectors.Renderers.Wpf;
+using System.Windows.Media.Imaging;
 
 namespace PVScan.Desktop.WPF.Converters
 {
@@ -33,12 +38,34 @@ namespace PVScan.Desktop.WPF.Converters
 
                 var svg = writer.Write(b.Text);
 
-                MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(svg.Content));
+                var localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                var tempSVGFileDir = Path.Combine(localAppDataFolder, "PVScan", "Temp");
+                var tempSVGFilePath = Path.Combine(tempSVGFileDir, $"BarcodeSVG_temp.svg");
 
-                //var result = SvgImageSource.FromSvgStream(() => ms, writer.Options.Width, writer.Options.Height, Color.Black);
+                // Todo: move this somewhere else..
+                if (!Directory.Exists(tempSVGFileDir))
+                {
+                    Directory.CreateDirectory(tempSVGFileDir);
+                }
 
-                //return result;
-                return null;
+                if (!File.Exists(tempSVGFilePath))
+                {
+                    File.Create(tempSVGFilePath);
+                }
+
+                // Todo: Bug with SVG renderer putting invalid rgba value
+                svg.Content = svg.Content.Replace("rgba(1)", "rgba(255,255,255,0)");
+                File.WriteAllText(tempSVGFilePath, svg.Content);
+
+                var cnv = new ImageSvgConverter(new WpfDrawingSettings()
+                {
+                    IncludeRuntime = true,
+                    TextAsGeometry = true,
+                });
+
+                var result = cnv.Convert(tempSVGFilePath);
+
+                return LoadBitmapImage(tempSVGFilePath.Replace(".svg", ".png"));
             }
             catch (Exception ex)
             {
@@ -118,6 +145,20 @@ namespace PVScan.Desktop.WPF.Converters
                 };
             }
 
+        }
+
+        public static BitmapImage LoadBitmapImage(string fileName)
+        {
+            using (var stream = new FileStream(fileName, FileMode.Open))
+            {
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = stream;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+                return bitmapImage;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
