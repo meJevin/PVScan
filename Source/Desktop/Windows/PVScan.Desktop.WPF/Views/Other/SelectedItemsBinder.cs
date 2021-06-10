@@ -53,7 +53,8 @@ namespace PVScan.Desktop.WPF.Views
 
         private void Collection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Reset)
+            if (e.Action == NotifyCollectionChangedAction.Reset && 
+                _listView.SelectionMode == SelectionMode.Multiple)
             {
                 _listView.SelectedItems.Clear();
                 return;
