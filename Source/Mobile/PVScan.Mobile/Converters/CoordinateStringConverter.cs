@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using PVScan.Mobile.Models;
+using PVScan.Core.Models;
 using Xamarin.Forms;
 
 namespace PVScan.Mobile.Converters

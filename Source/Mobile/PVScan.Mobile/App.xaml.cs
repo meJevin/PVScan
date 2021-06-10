@@ -1,6 +1,8 @@
 ﻿using Autofac;
+using PVScan.Core;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Views;
 using System;
 using Xamarin.Essentials;
@@ -9,6 +11,7 @@ using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Xamarin.Forms.Svg;
 using Xamarin.Forms.Xaml;
+using PVScan.Mobile.Services.Interfaces;
 
 namespace PVScan.Mobile
 {
@@ -16,6 +19,8 @@ namespace PVScan.Mobile
     {
         public App()
         {
+            DataAccess.Init(System.IO.Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3"));
+
             InitializeTheme();
 
             InitializeComponent();

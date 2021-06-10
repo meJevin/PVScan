@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
     xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels"
-    xmlns:models="clr-namespace:PVScan.Mobile.Models"
+    xmlns:models="clr-namespace:PVScan.Core.Models;assembly=PVScan.Core"
     xmlns:di="clr-namespace:PVScan.Mobile.DI"
     xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
     x:Class="PVScan.Mobile.Views.SpecifyLocationPage"

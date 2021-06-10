@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="PVScan.Desktop.WPF.Views.DataTemplates.NormalBarcodeItem"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:models="clr-namespace:PVScan.Core.Models;assembly=PVScan.Core" 
+      xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance models:Barcode}">
+
+    <UserControl.Resources>
+        <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
+        <converters:LastTimeTypeStringConverter x:Key="LastTimeTypeString"/>
+        <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
+    </UserControl.Resources>
+    
+    <Grid Margin="4, 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="32"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding Text}" Foreground="White" Padding="0,2"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}" 
+                   Foreground="White" Opacity="0.45" Padding="0,4"/>
+            <Label Content="{Binding Format, Converter={StaticResource BarcodeFormatString}}" ContentStringFormat=", {0}" Foreground="White" Padding="0,4"/>
+        </StackPanel>
+
+        <Button Width="22" Height="22" Grid.Column="1" Grid.RowSpan="2" Click="FavoriteButton_Click"
+                                    HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="FavoriteButton"
+                                    Style="{DynamicResource MaterialDesignToolButton}" Padding="0">
+            <materialDesign:PackIcon Kind="Heart" Foreground="White" Height="22" Width="22"
+                                                         Opacity="0.25" x:Name="FavoriteButtonIcon"/>
+        </Button>
+
+        <materialDesign:PackIcon Kind="Check" Foreground="White" Height="28" Width="28" Grid.Column="1" Grid.RowSpan="2"
+                                 HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="SelectedIcon"
+                                         Visibility="{Binding 
+                                         RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}},
+                                         Path=IsSelected, 
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+            <materialDesign:PackIcon.RenderTransform>
+                <TranslateTransform X="32"/>
+            </materialDesign:PackIcon.RenderTransform>
+        </materialDesign:PackIcon>
+    </Grid>
+</UserControl>

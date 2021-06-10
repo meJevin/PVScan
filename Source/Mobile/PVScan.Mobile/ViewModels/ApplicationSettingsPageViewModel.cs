@@ -1,5 +1,6 @@
 ﻿using MvvmHelpers;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;

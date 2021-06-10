@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>Latest</LangVersion>
+    <Configurations>Debug;Release;IOS_Device_Debug;IOS_Simulator_Debug;Android_Simulator_Debug;Desktop_Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Android_Simulator_Debug|AnyCPU'">
+    <DefineConstants>TRACE;MOBILE_ANDROID;SIMULATOR;</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='IOS_Device_Debug|AnyCPU'">
+    <DefineConstants>TRACE;MOBILE_IOS;DEVICE:</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='IOS_Simulator_Debug|AnyCPU'">
+    <DefineConstants>TRACE;MOBILE_IOS;SIMULATOR;</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|AnyCPU'">
+    <DefineConstants>TRACE;DESKTOP_WINDOWS</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityModel.OidcClient" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.4" />
+    <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
+  </ItemGroup>
+
+</Project>

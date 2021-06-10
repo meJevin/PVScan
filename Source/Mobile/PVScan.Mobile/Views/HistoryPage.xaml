@@ -7,7 +7,7 @@
     xmlns:effects="clr-namespace:PVScan.Mobile.Effects"
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
     xmlns:views="clr-namespace:PVScan.Mobile.Views"
-    xmlns:models="clr-namespace:PVScan.Mobile.Models"
+    xmlns:models="clr-namespace:PVScan.Core.Models;assembly=PVScan.Core"
     x:Class="PVScan.Mobile.Views.HistoryPage"
     xmlns:di="clr-namespace:PVScan.Mobile.DI" 
     xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"

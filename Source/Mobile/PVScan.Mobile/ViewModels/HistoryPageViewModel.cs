@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MvvmHelpers;
 using PVScan.Mobile.Converters;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
-using PVScan.Mobile.Models.API;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Models.API;
 using PVScan.Mobile.Services;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages;
 using PVScan.Mobile.ViewModels.Messages.Filtering;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
@@ -22,6 +22,7 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using ZXing;
+using PVScan.Mobile.Services.Interfaces;
 
 namespace PVScan.Mobile.ViewModels
 {
@@ -56,6 +57,7 @@ namespace PVScan.Mobile.ViewModels
 
             BarcodeHub.OnDeleted += BarcodeHub_OnDeleted;
             BarcodeHub.OnUpdated += BarcodeHub_OnUpdated;
+            BarcodeHub.OnScanned += BarcodeHub_OnScanned;
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
@@ -351,6 +353,36 @@ namespace PVScan.Mobile.ViewModels
             {
                 Barcodes.Remove(barcode);
             }
+        }
+
+        private async void BarcodeHub_OnScanned(object sender, ScannedBarcodeRequest b)
+        {
+            Barcode newBarcode = new Barcode()
+            {
+                Favorite = b.Favorite,
+                Format = b.Format,
+                GUID = b.GUID,
+                Hash = b.Hash,
+                ScanLocation = null,
+                ScanTime = b.ScanTime,
+                Text = b.Text,
+            };
+
+            if (b.Latitude.HasValue && b.Longitude.HasValue)
+            {
+                newBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = b.Latitude,
+                    Longitude = b.Longitude
+                };
+            }
+
+            newBarcode = await BarcodesRepository.Save(newBarcode);
+
+            MessagingCenter.Send(this, nameof(BarcodeScannedMessage), new BarcodeScannedMessage()
+            {
+                ScannedBarcode = newBarcode,
+            });
         }
 
         public async Task LoadBarcodesFromDB()

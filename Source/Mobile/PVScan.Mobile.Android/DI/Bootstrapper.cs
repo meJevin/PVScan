@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Droid.Services;
 using PVScan.Mobile.Services.Interfaces;
 

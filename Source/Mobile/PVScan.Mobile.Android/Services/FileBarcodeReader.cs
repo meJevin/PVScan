@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Android.Graphics;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services.Interfaces;
 using ZXing;
 
