@@ -30,12 +30,13 @@ namespace PVScan.Mobile.ViewModels
             {
                 if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Email))
                 {
-                    //FailedSignUp?.Invoke(this, new SignUpEventArgs()
-                    //{
-                    //    Message = "Please fill in all fields!",
-                    //});
-
                     _ = PopupMessageService.ShowMessage("Please fill in all fields!");
+
+                    // Todo: dead code
+                    FailedSignUp?.Invoke(this, new SignUpEventArgs()
+                    {
+                        Message = "Please fill in all fields!",
+                    });
 
                     return;
                 }
@@ -48,19 +49,23 @@ namespace PVScan.Mobile.ViewModels
 
                 if (result)
                 {
-                    //SuccessfulSignUp?.Invoke(this, new SignUpEventArgs()
-                    //{
-                    //    Message = "You've successfuly signed up",
-                    //});
                     _ = PopupMessageService.ShowMessage("You've successfuly signed up!");
+
+                    // Todo: dead code
+                    SuccessfulSignUp?.Invoke(this, new SignUpEventArgs()
+                    {
+                        Message = "You've successfuly signed up",
+                    });
                 }
                 else
                 {
-                    //FailedSignUp?.Invoke(this, new SignUpEventArgs()
-                    //{
-                    //    Message = "Failed to sign up!",
-                    //});
                     _ = PopupMessageService.ShowMessage("Failed to sign up!");
+
+                    // Todo: dead code
+                    FailedSignUp?.Invoke(this, new SignUpEventArgs()
+                    {
+                        Message = "Failed to sign up!",
+                    });
                 }
 
                 Login = "";

@@ -39,7 +39,9 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void Can_SignUp_With_Valid_Credentials(string login, string password, string email)
         {
             // Arrange
-            SignUpPageViewModel vm = new SignUpPageViewModel(mockIdentityService.Object, null);
+            SignUpPageViewModel vm = new SignUpPageViewModel(
+                mockIdentityService.Object, 
+                new Mock<IPopupMessageService>().Object);
             bool signedUp = false;
 
             vm.Login = login;
@@ -68,7 +70,9 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void SignUp_With_Empty_Credentials_SignUp_Not_Requested(string login, string password, string email)
         {
             // Arrange
-            SignUpPageViewModel vm = new SignUpPageViewModel(mockIdentityService.Object, null);
+            SignUpPageViewModel vm = new SignUpPageViewModel(
+                mockIdentityService.Object,
+                new Mock<IPopupMessageService>().Object);
 
             vm.Login = login;
             vm.Password = password;

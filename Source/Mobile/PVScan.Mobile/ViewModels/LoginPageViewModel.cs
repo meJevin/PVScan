@@ -36,6 +36,8 @@ namespace PVScan.Mobile.ViewModels
                 {
                     _ = PopupMessageService?.ShowMessage("Please fill in all fields!");
 
+                    FailedLogin?.Invoke(this, new LoginEventArgs() { });
+
                     return;
                 }
 
@@ -64,7 +66,7 @@ namespace PVScan.Mobile.ViewModels
                     _ = PopupMessageService?.ShowMessage("Failed to login!");
 
                     // Todo: dead code :)
-                    SuccessfulLogin?.Invoke(this, new LoginEventArgs() { });
+                    FailedLogin?.Invoke(this, new LoginEventArgs() { });
                 }
             });
         }
