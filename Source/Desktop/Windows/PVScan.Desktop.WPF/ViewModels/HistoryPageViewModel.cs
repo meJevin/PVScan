@@ -31,6 +31,8 @@ namespace PVScan.Desktop.WPF.ViewModels
             Barcodes = new ObservableRangeCollection<Barcode>();
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
 
+            SelectedBarcodes = new ObservableCollection<Barcode>();
+
             LoadNextPage = new Command(async () =>
             {
                 var newBarcodes = Barcodes.Skip(PageCount * PageSize).Take(PageSize);
@@ -81,6 +83,45 @@ namespace PVScan.Desktop.WPF.ViewModels
                 }
             });
 
+            StartEditCommand = new Command(() =>
+            {
+                IsEditing = true;
+            });
+
+            DoneEditCommand = new Command(() =>
+            {
+                SelectedBarcodes.Clear();
+                IsEditing = false;
+            });
+
+            DeleteSelectedBarcodesCommand = new Command(async () =>
+            {
+                var selectedGUIDS = new List<string>();
+
+                foreach (var b in SelectedBarcodes)
+                {
+                    selectedGUIDS.Add(b.GUID);
+                }
+
+                foreach (var guid in selectedGUIDS)
+                {
+                    var barcode = Barcodes.FirstOrDefault(b => b.GUID == guid);
+
+                    await barcodesRepository.Delete(barcode);
+
+                    if (Barcodes.Contains(barcode))
+                    {
+                        Barcodes.Remove(barcode);
+                    }
+
+                    if (BarcodesPaged.Contains(barcode))
+                    {
+                        BarcodesPaged.Remove(barcode);
+                    }
+                }
+
+                SelectedBarcodes.Clear();
+            });
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
@@ -205,5 +246,13 @@ namespace PVScan.Desktop.WPF.ViewModels
         public bool IsLoading { get; set; }
 
         public ICommand FavoriteCommand { get; set; }
+
+
+        public bool IsEditing { get; set; }
+        public ICommand StartEditCommand { get; set; }
+        public ICommand DoneEditCommand { get; set; }
+        public ICommand DeleteSelectedBarcodesCommand { get; set; }
+
+        public ObservableCollection<Barcode> SelectedBarcodes { get; set; }
     }
 }

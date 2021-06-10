@@ -79,21 +79,41 @@
                       ScrollChanged="BarcodesScrollViewer_ScrollChanged"
                       PreviewMouseWheel="BarecodesScrollViewer_PreviewMouseWheel">
             <StackPanel>
+                <Grid Height="32" Margin="8,0">
+                </Grid>
                 <ListView x:Name="LoadedBarcodesListView"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           ItemsSource="{Binding BarcodesPaged}"
                           HorizontalContentAlignment="Stretch"
-                          SelectionChanged="LoadedBarcodesListView_SelectionChanged">
+                          local:ListViewExtensions.SelectedValues="{Binding SelectedBarcodes}"
+                          SelectionChanged="LoadedBarcodesListView_SelectionChanged"
+                          >
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:Barcode}">
                             <datatemplates:NormalBarcodeItem 
-                                FavoriteCommand="{Binding RelativeSource={RelativeSource AncestorType=local:HistoryPage}, Path=DataContext.FavoriteCommand}"/>
+                                FavoriteCommand="{Binding RelativeSource={RelativeSource AncestorType=local:HistoryPage}, Path=DataContext.FavoriteCommand}"
+                                IsEditing="{Binding RelativeSource={RelativeSource AncestorType=local:HistoryPage}, Path=DataContext.IsEditing}"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
                 <Grid Height="46"/>
             </StackPanel>
         </ScrollViewer>
+
+        <Grid Height="32" Margin="8,0" Grid.Row="1" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Delete" Foreground="White" Opacity="0" x:Name="DeleteButton"
+                            Command="{Binding DeleteSelectedBarcodesCommand}" Grid.Column="2"/>
+            <Button Content="Done" Foreground="White" Opacity="0" x:Name="DoneEditButton"
+                            Command="{Binding DoneEditCommand}" Grid.Column="0"/>
+            <Button Content="Edit" Foreground="White" Grid.Column="0" x:Name="StartEditButton"
+                            Command="{Binding StartEditCommand}"/>
+        </Grid>
 
         <Button Content="Sorting" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" 
                 Grid.RowSpan="2" Margin="8" Width="200" Click="SortingButton_Click"/>

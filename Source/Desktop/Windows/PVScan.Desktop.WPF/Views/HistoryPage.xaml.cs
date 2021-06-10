@@ -75,6 +75,33 @@ namespace PVScan.Desktop.WPF.Views
                     await HideBarcodeInfoPage(TimeSpan.Zero);
                 }
             };
+
+            VM.PropertyChanged += VM_PropertyChanged;
+        }
+
+        private async void VM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(VM.IsEditing))
+            {
+                if (VM.IsEditing)
+                {
+                    LoadedBarcodesListView.SelectionMode = SelectionMode.Multiple;
+
+                    _ = StartEditButton.FadeTo(0, Animations.DefaultDuration);
+                    StartEditButton.IsHitTestVisible = false;
+                    _ = DoneEditButton.FadeTo(1, Animations.DefaultDuration);
+                    await DeleteButton.FadeTo(1, Animations.DefaultDuration);
+                }
+                else
+                {
+                    LoadedBarcodesListView.SelectionMode = SelectionMode.Single;
+
+                    _ = StartEditButton.FadeTo(1, Animations.DefaultDuration);
+                    StartEditButton.IsHitTestVisible = true;
+                    _ = DoneEditButton.FadeTo(0, Animations.DefaultDuration);
+                    await DeleteButton.FadeTo(0, Animations.DefaultDuration);
+                }
+            }
         }
 
         private void SearchDelayTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -190,6 +217,11 @@ namespace PVScan.Desktop.WPF.Views
 
         private async void LoadedBarcodesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (VM.IsEditing)
+            {
+                return;
+            }
+
             if ((sender as ListView).SelectedItem == null)
             {
                 return;

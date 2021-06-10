@@ -19,7 +19,7 @@
     <Grid Margin="4, 0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="32"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -36,10 +36,21 @@
         </StackPanel>
 
         <Button Width="22" Height="22" Grid.Column="1" Grid.RowSpan="2" Click="FavoriteButton_Click"
-                                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="FavoriteButton"
                                     Style="{DynamicResource MaterialDesignToolButton}" Padding="0">
             <materialDesign:PackIcon Kind="Heart" Foreground="White" Height="22" Width="22"
                                                          Opacity="0.25" x:Name="FavoriteButtonIcon"/>
         </Button>
+
+        <materialDesign:PackIcon Kind="Check" Foreground="White" Height="28" Width="28" Grid.Column="1" Grid.RowSpan="2"
+                                 HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="SelectedIcon"
+                                         Visibility="{Binding 
+                                         RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}},
+                                         Path=IsSelected, 
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+            <materialDesign:PackIcon.RenderTransform>
+                <TranslateTransform X="32"/>
+            </materialDesign:PackIcon.RenderTransform>
+        </materialDesign:PackIcon>
     </Grid>
 </UserControl>
