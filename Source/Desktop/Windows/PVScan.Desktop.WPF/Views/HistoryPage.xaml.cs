@@ -190,6 +190,11 @@ namespace PVScan.Desktop.WPF.Views
 
         private async void LoadedBarcodesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if ((sender as ListView).SelectedItem == null)
+            {
+                return;
+            }
+
             (BarcodeInfoPage.DataContext as BarcodeInfoPageViewModel).SelectedBarcode 
                 = (sender as ListView).SelectedItem as Barcode;
 
