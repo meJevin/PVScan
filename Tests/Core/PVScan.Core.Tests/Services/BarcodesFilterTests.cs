@@ -281,6 +281,24 @@ namespace PVScan.Core.Tests.Services
             Assert.Equal(existingFormats, filteredFormats);
         }
 
+        [Fact]
+        public void Can_Filter_By_Search()
+        {
+            // Arrange
+            var mockBarcodes = DbContext.Barcodes.ToList();
+            var sut = new BarcodesFilter();
+
+            // Act
+            var filteredBarcodes = sut.Search(mockBarcodes, "Test1");
+
+            // Assert
+            Assert.NotEqual(mockBarcodes.Count(), filteredBarcodes.Count());
+            Assert.All(filteredBarcodes, (b) =>
+            {
+                Assert.Contains("Test1", b.Text);
+            });
+        }
+
         private void FillUpTestBarcodes()
         {
             // For mock barcodes we add 3 barcodes for each time category
@@ -291,16 +309,19 @@ namespace PVScan.Core.Tests.Services
             {
                 ScanTime = DateTime.Today.AddHours(2),
                 Format = ZXing.BarcodeFormat.QR_CODE,
+                Text = "Test1",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = DateTime.Today.AddHours(3),
                 Format = ZXing.BarcodeFormat.AZTEC,
+                Text = "Test2",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = DateTime.Today.AddHours(4),
                 Format = ZXing.BarcodeFormat.PDF_417,
+                Text = "Test3",
             });
 
             // This week
@@ -308,16 +329,19 @@ namespace PVScan.Core.Tests.Services
             {
                 ScanTime = DateTime.Today.AddDays(-7).AddDays(1),
                 Format = ZXing.BarcodeFormat.QR_CODE,
+                Text = "Test4",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = DateTime.Today.AddDays(-7).AddDays(2),
                 Format = ZXing.BarcodeFormat.AZTEC,
+                Text = "Test5",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = DateTime.Today.AddDays(-7).AddDays(3),
                 Format = ZXing.BarcodeFormat.PDF_417,
+                Text = "Test6",
             });
 
             // This month
@@ -325,16 +349,19 @@ namespace PVScan.Core.Tests.Services
             {
                 ScanTime = DateTime.Today.AddMonths(-1).AddDays(1),
                 Format = ZXing.BarcodeFormat.QR_CODE,
+                Text = "Test7",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = DateTime.Today.AddMonths(-1).AddDays(2),
                 Format = ZXing.BarcodeFormat.AZTEC,
+                Text = "Test8",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = DateTime.Today.AddMonths(-1).AddDays(3),
                 Format = ZXing.BarcodeFormat.PDF_417,
+                Text = "Test9",
             });
 
             // This year
@@ -342,16 +369,19 @@ namespace PVScan.Core.Tests.Services
             {
                 ScanTime = DateTime.Today.AddYears(-1).AddDays(1),
                 Format = ZXing.BarcodeFormat.QR_CODE,
+                Text = "Test10",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = DateTime.Today.AddYears(-1).AddDays(2),
                 Format = ZXing.BarcodeFormat.AZTEC,
+                Text = "Test11",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = DateTime.Today.AddYears(-1).AddDays(3),
                 Format = ZXing.BarcodeFormat.PDF_417,
+                Text = "Test12",
             });
 
             // Some time ago
@@ -359,16 +389,19 @@ namespace PVScan.Core.Tests.Services
             {
                 ScanTime = new DateTime(2010, 1, 1),
                 Format = ZXing.BarcodeFormat.QR_CODE,
+                Text = "Test13",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = new DateTime(2010, 1, 2),
                 Format = ZXing.BarcodeFormat.AZTEC,
+                Text = "Test14",
             });
             DbContext.Barcodes.Add(new Barcode()
             {
                 ScanTime = new DateTime(2010, 1, 3),
                 Format = ZXing.BarcodeFormat.PDF_417,
+                Text = "Test15",
             });
 
             // Save changes
