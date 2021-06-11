@@ -14,7 +14,7 @@ namespace PVScan.Core.Services
             {
                 dbBarcodes = dbBarcodes
                     .Where(b => b.ScanTime >= filter.FromDate)
-                    .Where(b => b.ScanTime < filter.ToDate);
+                    .Where(b => b.ScanTime <= filter.ToDate);
             }
             else if (filter.LastType != null)
             {

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>Latest</LangVersion>
-    <Configurations>Debug;Release;IOS_Device_Debug;IOS_Simulator_Debug;Android_Simulator_Debug;Desktop_Debug</Configurations>
+    <Configurations>Android_Simulator_Debug;IOS_Device_Debug;IOS_Simulator_Debug;Desktop_Debug;Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Android_Simulator_Debug|AnyCPU'">
@@ -31,4 +31,7 @@
     <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Mocks\" />
+  </ItemGroup>
 </Project>

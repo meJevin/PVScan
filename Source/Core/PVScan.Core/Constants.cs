@@ -8,11 +8,11 @@ namespace PVScan.Core
     public static class Auth
     {
 #if MOBILE_ANDROID
-        public static string Authority = "https://10.0.2.2:1488";
+        public static string Authority = "https://10.0.2.2:1488/";
 #elif MOBILE_IOS
-        public static string Authority = "https://192.168.1.23:1488";
+        public static string Authority = "https://192.168.1.23:1488/";
 #elif DESKTOP_WINDOWS
-        public static string Authority = "https://localhost:1488";
+        public static string Authority = "https://localhost:1488/";
 #endif
 
 #if MOBILE_ANDROID || MOBILE_IOS
@@ -26,11 +26,11 @@ namespace PVScan.Core
     {
 
 #if MOBILE_ANDROID
-        public static string BaseAddress = "https://10.0.2.2:1337";
+        public static string BaseAddress = "https://10.0.2.2:1337/";
 #elif MOBILE_IOS
-        public static string BaseAddress = "https://192.168.1.23:1337";
+        public static string BaseAddress = "https://192.168.1.23:1337/";
 #elif DESKTOP_WINDOWS
-        public static string BaseAddress = "https://localhost:1337";
+        public static string BaseAddress = "https://localhost:1337/";
 #endif
         public static string BarcodesHub = "/hubs/barcodes";
         public static string UserInfoHub = "/hubs/userInfo";
