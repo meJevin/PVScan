@@ -4,6 +4,8 @@ using PVScan.Desktop.WPF.ViewModels;
 using PVScan.Desktop.WPF.ViewModels.Messages;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,9 +79,29 @@ namespace PVScan.Desktop.WPF.Views
             };
 
             VM.PropertyChanged += VM_PropertyChanged;
+            VM.SelectedBarcodes.CollectionChanged += SelectedBarcodes_CollectionChanged;
         }
 
-        private async void VM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private async void SelectedBarcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (!VM.IsEditing)
+            {
+                return;
+            }
+
+            if (VM.SelectedBarcodes.Count == 0)
+            {
+                DeleteButton.IsHitTestVisible = false;
+                await DeleteButton.FadeTo(0.5, Animations.DefaultDuration);
+            }
+            else
+            {
+                DeleteButton.IsHitTestVisible = true;
+                await DeleteButton.FadeTo(1, Animations.DefaultDuration);
+            }
+        }
+
+        private async void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(VM.IsEditing))
             {
@@ -90,7 +112,7 @@ namespace PVScan.Desktop.WPF.Views
                     _ = StartEditButton.FadeTo(0, Animations.DefaultDuration);
                     StartEditButton.IsHitTestVisible = false;
                     _ = DoneEditButton.FadeTo(1, Animations.DefaultDuration);
-                    await DeleteButton.FadeTo(1, Animations.DefaultDuration);
+                    await DeleteButton.FadeTo(0.5, Animations.DefaultDuration);
                 }
                 else
                 {
