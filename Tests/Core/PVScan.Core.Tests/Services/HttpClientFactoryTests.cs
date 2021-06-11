@@ -18,5 +18,33 @@ namespace PVScan.Core.Tests.Services
         public HttpClientFactoryTests()
         {
         }
+
+        [Fact]
+        public void Factory_ForAPI_Has_Correct_Base_Address()
+        {
+            // Arrange
+            var sut = new HttpClientFactory();
+
+            // Act
+            var result = sut.ForAPI("some_token");
+
+            // Assert
+            Assert.Equal(API.BaseAddress, result.BaseAddress.AbsoluteUri);
+        }
+
+        [Fact]
+        public void Factory_ForAPI_Has_Bearer_Authentication_Set()
+        {
+            // Arrange
+            var sut = new HttpClientFactory();
+
+            // Act
+            var result = sut.ForAPI("some_token");
+
+            // Assert
+            var authHeader = result.DefaultRequestHeaders.Authorization;
+            Assert.Equal("Bearer", authHeader.Scheme);
+            Assert.Equal("some_token", authHeader.Parameter);
+        }
     }
 }
