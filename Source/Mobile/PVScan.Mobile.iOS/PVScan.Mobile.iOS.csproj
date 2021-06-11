@@ -266,7 +266,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\..\Core\PVScan.Core\PVScan.Core.csproj">
-      <Project>{5B96B7D1-5A2B-4E6E-BC23-FD73A41B0417}</Project>
+      <Project>{A72C6C66-F1EF-47FA-B004-2DCEE2441F85}</Project>
       <Name>PVScan.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\PVScan.Mobile\PVScan.Mobile.csproj">

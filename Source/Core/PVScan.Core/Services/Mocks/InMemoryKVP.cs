@@ -1,10 +1,9 @@
 ﻿using PVScan.Core.Services.Interfaces;
-using PVScan.Mobile.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PVScan.Mobile.Tests.Services.Mocks
+namespace PVScan.Core.Services.Mocks
 {
     public class InMemoryKVP : IPersistentKVP
     {

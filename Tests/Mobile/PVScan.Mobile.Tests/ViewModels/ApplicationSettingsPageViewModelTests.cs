@@ -6,9 +6,9 @@ using PVScan.Core.Models;
 using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
-using PVScan.Mobile.Tests.Services.Mocks;
 using PVScan.Mobile.ViewModels;
 using Xunit;
+using PVScan.Core.Services.Mocks;
 
 namespace PVScan.Mobile.Tests.ViewModels
 {

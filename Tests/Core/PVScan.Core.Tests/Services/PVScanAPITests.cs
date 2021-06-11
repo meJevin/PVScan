@@ -1,6 +1,5 @@
-﻿using PVScan.Mobile.Services.Interfaces;
-using PVScan.Mobile.Tests.Services.Mocks;
-using PVScan.Mobile.Services;
+﻿using PVScan.Core.Services.Interfaces;
+using PVScan.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,11 +11,11 @@ using Moq.Protected;
 using System.Threading;
 using System.Net.Http.Headers;
 
-namespace PVScan.Mobile.Tests.Services
+namespace PVScan.Core.Tests.Services
 {
-    public class BarcodesFilterTests : TestBase
+    public class PVScanAPITests : TestBase
     {
-        public BarcodesFilterTests()
+        public PVScanAPITests()
         {
         }
     }
