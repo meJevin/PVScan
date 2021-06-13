@@ -1,0 +1,3 @@
+[submodule "Vendor/MapboxNet"]
+	path = Vendor/MapboxNet
+	url = https://github.com/meJevin/MapboxNet
