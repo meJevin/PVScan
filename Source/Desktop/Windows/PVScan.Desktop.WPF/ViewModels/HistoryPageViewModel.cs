@@ -107,7 +107,7 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                 foreach (var guid in selectedGUIDS)
                 {
-                    var barcode = Barcodes.FirstOrDefault(b => b.GUID == guid);
+                    var barcode = Barcodes.FirstOrDefault(b => { if (b == null) return false; return b.GUID == guid; });
 
                     await barcodesRepository.Delete(barcode);
 
