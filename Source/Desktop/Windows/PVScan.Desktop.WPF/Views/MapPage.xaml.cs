@@ -1,6 +1,7 @@
 ﻿using MapboxNetCore;
 using PVScan.Core.Models;
 using PVScan.Desktop.WPF.ViewModels;
+using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -39,6 +40,19 @@ namespace PVScan.Desktop.WPF.Views
             Map.Ready += Map_Ready;
 
             VM = DataContext as MapPageViewModel;
+
+            MessagingCenter.Subscribe(this, nameof(ShowBarcodeOnMapMessage),
+                async (MainWindowViewModel vm, ShowBarcodeOnMapMessage args) =>
+                {
+                    if (args.BarcodeToShow.ScanLocation == null)
+                    {
+                        return;
+                    }
+
+                    var loc = args.BarcodeToShow.ScanLocation;
+
+                    Map.FlyTo(new GeoLocation(loc.Longitude.Value, loc.Latitude.Value), 12);
+                });
         }
 
         private void Barcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
