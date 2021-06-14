@@ -9,8 +9,8 @@
              xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels" 
              xmlns:datatemplates="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
              xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
-             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-             d:DataContext="{d:DesignInstance Type=viewmodels:BarcodeInfoPageViewModel}"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                d:DataContext="{d:DesignInstance Type=viewmodels:BarcodeInfoPageViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="500">
 
@@ -40,6 +40,11 @@
             <Label Content="Barcode Information" Foreground="White" FontSize="22" FontWeight="DemiBold"
                    HorizontalAlignment="Center" VerticalAlignment="Top"
                        Margin="0,8,0,12"/>
+
+            <Button Style="{DynamicResource MaterialDesignToolButton}" Width="30" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Background="Transparent" Padding="0" Click="CloseButton_Click">
+                <materialDesign:PackIcon Kind="Close" Foreground="White" Width="26" Height="26"/>
+            </Button>
 
             <!-- SEPARATOR -->
             <Rectangle Fill="White" Height="2" Grid.Row="1"/>

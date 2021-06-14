@@ -29,13 +29,14 @@ namespace PVScan.Desktop.WPF.Views
     {
         double SortingPageHeight = -1;
         double FilterPageHeight = -1;
-        double BarcodeInfoPageHeight = -1;
         double SearchDelay = 500;
         Timer SearchDelayTimer;
 
         HistoryPageViewModel VM;
 
         double OverlayMaxOpacity = 0.65;
+
+        public event EventHandler<Barcode> BarcodeSelected;
 
         public HistoryPage()
         {
@@ -65,16 +66,6 @@ namespace PVScan.Desktop.WPF.Views
                 {
                     FilterPageHeight = FilterPage.ActualHeight;
                     await HideFilterPage(TimeSpan.Zero);
-                }
-            };
-
-            BarcodeInfoPage.SizeChanged += async (_, _) =>
-            {
-                if (BarcodeInfoPage.ActualHeight != BarcodeInfoPageHeight &&
-                    BarcodeInfoPageOverlay.Opacity != OverlayMaxOpacity)
-                {
-                    BarcodeInfoPageHeight = BarcodeInfoPage.ActualHeight;
-                    await HideBarcodeInfoPage(TimeSpan.Zero);
                 }
             };
 
@@ -212,31 +203,6 @@ namespace PVScan.Desktop.WPF.Views
             await ShowFilterPage(Animations.DefaultDuration);
         }
 
-        private async Task HideBarcodeInfoPage(TimeSpan duration)
-        {
-            BarcodeInfoPageOverlay.IsHitTestVisible = false;
-
-            _ = BarcodeInfoPage.TranslateTo(0, BarcodeInfoPage.ActualHeight, duration);
-            await BarcodeInfoPageOverlay.FadeTo(0, duration);
-        }
-
-        private async Task ShowBarcodeInfoPage(TimeSpan duration)
-        {
-            BarcodeInfoPageOverlay.IsHitTestVisible = true;
-
-            _ = BarcodeInfoPageOverlay.FadeTo(OverlayMaxOpacity, duration);
-            await BarcodeInfoPage.TranslateTo(0, 0, duration);
-        }
-
-        private async void BarcodeInfoPageOverlay_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            await HideBarcodeInfoPage(Animations.DefaultDuration);
-
-            LoadedBarcodesListView.SelectionChanged -= LoadedBarcodesListView_SelectionChanged;
-            LoadedBarcodesListView.SelectedItem = null;
-            LoadedBarcodesListView.SelectionChanged += LoadedBarcodesListView_SelectionChanged;
-        }
-
         private async void LoadedBarcodesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (VM.IsEditing)
@@ -249,12 +215,7 @@ namespace PVScan.Desktop.WPF.Views
                 return;
             }
 
-            (BarcodeInfoPage.DataContext as BarcodeInfoPageViewModel).SelectedBarcode 
-                = (sender as ListView).SelectedItem as Barcode;
-
-            // Todo: this is some weird bug with WPF
-            await ShowBarcodeInfoPage(Animations.DefaultDuration);
-            await ShowBarcodeInfoPage(Animations.DefaultDuration);
+            BarcodeSelected?.Invoke(this, (sender as ListView).SelectedItem as Barcode);
         }
     }
 }

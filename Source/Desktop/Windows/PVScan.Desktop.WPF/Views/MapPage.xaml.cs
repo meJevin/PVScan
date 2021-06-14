@@ -30,6 +30,8 @@ namespace PVScan.Desktop.WPF.Views
 
         MapPageViewModel VM;
 
+        public event EventHandler<Barcode> BarcodeSelected;
+
         public MapPage()
         {
             InitializeComponent();
@@ -69,16 +71,19 @@ namespace PVScan.Desktop.WPF.Views
             }
 
             Map.AddMarker(new GeoLocation(b.ScanLocation.Latitude.Value, b.ScanLocation.Longitude.Value), b.GUID);
+            BarcodeMarkers.Add(b.GUID, b);
         }
 
         private void RemoveMarker(string guid)
         {
             Map.RemoveMarker(guid);
+            BarcodeMarkers.Remove(guid);
         }
 
         private void ClearMarkers()
         {
             Map.ClearMarkers();
+            BarcodeMarkers.Clear();
         }
 
         private async void Map_Ready(object sender, EventArgs e)
@@ -92,6 +97,11 @@ namespace PVScan.Desktop.WPF.Views
             {
                 AddMarker(b);
             }
+        }
+
+        private void Map_MarkerClicked(object sender, string e)
+        {
+            BarcodeSelected?.Invoke(this, BarcodeMarkers[e]);
         }
     }
 }

@@ -24,6 +24,9 @@ namespace PVScan.Desktop.WPF.Views
     {
         MainWindowViewModel VM;
 
+        double BarcodeInfoPageHeight = -1;
+        bool showingBarcodeInfoPage = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,7 +34,29 @@ namespace PVScan.Desktop.WPF.Views
             VM = DataContext as MainWindowViewModel;
             VM.MapScanPagesToggled += VM_MapScanPagesToggled;
 
+            BarcodeInfoPage.SizeChanged += async (_, _) =>
+            {
+                if (BarcodeInfoPage.ActualHeight != BarcodeInfoPageHeight &&
+                    !showingBarcodeInfoPage)
+                {
+                    BarcodeInfoPageHeight = BarcodeInfoPage.ActualHeight;
+                    await HideBarcodeInfoPage(TimeSpan.Zero);
+                }
+            };
+
             _ = ToggleToMapPage(TimeSpan.Zero);
+        }
+
+        private async Task HideBarcodeInfoPage(TimeSpan duration)
+        {
+            await BarcodeInfoPage.TranslateTo(0, BarcodeInfoPage.ActualHeight, duration);
+            showingBarcodeInfoPage = false;
+        }
+
+        private async Task ShowBarcodeInfoPage(TimeSpan duration)
+        {
+            await BarcodeInfoPage.TranslateTo(0, 0, duration);
+            showingBarcodeInfoPage = true;
         }
 
         private async void VM_MapScanPagesToggled(object sender, EventArgs e)
@@ -72,6 +97,23 @@ namespace PVScan.Desktop.WPF.Views
             await ScanPageView.FadeTo(1, duration);
 
             MapPageView.Visibility = Visibility.Hidden;
+        }
+
+        private async void MapPageView_BarcodeSelected(object sender, Core.Models.Barcode e)
+        {
+            (BarcodeInfoPage.DataContext as BarcodeInfoPageViewModel).SelectedBarcode = e;
+            await ShowBarcodeInfoPage(Animations.DefaultDuration);
+        }
+
+        private async void HistoryPage_BarcodeSelected(object sender, Core.Models.Barcode e)
+        {
+            (BarcodeInfoPage.DataContext as BarcodeInfoPageViewModel).SelectedBarcode = e;
+            await ShowBarcodeInfoPage(Animations.DefaultDuration);
+        }
+
+        private async void BarcodeInfoPage_Closed(object sender, EventArgs e)
+        {
+            await HideBarcodeInfoPage(Animations.DefaultDuration);
         }
     }
 }

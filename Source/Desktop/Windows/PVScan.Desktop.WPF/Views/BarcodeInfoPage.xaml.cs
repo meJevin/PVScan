@@ -20,33 +20,16 @@ namespace PVScan.Desktop.WPF.Views
     /// </summary>
     public partial class BarcodeInfoPage : ContentControl
     {
-        //public static readonly DependencyProperty SelectedBarcodeProperty =
-        //    DependencyProperty.Register("s", typeof(Barcode), typeof(BarcodeInfoPage),
-        //        new PropertyMetadata(null, SelectedBarcodePropertyChanged));
-
-        //public Barcode SelectedBarcode
-        //{
-        //    get
-        //    {
-        //        return (Barcode)GetValue(SelectedBarcodeProperty);
-        //    }
-
-        //    set
-        //    {
-        //        SetValue(SelectedBarcodeProperty, value);
-        //    }
-        //}
+        public event EventHandler Closed;
 
         public BarcodeInfoPage()
         {
             InitializeComponent();
         }
 
-        //private static void SelectedBarcodePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    var VM = ((BarcodeInfoPage)d).DataContext as BarcodeInfoPageViewModel;
-
-        //    VM.SelectedBarcode = e.NewValue as Barcode;
-        //}
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Closed?.Invoke(this, new EventArgs());
+        }
     }
 }
