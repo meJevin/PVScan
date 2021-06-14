@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:models="clr-namespace:PVScan.Core.Models;assembly=PVScan.Core" 
+      xmlns:views="clr-namespace:PVScan.Desktop.WPF.Views"
       xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance models:Barcode}" 
@@ -40,11 +41,13 @@
 
             <Button Cursor="Hand" Opacity="0.65" x:Name="NoLocationIcon" Style="{DynamicResource MaterialDesignToolButton}"
                   Click="NoLocationButton_Click" Visibility="Visible" Width="24" Height="24"
-                  Background="Transparent" Margin="6,0,0,0" Padding="0">
+                  Background="Transparent" Margin="6,0,0,0" Padding="0"
+                    Command="{Binding RelativeSource={RelativeSource AncestorType=views:MainWindow}, Path=DataContext.NoLocationCommand}"
+                    CommandParameter="{Binding .}">
                 <materialDesign:PackIcon Foreground="Red" Kind="ExclamationBold"
-                                     Height="20" Width="20"
+                                         Height="20" Width="20"
                                          HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"/>
+                                         VerticalAlignment="Center"/>
             </Button>
         </StackPanel>
 
