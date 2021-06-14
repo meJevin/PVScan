@@ -13,6 +13,6 @@
       d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid x:Name="MainContainer">
-        <mapbox:Map Name="Map" Center="52.3723267,4.890331" Zoom="13"></mapbox:Map>
+        <mapbox:Map Name="Map" Center="{Binding CenterLocation, Mode=TwoWay}" Zoom="{Binding Zoom, Mode=TwoWay}"></mapbox:Map>
     </Grid>
 </ContentControl>

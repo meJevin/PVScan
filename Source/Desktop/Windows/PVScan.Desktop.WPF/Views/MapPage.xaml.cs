@@ -81,9 +81,11 @@ namespace PVScan.Desktop.WPF.Views
             Map.ClearMarkers();
         }
 
-        private void Map_Ready(object sender, EventArgs e)
+        private async void Map_Ready(object sender, EventArgs e)
         {
             Map.Invoke.SetStyle("mapbox://styles/mapbox/dark-v10");
+
+            await VM.Initialize();
 
             VM.Barcodes.CollectionChanged += Barcodes_CollectionChanged;
             foreach (Barcode b in VM.Barcodes)
