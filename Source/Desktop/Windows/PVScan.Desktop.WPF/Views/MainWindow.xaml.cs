@@ -83,6 +83,8 @@ namespace PVScan.Desktop.WPF.Views
             await MapPageView.FadeTo(1, duration);
 
             ScanPageView.Visibility = Visibility.Hidden;
+
+            (ScanPageView.DataContext as ScanPageViewModel).StopCapturing();
         }
 
         private async Task ToggleToScanPage(TimeSpan duration)
@@ -97,6 +99,8 @@ namespace PVScan.Desktop.WPF.Views
             await ScanPageView.FadeTo(1, duration);
 
             MapPageView.Visibility = Visibility.Hidden;
+
+            (ScanPageView.DataContext as ScanPageViewModel).StartCapturing();
         }
 
         private async void MapPageView_BarcodeSelected(object sender, Core.Models.Barcode e)
