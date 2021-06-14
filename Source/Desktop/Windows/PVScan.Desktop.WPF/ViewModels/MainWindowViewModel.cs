@@ -1,6 +1,8 @@
 ﻿using PVScan.Core.Models;
 using PVScan.Core.Services.Interfaces;
+using PVScan.Desktop.WPF.Services.Interfaces;
 using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
+using PVScan.Desktop.WPF.Views.Popups;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,13 @@ namespace PVScan.Desktop.WPF.ViewModels
     public class MainWindowViewModel : BaseViewModel
     {
         readonly IBarcodesRepository BarcodesRepository;
-        public MainWindowViewModel(IBarcodesRepository barcodesRepository)
+        readonly IPopup<NoLocationAvailablePopupResult> NoLocationPopup;
+
+        public MainWindowViewModel(IBarcodesRepository barcodesRepository,
+            IPopup<NoLocationAvailablePopupResult> noLocationPopup)
         {
             BarcodesRepository = barcodesRepository;
+            NoLocationPopup = noLocationPopup;
 
             ToggleMapScanPages = new Command(() =>
             {
@@ -49,6 +55,20 @@ namespace PVScan.Desktop.WPF.ViewModels
                     DeletedBarcode = barcode,
                 });
             });
+
+            NoLocationCommand = new Command(async (object b) =>
+            {
+                var barcode = b as Barcode;
+
+                var result = await NoLocationPopup.ShowPopup();
+
+                if (result.UserWantsToSpecify)
+                {
+                    // Send message that user is specifiying location for this barcode
+                }
+
+                // Do nothing..
+            });
         }
 
         public ICommand ToggleMapScanPages { get; set; }
@@ -58,5 +78,7 @@ namespace PVScan.Desktop.WPF.ViewModels
         public ICommand ShowOnMapCommand { get; set; }
         public ICommand ShowInListCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
+
+        public ICommand NoLocationCommand { get; set; }
     }
 }
