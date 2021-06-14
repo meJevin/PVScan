@@ -4,9 +4,18 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>Latest</LangVersion>
     <Configurations>Android_Simulator_Debug;IOS_Device_Debug;IOS_Simulator_Debug;Desktop_Debug;Debug;Release</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Android_Simulator_Debug|AnyCPU'">
+    <DefineConstants>TRACE;MOBILE_ANDROID;SIMULATOR;</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Android_Simulator_Debug|x86'">
+    <DefineConstants>TRACE;MOBILE_ANDROID;SIMULATOR;</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Android_Simulator_Debug|x64'">
     <DefineConstants>TRACE;MOBILE_ANDROID;SIMULATOR;</DefineConstants>
   </PropertyGroup>
 
@@ -14,11 +23,35 @@
     <DefineConstants>TRACE;MOBILE_IOS;DEVICE:</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='IOS_Device_Debug|x86'">
+    <DefineConstants>TRACE;MOBILE_IOS;DEVICE:</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='IOS_Device_Debug|x64'">
+    <DefineConstants>TRACE;MOBILE_IOS;DEVICE:</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='IOS_Simulator_Debug|AnyCPU'">
     <DefineConstants>TRACE;MOBILE_IOS;SIMULATOR;</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='IOS_Simulator_Debug|x86'">
+    <DefineConstants>TRACE;MOBILE_IOS;SIMULATOR;</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='IOS_Simulator_Debug|x64'">
+    <DefineConstants>TRACE;MOBILE_IOS;SIMULATOR;</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|AnyCPU'">
+    <DefineConstants>TRACE;DESKTOP_WINDOWS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|x86'">
+    <DefineConstants>TRACE;DESKTOP_WINDOWS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|x64'">
     <DefineConstants>TRACE;DESKTOP_WINDOWS</DefineConstants>
   </PropertyGroup>
 

@@ -6,12 +6,13 @@
       xmlns:local="clr-namespace:PVScan.Desktop.WPF.Views"
       xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI"
       di:ViewModelLocator.AutoWireViewModel="True"
+      xmlns:mapbox="clr-namespace:MapboxNetWPF;assembly=MapboxNetWPF"
       xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels"
       d:DataContext="{d:DesignInstance Type=viewmodels:MapPageViewModel}"
-      xmlns:Maps="clr-namespace:Microsoft.Toolkit.Wpf.UI.Controls;assembly=Microsoft.Toolkit.Wpf.UI.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid x:Name="MainContainer">
+        <mapbox:Map Name="Map" Center="52.3723267,4.890331" Zoom="13"></mapbox:Map>
     </Grid>
 </ContentControl>

@@ -106,14 +106,14 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
         public async Task MakeEditable()
         {
             //this.Background = new SolidColorBrush(Colors.Red
-            _ = FavoriteButton.TranslateTo(32, 0, Animations.DefaultDuration);
+            _ = FavoriteButton.TranslateTo(38, 0, Animations.DefaultDuration);
             await SelectedIcon.TranslateTo(0, 0, Animations.DefaultDuration);
         }
 
         public async Task MakeNotEditable()
         {
             _ =FavoriteButton.TranslateTo(0, 0, Animations.DefaultDuration);
-            await SelectedIcon.TranslateTo(32, 0, Animations.DefaultDuration);
+            await SelectedIcon.TranslateTo(38, 0, Animations.DefaultDuration);
             //this.Background = new SolidColorBrush(Colors.Blue);
         }
     }

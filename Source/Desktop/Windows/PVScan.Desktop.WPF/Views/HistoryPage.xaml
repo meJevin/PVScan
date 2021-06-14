@@ -107,7 +107,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Content="Delete" Foreground="White" Opacity="0" x:Name="DeleteButton"
+            <Button Content="Delete" Foreground="White" Opacity="0" x:Name="DeleteButton" IsHitTestVisible="False"
                             Command="{Binding DeleteSelectedBarcodesCommand}" Grid.Column="2"/>
             <Button Content="Done" Foreground="White" Opacity="0" x:Name="DoneEditButton"
                             Command="{Binding DoneEditCommand}" Grid.Column="0"/>
@@ -121,7 +121,7 @@
         <Rectangle x:Name="SortingPageOverlay" Fill="Black" Grid.RowSpan="2" Opacity="0" IsHitTestVisible="False"
                    MouseDown="SortingPageOverlay_MouseDown"/>
 
-        <local:SortingPage Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="12,0,12,0"
+        <local:SortingPage Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="24,0,24,0"
                            x:Name="SortingPage" MaxWidth="375"/>
 
         <Rectangle x:Name="FilterPageOverlay" Fill="Black" Grid.RowSpan="2" Opacity="0" IsHitTestVisible="False"

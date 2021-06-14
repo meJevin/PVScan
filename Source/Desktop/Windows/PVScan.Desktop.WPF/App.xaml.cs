@@ -57,9 +57,9 @@ namespace PVScan.Desktop.WPF
         private void InitializeMapsServiceToken()
         {
             var cfg = Resolver.Resolve<IConfiguration>();
-            MapServiceToken = cfg.GetSection("Maps:BingMapsKey").Value;
+            MapBoxToken = cfg.GetSection("MapBoxKey").Value;
         }
 
-        public static string MapServiceToken;
+        public static string MapBoxToken;
     }
 }

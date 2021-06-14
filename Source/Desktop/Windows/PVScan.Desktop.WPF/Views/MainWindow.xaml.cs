@@ -31,7 +31,7 @@ namespace PVScan.Desktop.WPF.Views
             VM = DataContext as MainWindowViewModel;
             VM.MapScanPagesToggled += VM_MapScanPagesToggled;
 
-            _ = ToggleToScanPage(TimeSpan.Zero);
+            _ = ToggleToMapPage(TimeSpan.Zero);
         }
 
         private async void VM_MapScanPagesToggled(object sender, EventArgs e)

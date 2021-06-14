@@ -49,7 +49,7 @@
                                          Path=IsSelected, 
                                          Converter={StaticResource BooleanToVisibilityConverter}}">
             <materialDesign:PackIcon.RenderTransform>
-                <TranslateTransform X="32"/>
+                <TranslateTransform X="38"/>
             </materialDesign:PackIcon.RenderTransform>
         </materialDesign:PackIcon>
     </Grid>

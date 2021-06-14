@@ -25,40 +25,13 @@ namespace PVScan.Desktop.WPF.Views
         public MapPage()
         {
             InitializeComponent();
-            // InitializeMapControl();
+            Map.AccessToken = App.MapBoxToken;
+            Map.Ready += Map_Ready;
         }
 
-        private void InitializeMapControl()
+        private void Map_Ready(object sender, EventArgs e)
         {
-            Microsoft.Toolkit.Wpf.UI.Controls.MapControl map = new Microsoft.Toolkit.Wpf.UI.Controls.MapControl();
-
-            map.MapServiceToken = App.MapServiceToken;
-            MainContainer.Children.Add(map);
-
-            var MyLandmarks = new List<MapElement>();
-
-            BasicGeoposition snPosition = new BasicGeoposition { Latitude = 47.620, Longitude = -122.349 };
-            Geopoint snPoint = new Geopoint(snPosition);
-
-            var spaceNeedleIcon = new MapIcon
-            {
-                Location = snPoint,
-                NormalizedAnchorPoint = new Windows.Foundation.Point(0.5, 1.0),
-                ZIndex = 0,
-                Title = "Space Needle"
-            };
-
-            MyLandmarks.Add(spaceNeedleIcon);
-
-            var LandmarksLayer = new MapElementsLayer
-            {
-                ZIndex = 1,
-                MapElements = MyLandmarks
-            };
-
-            map.Layers.Add(LandmarksLayer);
-            map.Center = snPoint;
-            map.ZoomLevel = 14;
+            Map.Invoke.SetStyle("mapbox://styles/mapbox/dark-v10");
         }
     }
 }
