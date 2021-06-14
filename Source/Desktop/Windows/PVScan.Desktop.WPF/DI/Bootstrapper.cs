@@ -13,6 +13,8 @@ using System.Reflection;
 using PVScan.Desktop.WPF.ViewModels;
 using PVScan.Desktop.WPF.Views;
 using Microsoft.Extensions.Configuration;
+using PVScan.Desktop.WPF.Views.Popups;
+using System.Windows;
 
 namespace PVScan.Desktop.WPF.DI
 {
@@ -141,6 +143,10 @@ namespace PVScan.Desktop.WPF.DI
 
                 return cfg;
             });
+
+            ContainerBuilder.RegisterType<NoLocationAvailablePopup>()
+                .As<IPopup<NoLocationAvailablePopupResult>>()
+                .InstancePerLifetimeScope();
         }
 
         private void FinishInitialization()
