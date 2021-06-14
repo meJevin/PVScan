@@ -79,7 +79,8 @@
                             </Grid>
                         </StackPanel>
 
-                        <Button Content="Show on map" Foreground="White" Margin="4, 4" Click="ShowOnMapButton_Click"/>
+                        <Button Content="Show on map" Foreground="White" Margin="4, 4" Click="ShowOnMapButton_Click"
+                                IsEnabled="{Binding ShowOnMapButtonEnabled}"/>
                         <Button Content="Show in list" Foreground="White" Margin="4, 4" Click="ShowInListButton_Click"/>
                         <Button Content="Delete" Background="Red" BorderBrush="Red" Foreground="White" 
                                 Margin="4, 4, 4, 16" Click="DeleteButton_Click"/>
