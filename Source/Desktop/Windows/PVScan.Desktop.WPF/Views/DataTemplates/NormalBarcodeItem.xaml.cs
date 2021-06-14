@@ -1,5 +1,7 @@
 ﻿using PVScan.Core;
 using PVScan.Core.Models;
+using PVScan.Desktop.WPF.ViewModels;
+using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,6 +29,8 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
         public static readonly DependencyProperty IsEditingProperty =
             DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(UserControl), 
                 new PropertyMetadata(false, IsEditingChanged));
+
+        public event EventHandler NoLocationClicked;
 
         public ICommand FavoriteCommand
         {
@@ -81,9 +85,26 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
                 }
 
                 ToggleFavoriteOpacity();
+                ToggleNoLocationButton();
             };
 
             _ = MakeNotEditable();
+
+            MessagingCenter.Subscribe(this, nameof(HighlightBarcodeInListMessage),
+                async (HistoryPage hp, HighlightBarcodeInListMessage args) =>
+                {
+                    if (DataContext == args.BarcodeToHighlight)
+                    {
+                        await Highlight();
+                    }
+                });
+        }
+
+        private async Task Highlight()
+        {
+            await HighlightBG.FadeTo(0.35, Animations.DefaultDuration);
+            await Task.Delay(2500);
+            await HighlightBG.FadeTo(0, Animations.DefaultDuration);
         }
 
         private void FavoriteButton_Click(object sender, RoutedEventArgs e)
@@ -103,6 +124,18 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
             }
         }
 
+        private void ToggleNoLocationButton()
+        {
+            if ((DataContext as Barcode).ScanLocation == null)
+            {
+                NoLocationIcon.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                NoLocationIcon.Visibility = Visibility.Hidden;
+            }
+        }
+
         public async Task MakeEditable()
         {
             //this.Background = new SolidColorBrush(Colors.Red
@@ -115,6 +148,11 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
             _ =FavoriteButton.TranslateTo(0, 0, Animations.DefaultDuration);
             await SelectedIcon.TranslateTo(38, 0, Animations.DefaultDuration);
             //this.Background = new SolidColorBrush(Colors.Blue);
+        }
+
+        private void NoLocationButton_Click(object sender, RoutedEventArgs e)
+        {
+            NoLocationClicked?.Invoke(this, new EventArgs());
         }
     }
 }

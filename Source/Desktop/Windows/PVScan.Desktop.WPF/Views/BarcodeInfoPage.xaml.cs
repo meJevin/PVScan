@@ -1,5 +1,6 @@
 ﻿using PVScan.Core.Models;
 using PVScan.Desktop.WPF.ViewModels;
+using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,33 +21,108 @@ namespace PVScan.Desktop.WPF.Views
     /// </summary>
     public partial class BarcodeInfoPage : ContentControl
     {
-        //public static readonly DependencyProperty SelectedBarcodeProperty =
-        //    DependencyProperty.Register("s", typeof(Barcode), typeof(BarcodeInfoPage),
-        //        new PropertyMetadata(null, SelectedBarcodePropertyChanged));
+        public event EventHandler Closed;
 
-        //public Barcode SelectedBarcode
-        //{
-        //    get
-        //    {
-        //        return (Barcode)GetValue(SelectedBarcodeProperty);
-        //    }
+        public static readonly DependencyProperty ShowOnMapCommandProperty =
+            DependencyProperty.Register(nameof(ShowOnMapCommand), typeof(ICommand), typeof(ContentControl));
+        public ICommand ShowOnMapCommand
+        {
+            get
+            {
+                return (ICommand)GetValue(ShowOnMapCommandProperty);
+            }
 
-        //    set
-        //    {
-        //        SetValue(SelectedBarcodeProperty, value);
-        //    }
-        //}
+            set
+            {
+                SetValue(ShowOnMapCommandProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty ShowInListCommandProperty =
+            DependencyProperty.Register(nameof(ShowInListCommand), typeof(ICommand), typeof(ContentControl));
+        public ICommand ShowInListCommand
+        {
+            get
+            {
+                return (ICommand)GetValue(ShowInListCommandProperty);
+            }
+
+            set
+            {
+                SetValue(ShowInListCommandProperty, value);
+            }
+        }
+
+        public static readonly DependencyProperty DeleteCommandProperty =
+            DependencyProperty.Register(nameof(DeleteCommand), typeof(ICommand), typeof(ContentControl));
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                return (ICommand)GetValue(DeleteCommandProperty);
+            }
+
+            set
+            {
+                SetValue(DeleteCommandProperty, value);
+            }
+        }
+
+        BarcodeInfoPageViewModel VM;
 
         public BarcodeInfoPage()
         {
             InitializeComponent();
+
+            VM = DataContext as BarcodeInfoPageViewModel;
+
+            MessagingCenter.Subscribe<HistoryPageViewModel, BarcodeDeletedMessage>(this,
+                nameof(BarcodeDeletedMessage),
+                (sender, args) => 
+                { 
+                    if (VM.SelectedBarcode == args.DeletedBarcode)
+                    {
+                        VM.SelectedBarcode = null;
+                        Closed?.Invoke(this, new EventArgs());
+                    }
+                });
         }
 
-        //private static void SelectedBarcodePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    var VM = ((BarcodeInfoPage)d).DataContext as BarcodeInfoPageViewModel;
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Closed?.Invoke(this, new EventArgs());
+        }
 
-        //    VM.SelectedBarcode = e.NewValue as Barcode;
-        //}
+        private void ShowOnMapButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM.SelectedBarcode == null)
+            {
+                return;
+            }
+
+            ShowOnMapCommand.Execute(VM.SelectedBarcode);
+        }
+
+        private void ShowInListButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM.SelectedBarcode == null)
+            {
+                return;
+            }
+
+            ShowInListCommand.Execute(VM.SelectedBarcode);
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (VM.SelectedBarcode == null)
+            {
+                return;
+            }
+
+            DeleteCommand.Execute(VM.SelectedBarcode);
+
+            Closed?.Invoke(this, new EventArgs());
+        }
     }
 }

@@ -2,10 +2,12 @@
 using PVScan.Core.Models;
 using PVScan.Core.Services.Interfaces;
 using PVScan.Desktop.WPF.ViewModels.Messages;
+using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using PVScan.Desktop.WPF.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,9 +107,12 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                 foreach (var guid in selectedGUIDS)
                 {
-                    var barcode = Barcodes.FirstOrDefault(b => b.GUID == guid);
+                    var barcode = Barcodes.FirstOrDefault(b => { if (b == null) return false; return b.GUID == guid; });
 
                     await barcodesRepository.Delete(barcode);
+
+                    MessagingCenter.Send(this, nameof(BarcodeDeletedMessage),
+                        new BarcodeDeletedMessage() { DeletedBarcode = barcode });
 
                     if (Barcodes.Contains(barcode))
                     {
@@ -122,6 +127,8 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                 SelectedBarcodes.Clear();
             });
+
+            Barcodes.CollectionChanged += Barcodes_CollectionChanged;
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
@@ -177,7 +184,28 @@ namespace PVScan.Desktop.WPF.ViewModels
                     await LoadBarcodesFromDB();
                 });
 
+            MessagingCenter.Subscribe(this, nameof(BarcodeDeletedMessage),
+                async (MainWindowViewModel vm, BarcodeDeletedMessage args) =>
+                {
+                    if (Barcodes.Contains(args.DeletedBarcode))
+                    {
+                        Barcodes.Remove(args.DeletedBarcode);
+                    }
+
+                    if (BarcodesPaged.Contains(args.DeletedBarcode))
+                    {
+                        BarcodesPaged.Remove(args.DeletedBarcode);
+                    }
+                });
+
             _ = LoadBarcodesFromDB();
+        }
+
+        private void Barcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            MessagingCenter.Send(this, 
+                nameof(HistoryPageBarcodesCollectionChanged), 
+                new HistoryPageBarcodesCollectionChanged() { Args = e });
         }
 
         public async Task LoadBarcodesFromDB()
@@ -254,5 +282,6 @@ namespace PVScan.Desktop.WPF.ViewModels
         public ICommand DeleteSelectedBarcodesCommand { get; set; }
 
         public ObservableCollection<Barcode> SelectedBarcodes { get; set; }
+        public Barcode SelectedBarcode { get; set; }
     }
 }

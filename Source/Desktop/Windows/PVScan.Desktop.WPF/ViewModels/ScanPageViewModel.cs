@@ -91,10 +91,40 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             FakeBarcodeCommand = new Command(() =>
             {
+                for (int i = 0; i < 200; ++i)
+                {
+                    GenerateRandomBarcode();
+                }
                 LastScanResult = new Result("Test", null, null, BarcodeFormat.QR_CODE);
 
                 GotBarcode?.Invoke(this, new EventArgs());
             });
+        }
+
+        private void GenerateRandomBarcode()
+        {
+            Array values = Enum.GetValues(typeof(BarcodeFormat)).OfType<BarcodeFormat>().Where(f => { return (int)f <= 2048; }).ToArray();
+            Random random = new Random();
+            BarcodeFormat randomType = (BarcodeFormat)values.GetValue(random.Next(values.Length));
+
+            DateTime date = DateTime.UtcNow;
+            date = date.Subtract(TimeSpan.FromSeconds(random.NextDouble() * 157680000));
+
+            Coordinate randomCoord = new Coordinate()
+            {
+                Latitude = (random.NextDouble() * 180) - 90,
+                Longitude = (random.NextDouble() * 180) - 90,
+            };
+
+            var b = new Barcode()
+            {
+                Format = randomType,
+                ScanLocation = random.NextDouble() > 0.25 ? randomCoord : null,
+                ScanTime = date,
+                Text = Guid.NewGuid().ToString(),
+            };
+
+            BarcodesRepository.Save(b);
         }
 
         private void VideoCapture_ImageGrabbed()
