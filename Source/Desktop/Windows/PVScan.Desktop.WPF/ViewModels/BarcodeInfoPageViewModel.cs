@@ -28,14 +28,14 @@ namespace PVScan.Desktop.WPF.ViewModels
             if (SelectedBarcode == null ||
                 SelectedBarcode.ScanLocation == null)
             {
-                ShowOnMapButtonEnabled = false;
+                SelectedBarcodeHasLocation = false;
                 return;
             }
 
-            ShowOnMapButtonEnabled = true;
+            SelectedBarcodeHasLocation = true;
         }
 
         public Barcode SelectedBarcode { get; set; }
-        public bool ShowOnMapButtonEnabled { get; set; } = true;
+        public bool SelectedBarcodeHasLocation { get; set; } = true;
     }
 }

@@ -57,11 +57,27 @@
                             <Label Content="Text" Foreground="White" Opacity="0.35" Padding="4, 0"/>
                             <Label Content="{Binding SelectedBarcode.Text, FallbackValue=—}" Foreground="White" Padding="4, 0"/>
                         </StackPanel>
-                        <StackPanel Margin="0,0,0,16">
+                        <Grid Margin="0,0,0,16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
                             <Label Content="Location" Foreground="White" Opacity="0.35" Padding="4, 0"/>
                             <Label Content="{Binding SelectedBarcode.ScanLocation, FallbackValue=—, Converter={StaticResource CoordinatesString}}" 
-                                   Foreground="White" Padding="4, 0"/>
-                        </StackPanel>
+                                   Foreground="White" Padding="4, 0" Grid.Row="1" x:Name="LocationField"/>
+                            
+                            <Label Content="Not available" x:Name="LocationNotAvailableLabel"
+                                   Foreground="White" Padding="4, 0" Grid.Row="1" Opacity="0"/>
+
+                            <materialDesign:PackIcon Kind="ExclamationBold" Foreground="Red" Grid.RowSpan="2" Height="26" Width="26" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                     Grid.Column="1" Margin="6,0" x:Name="LocationNotAvailableIcon" Opacity="0"/>
+                        </Grid>
                         <StackPanel Margin="0,0,0,16">
                             <Label Content="Format" Foreground="White" Opacity="0.35" Padding="4, 0"/>
                             <Label Content="{Binding SelectedBarcode.Format, FallbackValue=—, Converter={StaticResource BarcodeFormatString}}" 
@@ -80,7 +96,7 @@
                         </StackPanel>
 
                         <Button Content="Show on map" Foreground="White" Margin="4, 4" Click="ShowOnMapButton_Click"
-                                IsEnabled="{Binding ShowOnMapButtonEnabled}"/>
+                                IsEnabled="{Binding SelectedBarcodeHasLocation}"/>
                         <Button Content="Show in list" Foreground="White" Margin="4, 4" Click="ShowInListButton_Click"/>
                         <Button Content="Delete" Background="Red" BorderBrush="Red" Foreground="White" 
                                 Margin="4, 4, 4, 16" Click="DeleteButton_Click"/>

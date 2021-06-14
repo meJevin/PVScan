@@ -3,6 +3,7 @@ using PVScan.Desktop.WPF.ViewModels;
 using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -86,6 +87,39 @@ namespace PVScan.Desktop.WPF.Views
                         Closed?.Invoke(this, new EventArgs());
                     }
                 });
+
+            VM.PropertyChanged += VM_PropertyChanged;
+        }
+
+        private void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(VM.SelectedBarcodeHasLocation))
+            {
+                if (VM.SelectedBarcodeHasLocation)
+                {
+                    ShowNormalLocationMenu();
+                }
+                else
+                {
+                    ShowNoLocationMenu();
+                }
+            }
+        }
+
+        // Shows an exlamaition point and no location label
+        private void ShowNoLocationMenu()
+        {
+            LocationNotAvailableIcon.Opacity = 1;
+            LocationNotAvailableLabel.Opacity = 1;
+            LocationField.Opacity = 0;
+        }
+
+        // Shows coordinates
+        private void ShowNormalLocationMenu()
+        {
+            LocationNotAvailableIcon.Opacity = 0;
+            LocationNotAvailableLabel.Opacity = 0;
+            LocationField.Opacity = 1;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
