@@ -51,6 +51,19 @@ namespace PVScan.Desktop.WPF.DI
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
+            // Updater
+            ContainerBuilder.Register(updater =>
+            {
+                var options = new UpdaterOptions()
+                {
+                    GitHubRepoURL = Constants.GitHubRepoURL,
+                };
+
+                return new Updater(options);
+            })
+                .As<IUpdater>()
+                .SingleInstance();
+
             // IdentityService singleton
             ContainerBuilder.RegisterType<IdentityService>()
                 .As<IIdentityService>()

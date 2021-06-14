@@ -36,7 +36,7 @@ namespace PVScan.Desktop.WPF.Views
         public MapPage()
         {
             InitializeComponent();
-            Map.AccessToken = App.MapBoxToken;
+            Map.AccessToken = Constants.MapBoxKey;
             Map.Ready += Map_Ready;
 
             VM = DataContext as MapPageViewModel;
