@@ -265,5 +265,6 @@ namespace PVScan.Desktop.WPF.ViewModels
         public ICommand DeleteSelectedBarcodesCommand { get; set; }
 
         public ObservableCollection<Barcode> SelectedBarcodes { get; set; }
+        public Barcode SelectedBarcode { get; set; }
     }
 }

@@ -87,6 +87,7 @@
                           HorizontalContentAlignment="Stretch"
                           local:ListViewExtensions.SelectedValues="{Binding SelectedBarcodes}"
                           SelectionChanged="LoadedBarcodesListView_SelectionChanged"
+                          SelectedItem="{Binding SelectedBarcode, Mode=TwoWay}"
                           >
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type models:Barcode}">

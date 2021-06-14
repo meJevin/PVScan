@@ -113,6 +113,13 @@ namespace PVScan.Desktop.WPF.Views
 
         private async void BarcodeInfoPage_Closed(object sender, EventArgs e)
         {
+            var HPVM = (HistoryPage.DataContext as HistoryPageViewModel);
+
+            if (!HPVM.IsEditing)
+            {
+                HPVM.SelectedBarcode = null;
+            }
+
             await HideBarcodeInfoPage(Animations.DefaultDuration);
         }
     }

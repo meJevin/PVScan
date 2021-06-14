@@ -46,7 +46,8 @@
                       Background="#2f2f2f"/>
         
         <Grid Background="#2e2e2e">
-            <views:HistoryPage BarcodeSelected="HistoryPage_BarcodeSelected"/>
+            <views:HistoryPage BarcodeSelected="HistoryPage_BarcodeSelected"
+                               x:Name="HistoryPage"/>
         </Grid>
     </Grid>
 </Window>
