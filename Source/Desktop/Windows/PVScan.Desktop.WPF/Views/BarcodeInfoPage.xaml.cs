@@ -112,11 +112,13 @@ namespace PVScan.Desktop.WPF.Views
             LocationNotAvailableIcon.Opacity = 1;
             LocationNotAvailableLabel.Opacity = 1;
             LocationField.Opacity = 0;
+            LocationNotAvailableOverlay.IsHitTestVisible = true;
         }
 
         // Shows coordinates
         private void ShowNormalLocationMenu()
         {
+            LocationNotAvailableOverlay.IsHitTestVisible = false;
             LocationNotAvailableIcon.Opacity = 0;
             LocationNotAvailableLabel.Opacity = 0;
             LocationField.Opacity = 1;
