@@ -2,10 +2,12 @@
 using PVScan.Core.Models;
 using PVScan.Core.Services.Interfaces;
 using PVScan.Desktop.WPF.ViewModels.Messages;
+using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using PVScan.Desktop.WPF.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -123,6 +125,8 @@ namespace PVScan.Desktop.WPF.ViewModels
                 SelectedBarcodes.Clear();
             });
 
+            Barcodes.CollectionChanged += Barcodes_CollectionChanged;
+
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
                 {
@@ -178,6 +182,13 @@ namespace PVScan.Desktop.WPF.ViewModels
                 });
 
             _ = LoadBarcodesFromDB();
+        }
+
+        private void Barcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            MessagingCenter.Send(this, 
+                nameof(HistoryPageBarcodesCollectionChanged), 
+                new HistoryPageBarcodesCollectionChanged() { Args = e });
         }
 
         public async Task LoadBarcodesFromDB()
