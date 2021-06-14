@@ -2,6 +2,7 @@
 using PVScan.Core.Models;
 using PVScan.Desktop.WPF.ViewModels;
 using PVScan.Desktop.WPF.ViewModels.Messages;
+using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -71,6 +72,34 @@ namespace PVScan.Desktop.WPF.Views
 
             VM.PropertyChanged += VM_PropertyChanged;
             VM.SelectedBarcodes.CollectionChanged += SelectedBarcodes_CollectionChanged;
+
+            MessagingCenter.Subscribe(this, nameof(ShowBarcodeInListMessage),
+                async (MainWindowViewModel vm, ShowBarcodeInListMessage args) =>
+                {
+                    while (!VM.BarcodesPaged.Contains(args.BarcodeToShow))
+                    {
+                        VM.LoadNextPage.Execute(null);
+                    }
+
+                    await Task.Delay(250);
+
+                    var desiredItem = LoadedBarcodesListView
+                                            .ItemContainerGenerator
+                                            .ContainerFromItem(args.BarcodeToShow) as UIElement;
+
+                    var desiredItemIndex = LoadedBarcodesListView
+                                                .ItemContainerGenerator
+                                                .IndexFromContainer(desiredItem, true);
+
+                    var viewportHeight = BarecodesScrollViewer.RenderSize.Height;
+
+                    var itemHeight = desiredItem.RenderSize.Height;
+
+                    var topOffset = itemHeight * desiredItemIndex;
+                    topOffset += viewportHeight / 2;
+
+                    BarecodesScrollViewer.ScrollToVerticalOffset(topOffset);
+                });
         }
 
         private async void SelectedBarcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
