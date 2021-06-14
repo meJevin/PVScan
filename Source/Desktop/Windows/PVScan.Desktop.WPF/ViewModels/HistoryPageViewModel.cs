@@ -111,6 +111,9 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                     await barcodesRepository.Delete(barcode);
 
+                    MessagingCenter.Send(this, nameof(BarcodeDeletedMessage),
+                        new BarcodeDeletedMessage() { DeletedBarcode = barcode });
+
                     if (Barcodes.Contains(barcode))
                     {
                         Barcodes.Remove(barcode);

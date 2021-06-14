@@ -1,5 +1,7 @@
 ﻿using PVScan.Core;
 using PVScan.Core.Models;
+using PVScan.Desktop.WPF.ViewModels;
+using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -87,6 +89,22 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
             };
 
             _ = MakeNotEditable();
+
+            MessagingCenter.Subscribe(this, nameof(HighlightBarcodeInListMessage),
+                async (HistoryPage hp, HighlightBarcodeInListMessage args) =>
+                {
+                    if (DataContext == args.BarcodeToHighlight)
+                    {
+                        await Highlight();
+                    }
+                });
+        }
+
+        private async Task Highlight()
+        {
+            await HighlightBG.FadeTo(0.35, Animations.DefaultDuration);
+            await Task.Delay(2500);
+            await HighlightBG.FadeTo(0, Animations.DefaultDuration);
         }
 
         private void FavoriteButton_Click(object sender, RoutedEventArgs e)

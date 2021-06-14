@@ -28,6 +28,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <Rectangle Fill="White" Opacity="0" x:Name="HighlightBG"/>
+
         <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding Text, FallbackValue=Barcode Text}" Foreground="White" Padding="0,2"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">

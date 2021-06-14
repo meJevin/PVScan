@@ -1,5 +1,6 @@
 ﻿using PVScan.Core.Models;
 using PVScan.Desktop.WPF.ViewModels;
+using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -74,6 +75,17 @@ namespace PVScan.Desktop.WPF.Views
             InitializeComponent();
 
             VM = DataContext as BarcodeInfoPageViewModel;
+
+            MessagingCenter.Subscribe<HistoryPageViewModel, BarcodeDeletedMessage>(this,
+                nameof(BarcodeDeletedMessage),
+                (sender, args) => 
+                { 
+                    if (VM.SelectedBarcode == args.DeletedBarcode)
+                    {
+                        VM.SelectedBarcode = null;
+                        Closed?.Invoke(this, new EventArgs());
+                    }
+                });
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

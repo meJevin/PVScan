@@ -106,6 +106,12 @@ namespace PVScan.Desktop.WPF.Views
                     topOffset += itemHeight;
 
                     BarecodesScrollViewer.ScrollToVerticalOffset(topOffset);
+
+                    MessagingCenter.Send(this, nameof(HighlightBarcodeInListMessage),
+                        new HighlightBarcodeInListMessage()
+                        {
+                            BarcodeToHighlight = args.BarcodeToShow,
+                        });
                 });
         }
 
