@@ -28,6 +28,8 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
             DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(UserControl), 
                 new PropertyMetadata(false, IsEditingChanged));
 
+        public event EventHandler NoLocationClicked;
+
         public ICommand FavoriteCommand
         {
             get
@@ -81,6 +83,7 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
                 }
 
                 ToggleFavoriteOpacity();
+                ToggleNoLocationButton();
             };
 
             _ = MakeNotEditable();
@@ -103,6 +106,18 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
             }
         }
 
+        private void ToggleNoLocationButton()
+        {
+            if ((DataContext as Barcode).ScanLocation == null)
+            {
+                NoLocationIcon.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                NoLocationIcon.Visibility = Visibility.Hidden;
+            }
+        }
+
         public async Task MakeEditable()
         {
             //this.Background = new SolidColorBrush(Colors.Red
@@ -115,6 +130,11 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
             _ =FavoriteButton.TranslateTo(0, 0, Animations.DefaultDuration);
             await SelectedIcon.TranslateTo(38, 0, Animations.DefaultDuration);
             //this.Background = new SolidColorBrush(Colors.Blue);
+        }
+
+        private void NoLocationButton_Click(object sender, RoutedEventArgs e)
+        {
+            NoLocationClicked?.Invoke(this, new EventArgs());
         }
     }
 }

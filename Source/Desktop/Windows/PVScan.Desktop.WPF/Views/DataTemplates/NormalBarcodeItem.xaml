@@ -8,7 +8,8 @@
       xmlns:models="clr-namespace:PVScan.Core.Models;assembly=PVScan.Core" 
       xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
       mc:Ignorable="d"
-      d:DataContext="{d:DesignInstance models:Barcode}">
+      d:DataContext="{d:DesignInstance models:Barcode}" 
+      d:DesignWidth="300">
 
     <UserControl.Resources>
         <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
@@ -27,12 +28,22 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding Text}" Foreground="White" Padding="0,2"/>
+        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding Text, FallbackValue=Barcode Text}" Foreground="White" Padding="0,2"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Label Content="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal}}" 
+            <Label Content="{Binding ScanTime, Converter={StaticResource DateTimeUTCDateTimeLocal},
+                            FallbackValue=2000.12.01 13:45}" 
                    Foreground="White" Opacity="0.45" Padding="0,4"/>
-            <Label Content="{Binding Format, Converter={StaticResource BarcodeFormatString}}" ContentStringFormat=", {0}" Foreground="White" Padding="0,4"/>
+            <Label Content="{Binding Format, Converter={StaticResource BarcodeFormatString}, FallbackValue=QR CODE}" ContentStringFormat=", {0}" Foreground="White" Padding="0,4"/>
+
+            <Button Cursor="Hand" Opacity="0.65" x:Name="NoLocationIcon" Style="{DynamicResource MaterialDesignToolButton}"
+                  Click="NoLocationButton_Click" Visibility="Visible" Width="24" Height="24"
+                  Background="Transparent" Margin="6,0,0,0" Padding="0">
+                <materialDesign:PackIcon Foreground="Red" Kind="ExclamationBold"
+                                     Height="20" Width="20"
+                                         HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+            </Button>
         </StackPanel>
 
         <Button Width="22" Height="22" Grid.Column="1" Grid.RowSpan="2" Click="FavoriteButton_Click"
