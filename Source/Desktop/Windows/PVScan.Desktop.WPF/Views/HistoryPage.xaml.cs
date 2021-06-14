@@ -96,7 +96,7 @@ namespace PVScan.Desktop.WPF.Views
                     var itemHeight = desiredItem.RenderSize.Height;
 
                     var topOffset = itemHeight * desiredItemIndex;
-                    topOffset += viewportHeight / 2;
+                    topOffset -= viewportHeight / 2;
 
                     BarecodesScrollViewer.ScrollToVerticalOffset(topOffset);
                 });
