@@ -181,6 +181,20 @@ namespace PVScan.Desktop.WPF.ViewModels
                     await LoadBarcodesFromDB();
                 });
 
+            MessagingCenter.Subscribe(this, nameof(BarcodeDeletedMessage),
+                async (MainWindowViewModel vm, BarcodeDeletedMessage args) =>
+                {
+                    if (Barcodes.Contains(args.DeletedBarcode))
+                    {
+                        Barcodes.Remove(args.DeletedBarcode);
+                    }
+
+                    if (BarcodesPaged.Contains(args.DeletedBarcode))
+                    {
+                        BarcodesPaged.Remove(args.DeletedBarcode);
+                    }
+                });
+
             _ = LoadBarcodesFromDB();
         }
 

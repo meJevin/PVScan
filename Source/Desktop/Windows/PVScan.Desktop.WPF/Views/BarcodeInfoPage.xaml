@@ -10,7 +10,7 @@
              xmlns:datatemplates="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
              xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
              xmlns:svgc="http://sharpvectors.codeplex.com/svgc/" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                d:DataContext="{d:DesignInstance Type=viewmodels:BarcodeInfoPageViewModel}"
+             d:DataContext="{d:DesignInstance Type=viewmodels:BarcodeInfoPageViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="500">
 
@@ -79,8 +79,10 @@
                             </Grid>
                         </StackPanel>
 
-                        <Button Content="Show on map" Foreground="White" Margin="4, 4"/>
-                        <Button Content="Delete" Background="Red" BorderBrush="Red" Foreground="White" Margin="4, 4, 4, 16"/>
+                        <Button Content="Show on map" Foreground="White" Margin="4, 4" Click="ShowOnMapButton_Click"/>
+                        <Button Content="Show in list" Foreground="White" Margin="4, 4" Click="ShowInListButton_Click"/>
+                        <Button Content="Delete" Background="Red" BorderBrush="Red" Foreground="White" 
+                                Margin="4, 4, 4, 16" Click="DeleteButton_Click"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
