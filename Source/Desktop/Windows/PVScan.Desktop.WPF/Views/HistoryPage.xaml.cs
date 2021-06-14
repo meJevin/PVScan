@@ -81,11 +81,17 @@ namespace PVScan.Desktop.WPF.Views
                         VM.LoadNextPage.Execute(null);
                     }
 
-                    await Task.Delay(250);
-
                     var desiredItem = LoadedBarcodesListView
                                             .ItemContainerGenerator
                                             .ContainerFromItem(args.BarcodeToShow) as UIElement;
+
+                    while (desiredItem == null)
+                    {
+                        await Task.Delay(5);
+                        desiredItem = LoadedBarcodesListView
+                                            .ItemContainerGenerator
+                                            .ContainerFromItem(args.BarcodeToShow) as UIElement;
+                    }
 
                     var desiredItemIndex = LoadedBarcodesListView
                                                 .ItemContainerGenerator
