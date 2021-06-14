@@ -98,6 +98,7 @@ namespace PVScan.Desktop.WPF.Views
             {
                 if (VM.IsEditing)
                 {
+                    LoadedBarcodesListView.SelectedItem = null;
                     LoadedBarcodesListView.SelectionMode = SelectionMode.Multiple;
 
                     _ = StartEditButton.FadeTo(0, Animations.DefaultDuration);
