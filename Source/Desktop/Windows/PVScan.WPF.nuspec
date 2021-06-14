@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>PVScan</id>
+    <version>0.0.0</version>
+    <authors>meJevin</authors>
+	<title>PVScan</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/meJevin/PVScan</projectUrl>
+    <description>Application to scan barcodes</description>
+    <releaseNotes>Placeholder</releaseNotes>
+    <tags>Barcodes Free Open-Source</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="SampleDependency" version="1.0.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  
+  <files>
+    <file src="PVScan.Desktop.WPF\bin\x64\Desktop_Release\netcoreapp3.1\**" target="lib\net45"/>
+  </files>
+</package>

@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>PVScanIcon.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
-    <Configurations>Debug;Release;Dekstop_Debug;Desktop_Debug</Configurations>
+    <Configurations>Debug;Release;Dekstop_Debug;Desktop_Debug;Desktop_Release</Configurations>
     <UserSecretsId>48193f25-445f-4379-a568-bc7347ddf24f</UserSecretsId>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <LangVersion>Latest</LangVersion>
@@ -28,7 +28,30 @@
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
     <PackageReference Include="SharpVectors" Version="1.7.5" />
     <PackageReference Include="squirrel.windows" Version="1.9.0" />
+    <PackageReference Include="NuGet.CommandLine" Version="5.8.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
+
+  <PropertyGroup>
+    <NugetTools>$(PkgNuGet_CommandLine)\tools</NugetTools>
+    <SquirrelTools>$(Pkgsquirrel_windows)\tools</SquirrelTools>
+
+    <Version>0.0.1</Version>
+
+    <NuspecFile>$(SolutionDir)PVScan.WPF.nuspec</NuspecFile>
+  </PropertyGroup>
+
+  <Target Name="GenerateRelease" AfterTargets="AfterBuild" Condition="$(Configuration) == Desktop_Release">
+    <XmlPeek XmlInputPath="$(NuspecFile)" Query="/package/metadata/id/text()">
+      <Output TaskParameter="Result" ItemName="ID" />
+    </XmlPeek>
+
+    <Exec Command="$(NugetTools)\NuGet.exe pack $(NuspecFile) -Version $(Version) -Properties Configuration=Desktop_Release -OutputDirectory $(SolutionDir)Deployment\GeneratedNugets" />
+
+    <Exec Command="$(SquirrelTools)\Squirrel.exe --releasify $(SolutionDir)Deployment\GeneratedNugets\@(ID).$(Version).nupkg --releaseDir=$(SolutionDir)Deployment\Releases" />
+  </Target>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Vendor\MapboxNet\Source\MapboxNetWPF\MapboxNetWPF.csproj" />

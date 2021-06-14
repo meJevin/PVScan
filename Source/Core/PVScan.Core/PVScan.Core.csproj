@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>Latest</LangVersion>
-    <Configurations>Android_Simulator_Debug;IOS_Device_Debug;IOS_Simulator_Debug;Desktop_Debug;Debug;Release</Configurations>
+    <Configurations>Android_Simulator_Debug;IOS_Device_Debug;IOS_Simulator_Debug;Desktop_Debug;Debug;Release;Desktop_Release</Configurations>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
@@ -52,6 +52,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|x64'">
+    <DefineConstants>TRACE;DESKTOP_WINDOWS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Release|x64'">
     <DefineConstants>TRACE;DESKTOP_WINDOWS</DefineConstants>
   </PropertyGroup>
 
