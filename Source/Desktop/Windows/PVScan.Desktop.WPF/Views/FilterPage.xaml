@@ -13,7 +13,7 @@
     xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
     mc:Ignorable="d" 
     d:DataContext="{d:DesignInstance Type=viewmodels:FilterPageViewModel}"
-    d:DesignHeight="450" d:DesignWidth="800">
+    d:DesignHeight="450" d:DesignWidth="500">
     <Grid>
         <Border CornerRadius="16" Background="#262626">
         </Border>
@@ -72,36 +72,61 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
-                            <Grid Grid.Column="0">
+                            <Grid Grid.Column="0" Cursor="Hand" Background="Transparent">
                                 <Label Content="Last"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       Foreground="White"/>
+                                       Foreground="White"
+                                       x:Name="DateLastButtonLabel"/>
+
+                                <Grid.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding SwitchToDateLatest}"/>
+                                </Grid.InputBindings>
                             </Grid>
 
-                            <Grid Grid.Column="1">
+                            <Grid Grid.Column="1" Cursor="Hand" Background="Transparent">
                                 <Label Content="Range"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       Foreground="White"/>
+                                       Foreground="White"
+                                       x:Name="DateRangeButtonLabel"
+                                       Opacity="0.35"/>
+
+                                <Grid.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding SwitchToDateRange}"/>
+                                </Grid.InputBindings>
                             </Grid>
 
                             <Rectangle Fill="OrangeRed" Height="2" VerticalAlignment="Bottom"
-                                       x:Name="DateTypeIndicator"/>
+                                       x:Name="DateTypeIndicator" SizeChanged="DateTypeIndicator_SizeChanged"/>
                         </Grid>
 
                         <Grid>
-                            <ListView ItemsSource="{Binding AvailableLastTimeSpans}"
+                            <Grid x:Name="DateLastPanel">
+                                <ListView ItemsSource="{Binding AvailableLastTimeSpans}"
                                       SelectedItem="{Binding SelectedLastTimeSpan}"
                                       SelectionMode="Single"
                                       HorizontalContentAlignment="Stretch"
                                       x:Name="AvailableLastTimeSpansListView">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <datatemplates:FilterLastTimeSpanItem/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <datatemplates:FilterLastTimeSpanItem/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+
+                            <Grid MinHeight="150" x:Name="DateRangePanel">
+                                <StackPanel VerticalAlignment="Center" Margin="14,0">
+                                    <Label Content="From" Foreground="White" Padding="0, 4"/>
+                                    <DatePicker BorderBrush="White" SelectedDate="{Binding FromDate}" 
+                                                Background="Black" Margin="0,0,0,16" >
+                                    </DatePicker>
+                                    <Label Content="To" Foreground="White" Padding="0,4"/>
+                                    <DatePicker BorderBrush="White" SelectedDate="{Binding ToDate}" 
+                                                Background="Black"/>
+                                </StackPanel>
+                            </Grid>
                         </Grid>
 
                         <Grid Margin="4,12,4,8">
