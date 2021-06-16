@@ -56,8 +56,8 @@ namespace PVScan.Desktop.WPF.Views.Popups
 
             await WaitForResultOrDismiss();
 
-            await AnimateOut(Animations.DefaultDuration);
-            _ = AnimateMainWindowOut(Animations.DefaultDuration);
+            _ =AnimateOut(Animations.DefaultDuration);
+            await AnimateMainWindowOut(Animations.DefaultDuration);
 
             return Result;
         }
