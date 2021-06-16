@@ -31,6 +31,8 @@ Global
 		Debug|x86 = Debug|x86
 		Desktop_Debug|x64 = Desktop_Debug|x64
 		Desktop_Debug|x86 = Desktop_Debug|x86
+		Desktop_Release|x64 = Desktop_Release|x64
+		Desktop_Release|x86 = Desktop_Release|x86
 		IOS_Device_Debug|x64 = IOS_Device_Debug|x64
 		IOS_Device_Debug|x86 = IOS_Device_Debug|x86
 		IOS_Simulator_Debug|x64 = IOS_Simulator_Debug|x64
@@ -51,6 +53,10 @@ Global
 		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Desktop_Debug|x64.Build.0 = Desktop_Debug|x64
 		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Desktop_Debug|x86.ActiveCfg = Desktop_Debug|x86
 		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Desktop_Debug|x86.Build.0 = Desktop_Debug|x86
+		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Desktop_Release|x64.ActiveCfg = Desktop_Release|x64
+		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Desktop_Release|x64.Build.0 = Desktop_Release|x64
+		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Desktop_Release|x86.ActiveCfg = Desktop_Release|x86
+		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.Desktop_Release|x86.Build.0 = Desktop_Release|x86
 		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.IOS_Device_Debug|x64.ActiveCfg = Debug|x64
 		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.IOS_Device_Debug|x64.Build.0 = Debug|x64
 		{115B04C6-9276-4BBF-9FE3-842866AF71D5}.IOS_Device_Debug|x86.ActiveCfg = Debug|x86
@@ -75,6 +81,10 @@ Global
 		{669436E4-A5AA-45F6-A361-271CBC947741}.Desktop_Debug|x64.Build.0 = Desktop_Debug|x64
 		{669436E4-A5AA-45F6-A361-271CBC947741}.Desktop_Debug|x86.ActiveCfg = Desktop_Debug|x86
 		{669436E4-A5AA-45F6-A361-271CBC947741}.Desktop_Debug|x86.Build.0 = Desktop_Debug|x86
+		{669436E4-A5AA-45F6-A361-271CBC947741}.Desktop_Release|x64.ActiveCfg = Desktop_Release|x64
+		{669436E4-A5AA-45F6-A361-271CBC947741}.Desktop_Release|x64.Build.0 = Desktop_Release|x64
+		{669436E4-A5AA-45F6-A361-271CBC947741}.Desktop_Release|x86.ActiveCfg = Desktop_Release|x86
+		{669436E4-A5AA-45F6-A361-271CBC947741}.Desktop_Release|x86.Build.0 = Desktop_Release|x86
 		{669436E4-A5AA-45F6-A361-271CBC947741}.IOS_Device_Debug|x64.ActiveCfg = IOS_Device_Debug|Any CPU
 		{669436E4-A5AA-45F6-A361-271CBC947741}.IOS_Device_Debug|x64.Build.0 = IOS_Device_Debug|Any CPU
 		{669436E4-A5AA-45F6-A361-271CBC947741}.IOS_Device_Debug|x86.ActiveCfg = IOS_Device_Debug|Any CPU
@@ -99,6 +109,10 @@ Global
 		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.Desktop_Debug|x64.Build.0 = Debug|x64
 		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.Desktop_Debug|x86.ActiveCfg = Debug|x86
 		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.Desktop_Debug|x86.Build.0 = Debug|x86
+		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.Desktop_Release|x64.ActiveCfg = Desktop_Release|x64
+		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.Desktop_Release|x64.Build.0 = Desktop_Release|x64
+		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.Desktop_Release|x86.ActiveCfg = Desktop_Release|x86
+		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.Desktop_Release|x86.Build.0 = Desktop_Release|x86
 		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.IOS_Device_Debug|x64.ActiveCfg = Debug|Any CPU
 		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.IOS_Device_Debug|x64.Build.0 = Debug|Any CPU
 		{2D48F2E3-1EE3-4DDC-98DF-45D586D39383}.IOS_Device_Debug|x86.ActiveCfg = Debug|Any CPU
@@ -123,6 +137,10 @@ Global
 		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.Desktop_Debug|x64.Build.0 = Debug|x64
 		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.Desktop_Debug|x86.ActiveCfg = Debug|x86
 		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.Desktop_Debug|x86.Build.0 = Debug|x86
+		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.Desktop_Release|x64.ActiveCfg = Desktop_Release|x64
+		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.Desktop_Release|x64.Build.0 = Desktop_Release|x64
+		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.Desktop_Release|x86.ActiveCfg = Desktop_Release|x86
+		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.Desktop_Release|x86.Build.0 = Desktop_Release|x86
 		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.IOS_Device_Debug|x64.ActiveCfg = Debug|Any CPU
 		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.IOS_Device_Debug|x64.Build.0 = Debug|Any CPU
 		{4426E9A0-D91F-4027-9C26-B6D73D098F64}.IOS_Device_Debug|x86.ActiveCfg = Debug|Any CPU
@@ -147,6 +165,10 @@ Global
 		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.Desktop_Debug|x64.Build.0 = Debug|x64
 		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.Desktop_Debug|x86.ActiveCfg = Debug|x86
 		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.Desktop_Debug|x86.Build.0 = Debug|x86
+		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.Desktop_Release|x64.ActiveCfg = Desktop_Release|x64
+		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.Desktop_Release|x64.Build.0 = Desktop_Release|x64
+		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.Desktop_Release|x86.ActiveCfg = Desktop_Release|x86
+		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.Desktop_Release|x86.Build.0 = Desktop_Release|x86
 		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.IOS_Device_Debug|x64.ActiveCfg = Debug|x64
 		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.IOS_Device_Debug|x64.Build.0 = Debug|x64
 		{248B5407-5B81-440D-8337-FB3A7D4B8EED}.IOS_Device_Debug|x86.ActiveCfg = Debug|x86
@@ -171,6 +193,10 @@ Global
 		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.Desktop_Debug|x64.Build.0 = Debug|x64
 		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.Desktop_Debug|x86.ActiveCfg = Debug|x86
 		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.Desktop_Debug|x86.Build.0 = Debug|x86
+		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.Desktop_Release|x64.ActiveCfg = Desktop_Release|x64
+		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.Desktop_Release|x64.Build.0 = Desktop_Release|x64
+		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.Desktop_Release|x86.ActiveCfg = Desktop_Release|x86
+		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.Desktop_Release|x86.Build.0 = Desktop_Release|x86
 		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.IOS_Device_Debug|x64.ActiveCfg = Debug|x64
 		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.IOS_Device_Debug|x64.Build.0 = Debug|x64
 		{D67072E8-F3D5-4320-ABC3-637EB1D20FC4}.IOS_Device_Debug|x86.ActiveCfg = Debug|x86

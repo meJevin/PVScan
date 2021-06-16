@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PVScan.Core;
 using PVScan.Desktop.WPF.DI;
+using PVScan.Desktop.WPF.Services.Interfaces;
 using PVScan.Desktop.WPF.Views;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,12 @@ namespace PVScan.Desktop.WPF
     /// </summary>
     public partial class App : Application
     {
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private async void Application_Startup(object sender, StartupEventArgs e)
         {
             InitializeDatabasePath();
             InitializeDependencyInjection();
             InitializeMapsServiceToken();
+            await InitializeUpdater();
 
             ShowMainWindow();
         }
@@ -57,9 +59,18 @@ namespace PVScan.Desktop.WPF
         private void InitializeMapsServiceToken()
         {
             var cfg = Resolver.Resolve<IConfiguration>();
-            MapBoxToken = cfg.GetSection("MapBoxKey").Value;
+            Constants.MapBoxKey = cfg.GetSection("MapBoxKey").Value;
         }
 
-        public static string MapBoxToken;
+        private async Task InitializeUpdater()
+        {
+            var updater = Resolver.Resolve<IUpdater>();
+            await updater.InitializeAsync();
+
+            _ = Task.Run(async () =>
+            {
+                await updater.CheckAndInstallUpdates();
+            });
+        }
     }
 }

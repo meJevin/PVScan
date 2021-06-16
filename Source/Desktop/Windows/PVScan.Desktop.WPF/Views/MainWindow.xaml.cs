@@ -1,5 +1,6 @@
 ﻿using PVScan.Core;
 using PVScan.Desktop.WPF.ViewModels;
+using PVScan.Desktop.WPF.ViewModels.Messages.Popups;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,6 +84,8 @@ namespace PVScan.Desktop.WPF.Views
             await MapPageView.FadeTo(1, duration);
 
             ScanPageView.Visibility = Visibility.Hidden;
+
+            (ScanPageView.DataContext as ScanPageViewModel).StopCapturing();
         }
 
         private async Task ToggleToScanPage(TimeSpan duration)
@@ -97,6 +100,8 @@ namespace PVScan.Desktop.WPF.Views
             await ScanPageView.FadeTo(1, duration);
 
             MapPageView.Visibility = Visibility.Hidden;
+
+            (ScanPageView.DataContext as ScanPageViewModel).StartCapturing();
         }
 
         private async void MapPageView_BarcodeSelected(object sender, Core.Models.Barcode e)
@@ -121,6 +126,12 @@ namespace PVScan.Desktop.WPF.Views
             }
 
             await HideBarcodeInfoPage(Animations.DefaultDuration);
+        }
+
+        private void PopupOverlay_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MessagingCenter.Send(this, nameof(PopupDismissedViaOverlayMessage),
+                new PopupDismissedViaOverlayMessage() { });
         }
     }
 }

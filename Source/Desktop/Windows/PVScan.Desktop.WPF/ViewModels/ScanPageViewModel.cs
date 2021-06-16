@@ -32,8 +32,6 @@ namespace PVScan.Desktop.WPF.ViewModels
             frame = new Mat();
 
             capture = new VideoCapture(0);
-            capture.Start();
-
             capture.ImageGrabbed += (s, e) =>
             {
                 if (capture.Retrieve(frame, 0))
@@ -99,6 +97,16 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                 GotBarcode?.Invoke(this, new EventArgs());
             });
+        }
+
+        public void StartCapturing()
+        {
+            capture.Start();
+        }
+
+        public void StopCapturing()
+        {
+            capture.Stop();
         }
 
         private void GenerateRandomBarcode()

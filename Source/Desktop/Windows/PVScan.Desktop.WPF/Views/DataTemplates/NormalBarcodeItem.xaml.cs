@@ -30,7 +30,7 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
             DependencyProperty.Register(nameof(IsEditing), typeof(bool), typeof(UserControl), 
                 new PropertyMetadata(false, IsEditingChanged));
 
-        public event EventHandler NoLocationClicked;
+        public event EventHandler<Barcode> NoLocationClicked;
 
         public ICommand FavoriteCommand
         {
@@ -152,7 +152,12 @@ namespace PVScan.Desktop.WPF.Views.DataTemplates
 
         private void NoLocationButton_Click(object sender, RoutedEventArgs e)
         {
-            NoLocationClicked?.Invoke(this, new EventArgs());
+            if (DataContext == null)
+            {
+                return;
+            }
+
+            NoLocationClicked?.Invoke(this, DataContext as Barcode);
         }
     }
 }

@@ -5,6 +5,7 @@ using PVScan.Desktop.WPF.ViewModels.Messages;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,6 +113,13 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                 ToggleApplyFilterEnabled();
             });
+
+            PropertyChanged += FilterPageViewModel_PropertyChanged;
+        }
+
+        private void FilterPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            ToggleApplyFilterEnabled();
         }
 
         private void InitBarcodeFormats()
@@ -184,6 +192,11 @@ namespace PVScan.Desktop.WPF.ViewModels
         {
             if (DateFilterTypeIndex == 0)
             {
+                if (CurrentFilter.FromDate != null && CurrentFilter.ToDate != null)
+                {
+                    return false;
+                }
+
                 // Last day, weeek, month ...
                 if ((CurrentFilter.LastType == null &&
                     SelectedLastTimeSpan != null) ||
@@ -208,7 +221,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                 if (CurrentFilter.FromDate == null ||
                     CurrentFilter.ToDate == null ||
                     CurrentFilter.FromDate != FromDate ||
-                    CurrentFilter.ToDate != ToDate)
+                    CurrentFilter.ToDate != ToDate.AddDays(1))
                 {
                     return false;
                 }

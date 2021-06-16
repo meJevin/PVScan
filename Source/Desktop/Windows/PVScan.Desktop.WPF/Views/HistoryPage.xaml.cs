@@ -260,5 +260,15 @@ namespace PVScan.Desktop.WPF.Views
 
             BarcodeSelected?.Invoke(this, (sender as ListView).SelectedItem as Barcode);
         }
+
+        private async void SortingPage_Closed(object sender, EventArgs e)
+        {
+            await HideSortingPage(Animations.DefaultDuration);
+        }
+
+        private async void FilterPage_Closed(object sender, EventArgs e)
+        {
+            await HideFilterPage(Animations.DefaultDuration);
+        }
     }
 }

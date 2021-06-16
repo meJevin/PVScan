@@ -19,6 +19,8 @@ namespace PVScan.Desktop.WPF.Views
     /// </summary>
     public partial class SortingPage : ContentControl
     {
+        public event EventHandler Closed;
+
         SortingPageViewModel VM;
 
         public SortingPage()
@@ -36,6 +38,11 @@ namespace PVScan.Desktop.WPF.Views
             }
 
             VM.SortingFieldSelectedCommand.Execute(AvailiableSortingFieldsListView.SelectedItem);
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Closed?.Invoke(this, new EventArgs());
         }
     }
 }

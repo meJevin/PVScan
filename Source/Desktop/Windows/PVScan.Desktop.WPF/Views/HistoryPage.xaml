@@ -123,12 +123,12 @@
                    MouseDown="SortingPageOverlay_MouseDown"/>
 
         <local:SortingPage Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="24,0,24,0"
-                           x:Name="SortingPage" MaxWidth="375"/>
+                           x:Name="SortingPage" MaxWidth="375" Closed="SortingPage_Closed"/>
 
         <Rectangle x:Name="FilterPageOverlay" Fill="Black" Grid.RowSpan="2" Opacity="0" IsHitTestVisible="False"
                    MouseDown="FilterPageOverlay_MouseDown"/>
 
         <local:FilterPage Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="24,84,24,0"
-                          x:Name="FilterPage" MaxWidth="475" MaxHeight="800"/>
+                          x:Name="FilterPage" MaxWidth="475" MaxHeight="800" Closed="FilterPage_Closed"/>
     </Grid>
 </ContentControl>
