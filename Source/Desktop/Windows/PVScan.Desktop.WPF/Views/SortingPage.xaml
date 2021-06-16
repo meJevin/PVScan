@@ -9,6 +9,7 @@
     di:ViewModelLocator.AutoWireViewModel="True"
     xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels" 
     xmlns:datatemplates="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
     mc:Ignorable="d" 
     d:DataContext="{d:DesignInstance Type=viewmodels:SortingPageViewModel}"
@@ -37,6 +38,12 @@
             <Label Content="Sort Barcodes" Foreground="White" FontSize="22" FontWeight="DemiBold"
                    HorizontalAlignment="Center" VerticalAlignment="Top"
                        Margin="0,8,0,12"/>
+
+            <!-- CLOSE BUTTON -->
+            <Button Style="{DynamicResource MaterialDesignToolButton}" Width="30" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Background="Transparent" Padding="0" Click="CloseButton_Click">
+                <materialDesign:PackIcon Kind="Close" Foreground="White" Width="26" Height="26"/>
+            </Button>
 
             <!-- SEPARATOR -->
             <Rectangle Fill="White" Height="2" Grid.Row="1"/>

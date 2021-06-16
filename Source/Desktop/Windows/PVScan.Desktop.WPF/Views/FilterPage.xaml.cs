@@ -19,6 +19,8 @@ namespace PVScan.Desktop.WPF.Views
     /// </summary>
     public partial class FilterPage : ContentControl
     {
+        public event EventHandler Closed;
+
         FilterPageViewModel VM;
 
         public FilterPage()
@@ -39,6 +41,11 @@ namespace PVScan.Desktop.WPF.Views
         private void LastTimeListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             VM.ToggleApplyFilterEnabled();
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Closed?.Invoke(this, new EventArgs());
         }
     }
 }
