@@ -192,6 +192,11 @@ namespace PVScan.Desktop.WPF.ViewModels
         {
             if (DateFilterTypeIndex == 0)
             {
+                if (CurrentFilter.FromDate != null && CurrentFilter.ToDate != null)
+                {
+                    return false;
+                }
+
                 // Last day, weeek, month ...
                 if ((CurrentFilter.LastType == null &&
                     SelectedLastTimeSpan != null) ||
