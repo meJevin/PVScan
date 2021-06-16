@@ -64,10 +64,12 @@
 
                     <TextBox Grid.Column="1"
                              materialDesign:HintAssist.Hint="Search" x:Name="SearchBox"
+                             materialDesign:HintAssist.Foreground="Black"
                              materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                              BorderThickness="0"
                              MinWidth="200"
                              VerticalAlignment="Center"
+                             Foreground="Black"
                              TextChanged="SearchBox_TextChanged"
                              Text="{Binding Search, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
