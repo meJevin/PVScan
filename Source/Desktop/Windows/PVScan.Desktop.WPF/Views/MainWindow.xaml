@@ -32,17 +32,17 @@
 
             <views:MapPage x:Name="MapPageView" BarcodeSelected="MapPageView_BarcodeSelected"/>
 
+            <Button Foreground="White" Content="Map" Width="150"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Margin="15" x:Name="ToggleScanMapPagesButton"
+                    Command="{Binding ToggleMapScanPages}"/>
+
             <views:BarcodeInfoPage Grid.RowSpan="2" VerticalAlignment="Bottom" Width="345"
                                    Margin="24,84,24,0" x:Name="BarcodeInfoPage"
                                    HorizontalAlignment="Left" Closed="BarcodeInfoPage_Closed"
                                    DeleteCommand="{Binding RelativeSource={RelativeSource AncestorType=views:MainWindow}, Path=DataContext.DeleteCommand}"
                                    ShowInListCommand="{Binding RelativeSource={RelativeSource AncestorType=views:MainWindow}, Path=DataContext.ShowInListCommand}"
                                    ShowOnMapCommand="{Binding RelativeSource={RelativeSource AncestorType=views:MainWindow}, Path=DataContext.ShowOnMapCommand}"/>
-
-            <Button Foreground="White" Content="Map" Width="150"
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    Margin="15" x:Name="ToggleScanMapPagesButton"
-                    Command="{Binding ToggleMapScanPages}"/>
         </Grid>
 
         <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
