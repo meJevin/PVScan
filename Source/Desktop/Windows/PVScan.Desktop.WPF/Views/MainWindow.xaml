@@ -47,10 +47,51 @@
 
         <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                       Background="#2f2f2f"/>
-        
+
         <Grid Background="#2e2e2e">
             <views:HistoryPage BarcodeSelected="HistoryPage_BarcodeSelected"
                                x:Name="HistoryPage"/>
+        </Grid>
+
+        <Grid Grid.Column="2">
+            <Button Margin="10"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                    x:Name="ProfileButton"
+                    Style="{DynamicResource MaterialDesignToolButton}"
+                    Height="36"
+                    Width="36"
+                    Padding="0"
+                    Click="ProfileButton_Click">
+                <materialDesign:PackIcon Kind="Menu"
+                                         Foreground="White"
+                                         Width="36"
+                                         Height="36"/>
+            </Button>
+        </Grid>
+
+        <Grid Grid.ColumnSpan="3">
+            <Rectangle Fill="Black" x:Name="ProfilePageOverlay" Opacity="0" IsHitTestVisible="False"
+                       MouseDown="ProfilePageOverlay_MouseDown"/>
+        </Grid>
+
+        <Grid Grid.ColumnSpan="3" x:Name="ProfilePageContainer" Opacity="0" IsHitTestVisible="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="300" MinWidth="300" MaxWidth="600"/>
+            </Grid.ColumnDefinitions>
+
+            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                      Background="#2f2f2f"/>
+            
+            <views:ProfilePage Grid.Column="2" x:Name="ProfilePage">
+                <views:ProfilePage.RenderTransform>
+                    <TransformGroup>
+                        <TranslateTransform X="300"/>
+                    </TransformGroup>
+                </views:ProfilePage.RenderTransform>
+            </views:ProfilePage>
         </Grid>
 
         <Grid Grid.ColumnSpan="3" x:Name="PopupContainer" IsHitTestVisible="False">

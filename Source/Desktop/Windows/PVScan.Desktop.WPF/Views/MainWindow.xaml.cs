@@ -27,6 +27,7 @@ namespace PVScan.Desktop.WPF.Views
 
         double BarcodeInfoPageHeight = -1;
         bool showingBarcodeInfoPage = false;
+        bool showingProfilePage = false;
 
         public MainWindow()
         {
@@ -46,6 +47,26 @@ namespace PVScan.Desktop.WPF.Views
             };
 
             _ = ToggleToMapPage(TimeSpan.Zero);
+        }
+
+        private async Task ShowProfilePage(TimeSpan duration)
+        {
+            _ = ProfilePageContainer.FadeTo(1, duration);
+            ProfilePageOverlay.IsHitTestVisible = true;
+            _ = ProfilePageOverlay.FadeTo(0.85, duration);
+            await ProfilePage.TranslateTo(0, 0, duration);
+            ProfilePageContainer.IsHitTestVisible = true;
+            showingProfilePage = true;
+        }
+
+        private async Task HideProfilePage(TimeSpan duration)
+        {
+            ProfilePageContainer.IsHitTestVisible = false;
+            _ = ProfilePageContainer.FadeTo(0, duration);
+            _ = ProfilePageOverlay.FadeTo(0, duration);
+            await ProfilePage.TranslateTo(ProfilePage.ActualWidth, 0, duration);
+            ProfilePageOverlay.IsHitTestVisible = false;
+            showingProfilePage = false;
         }
 
         private async Task HideBarcodeInfoPage(TimeSpan duration)
@@ -132,6 +153,16 @@ namespace PVScan.Desktop.WPF.Views
         {
             MessagingCenter.Send(this, nameof(PopupDismissedViaOverlayMessage),
                 new PopupDismissedViaOverlayMessage() { });
+        }
+
+        private async void ProfileButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ShowProfilePage(Animations.DefaultDuration);
+        }
+
+        private async void ProfilePageOverlay_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            await HideProfilePage(Animations.DefaultDuration);
         }
     }
 }
