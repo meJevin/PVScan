@@ -15,6 +15,7 @@ using PVScan.Desktop.WPF.Views;
 using Microsoft.Extensions.Configuration;
 using PVScan.Desktop.WPF.Views.Popups;
 using System.Windows;
+using PVScan.Desktop.WPF.Services.SQLiteEncrypted;
 
 namespace PVScan.Desktop.WPF.DI
 {
@@ -53,6 +54,22 @@ namespace PVScan.Desktop.WPF.DI
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
+            ContainerBuilder.Register(ctx =>
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<SQLiteEncryptedDbContext>();
+
+                optionsBuilder.UseSqlite(
+                    SQLiteEncryptedDbContext.GetConnection(Constants.SQLiteEncryptedKVPDatabasePath),
+                    sqliteOptions =>
+                    {
+                        var migrationsAssembly = typeof(SQLiteEncryptedDbContext).GetTypeInfo().Assembly.GetName().Name;
+                    });
+
+                return new SQLiteEncryptedDbContext(optionsBuilder.Options);
+            })
+                .AsSelf()
+                .InstancePerLifetimeScope();
+
             // Updater
             ContainerBuilder.Register(updater =>
             {
@@ -83,10 +100,10 @@ namespace PVScan.Desktop.WPF.DI
             ContainerBuilder.RegisterAssemblyTypes(typeof(App).Assembly).
                 Where(t => t.IsSubclassOf(typeof(BaseViewModel)));
 
-            //// KVP
-            //ContainerBuilder.RegisterType<PreferencesPersistentKVP>()
-            //    .As<IPersistentKVP>()
-            //    .InstancePerLifetimeScope();
+            // KVP
+            ContainerBuilder.RegisterType<SQLiteEncryptedPersistentKVP>()
+                .As<IPersistentKVP>()
+                .InstancePerLifetimeScope();
 
             // Filter Service
             ContainerBuilder.RegisterType<BarcodesFilter>()
