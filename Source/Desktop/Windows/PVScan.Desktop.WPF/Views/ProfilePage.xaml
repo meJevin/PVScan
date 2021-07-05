@@ -14,6 +14,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400">
     <Grid Background="#262626">
-        <Label Content="Profile Page" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="32"/>
+        <local:LoginPage x:Name="LoginPage" Visibility="Hidden"/>
+        <local:SignUpPage x:Name="SignUpPage" Visibility="Hidden"/>
+        <local:LoggedInPage x:Name="LoggedInPage" Visibility="Hidden"/>
     </Grid>
 </ContentControl>
