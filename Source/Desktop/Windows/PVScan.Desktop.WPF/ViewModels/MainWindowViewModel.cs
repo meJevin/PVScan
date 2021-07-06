@@ -15,10 +15,10 @@ namespace PVScan.Desktop.WPF.ViewModels
     public class MainWindowViewModel : BaseViewModel
     {
         readonly IBarcodesRepository BarcodesRepository;
-        readonly IPopup<NoLocationAvailablePopupResult> NoLocationPopup;
+        readonly IPopup<NoLocationAvailablePopupArgs, NoLocationAvailablePopupResult> NoLocationPopup;
 
         public MainWindowViewModel(IBarcodesRepository barcodesRepository,
-            IPopup<NoLocationAvailablePopupResult> noLocationPopup)
+            IPopup<NoLocationAvailablePopupArgs, NoLocationAvailablePopupResult> noLocationPopup)
         {
             BarcodesRepository = barcodesRepository;
             NoLocationPopup = noLocationPopup;
