@@ -76,8 +76,8 @@ namespace PVScan.Desktop.WPF
         private void InitializeMapsServiceToken()
         {
             var cfg = Resolver.Resolve<IConfiguration>();
-            //Constants.MapBoxKey = cfg.GetSection("MapBoxKey").Value;
-            Constants.MapBoxKey = "N/A";
+            Constants.MapBoxKey = cfg.GetSection("MapBoxKey").Value;
+            //Constants.MapBoxKey = "N/A";
         }
 
         private async Task InitializeUpdater()

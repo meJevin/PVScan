@@ -1,5 +1,6 @@
 ﻿using MvvmHelpers;
 using PVScan.Core.Models;
+using PVScan.Core.Models.API;
 using PVScan.Core.Services.Interfaces;
 using PVScan.Desktop.WPF.ViewModels.Messages;
 using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
@@ -11,6 +12,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PVScan.Desktop.WPF.ViewModels
@@ -20,20 +22,30 @@ namespace PVScan.Desktop.WPF.ViewModels
         readonly IBarcodesFilter FilterService;
         readonly IBarcodeSorter SorterService;
         readonly IBarcodesRepository BarcodesRepository;
+        readonly IPVScanAPI PVScanAPI;
+        readonly IAPIBarcodeHub BarcodeHub;
 
         public HistoryPageViewModel(
             IBarcodesRepository barcodesRepository,
             IBarcodesFilter filterService,
-            IBarcodeSorter sorterService)
+            IBarcodeSorter sorterService,
+            IPVScanAPI pVScanAPI,
+            IAPIBarcodeHub barcodeHub)
         {
             FilterService = filterService;
             SorterService = sorterService;
             BarcodesRepository = barcodesRepository;
+            PVScanAPI = pVScanAPI;
+            BarcodeHub = barcodeHub;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
 
             SelectedBarcodes = new ObservableCollection<Barcode>();
+
+            BarcodeHub.OnDeleted += BarcodeHub_OnDeleted;
+            BarcodeHub.OnUpdated += BarcodeHub_OnUpdated;
+            BarcodeHub.OnScanned += BarcodeHub_OnScanned;
 
             LoadNextPage = new Command(async () =>
             {
@@ -83,6 +95,19 @@ namespace PVScan.Desktop.WPF.ViewModels
                     Barcodes[indxPaged] = null;
                     Barcodes[indxTotal] = barcode;
                 }
+
+                var req = new UpdatedBarcodeRequest()
+                {
+                    GUID = barcode.GUID,
+                    Latitude = barcode.ScanLocation?.Latitude,
+                    Longitude = barcode.ScanLocation?.Longitude,
+                    Favorite = barcode.Favorite,
+                };
+
+                if (await PVScanAPI.UpdatedBarcode(req) != null)
+                {
+                    await BarcodeHub.Updated(req);
+                }
             });
 
             StartEditCommand = new Command(() =>
@@ -123,6 +148,16 @@ namespace PVScan.Desktop.WPF.ViewModels
                     {
                         BarcodesPaged.Remove(barcode);
                     }
+
+                    var req = new DeletedBarcodeRequest()
+                    {
+                        GUID = barcode.GUID,
+                    };
+
+                    if (await PVScanAPI.DeletedBarcode(req) != null)
+                    {
+                        await BarcodeHub.Deleted(req);
+                    }
                 }
 
                 SelectedBarcodes.Clear();
@@ -133,39 +168,7 @@ namespace PVScan.Desktop.WPF.ViewModels
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
                 {
-                    var tempEnumerable = new List<Barcode>() { args.ScannedBarcode };
-
-                    if (CurrentFilter != null)
-                    {
-                        tempEnumerable = FilterService
-                                            .Filter(tempEnumerable, CurrentFilter)
-                                            .ToList();
-                    }
-
-                    if (!String.IsNullOrEmpty(Search))
-                    {
-                        tempEnumerable = FilterService
-                                            .Search(tempEnumerable, Search)
-                                            .ToList();
-                    }
-
-                    var result = tempEnumerable.FirstOrDefault();
-                    if (result != null)
-                    {
-                        var tempList = Barcodes.ToList();
-                        tempList.Add(result);
-
-                        var newListSorted = (await SorterService.Sort(tempList, CurrentSorting)).ToList();
-
-                        var insertedIndex = newListSorted.IndexOf(result);
-
-                        Barcodes.Insert(insertedIndex, result);
-                        int lastPagedIndex = BarcodesPaged.Count;
-                        if (insertedIndex <= lastPagedIndex)
-                        {
-                            BarcodesPaged.Insert(insertedIndex, result);
-                        }
-                    }
+                    await BarcodeScanned(args);
                 });
 
             MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
@@ -206,6 +209,135 @@ namespace PVScan.Desktop.WPF.ViewModels
             MessagingCenter.Send(this, 
                 nameof(HistoryPageBarcodesCollectionChanged), 
                 new HistoryPageBarcodesCollectionChanged() { Args = e });
+        }
+
+        private async Task BarcodeScanned(BarcodeScannedMessage args)
+        {
+            var tempEnumerable = new List<Barcode>() { args.ScannedBarcode };
+
+            if (CurrentFilter != null)
+            {
+                tempEnumerable = FilterService
+                                    .Filter(tempEnumerable, CurrentFilter)
+                                    .ToList();
+            }
+
+            if (!String.IsNullOrEmpty(Search))
+            {
+                tempEnumerable = FilterService
+                                    .Search(tempEnumerable, Search)
+                                    .ToList();
+            }
+
+            var result = tempEnumerable.FirstOrDefault();
+            if (result != null)
+            {
+                var tempList = Barcodes.ToList();
+                tempList.Add(result);
+
+                var newListSorted = (await SorterService.Sort(tempList, CurrentSorting)).ToList();
+
+                var insertedIndex = newListSorted.IndexOf(result);
+
+                Barcodes.Insert(insertedIndex, result);
+                int lastPagedIndex = BarcodesPaged.Count;
+                if (insertedIndex <= lastPagedIndex)
+                {
+                    BarcodesPaged.Insert(insertedIndex, result);
+                }
+            }
+        }
+
+        private async void BarcodeHub_OnUpdated(object sender, UpdatedBarcodeRequest req)
+        {
+            var localBarcode = await BarcodesRepository.FindByGUID(req.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            localBarcode.ScanLocation = new Coordinate()
+            {
+                Latitude = req.Latitude,
+                Longitude = req.Longitude,
+            };
+            localBarcode.Favorite = req.Favorite;
+
+            await BarcodesRepository.Update(localBarcode);
+
+            await Application.Current.Dispatcher.InvokeAsync(async () =>
+            {
+                var indxPaged = BarcodesPaged.IndexOf(localBarcode);
+                var indxTotal = Barcodes.IndexOf(localBarcode);
+
+                if (indxPaged != -1)
+                {
+                    BarcodesPaged.RemoveAt(indxPaged);
+                    BarcodesPaged.Insert(indxPaged, localBarcode);
+                }
+
+                if (indxTotal != -1)
+                {
+                    BarcodesPaged.RemoveAt(indxTotal);
+                    BarcodesPaged.Insert(indxTotal, localBarcode);
+                }
+            });
+        }
+
+        private async void BarcodeHub_OnDeleted(object sender, DeletedBarcodeRequest req)
+        {
+            Barcode barcode = await BarcodesRepository.FindByGUID(req.GUID);
+
+            if (barcode == null)
+            {
+                return;
+            }
+
+            await BarcodesRepository.Delete(barcode);
+
+            await Application.Current.Dispatcher.InvokeAsync(async () =>
+            {
+                if (BarcodesPaged.Contains(barcode))
+                {
+                    BarcodesPaged.Remove(barcode);
+                }
+
+                if (Barcodes.Contains(barcode))
+                {
+                    Barcodes.Remove(barcode);
+                }
+            });
+        }
+
+        private async void BarcodeHub_OnScanned(object sender, ScannedBarcodeRequest b)
+        {
+            Barcode newBarcode = new Barcode()
+            {
+                Favorite = b.Favorite,
+                Format = b.Format,
+                GUID = b.GUID,
+                Hash = b.Hash,
+                ScanLocation = null,
+                ScanTime = b.ScanTime,
+                Text = b.Text,
+            };
+
+            if (b.Latitude.HasValue && b.Longitude.HasValue)
+            {
+                newBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = b.Latitude,
+                    Longitude = b.Longitude
+                };
+            }
+
+            newBarcode = await BarcodesRepository.Save(newBarcode);
+
+            await Application.Current.Dispatcher.InvokeAsync(async () =>
+            {
+                await BarcodeScanned(new BarcodeScannedMessage() { ScannedBarcode = newBarcode });
+            });
         }
 
         public async Task LoadBarcodesFromDB()

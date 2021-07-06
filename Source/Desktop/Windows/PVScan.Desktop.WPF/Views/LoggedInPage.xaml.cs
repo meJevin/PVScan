@@ -82,48 +82,43 @@ namespace PVScan.Desktop.WPF.Views
             {
                 if (VM.IsInitializing)
                 {
-                    InitializingSpinner.Visibility = Visibility.Visible;
+                    InitializingSpinner.IsHitTestVisible = true;
                     _ = ProfileContainer.FadeTo(0, Animations.DefaultDuration);
-                    await InitializingSpinner.FadeTo(1, Animations.DefaultDuration);
-                    ProfileContainer.Visibility = Visibility.Hidden;
+                    _ = InitializingSpinner.FadeTo(1, Animations.DefaultDuration);
+                    ProfileContainer.IsHitTestVisible = false;
                 }
                 else if (!VM.IsError)
                 {
-                    ProfileContainer.Visibility = Visibility.Visible;
+                    ProfileContainer.IsHitTestVisible = true;
                     _ = ProfileContainer.FadeTo(1, Animations.DefaultDuration);
-                    await InitializingSpinner.FadeTo(0, Animations.DefaultDuration);
-                    InitializingSpinner.Visibility = Visibility.Hidden;
+                    _ = InitializingSpinner.FadeTo(0, Animations.DefaultDuration);
+                    InitializingSpinner.IsHitTestVisible = false;
                 }
             }
             else if (e.PropertyName == nameof(LoggedInPageViewModel.IsError))
             {
                 if (VM.IsError)
                 {
-                    SomethingWentWrongContainer.Visibility = Visibility.Visible;
+                    SomethingWentWrongContainer.IsHitTestVisible = true;
                     _ = ProfileContainer.FadeTo(0, Animations.DefaultDuration);
-                    await SomethingWentWrongContainer.FadeTo(1, Animations.DefaultDuration);
-                    ProfileContainer.Visibility = Visibility.Hidden;
+                    _ = SomethingWentWrongContainer.FadeTo(1, Animations.DefaultDuration);
+                    ProfileContainer.IsHitTestVisible = false;
                 }
                 else
                 {
-                    await SomethingWentWrongContainer.FadeTo(0, Animations.DefaultDuration);
-                    SomethingWentWrongContainer.Visibility = Visibility.Hidden;
+                    _ = SomethingWentWrongContainer.FadeTo(0, Animations.DefaultDuration);
+                    SomethingWentWrongContainer.IsHitTestVisible = false;
                 }
             }
         }
 
         public async Task Initialize()
         {
-            ProfileContainer.Opacity = 0;
-            ProfileContainer.Visibility = Visibility.Hidden;
-            _ = InitializingSpinner.FadeTo(1, Animations.DefaultDuration);
             await VM.Initialize();
         }
 
         public async Task Uninitialize()
         {
-            ProfileContainer.Opacity = 0;
-            ProfileContainer.Visibility = Visibility.Hidden;
             MainScrollView.ScrollToTop();
         }
     }
