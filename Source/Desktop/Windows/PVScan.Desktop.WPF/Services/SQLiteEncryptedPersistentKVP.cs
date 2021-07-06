@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PVScan.Desktop.WPF.Services
 {
@@ -19,94 +20,115 @@ namespace PVScan.Desktop.WPF.Services
         }
 
 
-        public void Clear()
+        public async Task Clear()
         {
-            _context.KVPs.RemoveRange(_context.KVPs.ToList());
-            _context.SaveChanges();
-        }
-
-        public bool ContainsKey(string key)
-        {
-            return _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault() != null;
-        }
-
-        public string Get(string key, string defaultValue)
-        {
-            var dbKVP = _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault();
-
-            if (dbKVP == null || dbKVP.Type != typeof(string).Name)
+            await Task.Run(async () =>
             {
-                return defaultValue;
-            }
-
-            return dbKVP.Value;
+                _context.KVPs.RemoveRange(_context.KVPs.ToList());
+                await _context.SaveChangesAsync();
+            });
         }
 
-        public bool Get(string key, bool defaultValue)
+        public async Task<bool> ContainsKey(string key)
         {
-            var dbKVP = _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault();
-
-            if (dbKVP == null || dbKVP.Type != typeof(string).Name)
+            return await Task.Run(async () =>
             {
-                return defaultValue;
-            }
-
-            return bool.Parse(dbKVP.Value);
+                return (await _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefaultAsync()) != null;
+            });
         }
 
-        public void Remove(string key)
+        public async Task<string> Get(string key, string defaultValue)
         {
-            var dbKVP = _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault();
-
-            if (dbKVP == null)
+            return await Task.Run(async () =>
             {
-                return;
-            }
+                var dbKVP = await _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefaultAsync();
 
-            _context.KVPs.Remove(dbKVP);
-            _context.SaveChanges();
-        }
-
-        public void Set(string key, string value)
-        {
-            var dbKVP = _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault();
-
-            if (dbKVP == null || dbKVP.Type != typeof(string).Name)
-            {
-                _context.KVPs.Add(new SQLiteEncrypedKVP()
+                if (dbKVP == null || dbKVP.Type != typeof(string).Name)
                 {
-                    Key = key,
-                    Value = value,
-                    Type = typeof(string).Name,
-                });
-            }
-            else
-            {
-                dbKVP.Value = value;
-            }
+                    return defaultValue;
+                }
 
-            _context.SaveChanges();
+                return dbKVP.Value;
+            });
         }
 
-        public void Set(string key, bool value)
+        public async Task<bool> Get(string key, bool defaultValue)
         {
-            var dbKVP = _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault();
-
-            if (dbKVP == null || dbKVP.Type != typeof(string).Name)
+            return await Task.Run(async () =>
             {
-                _context.KVPs.Add(new SQLiteEncrypedKVP()
+                var dbKVP = await _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefaultAsync();
+
+                if (dbKVP == null || dbKVP.Type != typeof(string).Name)
                 {
-                    Key = key,
-                    Value = value.ToString(),
-                    Type = typeof(bool).Name,
-                });
-            }
-            else
-            {
-                dbKVP.Value = value.ToString();
-            }
+                    return defaultValue;
+                }
 
-            _context.SaveChanges();
+                return bool.Parse(dbKVP.Value);
+            });
+        }
+
+        public async Task Remove(string key)
+        {
+            await Task.Run(async () =>
+            {
+                var dbKVP = await _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefaultAsync();
+
+                if (dbKVP == null)
+                {
+                    return;
+                }
+
+                _context.KVPs.Remove(dbKVP);
+                await _context.SaveChangesAsync();
+            });
+        }
+
+        public async Task Set(string key, string value)
+        {
+            await Task.Run(async () =>
+            {
+                var dbKVP = await _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefaultAsync();
+
+                if (dbKVP == null || dbKVP.Type != typeof(string).Name)
+                {
+                    _context.KVPs.Add(new SQLiteEncrypedKVP()
+                    {
+                        Key = key,
+                        Value = value,
+                        Type = typeof(string).Name,
+                    });
+                }
+                else
+                {
+                    dbKVP.Value = value;
+                }
+
+                await _context.SaveChangesAsync();
+            });
+        }
+
+        public async Task Set(string key, bool value)
+        {
+            await Task.Run(async () =>
+            {
+                var dbKVP = await _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefaultAsync();
+
+                if (dbKVP == null || dbKVP.Type != typeof(string).Name)
+                {
+                    _context.KVPs.Add(new SQLiteEncrypedKVP()
+                    {
+                        Key = key,
+                        Value = value.ToString(),
+                        Type = typeof(bool).Name,
+                    });
+                }
+                else
+                {
+                    dbKVP.Value = value.ToString();
+                }
+
+                await _context.SaveChangesAsync();
+            });
         }
     }
 }

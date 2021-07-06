@@ -81,6 +81,18 @@ namespace PVScan.Desktop.WPF.ViewModels
                     VKLink = UserInfo.VKLink,
                 });
 
+                UserInfo = new UserInfo()
+                {
+                    BarcodeFormatsScanned = result.BarcodeFormatsScanned,
+                    BarcodesScanned = result.BarcodesScanned,
+                    Experience = result.Experience,
+                    IGLink = result.IGLink,
+                    VKLink = result.VKLink,
+                    Level = result.Level,
+                    Email = UserInfo.Email,
+                    Username = UserInfo.Username
+                };
+
                 if (result != null)
                 {
                     await UserInfoHub.Changed(new GetUserInfoResponse()

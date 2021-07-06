@@ -9,6 +9,7 @@ using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels;
 using Xunit;
 using PVScan.Core.Services.Mocks;
+using System.Threading.Tasks;
 
 namespace PVScan.Mobile.Tests.ViewModels
 {
@@ -50,11 +51,11 @@ namespace PVScan.Mobile.Tests.ViewModels
         [Theory]
         [InlineData("Dark", "Light")]
         [InlineData("Light", "Dark")]
-        public void Theme_Toggled_Changes_Current_Theme(string oldTheme, string newTheme)
+        public async Task Theme_Toggled_Changes_Current_Theme(string oldTheme, string newTheme)
         {
             // Arrange
-            KVP.Clear();
-            KVP.Set(StorageKeys.Theme, oldTheme);
+            await KVP.Clear();
+            await KVP.Set(StorageKeys.Theme, oldTheme);
             ApplicationSettingsPageViewModel vm = new ApplicationSettingsPageViewModel(KVP);
 
             // Act
@@ -62,7 +63,7 @@ namespace PVScan.Mobile.Tests.ViewModels
             vm.SwitchThemeCommand.Execute(null);
 
             // Assert
-            Assert.Equal(newTheme, KVP.Get(StorageKeys.Theme, null));
+            Assert.Equal(newTheme, await KVP.Get(StorageKeys.Theme, null));
         }
     }
 }

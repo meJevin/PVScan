@@ -181,9 +181,8 @@
         </Grid>
 
         <Grid Width="32" Height="32" Margin="10, 15" HorizontalAlignment="Left" VerticalAlignment="Top"
-              Background="Transparent">
-            <materialDesign:PackIcon Kind="Refresh" Foreground="White"
-                                 Cursor="Hand" Width="32" Height="32">
+              Background="Transparent" Cursor="Hand">
+            <materialDesign:PackIcon Kind="Refresh" Foreground="White" Width="32" Height="32">
             </materialDesign:PackIcon>
 
             <Grid.InputBindings>

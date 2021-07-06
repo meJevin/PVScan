@@ -76,12 +76,13 @@ namespace PVScan.Mobile.Tests.ViewModels
                 mockUserInfoHub.Object);
 
             // Act
+            sut.UserInfo = new UserInfo();
             sut.SaveProfileCommand.Execute(null);
 
             // Assert
             Assert.Equal(20, sut.UserInfo.BarcodeFormatsScanned);
             Assert.Equal(200, sut.UserInfo.BarcodesScanned);
-            Assert.Equal(900, sut.UserInfo.Experience);
+            Assert.Equal(999, sut.UserInfo.Experience);
             Assert.Equal("IgLink", sut.UserInfo.IGLink);
             Assert.Equal("VkLink", sut.UserInfo.VKLink);
             Assert.Equal(400, sut.UserInfo.Level);

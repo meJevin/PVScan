@@ -97,7 +97,7 @@ namespace PVScan.Mobile.ViewModels
                     return;
                 }
 
-                bool keepAlpha = KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, true);
+                bool keepAlpha = await KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, true);
 
                 var barcodeToImage = new BarcodeImageConverter();
                 var barcodeImage = (barcodeToImage.Convert(

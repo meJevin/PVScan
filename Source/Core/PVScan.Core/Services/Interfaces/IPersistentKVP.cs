@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PVScan.Core.Services.Interfaces
 {
     public interface IPersistentKVP
     {
-        void Clear();
+        Task Clear();
 
-        bool ContainsKey(string key);
+        Task<bool> ContainsKey(string key);
 
-        string Get(string key, string defaultValue);
-        bool Get(string key, bool defaultValue);
+        Task<string> Get(string key, string defaultValue);
+        Task<bool> Get(string key, bool defaultValue);
 
-        void Remove(string key);
+        Task Remove(string key);
 
-        void Set(string key, string value);
-        void Set(string key, bool value);
+        Task Set(string key, string value);
+        Task Set(string key, bool value);
     }
 }

@@ -38,11 +38,11 @@ namespace PVScan.Mobile
             MainPage = navigationPage;
         }
 
-        private void InitializeTheme()
+        private async void InitializeTheme()
         {
             using var scope = Resolver.Container.BeginLifetimeScope();
             var kvp = scope.Resolve<IPersistentKVP>();
-            string themeSelected = kvp.Get(StorageKeys.Theme, null);
+            string themeSelected = await kvp.Get(StorageKeys.Theme, null);
 
             if (themeSelected == null)
             {
