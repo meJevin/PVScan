@@ -18,7 +18,7 @@ namespace PVScan.Core
 #if MOBILE_ANDROID || MOBILE_IOS
         public const string ClientId = "PVScan.Auth.Mobile";
 #elif DESKTOP_WINDOWS
-        public const string ClientId = "PVScan.Auth.Desktop";
+        public const string ClientId = "PVScan.Auth.WPF";
 #endif
     }
 
@@ -32,8 +32,8 @@ namespace PVScan.Core
 #elif DESKTOP_WINDOWS
         public static string BaseAddress = "https://localhost:1337/";
 #endif
-        public static string BarcodesHub = "/hubs/barcodes";
-        public static string UserInfoHub = "/hubs/userInfo";
+        public static string BarcodesHub = "hubs/barcodes";
+        public static string UserInfoHub = "hubs/userInfo";
     }
 
     public static class DataAccess
