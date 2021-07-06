@@ -3,43 +3,44 @@ using PVScan.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 
 namespace PVScan.Mobile.Services
 {
     public class PreferencesPersistentKVP : IPersistentKVP
     {
-        public void Clear()
+        public async Task Clear()
         {
             Preferences.Clear();
         }
 
-        public bool ContainsKey(string key)
+        public async Task<bool> ContainsKey(string key)
         {
             return Preferences.ContainsKey(key);
         }
 
-        public string Get(string key, string defaultValue)
+        public async Task<string> Get(string key, string defaultValue)
         {
             return Preferences.Get(key, defaultValue);
         }
 
-        public bool Get(string key, bool defaultValue)
+        public async Task<bool> Get(string key, bool defaultValue)
         {
             return Preferences.Get(key, defaultValue);
         }
 
-        public void Remove(string key)
+        public async Task Remove(string key)
         {
             Preferences.Remove(key);
         }
 
-        public void Set(string key, string value)
+        public async Task Set(string key, string value)
         {
             Preferences.Set(key, value);
         }
 
-        public void Set(string key, bool value)
+        public async Task Set(string key, bool value)
         {
             Preferences.Set(key, value);
         }

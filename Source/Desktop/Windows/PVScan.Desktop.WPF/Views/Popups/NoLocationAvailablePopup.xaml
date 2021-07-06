@@ -21,7 +21,8 @@
                            FontWeight="DemiBold"/>
 
                     <TextBlock Grid.Row="1"  TextWrapping="Wrap" Margin="12,24"
-                               Text="Selected barcode has no location available. You can specify it manually by selecting a point on the map" Foreground="White"/>
+                               Text="Selected barcode has no location available. You can specify it manually by selecting a point on the map" Foreground="White"
+                               FontSize="14"/>
 
                     <Button Content="Specify" Click="SpecifyButton_Click" Margin="12" VerticalAlignment="Bottom"
                             HorizontalAlignment="Stretch" Grid.Row="2" Foreground="Black" 

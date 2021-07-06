@@ -8,5 +8,7 @@ namespace PVScan.Desktop.WPF
     {
         public static string GitHubRepoURL { get; set; } = "https://github.com/meJevin/PVScan";
         public static string MapBoxKey { get; set; } = "N/A";
+
+        public static string SQLiteEncryptedKVPDatabasePath { get; set; }
     }
 }

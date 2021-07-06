@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PVScan.Core.Services.Mocks
 {
@@ -14,17 +15,17 @@ namespace PVScan.Core.Services.Mocks
             KVPs = new Dictionary<string, object>();
         }
 
-        public void Clear()
+        public async Task Clear()
         {
             KVPs.Clear();
         }
 
-        public bool ContainsKey(string key)
+        public async Task<bool> ContainsKey(string key)
         {
             return KVPs.ContainsKey(key);
         }
 
-        public string Get(string key, string defaultValue)
+        public async Task<string> Get(string key, string defaultValue)
         {
             if (!KVPs.TryGetValue(key, out object result))
             {
@@ -39,7 +40,7 @@ namespace PVScan.Core.Services.Mocks
             return (string)result;
         }
 
-        public bool Get(string key, bool defaultValue)
+        public async Task<bool> Get(string key, bool defaultValue)
         {
             if (!KVPs.TryGetValue(key, out object result))
             {
@@ -54,17 +55,17 @@ namespace PVScan.Core.Services.Mocks
             return (bool)result;
         }
 
-        public void Remove(string key)
+        public async Task Remove(string key)
         {
             KVPs.Remove(key);
         }
 
-        public void Set(string key, string value)
+        public async Task Set(string key, string value)
         {
             KVPs[key] = value;
         }
 
-        public void Set(string key, bool value)
+        public async Task Set(string key, bool value)
         {
             KVPs[key] = value;
         }

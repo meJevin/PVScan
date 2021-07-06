@@ -5,8 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>PVScanIcon.ico</ApplicationIcon>
-    <Platforms>AnyCPU;x64;x86</Platforms>
-    <Configurations>Debug;Release;Dekstop_Debug;Desktop_Debug;Desktop_Release</Configurations>
+    <Platforms>x64;x86</Platforms>
+    <Configurations>Debug;Release;Desktop_Debug;Desktop_Release</Configurations>
     <UserSecretsId>48193f25-445f-4379-a568-bc7347ddf24f</UserSecretsId>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <LangVersion>Latest</LangVersion>
@@ -18,15 +18,20 @@
     <PackageReference Include="Emgu.CV.Bitmap" Version="4.5.1.4349" />
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.5.1.4349" />
     <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Toolkit.Wpf.UI.Controls" Version="6.1.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.2" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
     <PackageReference Include="SharpVectors" Version="1.7.5" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.0.4" />
     <PackageReference Include="squirrel.windows" Version="1.9.0" />
     <PackageReference Include="NuGet.CommandLine" Version="5.8.1">
       <PrivateAssets>all</PrivateAssets>
@@ -54,8 +59,30 @@
   </Target>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Vendor\MapboxNet\Source\MapboxNetWPF\MapboxNetWPF.csproj" />
+    <ProjectReference Include="..\..\..\..\Vendor\MapboxNet\Source\MapboxNetWPF\MapboxNetWPF.csproj">
+      <SetPlatform>Platform=x64</SetPlatform>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\PVScan.Core\PVScan.Core.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\Popups\TextMessagePopup.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\Popups\TextMessagePopup.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <Reference Include="Windows">
+      <HintPath>C:\Program Files (x86)\Windows Kits\\10\UnionMetadata\10.0.19041.0\Windows.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
+  </ItemGroup>-->
 
 </Project>

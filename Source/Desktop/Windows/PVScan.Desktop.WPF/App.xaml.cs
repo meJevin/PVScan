@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Autofac;
+using Microsoft.Extensions.Configuration;
 using PVScan.Core;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Desktop.WPF.DI;
 using PVScan.Desktop.WPF.Services.Interfaces;
 using PVScan.Desktop.WPF.Views;
@@ -22,17 +24,18 @@ namespace PVScan.Desktop.WPF
         private async void Application_Startup(object sender, StartupEventArgs e)
         {
             InitializeDatabasePath();
+            InitializeSQLiteEncryptedKVPDatabasePath();
             InitializeDependencyInjection();
             InitializeMapsServiceToken();
             await InitializeUpdater();
+            await InitializeIdentityService();
 
-            ShowMainWindow();
+            await ShowMainWindow();
         }
 
-        private void ShowMainWindow()
+        private async Task ShowMainWindow()
         {
             var mainWindow = Resolver.Resolve<MainWindow>();
-
             MainWindow = mainWindow;
             MainWindow.Show();
         }
@@ -51,6 +54,20 @@ namespace PVScan.Desktop.WPF
             DataAccess.Init(Path.Combine(dbDirectory, "PVScan.db3"));
         }
 
+        private void InitializeSQLiteEncryptedKVPDatabasePath()
+        {
+            var localAppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+            var dbDirectory = Path.Combine(localAppDataFolder, "PVScan");
+
+            if (!Directory.Exists(dbDirectory))
+            {
+                Directory.CreateDirectory(dbDirectory);
+            }
+
+            Constants.SQLiteEncryptedKVPDatabasePath = Path.Combine(dbDirectory, "PVScan_KVP.encdb3");
+        }
+
         private void InitializeDependencyInjection()
         {
             _ = new Bootstrapper();
@@ -60,17 +77,37 @@ namespace PVScan.Desktop.WPF
         {
             var cfg = Resolver.Resolve<IConfiguration>();
             Constants.MapBoxKey = cfg.GetSection("MapBoxKey").Value;
+            //Constants.MapBoxKey = "N/A";
         }
 
         private async Task InitializeUpdater()
         {
-            var updater = Resolver.Resolve<IUpdater>();
+            using var scope = Resolver.Container.BeginLifetimeScope();
+            
+            var updater = scope.Resolve<IUpdater>();
             await updater.InitializeAsync();
 
             _ = Task.Run(async () =>
             {
                 await updater.CheckAndInstallUpdates();
             });
+        }
+
+        private async Task InitializeIdentityService()
+        {
+            using var scope = Resolver.Container.BeginLifetimeScope();
+
+            var identity = scope.Resolve<IIdentityService>();
+            var barcodeHub = scope.Resolve<IAPIBarcodeHub>();
+            var userInfoHub = scope.Resolve<IAPIUserInfoHub>();
+
+            await identity.Initialize();
+
+            if (identity.AccessToken != null)
+            {
+                await barcodeHub.Connect();
+                await userInfoHub.Connect();
+            }
         }
     }
 }

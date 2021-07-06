@@ -38,16 +38,16 @@ namespace PVScan.Core.Services
             // Check auth token in storage and check it's validity
 
             // Todo: change to secure storage
-            _accessToken = KVP.Get(StorageKeys.AccessToken, null);
+            _accessToken = await KVP.Get(StorageKeys.AccessToken, null);
 
             if (!await ValidateToken(_accessToken))
             {
                 _accessToken = null;
-                KVP.Set(StorageKeys.AccessToken, null);
+                await KVP.Set(StorageKeys.AccessToken, null);
 
                 // Try to make request for another one
-                string prevUsername = KVP.Get(StorageKeys.Username, null);
-                string prevPassword = KVP.Get(StorageKeys.Password, null);
+                string prevUsername = await KVP.Get(StorageKeys.Username, null);
+                string prevPassword = await KVP.Get(StorageKeys.Password, null);
 
                 if (!await LoginAsync(prevUsername, prevPassword))
                 {
@@ -89,9 +89,9 @@ namespace PVScan.Core.Services
 
             _accessToken = token.AccessToken;
 
-            KVP.Set(StorageKeys.AccessToken, _accessToken);
-            KVP.Set(StorageKeys.Username, username);
-            KVP.Set(StorageKeys.Password, password);
+            await KVP.Set(StorageKeys.AccessToken, _accessToken);
+            await KVP.Set(StorageKeys.Username, username);
+            await KVP.Set(StorageKeys.Password, password);
 
             return true;
         }
@@ -139,9 +139,9 @@ namespace PVScan.Core.Services
 
             _accessToken = null;
 
-            KVP.Set(StorageKeys.AccessToken, null);
-            KVP.Set(StorageKeys.Username, null);
-            KVP.Set(StorageKeys.Password, null);
+            await KVP.Set(StorageKeys.AccessToken, null);
+            await KVP.Set(StorageKeys.Username, null);
+            await KVP.Set(StorageKeys.Password, null);
 
             return true;
         }

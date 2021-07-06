@@ -56,7 +56,7 @@ namespace PVScan.Mobile.ViewModels
 
                 if (result)
                 {
-                    SuccessfulLogout.Invoke(this, new LogoutEventArgs() { });
+                    SuccessfulLogout?.Invoke(this, new LogoutEventArgs() { });
 
                     MessagingCenter.Send(this, nameof(SuccessfulLogoutMessage), new SuccessfulLogoutMessage()
                     {
@@ -67,7 +67,7 @@ namespace PVScan.Mobile.ViewModels
                 }
                 else
                 {
-                    FailedLogout.Invoke(this, new LogoutEventArgs() { });
+                    FailedLogout?.Invoke(this, new LogoutEventArgs() { });
                 }
             });
 
@@ -85,6 +85,18 @@ namespace PVScan.Mobile.ViewModels
                     IGLink = UserInfo.IGLink,
                     VKLink = UserInfo.VKLink,
                 });
+
+                UserInfo = new UserInfo()
+                {
+                    BarcodeFormatsScanned = result.BarcodeFormatsScanned,
+                    BarcodesScanned = result.BarcodesScanned,
+                    Experience = result.Experience,
+                    IGLink = result.IGLink,
+                    VKLink = result.VKLink,
+                    Level = result.Level,
+                    Email = UserInfo.Email,
+                    Username = UserInfo.Username
+                };
 
                 if (result != null)
                 {

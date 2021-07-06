@@ -22,10 +22,16 @@ namespace PVScan.Desktop.WPF.Views.Popups
         public bool UserWantsToSpecify { get; set; } = false;
     }
 
+    public class NoLocationAvailablePopupArgs
+    {
+
+    }
+
     /// <summary>
     /// Interaction logic for NoLocationAvailablePopup.xaml
     /// </summary>
-    public partial class NoLocationAvailablePopup : UserControl, IPopup<NoLocationAvailablePopupResult>
+    public partial class NoLocationAvailablePopup : UserControl, 
+        IPopup<NoLocationAvailablePopupArgs, NoLocationAvailablePopupResult>
     {
         MainWindow MainWindow;
         NoLocationAvailablePopupResult Result;
@@ -47,7 +53,7 @@ namespace PVScan.Desktop.WPF.Views.Popups
             _ = AnimateOut(TimeSpan.Zero);
         }
 
-        public async Task<NoLocationAvailablePopupResult> ShowPopup()
+        public async Task<NoLocationAvailablePopupResult> ShowPopup(NoLocationAvailablePopupArgs args = null)
         {
             Prepare();
 

@@ -61,7 +61,7 @@ namespace PVScan.Auth
                 new Client {
                     ClientId = "PVScan.Auth.WPF",
 
-                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     RequirePkce = true,
                     RequireClientSecret = false,
 

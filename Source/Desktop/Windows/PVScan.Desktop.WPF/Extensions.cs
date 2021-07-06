@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using Windows.Foundation;
 
 namespace PVScan.Desktop.WPF
 {
@@ -43,6 +44,54 @@ namespace PVScan.Desktop.WPF
             opacityAnimation.To = opacity;
 
             element.BeginAnimation(UIElement.OpacityProperty, opacityAnimation);
+
+            await Task.Delay(duration);
+        }
+
+        public static async Task RotateTo(this UIElement element, double angle, TimeSpan duration)
+        {
+            DoubleAnimation angleAnimation = new DoubleAnimation()
+            {
+                EasingFunction = new CubicEase()
+                {
+                    EasingMode = EasingMode.EaseOut
+                },
+                Duration = duration,
+            };
+
+            RotateTransform transform = null;
+
+            if (element.RenderTransform is RotateTransform)
+            {
+                transform = element.RenderTransform as RotateTransform;
+            }
+            else if (element.RenderTransform is TransformGroup grp)
+            {
+                transform = (element.RenderTransform as TransformGroup).Children
+                    .FirstOrDefault(t => t is RotateTransform) as RotateTransform;
+
+                if (transform == null)
+                {
+                    grp.Children.Add(new RotateTransform());
+                    transform = grp.Children.Last() as RotateTransform;
+                }
+            }
+            else if (element.RenderTransform is MatrixTransform)
+            {
+                var group = new TransformGroup();
+                group.Children.Add(new RotateTransform());
+                element.RenderTransform = group;
+                transform = group.Children.Last() as RotateTransform;
+            }
+
+            angleAnimation.From = transform.Angle;
+
+            // This stops the current animation
+            transform.BeginAnimation(RotateTransform.AngleProperty, null);
+
+            angleAnimation.To = angle;
+
+            transform.BeginAnimation(RotateTransform.AngleProperty, angleAnimation);
 
             await Task.Delay(duration);
         }
@@ -106,6 +155,38 @@ namespace PVScan.Desktop.WPF
             transform.BeginAnimation(TranslateTransform.YProperty, yAnimation);
 
             await Task.Delay(duration);
+        }
+
+        public static Task<TResult> AsTask<TResult>(this IAsyncOperation<TResult> operation)
+        {
+            // Create task completion result
+            var tcs = new TaskCompletionSource<TResult>();
+
+            // When the operation is completed...
+            operation.Completed += delegate
+            {
+                switch (operation.Status)
+                {
+                    // If successful...
+                    case AsyncStatus.Completed:
+                        // Set result
+                        tcs.TrySetResult(operation.GetResults());
+                        break;
+                    // If exception...
+                    case AsyncStatus.Error:
+                        // Set exception
+                        tcs.TrySetException(operation.ErrorCode);
+                        break;
+                    // If canceled...
+                    case AsyncStatus.Canceled:
+                        // Set task as canceled
+                        tcs.SetCanceled();
+                        break;
+                }
+            };
+
+            // Return the task
+            return tcs.Task;
         }
     }
 }

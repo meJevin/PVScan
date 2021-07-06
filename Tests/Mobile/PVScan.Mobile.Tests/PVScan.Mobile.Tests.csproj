@@ -5,6 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
+    <LangVersion>Latest</LangVersion>
     <Configurations>Debug;Release;IOS_Device_Debug;IOS_Simulator_Debug;Android_Simulator_Debug</Configurations>
   </PropertyGroup>
 

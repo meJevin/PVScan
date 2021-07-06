@@ -34,9 +34,9 @@ namespace PVScan.Core.Tests.Services
             var handlerMock = new Mock<HttpMessageHandler>();
 
             // Set token to 'valid' token
-            KVPMock.Set(StorageKeys.AccessToken, ValidToken);
+            await KVPMock.Set(StorageKeys.AccessToken, ValidToken);
 
-            string storageAccessToken = KVPMock.Get(StorageKeys.AccessToken, null);
+            string storageAccessToken = await KVPMock.Get(StorageKeys.AccessToken, null);
 
             // We check the validity of token by making a request to current user endpoint
             factoryMock.Setup(m => m.ForAPI(It.Is<string>(s => s == storageAccessToken))).Returns(() => 
@@ -87,9 +87,9 @@ namespace PVScan.Core.Tests.Services
             var handlerMock = new Mock<HttpMessageHandler>();
 
             // Set token to 'invalid' token
-            KVPMock.Set(StorageKeys.AccessToken, Guid.NewGuid().ToString());
+            await KVPMock.Set(StorageKeys.AccessToken, Guid.NewGuid().ToString());
 
-            string storageAccessToken = KVPMock.Get(StorageKeys.AccessToken, null);
+            string storageAccessToken = await KVPMock.Get(StorageKeys.AccessToken, null);
 
             // If token is invalid, access token is set to null in storage and in service
             factoryMock.Setup(m => m.ForAPI(It.Is<string>(s => s == storageAccessToken))).Returns(() =>
@@ -129,7 +129,7 @@ namespace PVScan.Core.Tests.Services
 
             // Assert
             Assert.Null(identityService.AccessToken);
-            Assert.Null(KVPMock.Get(StorageKeys.AccessToken, null));
+            Assert.Null(await KVPMock.Get(StorageKeys.AccessToken, null));
         }
 
         // Todo: make this test pass
@@ -141,11 +141,11 @@ namespace PVScan.Core.Tests.Services
             var factoryMock = new Mock<IHttpClientFactory>();
             var handlerMock = new Mock<HttpMessageHandler>();
 
-            KVPMock.Set(StorageKeys.AccessToken, Guid.NewGuid().ToString());
-            KVPMock.Set(StorageKeys.Username, ValidUsername);
-            KVPMock.Set(StorageKeys.Password, ValidPassword);
+            await KVPMock.Set(StorageKeys.AccessToken, Guid.NewGuid().ToString());
+            await KVPMock.Set(StorageKeys.Username, ValidUsername);
+            await KVPMock.Set(StorageKeys.Password, ValidPassword);
 
-            string storageAccessToken = KVPMock.Get(StorageKeys.AccessToken, null);
+            string storageAccessToken = await KVPMock.Get(StorageKeys.AccessToken, null);
 
             factoryMock.Setup(m => m.ForAPI(It.IsAny<string>())).Returns(() =>
             {
@@ -196,7 +196,7 @@ namespace PVScan.Core.Tests.Services
 
             // Assert
             Assert.Equal(ValidToken, identityService.AccessToken);
-            Assert.Equal(ValidToken, KVPMock.Get(StorageKeys.AccessToken, null));
+            Assert.Equal(ValidToken, await KVPMock.Get(StorageKeys.AccessToken, null));
         }
 
         [Fact]
@@ -207,11 +207,11 @@ namespace PVScan.Core.Tests.Services
             var factoryMock = new Mock<IHttpClientFactory>();
             var handlerMock = new Mock<HttpMessageHandler>();
 
-            KVPMock.Set(StorageKeys.AccessToken, Guid.NewGuid().ToString());
-            KVPMock.Set(StorageKeys.Username, Guid.NewGuid().ToString());
-            KVPMock.Set(StorageKeys.Password, Guid.NewGuid().ToString());
+            await KVPMock.Set(StorageKeys.AccessToken, Guid.NewGuid().ToString());
+            await KVPMock.Set(StorageKeys.Username, Guid.NewGuid().ToString());
+            await KVPMock.Set(StorageKeys.Password, Guid.NewGuid().ToString());
 
-            string storageAccessToken = KVPMock.Get(StorageKeys.AccessToken, null);
+            string storageAccessToken = await KVPMock.Get(StorageKeys.AccessToken, null);
 
             factoryMock.Setup(m => m.ForAPI(It.IsAny<string>())).Returns(() =>
             {
@@ -261,7 +261,7 @@ namespace PVScan.Core.Tests.Services
 
             // Assert
             Assert.Null(identityService.AccessToken);
-            Assert.Null(KVPMock.Get(StorageKeys.AccessToken, null));
+            Assert.Null(await KVPMock.Get(StorageKeys.AccessToken, null));
         }
     }
 }

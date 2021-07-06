@@ -47,7 +47,7 @@ namespace PVScan.Desktop.WPF.ViewModels
         public async Task Initialize()
         {
             // TOdo: get this into a service!
-            var geolocationStatus = await Geolocator.RequestAccessAsync();
+            var geolocationStatus = await Geolocator.RequestAccessAsync().AsTask();
 
             if (geolocationStatus == GeolocationAccessStatus.Allowed)
             {
@@ -55,7 +55,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                 {
                     DesiredAccuracy = PositionAccuracy.High,
                 };
-                var location = await geolocator.GetGeopositionAsync();
+                var location = await geolocator.GetGeopositionAsync().AsTask();
 
                 CenterLocation = new GeoLocation(location.Coordinate.Latitude, location.Coordinate.Longitude);
             }
