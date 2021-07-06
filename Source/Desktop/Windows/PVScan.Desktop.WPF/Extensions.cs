@@ -48,6 +48,54 @@ namespace PVScan.Desktop.WPF
             await Task.Delay(duration);
         }
 
+        public static async Task RotateTo(this UIElement element, double angle, TimeSpan duration)
+        {
+            DoubleAnimation angleAnimation = new DoubleAnimation()
+            {
+                EasingFunction = new CubicEase()
+                {
+                    EasingMode = EasingMode.EaseOut
+                },
+                Duration = duration,
+            };
+
+            RotateTransform transform = null;
+
+            if (element.RenderTransform is RotateTransform)
+            {
+                transform = element.RenderTransform as RotateTransform;
+            }
+            else if (element.RenderTransform is TransformGroup grp)
+            {
+                transform = (element.RenderTransform as TransformGroup).Children
+                    .FirstOrDefault(t => t is RotateTransform) as RotateTransform;
+
+                if (transform == null)
+                {
+                    grp.Children.Add(new RotateTransform());
+                    transform = grp.Children.Last() as RotateTransform;
+                }
+            }
+            else if (element.RenderTransform is MatrixTransform)
+            {
+                var group = new TransformGroup();
+                group.Children.Add(new RotateTransform());
+                element.RenderTransform = group;
+                transform = group.Children.Last() as RotateTransform;
+            }
+
+            angleAnimation.From = transform.Angle;
+
+            // This stops the current animation
+            transform.BeginAnimation(RotateTransform.AngleProperty, null);
+
+            angleAnimation.To = angle;
+
+            transform.BeginAnimation(RotateTransform.AngleProperty, angleAnimation);
+
+            await Task.Delay(duration);
+        }
+
         public static async Task TranslateTo(this UIElement element, double? X, double? Y, TimeSpan duration)
         {
             DoubleAnimation xAnimation = new DoubleAnimation()
