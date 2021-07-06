@@ -162,7 +162,11 @@ namespace PVScan.Desktop.WPF.DI
             });
 
             ContainerBuilder.RegisterType<NoLocationAvailablePopup>()
-                .As<IPopup<NoLocationAvailablePopupResult>>()
+                .As<IPopup<NoLocationAvailablePopupArgs, NoLocationAvailablePopupResult>>()
+                .InstancePerLifetimeScope();
+
+            ContainerBuilder.RegisterType<TextMessagePopup>()
+                .As<IPopup<TextMessagePopupArgs, TextMessagePopupResult>>()
                 .InstancePerLifetimeScope();
         }
 

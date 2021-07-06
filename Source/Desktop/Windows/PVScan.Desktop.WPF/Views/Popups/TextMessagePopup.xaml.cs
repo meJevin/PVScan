@@ -17,28 +17,28 @@ using System.Windows.Shapes;
 
 namespace PVScan.Desktop.WPF.Views.Popups
 {
-    public class NoLocationAvailablePopupResult
+    public class TextMessagePopupResult
     {
-        public bool UserWantsToSpecify { get; set; } = false;
     }
 
-    public class NoLocationAvailablePopupArgs
+    public class TextMessagePopupArgs
     {
-
+        public string Message { get; set; }
     }
 
     /// <summary>
     /// Interaction logic for NoLocationAvailablePopup.xaml
     /// </summary>
-    public partial class NoLocationAvailablePopup : UserControl, 
-        IPopup<NoLocationAvailablePopupArgs, NoLocationAvailablePopupResult>
+    public partial class TextMessagePopup : UserControl, 
+        IPopup<TextMessagePopupArgs, TextMessagePopupResult>
     {
         MainWindow MainWindow;
-        NoLocationAvailablePopupResult Result;
-        bool Dismissed;
-        bool GotResult;
+        TextMessagePopupResult Result;
+        TextMessagePopupArgs Args;
 
-        public NoLocationAvailablePopup()
+        bool Dismissed;
+
+        public TextMessagePopup()
         {
             InitializeComponent();
 
@@ -53,16 +53,18 @@ namespace PVScan.Desktop.WPF.Views.Popups
             _ = AnimateOut(TimeSpan.Zero);
         }
 
-        public async Task<NoLocationAvailablePopupResult> ShowPopup(NoLocationAvailablePopupArgs args = null)
+        public async Task<TextMessagePopupResult> ShowPopup(TextMessagePopupArgs args)
         {
+            Args = args;
+
             Prepare();
 
             _ = AnimateMainWindowIn(Animations.DefaultDuration);
             await AnimateIn(Animations.DefaultDuration);
 
-            await WaitForResultOrDismiss();
+            await WaitOrDismiss();
 
-            _ =AnimateOut(Animations.DefaultDuration);
+            _ = AnimateOut(Animations.DefaultDuration);
             await AnimateMainWindowOut(Animations.DefaultDuration);
 
             return Result;
@@ -71,13 +73,14 @@ namespace PVScan.Desktop.WPF.Views.Popups
         private void Prepare()
         {
             Dismissed = false;
-            GotResult = false;
-            Result = new NoLocationAvailablePopupResult();
+            Result = new TextMessagePopupResult();
+            MessageTextBlock.Text = Args.Message;
         }
 
-        private async Task<NoLocationAvailablePopupResult> WaitForResultOrDismiss()
+        private async Task<TextMessagePopupResult> WaitOrDismiss()
         {
-            while (!Dismissed && !GotResult)
+            var delayTask = Task.Delay(1500);
+            while (!Dismissed && !delayTask.IsCompleted)
             {
                 await Task.Delay(5);
             }
@@ -109,12 +112,6 @@ namespace PVScan.Desktop.WPF.Views.Popups
             MainWindow.PopupContainer.IsHitTestVisible = false;
             await MainWindow.PopupOverlay.FadeTo(0, Animations.DefaultDuration);
             MainWindow.PopupContainer.Children.Remove(this);
-        }
-
-        private void SpecifyButton_Click(object sender, RoutedEventArgs e)
-        {
-            Result.UserWantsToSpecify = true;
-            GotResult = true;
         }
     }
 }

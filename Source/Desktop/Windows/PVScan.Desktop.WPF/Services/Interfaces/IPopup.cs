@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 namespace PVScan.Desktop.WPF.Services.Interfaces
 {
     // Popup that is shown and returns result T
-    public interface IPopup<T>
+    public interface IPopup<TArgumets, TResult> where TArgumets : class where TResult : class
     {
-        Task<T> ShowPopup();
+        Task<TResult> ShowPopup(TArgumets args = null);
     }
 }
