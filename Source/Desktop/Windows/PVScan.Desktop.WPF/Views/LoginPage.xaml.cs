@@ -1,5 +1,8 @@
-﻿using System;
+﻿using PVScan.Core;
+using PVScan.Desktop.WPF.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,9 +23,43 @@ namespace PVScan.Desktop.WPF.Views
     {
         public event EventHandler SignUpClicked;
 
+        LoginPageViewModel VM;
+
         public LoginPage()
         {
             InitializeComponent();
+
+            LoadingSpinnerContainer.Opacity = 0;
+
+            // Todo: this can be refactored
+            if (DataContext is LoginPageViewModel vm)
+            {
+                VM = vm;
+                VM.PropertyChanged += VM_PropertyChanged;
+            }
+
+            DataContextChanged += (newDataContext, obj) =>
+            {
+                if (newDataContext is LoginPageViewModel vm)
+                {
+                    VM = vm;
+                }
+            };
+        }
+
+        private void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(VM.IsLoggingIn))
+            {
+                if (VM.IsLoggingIn)
+                {
+                    _ = LoadingSpinnerContainer.FadeTo(1, Animations.DefaultDuration);
+                }
+                else
+                {
+                    _ = LoadingSpinnerContainer.FadeTo(0, Animations.DefaultDuration);
+                }
+            }
         }
 
         private void SignUpButton_Clicked(object sender, RoutedEventArgs e)

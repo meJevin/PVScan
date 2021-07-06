@@ -14,8 +14,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400">
     <Grid Background="#262626">
-        <local:LoginPage x:Name="LoginPage" Visibility="Hidden"/>
-        <local:SignUpPage x:Name="SignUpPage" Visibility="Hidden"/>
-        <local:LoggedInPage x:Name="LoggedInPage" Visibility="Hidden"/>
+        <local:LoginPage x:Name="LoginPage" Opacity="0" IsHitTestVisible="False"
+                         SignUpClicked="LoginPage_SignUpClicked"/>
+        <local:SignUpPage x:Name="SignUpPage" Opacity="0" IsHitTestVisible="False"
+                          BackClicked="SignUpPage_BackClicked"/>
+        <local:LoggedInPage x:Name="LoggedInPage" Opacity="0" IsHitTestVisible="False"/>
     </Grid>
 </ContentControl>

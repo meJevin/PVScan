@@ -19,6 +19,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
+        Loaded="Window_Loaded"
         mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>

@@ -10,19 +10,42 @@
     xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels" 
     xmlns:datatemplates="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
-    d:DataContext="{d:DesignInstance Type=viewmodels:FilterPageViewModel}"
+    xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters" xmlns:other="clr-namespace:PVScan.Desktop.WPF.Views.Other"
+                d:DataContext="{d:DesignInstance Type=viewmodels:LoginPageViewModel}"
              d:DesignHeight="450" d:DesignWidth="400">
+    <ContentControl.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        </ResourceDictionary>
+    </ContentControl.Resources>
     <Grid Margin="15">
-        <StackPanel VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="LoadingSpinnerContainer">
+            <other:LoadingSpinner VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  Width="40"/>
+        </Grid>
+        
+        <StackPanel VerticalAlignment="Center" Grid.Row="1">
             <TextBox materialDesign:HintAssist.Hint="Login" materialDesign:HintAssist.Foreground="White" Height="35" Margin="0,0,0,6"
-                     VerticalContentAlignment="Center" FontSize="14"/>
+                     VerticalContentAlignment="Center" FontSize="14"
+                     Text="{Binding Login}"
+                     IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBoolConverter}}"/>
             <TextBox materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.Foreground="White" Height="35"
-                     VerticalContentAlignment="Center" FontSize="14"/>
+                     VerticalContentAlignment="Center" FontSize="14"
+                     Text="{Binding Password}"
+                     IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBoolConverter}}"/>
             
             <Label Content="Forgot password?" FontSize="12" Margin="0 6" HorizontalAlignment="Right" Foreground="OrangeRed"/>
 
-            <Button Content="Log in" Foreground="White" Height="35"/>
+            <Button Content="Log in" Foreground="White" Height="35"
+                    Command="{Binding LoginCommand}"
+                    IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBoolConverter}}"/>
 
             <Grid Margin="0 6">
                 <Grid.ColumnDefinitions>
@@ -39,7 +62,8 @@
             </Grid>
             
             <Button Content="Sign up" Foreground="Black" Background="White" BorderBrush="White" Height="35"
-                    Click="SignUpButton_Clicked"/>
+                    Click="SignUpButton_Clicked"
+                    IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBoolConverter}}"/>
         </StackPanel>
     </Grid>
 </ContentControl>

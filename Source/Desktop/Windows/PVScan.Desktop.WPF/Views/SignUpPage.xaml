@@ -24,7 +24,7 @@
 
             <Button Content="Sign up" Foreground="White" Height="35" Margin="0 24 0 12"/>
             <Label Content="Back" FontSize="12" HorizontalAlignment="Center" Foreground="White"
-                   MouseDown="BackButton_MouseDown"/>
+                   MouseDown="BackButton_MouseDown" Cursor="Hand"/>
         </StackPanel>
     </Grid>
 </ContentControl>

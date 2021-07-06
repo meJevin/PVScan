@@ -164,5 +164,10 @@ namespace PVScan.Desktop.WPF.Views
         {
             await HideProfilePage(Animations.DefaultDuration);
         }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            await ProfilePage.Initialize();
+        }
     }
 }
