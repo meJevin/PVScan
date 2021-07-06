@@ -27,7 +27,7 @@ namespace PVScan.Desktop.WPF.Services
 
         public bool ContainsKey(string key)
         {
-            return (_context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault() != null);
+            return _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault() != null;
         }
 
         public string Get(string key, string defaultValue)
@@ -69,23 +69,43 @@ namespace PVScan.Desktop.WPF.Services
 
         public void Set(string key, string value)
         {
-            _context.KVPs.Add(new SQLiteEncrypedKVP()
+            var dbKVP = _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault();
+
+            if (dbKVP == null || dbKVP.Type != typeof(string).Name)
             {
-                Key = key,
-                Value = value,
-                Type = typeof(string).Name,
-            });
+                _context.KVPs.Add(new SQLiteEncrypedKVP()
+                {
+                    Key = key,
+                    Value = value,
+                    Type = typeof(string).Name,
+                });
+            }
+            else
+            {
+                dbKVP.Value = value;
+            }
+
             _context.SaveChanges();
         }
 
         public void Set(string key, bool value)
         {
-            _context.KVPs.Add(new SQLiteEncrypedKVP()
+            var dbKVP = _context.KVPs.Where(kvp => kvp.Key == key).FirstOrDefault();
+
+            if (dbKVP == null || dbKVP.Type != typeof(string).Name)
             {
-                Key = key,
-                Value = value.ToString(),
-                Type = typeof(bool).Name,
-            });
+                _context.KVPs.Add(new SQLiteEncrypedKVP()
+                {
+                    Key = key,
+                    Value = value.ToString(),
+                    Type = typeof(bool).Name,
+                });
+            }
+            else
+            {
+                dbKVP.Value = value.ToString();
+            }
+
             _context.SaveChanges();
         }
     }
