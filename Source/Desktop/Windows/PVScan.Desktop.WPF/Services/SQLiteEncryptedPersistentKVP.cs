@@ -64,6 +64,7 @@ namespace PVScan.Desktop.WPF.Services
             }
 
             _context.KVPs.Remove(dbKVP);
+            _context.SaveChanges();
         }
 
         public void Set(string key, string value)
@@ -74,6 +75,7 @@ namespace PVScan.Desktop.WPF.Services
                 Value = value,
                 Type = typeof(string).Name,
             });
+            _context.SaveChanges();
         }
 
         public void Set(string key, bool value)
@@ -84,6 +86,7 @@ namespace PVScan.Desktop.WPF.Services
                 Value = value.ToString(),
                 Type = typeof(bool).Name,
             });
+            _context.SaveChanges();
         }
     }
 }
