@@ -1,10 +1,12 @@
 ﻿using MapboxNetCore;
+using PVScan.Core;
 using PVScan.Core.Models;
 using PVScan.Desktop.WPF.ViewModels;
 using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +41,8 @@ namespace PVScan.Desktop.WPF.Views
 
             VM = DataContext as MapPageViewModel;
 
+            VM.PropertyChanged += VM_PropertyChanged;
+
             MessagingCenter.Subscribe(this, nameof(ShowBarcodeOnMapMessage),
                 async (MainWindowViewModel vm, ShowBarcodeOnMapMessage args) =>
                 {
@@ -51,6 +55,26 @@ namespace PVScan.Desktop.WPF.Views
 
                     Map.FlyTo(new GeoLocation(loc.Latitude.Value, loc.Longitude.Value), 12);
                 });
+
+            LocationSpecificationContainer.IsHitTestVisible = false;
+            _ = LocationSpecificationContainer.FadeTo(0, Animations.DefaultDuration);
+        }
+
+        private async void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(VM.IsSpecifyingLocation))
+            {
+                if (VM.IsSpecifyingLocation)
+                {
+                    LocationSpecificationContainer.IsHitTestVisible = true;
+                    _ = LocationSpecificationContainer.FadeTo(1, Animations.DefaultDuration);
+                }
+                else
+                {
+                    LocationSpecificationContainer.IsHitTestVisible = false;
+                    _ = LocationSpecificationContainer.FadeTo(0, Animations.DefaultDuration);
+                }
+            }
         }
 
         private void Barcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -114,6 +138,18 @@ namespace PVScan.Desktop.WPF.Views
         private void Map_MarkerClicked(object sender, string e)
         {
             BarcodeSelected?.Invoke(this, BarcodeMarkers[e]);
+        }
+
+        private void Map_MouseDown(object sender, EventArgs e)
+        {
+            _ = CenterLocationIcon.TranslateTo(0, -100, Animations.DefaultDuration);
+            _ = CenterLocationEllipse.FadeTo(0.85, Animations.DefaultDuration);
+        }
+
+        private void Map_MouseUp(object sender, EventArgs e)
+        {
+            _ = CenterLocationIcon.TranslateTo(0, 0, Animations.DefaultDuration);
+            _ = CenterLocationEllipse.FadeTo(0, Animations.DefaultDuration);
         }
     }
 }

@@ -7,13 +7,49 @@
       xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI"
       di:ViewModelLocator.AutoWireViewModel="True"
       xmlns:mapbox="clr-namespace:MapboxNetWPF;assembly=MapboxNetWPF"
-      xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels"
-      d:DataContext="{d:DesignInstance Type=viewmodels:MapPageViewModel}"
+      xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
+                d:DataContext="{d:DesignInstance Type=viewmodels:MapPageViewModel}"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
 
+    <ContentControl.Resources>
+        <ResourceDictionary>
+            <converters:GeoLocationStringConverter x:Key="GeoLocationString"/>
+        </ResourceDictionary>
+    </ContentControl.Resources>
+    
     <Grid x:Name="MainContainer">
         <mapbox:Map Name="Map" Center="{Binding CenterLocation, Mode=TwoWay}" Zoom="{Binding Zoom, Mode=TwoWay}"
-                    MarkerClicked="Map_MarkerClicked"></mapbox:Map>
+                    MarkerClicked="Map_MarkerClicked"
+                    MapMouseDown="Map_MouseDown"
+                    MapMouseUp="Map_MouseUp">
+        </mapbox:Map>
+
+        <Grid x:Name="LocationSpecificationContainer">
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15">
+                <StackPanel>
+                    <Label Content="You're currently specifying location"/>
+                    <Label Content="{Binding CenterLocation, Converter={StaticResource GeoLocationString}}" FontSize="10"/>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15">
+                <Button Content="Specify" Foreground="Black" Height="35" Width="175"
+                Background="White" BorderBrush="White" Margin="5"
+                        Command="{Binding LocationSpecifiedCommand}"/>
+                <Label Content="Cancel" FontSize="12" HorizontalAlignment="Center" Foreground="White" Cursor="Hand">
+                    <Label.InputBindings>
+                        <MouseBinding Gesture="LeftClick" Command="{Binding CancelLocationSpecificationCommand}"/>
+                    </Label.InputBindings>
+                </Label>
+            </StackPanel>
+
+            <Grid Width="32" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Ellipse x:Name="CenterLocationEllipse" Opacity="0" Fill="Black" Margin="8,26,8,0"/>
+                
+                <materialDesign:PackIcon Width="32" Height="32" Foreground="White" Kind="Location"
+                  x:Name="CenterLocationIcon"/>
+            </Grid>
+        </Grid>
     </Grid>
 </ContentControl>
