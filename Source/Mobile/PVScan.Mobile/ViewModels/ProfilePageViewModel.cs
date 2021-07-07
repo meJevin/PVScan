@@ -1,7 +1,7 @@
 ﻿using IdentityModel.OidcClient;
 using IdentityModel.OidcClient.Browser;
 using MvvmHelpers;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;

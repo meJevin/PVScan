@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView 
     xmlns="http://xamarin.com/schemas/2014/forms" 
-            
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:PVScan.Mobile.Views"
     xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
@@ -98,10 +97,12 @@
                                     <Button Text="Last" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
                                             Dark={StaticResource TextPrimaryColor_Dark},
                                             Light={StaticResource TextPrimaryColor_Light}}"
+                                            Padding="-4"
                                             x:Name="LastViewButton" Command="{Binding SwitchToDateLatest}"/>
                                     <Button Text="Range" Grid.Column="1" CornerRadius="0" BackgroundColor="Transparent" TextColor="{AppThemeBinding 
                                             Dark={StaticResource TextPrimaryColor_Dark},
                                             Light={StaticResource TextPrimaryColor_Light}}"
+                                            Padding="-4"
                                             x:Name="RangeViewButton" Command="{Binding SwitchToDateRange}"/>
                                 </Grid>
 
@@ -168,4 +169,5 @@
             </Grid>
         </Grid>
     </ContentView.Content>
+    
 </ContentView>

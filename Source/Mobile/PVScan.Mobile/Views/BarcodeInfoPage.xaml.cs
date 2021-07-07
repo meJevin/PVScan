@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PVScan.Mobile.Converters;
-using PVScan.Mobile.Models;
+using PVScan.Core.Models;
 using PVScan.Mobile.ViewModels;
 using PVScan.Mobile.ViewModels.Messages;
 using Xamarin.Forms;
@@ -80,6 +80,8 @@ namespace PVScan.Mobile.Views
 
             ShowOnMapButton.IsVisible = ShowOnMapButtonVisible;
             ShowInListButton.IsVisible = ShowInListButtonVisible;
+
+            ToggleLocationLabel();
 
             MessagingCenter.Subscribe(this, nameof(BarcodeLocationSpecifiedMessage),
                 async (SpecifyLocationPageViewModel vm, BarcodeLocationSpecifiedMessage args) =>

@@ -1,6 +1,8 @@
 ﻿using Autofac;
+using PVScan.Core;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Views;
 using System;
 using Xamarin.Essentials;
@@ -9,6 +11,7 @@ using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 using Xamarin.Forms.Svg;
 using Xamarin.Forms.Xaml;
+using PVScan.Mobile.Services.Interfaces;
 
 namespace PVScan.Mobile
 {
@@ -16,6 +19,8 @@ namespace PVScan.Mobile
     {
         public App()
         {
+            DataAccess.Init(System.IO.Path.Combine(FileSystem.AppDataDirectory, "PVScan.db3"));
+
             InitializeTheme();
 
             InitializeComponent();
@@ -33,11 +38,11 @@ namespace PVScan.Mobile
             MainPage = navigationPage;
         }
 
-        private void InitializeTheme()
+        private async void InitializeTheme()
         {
             using var scope = Resolver.Container.BeginLifetimeScope();
             var kvp = scope.Resolve<IPersistentKVP>();
-            string themeSelected = kvp.Get(StorageKeys.Theme, null);
+            string themeSelected = await kvp.Get(StorageKeys.Theme, null);
 
             if (themeSelected == null)
             {
@@ -66,7 +71,16 @@ namespace PVScan.Mobile
             using var scope = Resolver.Container.BeginLifetimeScope();
 
             var identity = scope.Resolve<IIdentityService>();
+            var barcodeHub = scope.Resolve<IAPIBarcodeHub>();
+            var userInfoHub = scope.Resolve<IAPIUserInfoHub>();
+
             await identity.Initialize();
+
+            if (identity.AccessToken != null)
+            {
+                await barcodeHub.Connect();
+                await userInfoHub.Connect();
+            }
         }
 
         protected override void OnSleep()

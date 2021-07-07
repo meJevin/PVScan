@@ -16,28 +16,28 @@
     </Grid.Resources>
 
     <Label Text="{Binding Type, Converter={StaticResource LastTimeTypeString}}"
-                           FontSize="16" VerticalOptions="Center"
-                           Margin="10,0,0,2"/>
+           FontSize="16" VerticalOptions="Center" Margin="10,0,0,2"/>
 
     <Image HorizontalOptions="End" VerticalOptions="Center" Margin="10,0"
            Opacity="0" x:Name="CheckImage">
         <Image.Source>
-            <FontImageSource FontFamily="FontAwesome"
-                                             Glyph="{x:Static theme:IconFont.Check}"
-                                             Color="{AppThemeBinding 
-                                                        Dark={StaticResource TextPrimaryColor_Dark}, 
-                                                        Light={StaticResource TextPrimaryColor_Light}}"
-                             Size="18"/>
+            <FontImageSource FontFamily="FontAwesome" Size="18" 
+                             Glyph="{x:Static theme:IconFont.Check}"
+                             Color="{AppThemeBinding 
+                             Dark={StaticResource TextPrimaryColor_Dark}, 
+                             Light={StaticResource TextPrimaryColor_Light}}"/>
         </Image.Source>
     </Image>
 
     <BoxView HeightRequest="1" BackgroundColor="{AppThemeBinding
-                                                Dark={StaticResource BackgroundColorDark},
-                                                Light={StaticResource BackgroundColorLighterAlt}}"
-                             VerticalOptions="End"/>
+                               Dark={StaticResource BackgroundColorDark},
+                               Light={StaticResource BackgroundColorLighterAlt}}"
+                               VerticalOptions="End"/>
 
     <Grid.GestureRecognizers>
-        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type views:FilterPage}}, Path=BindingContext.LastTimeSpanItemTappedCommand}"
+        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type views:FilterPage}},
+                                        Path=BindingContext.LastTimeSpanItemTappedCommand}"
                               CommandParameter="{Binding .}"/>
     </Grid.GestureRecognizers>
+    
 </Grid>

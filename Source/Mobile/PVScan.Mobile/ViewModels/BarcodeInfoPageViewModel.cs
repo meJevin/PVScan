@@ -3,11 +3,13 @@ using System.IO;
 using System.Windows.Input;
 using MvvmHelpers;
 using PVScan.Mobile.Converters;
-using PVScan.Mobile.Models;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.Models;
+using PVScan.Core.Services.Interfaces;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Svg;
+using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core;
 
 namespace PVScan.Mobile.ViewModels
 {
@@ -95,7 +97,7 @@ namespace PVScan.Mobile.ViewModels
                     return;
                 }
 
-                bool keepAlpha = KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, true);
+                bool keepAlpha = await KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, true);
 
                 var barcodeToImage = new BarcodeImageConverter();
                 var barcodeImage = (barcodeToImage.Convert(

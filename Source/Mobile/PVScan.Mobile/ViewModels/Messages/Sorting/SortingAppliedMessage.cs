@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using PVScan.Mobile.Models;
+using PVScan.Core.Models;
 using ZXing;
 using PVScan.Mobile.ViewModels;
 

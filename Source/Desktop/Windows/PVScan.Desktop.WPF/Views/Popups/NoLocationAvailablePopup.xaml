@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="PVScan.Desktop.WPF.Views.Popups.NoLocationAvailablePopup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PVScan.Desktop.WPF.Views.Popups"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border Background="Black" Width="275" CornerRadius="12" Padding="8,6">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="No location" Foreground="White" FontSize="18" Margin="12" Padding="0"
+                           FontWeight="DemiBold"/>
+
+                    <TextBlock Grid.Row="1"  TextWrapping="Wrap" Margin="12,24"
+                               Text="Selected barcode has no location available. You can specify it manually by selecting a point on the map" Foreground="White"
+                               FontSize="14"/>
+
+                    <Button Content="Specify" Click="SpecifyButton_Click" Margin="12" VerticalAlignment="Bottom"
+                            HorizontalAlignment="Stretch" Grid.Row="2" Foreground="Black" 
+                            Background="White" BorderBrush="White" FontSize="12"/>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </Grid>
+</UserControl>

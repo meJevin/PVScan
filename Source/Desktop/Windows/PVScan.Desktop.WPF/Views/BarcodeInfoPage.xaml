@@ -1,0 +1,119 @@
+﻿<ContentControl x:Class="PVScan.Desktop.WPF.Views.BarcodeInfoPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PVScan.Desktop.WPF.Views"
+             xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI" 
+             di:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels" 
+             xmlns:datatemplates="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
+             xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DataContext="{d:DesignInstance Type=viewmodels:BarcodeInfoPageViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="500">
+
+    <ContentControl.Resources>
+        <converters:CoordinateStringConverter x:Key="CoordinatesString"/>
+        <converters:BarcodeFormatStringConverter x:Key="BarcodeFormatString"/>
+        <converters:DateTimeUTCDateTimeLocalConverter x:Key="DateTimeUTCDateTimeLocal"/>
+        <converters:BarcodeImageConverter x:Key="BarcodeImage"/>
+    </ContentControl.Resources>
+    
+    <Grid>
+        <Border CornerRadius="16" Background="#262626">
+        </Border>
+
+        <Grid Background="#262626" 
+              VerticalAlignment="Bottom" Height="40">
+        </Grid>
+
+        <Grid Margin="12, 4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!-- HEADER -->
+            <Label Content="Barcode Information" Foreground="White" FontSize="22" FontWeight="DemiBold"
+                   HorizontalAlignment="Center" VerticalAlignment="Top"
+                       Margin="0,8,0,12"/>
+
+            <!-- CLOSE BUTTON -->
+            <Button Style="{DynamicResource MaterialDesignToolButton}" Width="30" Height="30" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Background="Transparent" Padding="0" Click="CloseButton_Click">
+                <materialDesign:PackIcon Kind="Close" Foreground="White" Width="26" Height="26"/>
+            </Button>
+
+            <!-- SEPARATOR -->
+            <Rectangle Fill="White" Height="2" Grid.Row="1"/>
+
+            <!-- CONTENT -->
+            <Grid Grid.Row="2">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="6,18,6,0">
+                        <StackPanel Margin="0,0,0,16">
+                            <Label Content="Text" Foreground="White" Opacity="0.35" Padding="4, 0"/>
+                            <Label Content="{Binding SelectedBarcode.Text, FallbackValue=—}" Foreground="White" Padding="4, 0"/>
+                        </StackPanel>
+                        <Grid Margin="0,0,0,16">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Content="Location" Foreground="White" Opacity="0.35" Padding="4, 0"/>
+                            <Label Content="{Binding SelectedBarcode.ScanLocation, FallbackValue=—, Converter={StaticResource CoordinatesString}}" 
+                                   Foreground="White" Padding="4, 0" Grid.Row="1" x:Name="LocationField"/>
+                            
+                            <Label Content="Not available" x:Name="LocationNotAvailableLabel"
+                                   Foreground="White" Padding="4, 0" Grid.Row="1" Opacity="0"/>
+
+                            <materialDesign:PackIcon Kind="ExclamationBold" Foreground="Red" Grid.RowSpan="2" Height="26" Width="26" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                     Grid.Column="1" Margin="6,0" x:Name="LocationNotAvailableIcon" Opacity="0"/>
+
+                            <Grid x:Name="LocationNotAvailableOverlay" Grid.RowSpan="2" Grid.ColumnSpan="2" Cursor="Hand" 
+                                  Background="Transparent">
+                                <Grid.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" 
+                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=local:MainWindow}, Path=DataContext.NoLocationCommand}"
+                                                  CommandParameter="{Binding SelectedBarcode}"/>
+                                </Grid.InputBindings>
+                            </Grid>
+                        </Grid>
+                        <StackPanel Margin="0,0,0,16">
+                            <Label Content="Format" Foreground="White" Opacity="0.35" Padding="4, 0"/>
+                            <Label Content="{Binding SelectedBarcode.Format, FallbackValue=—, Converter={StaticResource BarcodeFormatString}}" 
+                                   Foreground="White" Padding="4, 0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,16">
+                            <Label Content="Scan Time" Foreground="White" Opacity="0.35" Padding="4, 0"/>
+                            <Label Content="{Binding SelectedBarcode.ScanTime, FallbackValue=—, Converter={StaticResource DateTimeUTCDateTimeLocal}}" 
+                                   Foreground="White" Padding="4, 0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,16">
+                            <Label Content="Barcode Image" Foreground="White" Opacity="0.35" Padding="4, 0"/>
+                            <Grid Height="150" Background="White" Margin="4, 4">
+                                <Image Source="{Binding SelectedBarcode, Converter={StaticResource BarcodeImage}}"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <Button Content="Show on map" Foreground="White" Margin="4, 4" Click="ShowOnMapButton_Click"
+                                IsEnabled="{Binding SelectedBarcodeHasLocation}"/>
+                        <Button Content="Show in list" Foreground="White" Margin="4, 4" Click="ShowInListButton_Click"/>
+                        <Button Content="Delete" Background="Red" BorderBrush="Red" Foreground="White" 
+                                Margin="4, 4, 4, 16" Click="DeleteButton_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentControl>

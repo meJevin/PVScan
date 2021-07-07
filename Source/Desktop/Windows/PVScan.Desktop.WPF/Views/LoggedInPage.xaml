@@ -1,0 +1,193 @@
+﻿<ContentControl x:Class="PVScan.Desktop.WPF.Views.LoggedInPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PVScan.Desktop.WPF.Views"
+             mc:Ignorable="d" 
+    xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI" 
+    di:ViewModelLocator.AutoWireViewModel="True"
+    xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels" 
+    xmlns:datatemplates="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters" xmlns:other="clr-namespace:PVScan.Desktop.WPF.Views.Other"
+                d:DataContext="{d:DesignInstance Type=viewmodels:LoggedInPageViewModel}"
+             d:DesignHeight="854" d:DesignWidth="400">
+    <ContentControl.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        </ResourceDictionary>
+    </ContentControl.Resources>
+    <Grid>
+        <ScrollViewer x:Name="MainScrollView">
+            <Grid x:Name="ProfileContainer" Grid.Row="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Content="Profile" FontSize="22" HorizontalAlignment="Center" Margin="0,10,0,10"
+                           VerticalAlignment="Center"/>
+
+                    <StackPanel Grid.Row="1">
+                        <StackPanel Margin="0,0,0,35">
+                            <Label Height="45" VerticalContentAlignment="Center" Content="Information" FontSize="18" 
+                           FontWeight="DemiBold" Margin="10,0"/>
+                            <Rectangle Fill="White" Height="1"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label VerticalContentAlignment="Center" Content="Username" FontSize="16" Margin="10,0,0,0"/>
+                                <TextBox IsReadOnly="True" Height="45" VerticalContentAlignment="Center" 
+                                         Text="{Binding UserInfo.Username}" 
+                                 Foreground="White" FontSize="16" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 Margin="10,0,10,0"/>
+                                <Rectangle Fill="White" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label VerticalContentAlignment="Center" Content="E-mail" FontSize="16" Margin="10,0,0,0"/>
+                                <TextBox IsReadOnly="True" Height="45" VerticalContentAlignment="Center" 
+                                         Text="{Binding UserInfo.Email}"
+                                 Foreground="White" FontSize="16" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 Margin="10,0,10,0"/>
+                                <Rectangle Fill="White" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,0,0,35">
+                            <Label Height="45" VerticalContentAlignment="Center" Content="Social" FontSize="18" 
+                           FontWeight="DemiBold" Margin="10,0"/>
+                            <Rectangle Fill="White" Height="1"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label VerticalContentAlignment="Center" Content="VK" FontSize="16" Margin="10,0,0,0"/>
+                                <TextBox IsReadOnly="False" Height="45" VerticalContentAlignment="Center" 
+                                         Text="{Binding UserInfo.VKLink}" x:Name="IGLinkEntry"
+                                 Foreground="White" FontSize="16" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 Margin="10,0,10,0"/>
+                                <Rectangle Fill="White" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label VerticalContentAlignment="Center" Content="Instagram" FontSize="16" Margin="10,0,0,0"/>
+                                <TextBox IsReadOnly="False" Height="45" VerticalContentAlignment="Center" 
+                                         Text="{Binding UserInfo.IGLink}" x:Name="VKLinkEntry"
+                                 Foreground="White" FontSize="16" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 Margin="10,0,10,0"/>
+                                <Rectangle Fill="White" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,0,0,35">
+                            <Label Height="45" VerticalContentAlignment="Center" Content="Statistics" FontSize="18" 
+                           FontWeight="DemiBold" Margin="10,0"/>
+                            <Rectangle Fill="White" Height="1"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label VerticalContentAlignment="Center" Content="Scanned" FontSize="16" Margin="10,0,0,0"/>
+                                <TextBox IsReadOnly="True" Height="45" VerticalContentAlignment="Center"
+                                         Text="{Binding UserInfo.BarcodesScanned}"
+                                 Foreground="White" FontSize="16" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 Margin="10,0,10,0"/>
+                                <Rectangle Fill="White" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label VerticalContentAlignment="Center" Content="Formats" FontSize="16" Margin="10,0,0,0"/>
+                                <TextBox IsReadOnly="True" Height="45" VerticalContentAlignment="Center" 
+                                         Text="{Binding UserInfo.BarcodeFormatsScanned}" 
+                                 Foreground="White" FontSize="16" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 Margin="10,0,10,0"/>
+                                <Rectangle Fill="White" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label VerticalContentAlignment="Center" Content="Experiene" FontSize="16" Margin="10,0,0,0"/>
+                                <TextBox IsReadOnly="True" Height="45" VerticalContentAlignment="Center"
+                                         Text="{Binding UserInfo.Experience}"
+                                 Foreground="White" FontSize="16" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 Margin="10,0,10,0"/>
+                                <Rectangle Fill="White" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label VerticalContentAlignment="Center" Content="Level" FontSize="16" Margin="10,0,0,0"/>
+                                <TextBox IsReadOnly="True" Height="45" VerticalContentAlignment="Center" 
+                                         Text="{Binding UserInfo.Level}"
+                                 Foreground="White" FontSize="16" Grid.Column="1" HorizontalContentAlignment="Right"
+                                 Margin="10,0,10,0"/>
+                                <Rectangle Fill="White" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Margin="15, 35, 15, 70" Grid.Row="2" VerticalAlignment="Center">
+                        <Button Content="Save" Foreground="White" Height="35" Margin="0,0,0,15"
+                                    x:Name="SaveButton" Command="{Binding SaveProfileCommand}"/>
+                        <Button Content="Log out" Foreground="Black" Background="White" BorderBrush="White" Height="35"
+                                    x:Name="LogoutButton" Command="{Binding LogoutCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+
+        <Grid x:Name="InitializingSpinner" Grid.RowSpan="2" Opacity="0" IsHitTestVisible="False"
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
+            <other:LoadingSpinner Height="40" Width="40"/>
+        </Grid>
+
+        <Grid x:Name="SomethingWentWrongContainer" Grid.RowSpan="2" Opacity="0" IsHitTestVisible="False"
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Label Content="Something went wrong!"/>
+        </Grid>
+
+        <Grid Width="32" Height="32" Margin="10, 15" HorizontalAlignment="Left" VerticalAlignment="Top"
+              Background="Transparent" Cursor="Hand">
+            <materialDesign:PackIcon Kind="Refresh" Foreground="White" Width="32" Height="32">
+            </materialDesign:PackIcon>
+
+            <Grid.InputBindings>
+                <MouseBinding Gesture="LeftClick" Command="{Binding RefreshCommand}"/>
+            </Grid.InputBindings>
+        </Grid>
+    </Grid>
+</ContentControl>

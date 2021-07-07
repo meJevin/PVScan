@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PVScan.Mobile.Views.ScanPage"
-             xmlns:vm="clr-namespace:PVScan.Mobile.ViewModels" 
-             xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
-             xmlns:theme="clr-namespace:PVScan.Mobile.Styles" xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
-             BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}"
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="PVScan.Mobile.Views.ScanPage"
+    xmlns:vm="clr-namespace:PVScan.Mobile.ViewModels" 
+    xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    xmlns:theme="clr-namespace:PVScan.Mobile.Styles" xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
     xmlns:di="clr-namespace:PVScan.Mobile.DI"
     di:ViewModelLocator.AutoWireViewModel="True"
-             x:DataType="vm:ScanPageViewModel"
-             >
+    x:DataType="vm:ScanPageViewModel"
+    BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -38,7 +38,6 @@
                      PropertyChanged="BarcodeInfoContainer_PropertyChanged">
             <Grid ColumnDefinitions="Auto,*">
                 <Label Text="Last scanned barcode" FontSize="18"/>
-
 
                 <Grid BackgroundColor="Transparent"
                       HorizontalOptions="End" Grid.Column="1" Padding="8,0"
@@ -107,4 +106,5 @@
             </Button>
         </Grid>
     </Grid>
+    
 </ContentView>

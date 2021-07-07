@@ -215,8 +215,20 @@ namespace PVScan.Database.MigrationsMySQL
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<bool>("Favorite")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("Format")
                         .HasColumnType("int");
+
+                    b.Property<string>("GUID")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Hash")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ScanTime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Text")
                         .HasColumnType("longtext");

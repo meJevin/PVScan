@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using PVScan.Database.Extensions;
 using PVScan.API.Services.Interfaces;
 using PVScan.API.Services;
+using PVScan.API.Hubs;
 
 namespace PVScan.API
 {
@@ -30,6 +31,8 @@ namespace PVScan.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+
             services.AddControllers();
 
             services.AddAuthentication("Bearer")
@@ -82,6 +85,8 @@ namespace PVScan.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers().RequireAuthorization();
+                endpoints.MapHub<BarcodesHub>("/hubs/barcodes").RequireAuthorization();
+                endpoints.MapHub<UserInfoHub>("/hubs/userInfo").RequireAuthorization();
             });
         }
     }

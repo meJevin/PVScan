@@ -1,19 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView 
     xmlns="http://xamarin.com/schemas/2014/forms" 
-             
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             
     x:Class="PVScan.Mobile.Views.ApplicationSettingsPage"
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
     xmlns:viewmodels="clr-namespace:PVScan.Mobile.ViewModels" 
     xmlns:converters="clr-namespace:PVScan.Mobile.Converters"
-    
     xmlns:di="clr-namespace:PVScan.Mobile.DI"
     di:ViewModelLocator.AutoWireViewModel="True"
     x:DataType="viewmodels:ApplicationSettingsPageViewModel"
-
-    BackgroundColor="{AppThemeBinding Dark={StaticResource BackgroundColorDarker}, Light={StaticResource BackgroundColorLighter}}">
+    BackgroundColor="{AppThemeBinding 
+    Dark={StaticResource BackgroundColorDarker}, 
+    Light={StaticResource BackgroundColorLighter}}">
     
     <ContentView.Resources>
         <ResourceDictionary>
@@ -62,4 +60,5 @@
             </ImageButton.Source>
         </ImageButton>
     </Grid>
+    
 </ContentView>

@@ -1,4 +1,5 @@
 ﻿using MvvmHelpers;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
@@ -16,15 +17,22 @@ namespace PVScan.Mobile.ViewModels
     public class SignUpPageViewModel : BaseViewModel
     {
         readonly IIdentityService IdentityService;
+        readonly IPopupMessageService PopupMessageService;
 
-        public SignUpPageViewModel(IIdentityService identityService)
+        public SignUpPageViewModel(
+            IIdentityService identityService,
+            IPopupMessageService popupMessageService)
         {
             IdentityService = identityService;
+            PopupMessageService = popupMessageService;
 
             SignUpCommand = new Command(async () =>
             {
                 if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Email))
                 {
+                    _ = PopupMessageService.ShowMessage("Please fill in all fields!");
+
+                    // Todo: dead code
                     FailedSignUp?.Invoke(this, new SignUpEventArgs()
                     {
                         Message = "Please fill in all fields!",
@@ -41,6 +49,9 @@ namespace PVScan.Mobile.ViewModels
 
                 if (result)
                 {
+                    _ = PopupMessageService.ShowMessage("You've successfuly signed up!");
+
+                    // Todo: dead code
                     SuccessfulSignUp?.Invoke(this, new SignUpEventArgs()
                     {
                         Message = "You've successfuly signed up",
@@ -48,11 +59,18 @@ namespace PVScan.Mobile.ViewModels
                 }
                 else
                 {
+                    _ = PopupMessageService.ShowMessage("Failed to sign up!");
+
+                    // Todo: dead code
                     FailedSignUp?.Invoke(this, new SignUpEventArgs()
                     {
                         Message = "Failed to sign up!",
                     });
                 }
+
+                Login = "";
+                Email = "";
+                Password = "";
             });
         }
 

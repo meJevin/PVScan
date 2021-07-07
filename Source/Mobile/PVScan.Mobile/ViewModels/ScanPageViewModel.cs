@@ -1,6 +1,8 @@
 ﻿using MvvmHelpers;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Models.API;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
@@ -19,14 +21,20 @@ namespace PVScan.Mobile.ViewModels
         readonly IBarcodesRepository BarcodesRepository;
         readonly IFileBarcodeReader FileBarcodeReader;
         readonly IPopupMessageService PopupMessageService;
+        readonly IPVScanAPI PVScanAPI;
+        readonly IAPIBarcodeHub BarcodeHub;
 
         public ScanPageViewModel(IBarcodesRepository barcodesRepository,
             IFileBarcodeReader fileBarcodeReader,
-            IPopupMessageService popupMessageService)
+            IPopupMessageService popupMessageService,
+            IPVScanAPI pVScanAPI, 
+            IAPIBarcodeHub barcodeHub)
         {
             BarcodesRepository = barcodesRepository;
             FileBarcodeReader = fileBarcodeReader;
             PopupMessageService = popupMessageService;
+            PVScanAPI = pVScanAPI;
+            BarcodeHub = barcodeHub;
 
             ScanCommand = new Command(async (object scanResult) =>
             {
@@ -79,6 +87,8 @@ namespace PVScan.Mobile.ViewModels
                     Format = LastResult.BarcodeFormat,
                     Text = LastResult.Text,
                     ScanTime = DateTime.UtcNow,
+                    ScanLocation = null,
+                    Favorite = false,
                 };
 
                 if (location != null)
@@ -100,6 +110,22 @@ namespace PVScan.Mobile.ViewModels
                 });
 
                 ClearCommand.Execute(null);
+
+                // Todo: move this somewhere else. Possibly in the IBarcodesRepository?
+                var req = new ScannedBarcodeRequest()
+                {
+                    Format = b.Format,
+                    Latitude = b.ScanLocation?.Latitude,
+                    Longitude = b.ScanLocation?.Longitude,
+                    ScanTime = b.ScanTime,
+                    Text = b.Text,
+                    Favorite = b.Favorite,
+                    GUID = b.GUID,
+                    Hash = b.Hash,
+                };
+
+                await PVScanAPI.ScannedBarcode(req);
+                await BarcodeHub.Scanned(req);
             });
 
             AllowCameraCommand = new Command(async () =>

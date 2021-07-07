@@ -1,5 +1,5 @@
 ﻿using System;
-using PVScan.Mobile.Models;
+using PVScan.Core.Models;
 
 namespace PVScan.Mobile.ViewModels.Messages
 {
