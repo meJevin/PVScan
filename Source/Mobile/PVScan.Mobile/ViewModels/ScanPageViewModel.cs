@@ -1,7 +1,8 @@
 ﻿using MvvmHelpers;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
-using PVScan.Mobile.Models.API;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Models.API;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
@@ -34,8 +35,6 @@ namespace PVScan.Mobile.ViewModels
             PopupMessageService = popupMessageService;
             PVScanAPI = pVScanAPI;
             BarcodeHub = barcodeHub;
-
-            BarcodeHub.OnScanned += BarcodeHub_OnScanned;
 
             ScanCommand = new Command(async (object scanResult) =>
             {
@@ -179,36 +178,6 @@ namespace PVScan.Mobile.ViewModels
                 {
                     IsCameraAllowed = true;
                 });
-        }
-
-        private async void BarcodeHub_OnScanned(object sender, ScannedBarcodeRequest b)
-        {
-            Barcode newBarcode = new Barcode()
-            {
-                Favorite = b.Favorite,
-                Format = b.Format,
-                GUID = b.GUID,
-                Hash = b.Hash,
-                ScanLocation = null,
-                ScanTime = b.ScanTime,
-                Text = b.Text,
-            };
-
-            if (b.Latitude.HasValue && b.Longitude.HasValue)
-            {
-                newBarcode.ScanLocation = new Coordinate()
-                {
-                    Latitude = b.Latitude,
-                    Longitude = b.Longitude
-                };
-            }
-
-            newBarcode = await BarcodesRepository.Save(newBarcode);
-
-            MessagingCenter.Send(this, nameof(BarcodeScannedMessage), new BarcodeScannedMessage()
-            {
-                ScannedBarcode = newBarcode,
-            });
         }
 
         private Result LastResult;

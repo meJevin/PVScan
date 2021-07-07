@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Services;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels;
@@ -25,7 +27,13 @@ namespace PVScan.Mobile.Tests.ViewModels
         public void Can_Create_Empty()
         {
             // Arrange + Act
-            HistoryPageViewModel vm = new HistoryPageViewModel(null, new BarcodesFilter(), null, new BarcodeSorter());
+            HistoryPageViewModel vm = new HistoryPageViewModel(
+                new Mock<IBarcodesRepository>().Object,
+                new BarcodesFilter(),
+                new Mock<IPopupMessageService>().Object,
+                new BarcodeSorter(),
+                new Mock<IPVScanAPI>().Object,
+                new Mock<IAPIBarcodeHub>().Object);
 
             // Assert
             Assert.Empty(vm.Barcodes);
@@ -56,7 +64,13 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
+            HistoryPageViewModel vm = new HistoryPageViewModel(
+                mockRepo,
+                new BarcodesFilter(),
+                new Mock<IPopupMessageService>().Object,
+                new BarcodeSorter(),
+                new Mock<IPVScanAPI>().Object,
+                new Mock<IAPIBarcodeHub>().Object);
 
             // Act
             await vm.LoadBarcodesFromDB();
@@ -91,7 +105,13 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
+            HistoryPageViewModel vm = new HistoryPageViewModel(
+                mockRepo,
+                new BarcodesFilter(),
+                new Mock<IPopupMessageService>().Object,
+                new BarcodeSorter(),
+                new Mock<IPVScanAPI>().Object,
+                new Mock<IAPIBarcodeHub>().Object);
             vm.CurrentFilter = new Filter()
             {
                 BarcodeFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
@@ -136,7 +156,13 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
+            HistoryPageViewModel vm = new HistoryPageViewModel(
+                mockRepo,
+                new BarcodesFilter(),
+                new Mock<IPopupMessageService>().Object,
+                new BarcodeSorter(),
+                new Mock<IPVScanAPI>().Object,
+                new Mock<IAPIBarcodeHub>().Object);
             vm.CurrentFilter = new Filter()
             {
                 BarcodeFormats = Enumerable.Empty<ZXing.BarcodeFormat>().ToList(),
@@ -176,7 +202,14 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
+            HistoryPageViewModel vm = new HistoryPageViewModel(
+                mockRepo,
+                new BarcodesFilter(),
+                new Mock<IPopupMessageService>().Object,
+                new BarcodeSorter(),
+                new Mock<IPVScanAPI>().Object,
+                new Mock<IAPIBarcodeHub>().Object);
+
             vm.CurrentFilter = new Filter()
             {
                 BarcodeFormats = Enumerable.Empty<ZXing.BarcodeFormat>().ToList(),
@@ -220,7 +253,13 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
+            HistoryPageViewModel vm = new HistoryPageViewModel(
+                mockRepo,
+                new BarcodesFilter(),
+                new Mock<IPopupMessageService>().Object,
+                new BarcodeSorter(),
+                new Mock<IPVScanAPI>().Object,
+                new Mock<IAPIBarcodeHub>().Object);
             vm.CurrentFilter = new Filter()
             {
                 BarcodeFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
@@ -271,7 +310,13 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
+            HistoryPageViewModel vm = new HistoryPageViewModel(
+                mockRepo,
+                new BarcodesFilter(),
+                new Mock<IPopupMessageService>().Object,
+                new BarcodeSorter(),
+                new Mock<IPVScanAPI>().Object,
+                new Mock<IAPIBarcodeHub>().Object);
             vm.CurrentFilter = new Filter()
             {
                 BarcodeFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
@@ -313,7 +358,13 @@ namespace PVScan.Mobile.Tests.ViewModels
             DbContext.SaveChanges();
 
             var mockRepo = new BarcodesRepository(DbContext);
-            HistoryPageViewModel vm = new HistoryPageViewModel(mockRepo, new BarcodesFilter(), null, new BarcodeSorter());
+            HistoryPageViewModel vm = new HistoryPageViewModel(
+                mockRepo,
+                new BarcodesFilter(),
+                new Mock<IPopupMessageService>().Object,
+                new BarcodeSorter(),
+                new Mock<IPVScanAPI>().Object,
+                new Mock<IAPIBarcodeHub>().Object);
             vm.Search = "B2";
 
             // Act

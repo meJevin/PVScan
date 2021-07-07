@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
-using PVScan.Mobile.Models;
+using PVScan.Core.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Svg;
 using ZXing;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PVScan.Mobile.DAL;
+using PVScan.Core.DAL;
+using PVScan.Core.DAL;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,17 +13,17 @@ namespace PVScan.Mobile.Tests
 {
     public class TestBase
     {
-        protected PVScanMobileDbContext DbContext;
+        protected PVScanDbContext DbContext;
 
         public TestBase()
         {
             MockForms.Init();
             Application.Current = new Application();
 
-            var optionsBuilder = new DbContextOptionsBuilder<PVScanMobileDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<PVScanDbContext>();
             optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
 
-            DbContext = new PVScanMobileDbContext(optionsBuilder.Options);
+            DbContext = new PVScanDbContext(optionsBuilder.Options);
         }
     }
 }

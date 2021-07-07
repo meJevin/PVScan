@@ -1,5 +1,6 @@
 ﻿using MvvmHelpers;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,12 @@ namespace PVScan.Mobile.ViewModels
                 if (IsDarkTheme)
                 {
                     Application.Current.UserAppTheme = OSAppTheme.Dark;
-                    KVP.Set(StorageKeys.Theme, "Dark");
+                    await KVP.Set(StorageKeys.Theme, "Dark");
                 }
                 else
                 {
                     Application.Current.UserAppTheme = OSAppTheme.Light;
-                    KVP.Set(StorageKeys.Theme, "Light");
+                    await KVP.Set(StorageKeys.Theme, "Light");
                 }
             });
 
@@ -36,16 +37,17 @@ namespace PVScan.Mobile.ViewModels
             {
                 if (SaveBarcodeImagesWithAlpha)
                 {
-                    KVP.Set(StorageKeys.SaveBarcodeImagesWithAlpha, true);
+                    await KVP.Set(StorageKeys.SaveBarcodeImagesWithAlpha, true);
                 }
                 else
                 {
-                    KVP.Set(StorageKeys.SaveBarcodeImagesWithAlpha, false);
+                    await KVP .Set(StorageKeys.SaveBarcodeImagesWithAlpha, false);
                 }
             });
 
             IsDarkTheme = Application.Current.UserAppTheme == OSAppTheme.Dark;
-            SaveBarcodeImagesWithAlpha = KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, StorageKeys.Defaults.SaveBarcodeImagesWithAlpha);
+            SaveBarcodeImagesWithAlpha 
+                = KVP.Get(StorageKeys.SaveBarcodeImagesWithAlpha, StorageKeys.Defaults.SaveBarcodeImagesWithAlpha).GetAwaiter().GetResult();
         }
 
         public ICommand SwitchThemeCommand { get; }

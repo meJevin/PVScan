@@ -1,7 +1,7 @@
 ﻿using MvvmHelpers;
-using PVScan.Mobile.DAL;
-using PVScan.Mobile.Models;
-using PVScan.Mobile.Services.Interfaces;
+using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Filtering;
 using System;
 using System.Collections.Generic;

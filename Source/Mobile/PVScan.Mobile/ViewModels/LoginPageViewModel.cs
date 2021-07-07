@@ -1,4 +1,5 @@
 ﻿using MvvmHelpers;
+using PVScan.Core.Services.Interfaces;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Mobile.ViewModels.Messages.Auth;
 using System;
@@ -33,7 +34,9 @@ namespace PVScan.Mobile.ViewModels
             {
                 if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password))
                 {
-                    _ = PopupMessageService.ShowMessage("Please fill in all fields!");
+                    _ = PopupMessageService?.ShowMessage("Please fill in all fields!");
+
+                    FailedLogin?.Invoke(this, new LoginEventArgs() { });
 
                     return;
                 }
@@ -54,10 +57,16 @@ namespace PVScan.Mobile.ViewModels
 
                     await BarcodeHub.Connect();
                     await UserInfoHub.Connect();
+
+                    // Todo: dead code :)
+                    SuccessfulLogin?.Invoke(this, new LoginEventArgs() { });
                 }
                 else
                 {
-                    _ = PopupMessageService.ShowMessage("Failed to login!");
+                    _ = PopupMessageService?.ShowMessage("Failed to login!");
+
+                    // Todo: dead code :)
+                    FailedLogin?.Invoke(this, new LoginEventArgs() { });
                 }
             });
         }

@@ -1,0 +1,1 @@
+﻿dotnet ef migrations add NAME --startup-project ./PVScan.Desktop.WPF.csproj --context SQLiteEncryptedDbContext --output-dir ./Services/SQLiteEncrypted/Migrations --configuration Desktop_Debug --runtime win-x64 -v

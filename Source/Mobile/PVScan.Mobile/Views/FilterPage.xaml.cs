@@ -26,9 +26,15 @@ namespace PVScan.Mobile.Views
                 _ = ShowLastDateType(0);
             };
 
-            VM = (BindingContext as FilterPageViewModel);
+            BindingContextChanged += (s, e) =>
+            {
+                if (BindingContext != null && BindingContext is FilterPageViewModel)
+                {
+                    VM = (BindingContext as FilterPageViewModel);
 
-            VM.PropertyChanged += VM_PropertyChanged;
+                    VM.PropertyChanged += VM_PropertyChanged;
+                }
+            };
         }
 
         private async void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)

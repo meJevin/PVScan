@@ -153,6 +153,8 @@
                         
                                 <Button Text="Delete" BackgroundColor="#D61818"
                                         TextColor="White" Clicked="Delete_Clicked"/>
+
+                                <BoxView HeightRequest="14"/>
                             </StackLayout>  
                         </StackLayout>
                     </ScrollView>

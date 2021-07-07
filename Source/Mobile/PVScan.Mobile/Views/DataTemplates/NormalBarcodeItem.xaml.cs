@@ -1,4 +1,4 @@
-﻿using PVScan.Mobile.Models;
+﻿using PVScan.Core.Models;
 using PVScan.Mobile.ViewModels;
 using PVScan.Mobile.ViewModels.Messages;
 using PVScan.Mobile.Views.Extensions;

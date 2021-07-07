@@ -66,13 +66,6 @@ namespace PVScan.Mobile.Views
 
         private async void Vm_FailedLogin(object sender, LoginEventArgs e)
         {
-            //LoginMessageLabel.Text = e.Message;
-
-            //_ = LoginMessageLabel.FadeTo(1);
-
-            //await Task.Delay(1500);
-
-            //_ = LoginMessageLabel.FadeTo(0);
         }
 
         private void Vm_SuccessfulLogin(object sender, LoginEventArgs e)
