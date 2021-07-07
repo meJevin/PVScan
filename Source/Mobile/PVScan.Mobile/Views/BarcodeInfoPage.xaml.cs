@@ -56,6 +56,7 @@ namespace PVScan.Mobile.Views
 
             page.BarcodeImage.Source = (SvgImageSource)cnv.Convert(newBarcode, null, null, null);
             page.ToggleLocationLabel();
+            page.ToggleLoadingSpinner();
         }
         
         static async void OnShowInListButtonVisibleChanged(BindableObject bindable, object oldValue, object newValue)
@@ -113,6 +114,22 @@ namespace PVScan.Mobile.Views
             {
                 ScanLocationAvailableContainer.IsVisible = true;
                 ScanLocationNotAvailableContainer.IsVisible = false;
+            }
+        }
+
+        public async void ToggleLoadingSpinner()
+        {
+            if (SelectedBarcode == null)
+            {
+                ContentScrollView.FadeTo(0, 250, Easing.CubicOut);
+                LoadingSpinner.FadeTo(1, 250, Easing.CubicOut);
+                LoadingSpinner.ScaleTo(1, 250, Easing.CubicOut);
+            }
+            else
+            {
+                ContentScrollView.FadeTo(1, 250, Easing.CubicOut);
+                LoadingSpinner.FadeTo(0, 250, Easing.CubicOut);
+                LoadingSpinner.ScaleTo(0.75, 250, Easing.CubicOut);
             }
         }
 

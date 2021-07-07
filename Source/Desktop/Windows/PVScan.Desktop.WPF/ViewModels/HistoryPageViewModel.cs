@@ -201,6 +201,28 @@ namespace PVScan.Desktop.WPF.ViewModels
                     }
                 });
 
+            MessagingCenter.Subscribe(this, nameof(LocationSpecifiedMessage),
+                async (MapPageViewModel vm, LocationSpecifiedMessage args) =>
+                {
+                    await Application.Current.Dispatcher.InvokeAsync(async () =>
+                    {
+                        var indxPaged = BarcodesPaged.IndexOf(args.Barcode);
+                        var indxTotal = Barcodes.IndexOf(args.Barcode);
+
+                        if (indxPaged != -1)
+                        {
+                            BarcodesPaged.RemoveAt(indxPaged);
+                            BarcodesPaged.Insert(indxPaged, args.Barcode);
+                        }
+
+                        if (indxTotal != -1)
+                        {
+                            Barcodes.RemoveAt(indxTotal);
+                            Barcodes.Insert(indxTotal, args.Barcode);
+                        }
+                    });
+                });
+
             _ = LoadBarcodesFromDB();
         }
 
@@ -257,11 +279,14 @@ namespace PVScan.Desktop.WPF.ViewModels
                 return;
             }
 
-            localBarcode.ScanLocation = new Coordinate()
+            if (req.Longitude.HasValue && req.Latitude.HasValue)
             {
-                Latitude = req.Latitude,
-                Longitude = req.Longitude,
-            };
+                localBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = req.Latitude,
+                    Longitude = req.Longitude,
+                };
+            }
             localBarcode.Favorite = req.Favorite;
 
             await BarcodesRepository.Update(localBarcode);
@@ -279,8 +304,8 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                 if (indxTotal != -1)
                 {
-                    BarcodesPaged.RemoveAt(indxTotal);
-                    BarcodesPaged.Insert(indxTotal, localBarcode);
+                    Barcodes.RemoveAt(indxTotal);
+                    Barcodes.Insert(indxTotal, localBarcode);
                 }
             });
         }

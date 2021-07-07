@@ -82,6 +82,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                 if (result.UserWantsToSpecify)
                 {
                     // Send message that user is specifiying location for this barcode
+                    LocationSpecificationStarted?.Invoke(this, barcode);
                 }
 
                 // Do nothing..
@@ -97,5 +98,7 @@ namespace PVScan.Desktop.WPF.ViewModels
         public ICommand DeleteCommand { get; set; }
 
         public ICommand NoLocationCommand { get; set; }
+
+        public event EventHandler<Barcode> LocationSpecificationStarted;
     }
 }

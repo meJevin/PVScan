@@ -1,4 +1,5 @@
 ﻿using PVScan.Core;
+using PVScan.Core.Models;
 using PVScan.Desktop.WPF.ViewModels;
 using PVScan.Desktop.WPF.ViewModels.Messages.Popups;
 using System;
@@ -35,6 +36,7 @@ namespace PVScan.Desktop.WPF.Views
 
             VM = DataContext as MainWindowViewModel;
             VM.MapScanPagesToggled += VM_MapScanPagesToggled;
+            VM.LocationSpecificationStarted += VM_LocationSpecificationStarted;
 
             BarcodeInfoPage.SizeChanged += async (_, _) =>
             {
@@ -47,6 +49,21 @@ namespace PVScan.Desktop.WPF.Views
             };
 
             _ = ToggleToMapPage(TimeSpan.Zero);
+        }
+
+        private void VM_LocationSpecificationStarted(object sender, Barcode e)
+        {
+            var mapPageVM = (MapPageView.DataContext as MapPageViewModel);
+
+            mapPageVM.IsSpecifyingLocation = true;
+            mapPageVM.LocationSpecificationBarcode = e;
+
+            var HPVM = (HistoryPage.DataContext as HistoryPageViewModel);
+
+            HPVM.SelectedBarcode = null;
+            (BarcodeInfoPage.DataContext as BarcodeInfoPageViewModel).SelectedBarcode = null;
+
+            _ = HideBarcodeInfoPage(Animations.DefaultDuration);
         }
 
         private async Task ShowProfilePage(TimeSpan duration)
