@@ -49,7 +49,7 @@ namespace PVScan.Desktop.WPF.Views
 
                     var loc = args.BarcodeToShow.ScanLocation;
 
-                    Map.FlyTo(new GeoLocation(loc.Longitude.Value, loc.Latitude.Value), 12);
+                    Map.FlyTo(new GeoLocation(loc.Latitude.Value, loc.Longitude.Value), 12);
                 });
         }
 
