@@ -4,6 +4,7 @@ using PVScan.Desktop.WPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Linq;
 using System.Text;
 
 namespace PVScan.Desktop.WPF.Services.SQLiteEncrypted
@@ -34,10 +35,19 @@ namespace PVScan.Desktop.WPF.Services.SQLiteEncrypted
         public SQLiteEncryptedDbContext(DbContextOptions<SQLiteEncryptedDbContext> options)
             : base(options)
         {
-            if (Database.IsSqlite())
+            Database.OpenConnection();
+
+            if (Database.GetPendingMigrations().Any())
             {
                 Database.Migrate();
             }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            Database.CloseConnection();
         }
 
         public DbSet<SQLiteEncrypedKVP> KVPs { get; set; }
