@@ -48,6 +48,10 @@
     <NuspecFile>$(SolutionDir)PVScan.WPF.nuspec</NuspecFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Desktop_Debug|x64'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
   <Target Name="GenerateRelease" AfterTargets="AfterBuild" Condition="$(Configuration) == Desktop_Release">
     <XmlPeek XmlInputPath="$(NuspecFile)" Query="/package/metadata/id/text()">
       <Output TaskParameter="Result" ItemName="ID" />

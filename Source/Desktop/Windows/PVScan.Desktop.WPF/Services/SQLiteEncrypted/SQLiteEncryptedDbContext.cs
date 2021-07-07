@@ -1,5 +1,8 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Autofac;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using PVScan.Desktop.WPF.DI;
 using PVScan.Desktop.WPF.Models;
 using System;
 using System.Collections.Generic;
@@ -11,25 +14,8 @@ namespace PVScan.Desktop.WPF.Services.SQLiteEncrypted
 {
     public class SQLiteEncryptedDbContext : DbContext
     {
-        // This is only needed to make migrations :)
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite(GetConnection(Constants.SQLiteEncryptedKVPDatabasePath));
-        }
-
-        public static SqliteConnection GetConnection(string dbFilePath)
-        {
-            var connectionString = new SqliteConnectionStringBuilder
-            {
-                DataSource = dbFilePath,
-                Password = "Test123",
-            };
-            return new SqliteConnection(connectionString.ToString());
-        }
-
         public SQLiteEncryptedDbContext() : base()
         {
-
         }
 
         public SQLiteEncryptedDbContext(DbContextOptions<SQLiteEncryptedDbContext> options)
@@ -41,6 +27,32 @@ namespace PVScan.Desktop.WPF.Services.SQLiteEncrypted
             {
                 Database.Migrate();
             }
+        }
+
+        // This is only needed to make migrations :)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite(GetConnection(Constants.SQLiteEncryptedKVPDatabasePath));
+        }
+
+        public static SqliteConnection GetConnection(string dbFilePath)
+        {
+            using var scope = Resolver.Container.BeginLifetimeScope();
+            var cfg = scope.Resolve<IConfiguration>();
+
+#if DEBUG
+            var key = cfg.GetSection("SQLiteEncryptedKey_Debug").Value;
+#else
+            var key = cfg.GetSection("SQLiteEncryptedKey").Value;
+#endif
+
+            var connectionString = new SqliteConnectionStringBuilder
+            {
+                DataSource = dbFilePath,
+                Password = key,
+            };
+
+            return new SqliteConnection(connectionString.ToString());
         }
 
         public override void Dispose()
