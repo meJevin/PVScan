@@ -8,7 +8,7 @@
     xmlns:datatemplates="clr-namespace:PVScan.Mobile.Views.DataTemplates"
     xmlns:theme="clr-namespace:PVScan.Mobile.Styles" 
     xmlns:xtc="http://xamarin.com/schemas/2020/toolkit"
-    xmlns:views="clr-namespace:PVScan.Mobile.Views"
+    xmlns:views="clr-namespace:PVScan.Mobile.Views" xmlns:controls="clr-namespace:PVScan.Mobile.Views.Controls"
     x:Class="PVScan.Mobile.Views.BarcodeInfoPage"
     di:ViewModelLocator.AutoWireViewModel="True"
     x:DataType="viewmodels:BarcodeInfoPageViewModel">
@@ -158,6 +158,9 @@
                             </StackLayout>  
                         </StackLayout>
                     </ScrollView>
+
+                    <controls:LoadingSpinner x:Name="LoadingSpinner"
+                                             VerticalOptions="Center" HorizontalOptions="Center"/>
                 </Grid>
             </Grid>
         </Grid>

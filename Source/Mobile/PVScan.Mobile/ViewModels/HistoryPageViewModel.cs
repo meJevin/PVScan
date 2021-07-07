@@ -310,11 +310,14 @@ namespace PVScan.Mobile.ViewModels
                 return;
             }
 
-            localBarcode.ScanLocation = new Coordinate()
+            if (req.Longitude.HasValue && req.Latitude.HasValue)
             {
-                Latitude = req.Latitude,
-                Longitude = req.Longitude,
-            };
+                localBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = req.Latitude,
+                    Longitude = req.Longitude,
+                };
+            }
             localBarcode.Favorite = req.Favorite;
 
             await BarcodesRepository.Update(localBarcode);
@@ -331,6 +334,15 @@ namespace PVScan.Mobile.ViewModels
             {
                 Barcodes[indxTotal] = localBarcode;
             }
+
+            if (SelectedBarcode == null ||
+                req.GUID != SelectedBarcode.GUID)
+            {
+                return;
+            }
+
+            SelectedBarcode = null;
+            SelectedBarcode = localBarcode;
         }
 
         private async void BarcodeHub_OnDeleted(object sender, DeletedBarcodeRequest req)

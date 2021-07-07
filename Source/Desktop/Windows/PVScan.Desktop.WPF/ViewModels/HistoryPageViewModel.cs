@@ -279,11 +279,14 @@ namespace PVScan.Desktop.WPF.ViewModels
                 return;
             }
 
-            localBarcode.ScanLocation = new Coordinate()
+            if (req.Longitude.HasValue && req.Latitude.HasValue)
             {
-                Latitude = req.Latitude,
-                Longitude = req.Longitude,
-            };
+                localBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = req.Latitude,
+                    Longitude = req.Longitude,
+                };
+            }
             localBarcode.Favorite = req.Favorite;
 
             await BarcodesRepository.Update(localBarcode);
