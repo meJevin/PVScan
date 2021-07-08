@@ -50,7 +50,8 @@ namespace PVScan.API.Controllers
                 ScanTime = data.ScanTime,
                 Favorite = false,
                 GUID = data.GUID,
-                Hash = data.Hash
+                Hash = data.Hash,
+                LastUpdateTime = data.LastTimeUpdated,
             };
 
             if (data.Latitude.HasValue && data.Longitude.HasValue)
@@ -108,17 +109,20 @@ namespace PVScan.API.Controllers
             _context.UserInfos.Update(userInfo);
             await _context.SaveChangesAsync();
 
-            await _userInfoHub.Clients
-                .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
-                .SendAsync("Changed", new CurrentResponse()
-                {
-                    BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
-                    BarcodesScanned = userInfo.BarcodesScanned,
-                    Experience = userInfo.Experience,
-                    IGLink = userInfo.IGLink,
-                    Level = userInfo.Level,
-                    VKLink = userInfo.VKLink,
-                });
+            if (_userInfoHub.Clients != null)
+            {
+                await _userInfoHub.Clients
+                    .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    .SendAsync("Changed", new CurrentResponse()
+                    {
+                        BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
+                        BarcodesScanned = userInfo.BarcodesScanned,
+                        Experience = userInfo.Experience,
+                        IGLink = userInfo.IGLink,
+                        Level = userInfo.Level,
+                        VKLink = userInfo.VKLink,
+                    });
+            }
 
             // Form response and send back
             ScannedResponse response = new ScannedResponse()
@@ -157,6 +161,8 @@ namespace PVScan.API.Controllers
             }
 
             barcodeFromDB.Favorite = data.Favorite;
+            barcodeFromDB.LastUpdateTime = data.LastTimeUpdated;
+            barcodeFromDB.Hash = Barcode.HashOf(barcodeFromDB);
 
             _context.Barcodes.Update(barcodeFromDB);
             await _context.SaveChangesAsync();
@@ -199,17 +205,20 @@ namespace PVScan.API.Controllers
             _context.UserInfos.Update(userInfo);
             await _context.SaveChangesAsync();
 
-            await _userInfoHub.Clients
-                .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
-                .SendAsync("Changed", new CurrentResponse()
-                {
-                    BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
-                    BarcodesScanned = userInfo.BarcodesScanned,
-                    Experience = userInfo.Experience,
-                    IGLink = userInfo.IGLink,
-                    Level = userInfo.Level,
-                    VKLink = userInfo.VKLink,
-                });
+            if (_userInfoHub.Clients != null)
+            {
+                await _userInfoHub.Clients
+                    .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    .SendAsync("Changed", new CurrentResponse()
+                    {
+                        BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
+                        BarcodesScanned = userInfo.BarcodesScanned,
+                        Experience = userInfo.Experience,
+                        IGLink = userInfo.IGLink,
+                        Level = userInfo.Level,
+                        VKLink = userInfo.VKLink,
+                    });
+            }
 
             return Ok(new DeletedResponse() { });
         }
