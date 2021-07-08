@@ -19,16 +19,22 @@ namespace PVScan.Desktop.WPF.ViewModels
         readonly IPopup<NoLocationAvailablePopupArgs, NoLocationAvailablePopupResult> NoLocationPopup;
         readonly IPVScanAPI PVScanAPI;
         readonly IAPIBarcodeHub BarcodeHub;
+        readonly IBarcodeSynchronizer Synchronizer;
+        readonly IIdentityService IdentityService;
 
         public MainWindowViewModel(IBarcodesRepository barcodesRepository,
             IPopup<NoLocationAvailablePopupArgs, NoLocationAvailablePopupResult> noLocationPopup,
             IPVScanAPI pVScanAPI,
-            IAPIBarcodeHub barcodeHub)
+            IAPIBarcodeHub barcodeHub,
+            IBarcodeSynchronizer synchronizer,
+            IIdentityService identityService)
         {
             BarcodesRepository = barcodesRepository;
             NoLocationPopup = noLocationPopup;
             PVScanAPI = pVScanAPI;
             BarcodeHub = barcodeHub;
+            Synchronizer = synchronizer;
+            IdentityService = identityService;
 
             ToggleMapScanPages = new Command(() =>
             {
@@ -57,7 +63,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                 var barcode = b as Barcode;
                 await BarcodesRepository.Delete(barcode);
 
-                MessagingCenter.Send(this, nameof(BarcodeDeletedMessage), new BarcodeDeletedMessage() 
+                MessagingCenter.Send(this, nameof(BarcodeDeletedMessage), new BarcodeDeletedMessage()
                 {
                     DeletedBarcode = barcode,
                 });
@@ -87,6 +93,14 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                 // Do nothing..
             });
+
+            LoadedCommand = new Command(async () =>
+            {
+                if (IdentityService.AccessToken != null)
+                {
+                    await Synchronizer.Synchronize();
+                }
+            });
         }
 
         public ICommand ToggleMapScanPages { get; set; }
@@ -100,5 +114,7 @@ namespace PVScan.Desktop.WPF.ViewModels
         public ICommand NoLocationCommand { get; set; }
 
         public event EventHandler<Barcode> LocationSpecificationStarted;
+
+        public ICommand LoadedCommand { get; set; }
     }
 }
