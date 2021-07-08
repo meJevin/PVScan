@@ -15,5 +15,6 @@ namespace PVScan.Core.Models.API
         public bool Favorite { get; set; }
         public string Hash { get; set; }
         public string GUID { get; set; }
+        public DateTime LastTimeUpdated { get; set; }
     }
 }

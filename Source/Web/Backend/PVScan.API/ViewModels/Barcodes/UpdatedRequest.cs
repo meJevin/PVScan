@@ -14,5 +14,6 @@ namespace PVScan.API.ViewModels.Barcodes
         public bool Favorite { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
+        public DateTime LastTimeUpdated { get; set; }
     }
 }

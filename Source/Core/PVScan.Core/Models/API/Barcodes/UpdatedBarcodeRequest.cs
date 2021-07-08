@@ -11,5 +11,6 @@ namespace PVScan.Core.Models.API
         public bool Favorite { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
+        public DateTime LastTimeUpdated { get; set; }
     }
 }
