@@ -10,6 +10,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Svg;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Core;
+using PVScan.Core.Models.API;
 
 namespace PVScan.Mobile.ViewModels
 {
@@ -18,15 +19,21 @@ namespace PVScan.Mobile.ViewModels
         readonly IPopupMessageService PopupMessageService;
         readonly IMediaService MediaService;
         readonly IPersistentKVP KVP;
+        readonly IAPIBarcodeHub BarcodeHub;
+        readonly IBarcodesRepository BarcodesRepository;
 
         public BarcodeInfoPageViewModel(
             IPopupMessageService popupMessageService,
             IMediaService mediaService,
-            IPersistentKVP kvp)
+            IPersistentKVP kvp, 
+            IAPIBarcodeHub barcodeHub,
+            IBarcodesRepository barcodesRepository)
         {
             PopupMessageService = popupMessageService;
             MediaService = mediaService;
             KVP = kvp;
+            BarcodeHub = barcodeHub;
+            BarcodesRepository = barcodesRepository;
 
             TextLongPressCommand = new Command(async () =>
             {
@@ -126,6 +133,33 @@ namespace PVScan.Mobile.ViewModels
 
                 //await PopupMessageService.ShowMessage("Saved barcode image to gallery");
             });
+
+            BarcodeHub.OnDeleted += BarcodeHub_OnDeleted;
+
+            CloseCommand = new Command(() =>
+            {
+                Closed?.Invoke(this, new EventArgs());
+            });
+        }
+
+        private async void BarcodeHub_OnDeleted(object sender, DeletedBarcodeRequest e)
+        {
+            if (SelectedBarcode == null ||
+                e.GUID != SelectedBarcode.GUID)
+            {
+                return;
+            }
+
+            var localBarcode = await BarcodesRepository.FindByGUID(e.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            SelectedBarcode = null;
+
+            Closed?.Invoke(this, new EventArgs());
         }
 
         public Barcode SelectedBarcode { get; set; }
@@ -139,5 +173,8 @@ namespace PVScan.Mobile.ViewModels
         public ICommand FormatLongPressCommand { get; set; }
         public ICommand ScanTimeLongPressCommand { get; set; }
         public ICommand BarcodeImageLongPressCommand { get; set; }
+
+        public ICommand CloseCommand { get; set; }
+        public event EventHandler Closed;
     }
 }
