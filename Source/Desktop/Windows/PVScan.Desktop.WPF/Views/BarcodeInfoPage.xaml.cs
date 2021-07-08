@@ -127,6 +127,7 @@ namespace PVScan.Desktop.WPF.Views
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Closed?.Invoke(this, new EventArgs());
+            VM.CloseCommand.Execute(null);
         }
 
         private void ShowOnMapButton_Click(object sender, RoutedEventArgs e)

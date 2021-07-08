@@ -48,7 +48,21 @@ namespace PVScan.Desktop.WPF.Views
                 }
             };
 
+            (BarcodeInfoPage.DataContext as BarcodeInfoPageViewModel).Closed += BarcodeInfoPage_Closed;
+
             _ = ToggleToMapPage(TimeSpan.Zero);
+        }
+
+        private async void BarcodeInfoPage_Closed(object sender, EventArgs e)
+        {
+            var HPVM = (HistoryPage.DataContext as HistoryPageViewModel);
+
+            if (!HPVM.IsEditing)
+            {
+                HPVM.SelectedBarcode = null;
+            }
+
+            await HideBarcodeInfoPage(Animations.DefaultDuration);
         }
 
         private void VM_LocationSpecificationStarted(object sender, Barcode e)
@@ -152,18 +166,6 @@ namespace PVScan.Desktop.WPF.Views
         {
             (BarcodeInfoPage.DataContext as BarcodeInfoPageViewModel).SelectedBarcode = e;
             await ShowBarcodeInfoPage(Animations.DefaultDuration);
-        }
-
-        private async void BarcodeInfoPage_Closed(object sender, EventArgs e)
-        {
-            var HPVM = (HistoryPage.DataContext as HistoryPageViewModel);
-
-            if (!HPVM.IsEditing)
-            {
-                HPVM.SelectedBarcode = null;
-            }
-
-            await HideBarcodeInfoPage(Animations.DefaultDuration);
         }
 
         private void PopupOverlay_MouseDown(object sender, MouseButtonEventArgs e)

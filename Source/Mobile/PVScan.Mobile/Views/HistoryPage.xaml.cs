@@ -101,6 +101,14 @@ namespace PVScan.Mobile.Views
                 });
 
             SpecifyLocation = new SpecifyLocationPage();
+
+            (BarcodeInfoPage.BindingContext as BarcodeInfoPageViewModel).Closed += BarcodeInfoPage_Closed;
+        }
+
+        private async void BarcodeInfoPage_Closed(object sender, EventArgs e)
+        {
+            await HideBarcodeInfoPage();
+            await HideBarcodeMapsInfo();
         }
 
         public async Task Initialize()

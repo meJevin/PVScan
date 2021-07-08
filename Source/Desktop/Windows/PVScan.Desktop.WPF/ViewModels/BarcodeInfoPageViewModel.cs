@@ -36,7 +36,33 @@ namespace PVScan.Desktop.WPF.ViewModels
                     }
                 });
 
+            CloseCommand = new Command(() =>
+            {
+                Closed?.Invoke(this, new EventArgs());
+            });
+
             BarcodeHub.OnUpdated += BarcodeHub_OnUpdated;
+            BarcodeHub.OnDeleted += BarcodeHub_OnDeleted;
+        }
+
+        private async void BarcodeHub_OnDeleted(object sender, DeletedBarcodeRequest e)
+        {
+            if (SelectedBarcode == null ||
+                e.GUID != SelectedBarcode.GUID)
+            {
+                return;
+            }
+
+            var localBarcode = await BarcodesRepository.FindByGUID(e.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            SelectedBarcode = null;
+
+            Closed?.Invoke(this, new EventArgs());
         }
 
         private void BarcodeInfoPageViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -82,5 +108,8 @@ namespace PVScan.Desktop.WPF.ViewModels
 
         public Barcode SelectedBarcode { get; set; }
         public bool SelectedBarcodeHasLocation { get; set; } = true;
+
+        public event EventHandler Closed;
+        public ICommand CloseCommand { get; set; }
     }
 }
