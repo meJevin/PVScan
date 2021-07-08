@@ -54,7 +54,14 @@ namespace PVScan.Desktop.WPF.ViewModels
                 if (DateFilterTypeIndex == 1)
                 {
                     newFilter.FromDate = FromDate;
-                    newFilter.ToDate = ToDate.AddDays(1);
+                    try
+                    {
+                        newFilter.ToDate = ToDate.AddDays(1);
+                    }
+                    catch
+                    {
+                        newFilter.ToDate = ToDate;
+                    }
                 }
                 else if (DateFilterTypeIndex == 0)
                 {
@@ -217,11 +224,21 @@ namespace PVScan.Desktop.WPF.ViewModels
             }
             else if (DateFilterTypeIndex == 1)
             {
+                var toDate = ToDate;
+                try
+                {
+                    toDate = ToDate.AddDays(1);
+                }
+                catch
+                {
+                    toDate = ToDate;
+                }
+
                 // Range
                 if (CurrentFilter.FromDate == null ||
                     CurrentFilter.ToDate == null ||
                     CurrentFilter.FromDate != FromDate ||
-                    CurrentFilter.ToDate != ToDate.AddDays(1))
+                    CurrentFilter.ToDate != toDate)
                 {
                     return false;
                 }

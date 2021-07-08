@@ -5,24 +5,48 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PVScan.Desktop.WPF.Views"
              mc:Ignorable="d" 
-    xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI" 
-    di:ViewModelLocator.AutoWireViewModel="True"
-    xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels" 
-    xmlns:datatemplates="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters"
-    d:DataContext="{d:DesignInstance Type=viewmodels:FilterPageViewModel}"
+             xmlns:di="clr-namespace:PVScan.Desktop.WPF.DI" 
+             di:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:viewmodels="clr-namespace:PVScan.Desktop.WPF.ViewModels" 
+             xmlns:datatemplates="clr-namespace:PVScan.Desktop.WPF.Views.DataTemplates" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:PVScan.Desktop.WPF.Converters" 
+             xmlns:other="clr-namespace:PVScan.Desktop.WPF.Views.Other"
+             d:DataContext="{d:DesignInstance Type=viewmodels:SignUpPageViewModel}"
              d:DesignHeight="450" d:DesignWidth="400">
-    <Grid Margin="15">
-        <StackPanel VerticalAlignment="Center">
-            <TextBox materialDesign:HintAssist.Hint="Login" materialDesign:HintAssist.Foreground="White" Height="35" Margin="0,0,0,6"
-                     VerticalContentAlignment="Center" FontSize="14"/>
-            <TextBox materialDesign:HintAssist.Hint="Email" materialDesign:HintAssist.Foreground="White" Height="35" Margin="0,0,0,6"
-                     VerticalContentAlignment="Center" FontSize="14"/>
-            <TextBox materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.Foreground="White" Height="35"
-                     VerticalContentAlignment="Center" FontSize="14"/>
 
-            <Button Content="Sign up" Foreground="White" Height="35" Margin="0 24 0 12"/>
+    <ContentControl.Resources>
+        <ResourceDictionary>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        </ResourceDictionary>
+    </ContentControl.Resources>
+    
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Grid x:Name="LoadingSpinnerContainer">
+            <other:LoadingSpinner VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  Width="40"/>
+        </Grid>
+        
+        <StackPanel VerticalAlignment="Center" Grid.Row="1">
+            <TextBox materialDesign:HintAssist.Hint="Login" materialDesign:HintAssist.Foreground="White" Height="35" Margin="0,0,0,6"
+                     VerticalContentAlignment="Center" FontSize="14"
+                     Text="{Binding Login}" IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBoolConverter}}"/>
+            <TextBox materialDesign:HintAssist.Hint="Email" materialDesign:HintAssist.Foreground="White" Height="35" Margin="0,0,0,6"
+                     VerticalContentAlignment="Center" FontSize="14"
+                     Text="{Binding Email}" IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBoolConverter}}"/>
+            <PasswordBox materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.Foreground="White" Height="35"
+                     VerticalContentAlignment="Center" FontSize="14" x:Name="PasswordBox"
+                         PasswordChanged="PasswordBox_PasswordChanged" IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBoolConverter}}"/>
+
+            <Button Content="Sign up" Foreground="White" Height="35" Margin="0 24 0 12" Command="{Binding SignUpCommand}" 
+                    IsEnabled="{Binding IsSigningUp, Converter={StaticResource InverseBoolConverter}}"/>
             <Label Content="Back" FontSize="12" HorizontalAlignment="Center" Foreground="White"
                    MouseDown="BackButton_MouseDown" Cursor="Hand"/>
         </StackPanel>

@@ -60,11 +60,23 @@ namespace PVScan.Desktop.WPF.Views
                     _ = LoadingSpinnerContainer.FadeTo(0, Animations.DefaultDuration);
                 }
             }
+            else if (e.PropertyName == nameof(VM.Password))
+            {
+                if (PasswordBox.Password != VM.Password)
+                {
+                    PasswordBox.Password = VM.Password;
+                }
+            }
         }
 
         private void SignUpButton_Clicked(object sender, RoutedEventArgs e)
         {
             SignUpClicked?.Invoke(this, new EventArgs());
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            VM.Password = PasswordBox.Password;
         }
     }
 }
