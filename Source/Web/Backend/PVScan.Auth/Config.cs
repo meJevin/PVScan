@@ -35,14 +35,14 @@ namespace PVScan.Auth
                     RequirePkce = true,
                     RequireClientSecret = false,
 
-                    RedirectUris = { "http://localhost/PVScan.Auth.WPF" },
-                    AllowedCorsOrigins = { "http://localhost" },
-
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "PVScan.API",
                     },
+
+                    AccessTokenLifetime = (int)TimeSpan.FromDays(30).TotalSeconds,
+                    IdentityTokenLifetime = (int)TimeSpan.FromDays(30).TotalSeconds,
 
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = false,
@@ -54,13 +54,14 @@ namespace PVScan.Auth
                     RequirePkce = true,
                     RequireClientSecret = false,
 
-                    RedirectUris = { "pvscan://callback" },
-
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "PVScan.API",
                     },
+
+                    AccessTokenLifetime = (int)TimeSpan.FromDays(30).TotalSeconds,
+                    IdentityTokenLifetime = (int)TimeSpan.FromDays(30).TotalSeconds,
 
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = false,

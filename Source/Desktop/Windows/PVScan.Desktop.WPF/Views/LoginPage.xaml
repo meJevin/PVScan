@@ -36,9 +36,9 @@
                      VerticalContentAlignment="Center" FontSize="14"
                      Text="{Binding Login}"
                      IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBoolConverter}}"/>
-            <TextBox materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.Foreground="White" Height="35"
-                     VerticalContentAlignment="Center" FontSize="14"
-                     Text="{Binding Password}"
+            <PasswordBox materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.Foreground="White" Height="35"
+                     VerticalContentAlignment="Center" FontSize="14" x:Name="PasswordBox"
+                     PasswordChanged="PasswordBox_PasswordChanged"
                      IsEnabled="{Binding IsLoggingIn, Converter={StaticResource InverseBoolConverter}}"/>
             
             <Label Content="Forgot password?" FontSize="12" Margin="0 6" HorizontalAlignment="Right" Foreground="OrangeRed"/>

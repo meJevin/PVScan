@@ -84,6 +84,9 @@ namespace PVScan.Core.Services
 
             if (token == null || token.AccessToken == null)
             {
+                await KVP.Set(StorageKeys.AccessToken, null);
+                await KVP.Set(StorageKeys.Username, null);
+                await KVP.Set(StorageKeys.Password, null);
                 return false;
             }
 
