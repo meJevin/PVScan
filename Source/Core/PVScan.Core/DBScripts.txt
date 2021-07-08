@@ -1,0 +1,1 @@
+﻿dotnet ef migrations add BarcodeLastUpdateTime_Added --startup-project ../../Desktop/Windows/PVScan.Desktop.WPF/PVScan.Desktop.WPF.csproj --output-dir ./Migrations/ --configuration Desktop_Debug --runtime win-x64 --context PVScanDbContext

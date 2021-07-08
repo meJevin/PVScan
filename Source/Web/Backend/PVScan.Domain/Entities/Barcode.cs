@@ -1,6 +1,7 @@
 ﻿using PVScan.Domain.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -17,14 +18,15 @@ namespace PVScan.Domain.Entities
         public bool Favorite { get; set; }
         public string Hash { get; set; }
         public string GUID { get; set; }
+        public DateTime LastUpdateTime { get; set; }
 
         public static string HashOf(Barcode barcode)
         {
             string input = "";
             input += barcode.Format.ToString() + " ";
             input += barcode.Text.ToString() + " ";
-            input += barcode.ScanLocation.Latitude.ToString() + " ";
-            input += barcode.ScanLocation.Longitude.ToString() + " ";
+            input += barcode.ScanLocation?.Latitude.ToString() + " ";
+            input += barcode.ScanLocation?.Longitude.ToString() + " ";
             input += barcode.ScanTime.Ticks.ToString() + " ";
             input += barcode.Favorite.ToString() + " ";
             input += barcode.GUID.ToString() + " ";
