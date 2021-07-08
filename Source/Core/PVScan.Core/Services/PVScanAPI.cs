@@ -192,5 +192,40 @@ namespace PVScan.Core.Services
                 return null;
             }
         }
+
+        public async Task<SynchronizeResponse> Synchronize(SynchronizeRequest req)
+        {
+            if (IdentityService.AccessToken == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
+
+                var contentToSend = new StringContent(JsonConvert.SerializeObject(req), Encoding.UTF8, "application/json");
+
+                var apiResponse = await httpClient
+                    .PostAsync("api/v1/synchronizer/synchronize", contentToSend)
+                    .WithTimeout(DataAccess.WebRequestTimeout);
+
+                if (!apiResponse.IsSuccessStatusCode)
+                {
+                    // Could also throw an exception :)
+                    return null;
+                }
+
+                var responseText = await apiResponse.Content.ReadAsStringAsync();
+                var responseObject = JsonConvert.DeserializeObject<SynchronizeResponse>(responseText);
+
+                return responseObject;
+            }
+            catch
+            {
+                // Could also throw a meaningful exception :)
+                return null;
+            }
+        }
     }
 }
