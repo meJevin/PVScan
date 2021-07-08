@@ -15,5 +15,7 @@ namespace PVScan.Core.Services.Interfaces
         Task<ScannedBarcodeResponse> ScannedBarcode(ScannedBarcodeRequest req);
         Task<UpdatedBarcodeResponse> UpdatedBarcode(UpdatedBarcodeRequest req);
         Task<DeletedBarcodeRequest> DeletedBarcode(DeletedBarcodeRequest req);
+
+        Task<SynchronizeResponse> Synchronize(SynchronizeRequest req);
     }
 }

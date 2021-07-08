@@ -56,6 +56,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                     Latitude = LocationSpecificationBarcode.ScanLocation?.Latitude,
                     Longitude = LocationSpecificationBarcode.ScanLocation?.Longitude,
                     Favorite = LocationSpecificationBarcode.Favorite,
+                    LastTimeUpdated = LocationSpecificationBarcode.LastUpdateTime,
                 };
                 await PVScanAPI.UpdatedBarcode(req);
 

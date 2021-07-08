@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PVScan.Database;
 
 namespace PVScan.Database.MigrationsMySQL
 {
     [DbContext(typeof(PVScanDbContext))]
-    partial class PVScanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210708155116_BarcodeLastUpdateTime_Added")]
+    partial class BarcodeLastUpdateTime_Added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

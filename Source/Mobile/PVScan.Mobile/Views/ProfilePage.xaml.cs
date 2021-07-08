@@ -19,9 +19,28 @@ namespace PVScan.Mobile.Views
         uint _animSpeed = 250;
         double _transY = 150;
 
+        ProfilePageViewModel VM;
+
         public ProfilePage()
         {
             InitializeComponent();
+
+            VM = BindingContext as ProfilePageViewModel;
+
+            if (VM != null)
+            {
+                _ = Initialize();
+            }
+
+            BindingContextChanged += async (newBindingContext, _) =>
+            {
+                VM = newBindingContext as ProfilePageViewModel;
+                if (VM != null)
+                {
+                    await Initialize();
+                }
+            };
+
 
             MessagingCenter.Subscribe(this, nameof(SuccessfulLoginMessage),
                 async (LoginPageViewModel sender, SuccessfulLoginMessage args) =>

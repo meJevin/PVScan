@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ZXing;
 
 namespace PVScan.Core.Models.API
 {
-    public class UpdatedBarcodeRequest
+    public class LocalBarcodeInfo
     {
+        // Id of local device DB
+        public int LocalId { get; set; }
         public string GUID { get; set; }
-        public bool Favorite { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
+        public string Hash { get; set; }
         public DateTime LastTimeUpdated { get; set; }
     }
+
 }

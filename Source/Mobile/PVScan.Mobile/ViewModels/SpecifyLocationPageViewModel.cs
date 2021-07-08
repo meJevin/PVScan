@@ -68,6 +68,7 @@ namespace PVScan.Mobile.ViewModels
                     Latitude = SelectedBarcode.ScanLocation?.Latitude,
                     Longitude = SelectedBarcode.ScanLocation?.Longitude,
                     Favorite = SelectedBarcode.Favorite,
+                    LastTimeUpdated = SelectedBarcode.LastUpdateTime,
                 };
                 await PVScanAPI.UpdatedBarcode(req);
 

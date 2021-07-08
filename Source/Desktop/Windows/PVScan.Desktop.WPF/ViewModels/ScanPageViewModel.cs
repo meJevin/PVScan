@@ -2,6 +2,7 @@
 using Emgu.CV.Structure;
 
 using PVScan.Core.Models;
+using PVScan.Core.Models.API;
 using PVScan.Core.Services.Interfaces;
 using PVScan.Desktop.WPF.Services.Interfaces;
 using PVScan.Desktop.WPF.ViewModels.Messages.Scanning;
@@ -23,11 +24,19 @@ namespace PVScan.Desktop.WPF.ViewModels
     {
         readonly IBarcodeReaderImage BarcodeReader;
         readonly IBarcodesRepository BarcodesRepository;
+        readonly IPVScanAPI PVScanAPI;
+        readonly IAPIBarcodeHub BarcodeHub;
 
-        public ScanPageViewModel(IBarcodeReaderImage barcodeReader, IBarcodesRepository repository)
+        public ScanPageViewModel(
+            IBarcodeReaderImage barcodeReader,
+            IBarcodesRepository repository,
+            IPVScanAPI pVScanAPI,
+            IAPIBarcodeHub barcodeHub)
         {
             BarcodeReader = barcodeReader;
             BarcodesRepository = repository;
+            PVScanAPI = pVScanAPI;
+            BarcodeHub = barcodeHub;
 
             frame = new Mat();
 
@@ -49,7 +58,7 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             SaveCommand = new Command(async () => 
             {
-                Barcode barcodeToSave = new Barcode()
+                Barcode b = new Barcode()
                 {
                     Favorite = false,
                     Format = LastScanResult.BarcodeFormat,
@@ -70,21 +79,38 @@ namespace PVScan.Desktop.WPF.ViewModels
                     };
                     var location = await geolocator.GetGeopositionAsync().AsTask();
 
-                    barcodeToSave.ScanLocation = new Coordinate()
+                    b.ScanLocation = new Coordinate()
                     {
                         Latitude = location.Coordinate.Latitude,
                         Longitude = location.Coordinate.Longitude,
                     };
                 }
 
-                await BarcodesRepository.Save(barcodeToSave);
+                await BarcodesRepository.Save(b);
 
                 MessagingCenter.Send(this, nameof(BarcodeScannedMessage), new BarcodeScannedMessage()
                 {
-                    ScannedBarcode = barcodeToSave,
+                    ScannedBarcode = b,
                 });
 
                 ClearCommand.Execute(null);
+
+                // Todo: move this somewhere else. Possibly in the IBarcodesRepository?
+                var req = new ScannedBarcodeRequest()
+                {
+                    Format = b.Format,
+                    Latitude = b.ScanLocation?.Latitude,
+                    Longitude = b.ScanLocation?.Longitude,
+                    ScanTime = b.ScanTime,
+                    Text = b.Text,
+                    Favorite = b.Favorite,
+                    GUID = b.GUID,
+                    Hash = b.Hash,
+                    LastTimeUpdated = b.LastUpdateTime,
+                };
+
+                await PVScanAPI.ScannedBarcode(req);
+                await BarcodeHub.Scanned(req);
             });
 
             FakeBarcodeCommand = new Command(() =>

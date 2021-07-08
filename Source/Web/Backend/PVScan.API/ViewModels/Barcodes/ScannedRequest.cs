@@ -16,5 +16,6 @@ namespace PVScan.API.ViewModels.Barcodes
         public bool Favorite { get; set; }
         public string Hash { get; set; }
         public string GUID { get; set; }
+        public DateTime LastTimeUpdated { get; set; }
     }
 }

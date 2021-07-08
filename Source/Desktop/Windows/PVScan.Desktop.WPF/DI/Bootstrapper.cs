@@ -168,6 +168,10 @@ namespace PVScan.Desktop.WPF.DI
             ContainerBuilder.RegisterType<TextMessagePopup>()
                 .As<IPopup<TextMessagePopupArgs, TextMessagePopupResult>>()
                 .InstancePerLifetimeScope();
+
+            ContainerBuilder.RegisterType<BarcodeSynchronizer>()
+                .As<IBarcodeSynchronizer>()
+                .SingleInstance();
         }
 
         private void FinishInitialization()

@@ -185,6 +185,7 @@ namespace PVScan.Desktop.WPF.Views
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await ProfilePage.Initialize();
+            VM.LoadedCommand.Execute(null);
         }
     }
 }

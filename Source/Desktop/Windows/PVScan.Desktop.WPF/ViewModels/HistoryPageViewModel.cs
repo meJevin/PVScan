@@ -24,19 +24,22 @@ namespace PVScan.Desktop.WPF.ViewModels
         readonly IBarcodesRepository BarcodesRepository;
         readonly IPVScanAPI PVScanAPI;
         readonly IAPIBarcodeHub BarcodeHub;
+        readonly IBarcodeSynchronizer Synchronizer;
 
         public HistoryPageViewModel(
             IBarcodesRepository barcodesRepository,
             IBarcodesFilter filterService,
             IBarcodeSorter sorterService,
             IPVScanAPI pVScanAPI,
-            IAPIBarcodeHub barcodeHub)
+            IAPIBarcodeHub barcodeHub,
+            IBarcodeSynchronizer synchronizer)
         {
             FilterService = filterService;
             SorterService = sorterService;
             BarcodesRepository = barcodesRepository;
             PVScanAPI = pVScanAPI;
             BarcodeHub = barcodeHub;
+            Synchronizer = synchronizer;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
@@ -79,6 +82,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                 }
 
                 barcode.Favorite = !barcode.Favorite;
+
                 await BarcodesRepository.Update(barcode);
 
                 var indxPaged = BarcodesPaged.IndexOf(barcode);
@@ -102,6 +106,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                     Latitude = barcode.ScanLocation?.Latitude,
                     Longitude = barcode.ScanLocation?.Longitude,
                     Favorite = barcode.Favorite,
+                    LastTimeUpdated = barcode.LastUpdateTime,
                 };
 
                 if (await PVScanAPI.UpdatedBarcode(req) != null)
@@ -223,6 +228,13 @@ namespace PVScan.Desktop.WPF.ViewModels
                     });
                 });
 
+            _ = LoadBarcodesFromDB();
+
+            Synchronizer.SynchorinizedLocally += Synchronizer_SynchorinizedLocally;
+        }
+
+        private void Synchronizer_SynchorinizedLocally(object sender, EventArgs e)
+        {
             _ = LoadBarcodesFromDB();
         }
 
@@ -346,6 +358,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                 ScanLocation = null,
                 ScanTime = b.ScanTime,
                 Text = b.Text,
+                LastUpdateTime = b.LastTimeUpdated,
             };
 
             if (b.Latitude.HasValue && b.Longitude.HasValue)
