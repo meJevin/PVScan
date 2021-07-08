@@ -26,11 +26,14 @@ namespace PVScan.Mobile.ViewModels
         readonly IPVScanAPI API;
         readonly IAPIBarcodeHub BarcodeHub;
         readonly IAPIUserInfoHub UserInfoHub;
+        readonly IBarcodeSynchronizer Synchronizer;
 
         public LoggedInPageViewModel(IIdentityService identityService, IPVScanAPI api,
-            IAPIBarcodeHub barcodeHub, IAPIUserInfoHub userInfoHub)
+            IAPIBarcodeHub barcodeHub, IAPIUserInfoHub userInfoHub,
+            IBarcodeSynchronizer synchronizer)
         {
             IdentityService = identityService;
+            Synchronizer = synchronizer;
             API = api;
             BarcodeHub = barcodeHub;
             UserInfoHub = userInfoHub;
@@ -182,6 +185,11 @@ namespace PVScan.Mobile.ViewModels
                 Level = user.Level,
                 Username = user.Username,
             };
+
+            if (IdentityService.AccessToken != null)
+            {
+                await Synchronizer.Synchronize();
+            }
 
             IsInitializing = false;
             IsUpdatingUserInfo = false;

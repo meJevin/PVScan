@@ -113,6 +113,10 @@ namespace PVScan.Mobile
             ContainerBuilder.RegisterType<APIUserInfoHub>()
                 .As<IAPIUserInfoHub>()
                 .SingleInstance();
+
+            ContainerBuilder.RegisterType<BarcodeSynchronizer>()
+                .As<IBarcodeSynchronizer>()
+                .SingleInstance();
         }
 
         private void FinishInitialization()

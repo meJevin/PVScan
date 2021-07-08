@@ -9,6 +9,7 @@ using Android.OS;
 using Xamarin.Forms;
 using System.Net;
 using Plugin.CurrentActivity;
+using System.Threading.Tasks;
 
 namespace PVScan.Mobile.Droid
 {
@@ -23,6 +24,8 @@ namespace PVScan.Mobile.Droid
         protected override void OnCreate(Bundle savedInstanceState)
         {
             AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException; ;
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -36,7 +39,24 @@ namespace PVScan.Mobile.Droid
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             Xamarin.FormsMaps.Init(this, savedInstanceState);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
-            LoadApplication(new App());
+            try
+            {
+                LoadApplication(new App());
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            Console.WriteLine("WOW");
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine("WOW");
         }
 
         private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)

@@ -34,6 +34,7 @@ namespace PVScan.Mobile.ViewModels
         readonly IPopupMessageService PopupMessageService;
         readonly IPVScanAPI PVScanAPI;
         readonly IAPIBarcodeHub BarcodeHub;
+        readonly IBarcodeSynchronizer Synchronizer;
 
         public HistoryPageViewModel(
             IBarcodesRepository barcodesRepository,
@@ -41,7 +42,8 @@ namespace PVScan.Mobile.ViewModels
             IPopupMessageService popupMessageService,
             IBarcodeSorter sorterService,
             IPVScanAPI pVScanAPI,
-            IAPIBarcodeHub barcodeHub)
+            IAPIBarcodeHub barcodeHub,
+            IBarcodeSynchronizer synchronizer)
         {
             BarcodesRepository = barcodesRepository;
             FilterService = filterService;
@@ -49,6 +51,7 @@ namespace PVScan.Mobile.ViewModels
             PopupMessageService = popupMessageService;
             PVScanAPI = pVScanAPI;
             BarcodeHub = barcodeHub;
+            Synchronizer = synchronizer;
 
             Barcodes = new ObservableRangeCollection<Barcode>();
             BarcodesPaged = new ObservableRangeCollection<Barcode>();
@@ -208,6 +211,7 @@ namespace PVScan.Mobile.ViewModels
                     Latitude = barcode.ScanLocation?.Latitude,
                     Longitude = barcode.ScanLocation?.Longitude,
                     Favorite = barcode.Favorite,
+                    LastTimeUpdated = barcode.LastUpdateTime,
                 };
 
                 if (await PVScanAPI.UpdatedBarcode(req) != null)
@@ -299,6 +303,13 @@ namespace PVScan.Mobile.ViewModels
 
                 SelectedBarcodes.Clear();
             });
+
+            Synchronizer.SynchorinizedLocally += Synchronizer_SynchorinizedLocally;
+        }
+
+        private void Synchronizer_SynchorinizedLocally(object sender, EventArgs e)
+        {
+            _ = LoadBarcodesFromDB();
         }
 
         private async void BarcodeHub_OnUpdated(object sender, UpdatedBarcodeRequest req)

@@ -19,16 +19,19 @@ namespace PVScan.Mobile.ViewModels
         readonly IPopupMessageService PopupMessageService;
         readonly IAPIBarcodeHub BarcodeHub;
         readonly IAPIUserInfoHub UserInfoHub;
+        readonly IBarcodeSynchronizer Synchronizer;
 
         public LoginPageViewModel(
             IIdentityService identityService,
             IPopupMessageService popupMessageService,
-            IAPIBarcodeHub barcodeHub, IAPIUserInfoHub userInfoHub)
+            IAPIBarcodeHub barcodeHub, IAPIUserInfoHub userInfoHub,
+            IBarcodeSynchronizer synchronizer)
         {
             IdentityService = identityService;
             PopupMessageService = popupMessageService;
             BarcodeHub = barcodeHub;
             UserInfoHub = userInfoHub;
+            Synchronizer = synchronizer;
 
             LoginCommand = new Command(async () =>
             {
@@ -57,6 +60,8 @@ namespace PVScan.Mobile.ViewModels
 
                     await BarcodeHub.Connect();
                     await UserInfoHub.Connect();
+
+                    await Synchronizer.Synchronize();
 
                     // Todo: dead code :)
                     SuccessfulLogin?.Invoke(this, new LoginEventArgs() { });

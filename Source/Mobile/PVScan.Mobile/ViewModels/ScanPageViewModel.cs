@@ -122,6 +122,7 @@ namespace PVScan.Mobile.ViewModels
                     Favorite = b.Favorite,
                     GUID = b.GUID,
                     Hash = b.Hash,
+                    LastTimeUpdated = b.LastUpdateTime,
                 };
 
                 await PVScanAPI.ScannedBarcode(req);
