@@ -109,7 +109,7 @@ namespace PVScan.API.Controllers
             _context.UserInfos.Update(userInfo);
             await _context.SaveChangesAsync();
 
-            if (_userInfoHub.Clients != null)
+            if (_userInfoHub != null)
             {
                 await _userInfoHub.Clients
                     .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
@@ -205,7 +205,7 @@ namespace PVScan.API.Controllers
             _context.UserInfos.Update(userInfo);
             await _context.SaveChangesAsync();
 
-            if (_userInfoHub.Clients != null)
+            if (_userInfoHub != null)
             {
                 await _userInfoHub.Clients
                     .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
