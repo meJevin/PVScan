@@ -46,7 +46,10 @@ Both `Source` and `Tests` folders have subfolders which are named after the plat
 ## Configuring your enviroment
 
 ### Desktop Client
-WPF client uses secrets. For now there's only one secret, which is `MapBoxKey`. This is an API key for MapBox. While this application is in development you'll have to get your own MapBox API key and use it by setting a dotnet secret with key `MapBoxKey` in the directory of WPF project. Type `dotnet user-secrets set "MapBoxKey" "YOUR_KEY"` to do that.
+WPF client uses secrets. For now there are the following secrects:
+ * `MapBoxKey`. This is an API key for MapBox. While this application is in development you'll have to get your own MapBox API key and use it by setting a dotnet secret with key `MapBoxKey` in the directory of WPF project. Type `dotnet user-secrets set "MapBoxKey" "YOUR_KEY"` to do that.
+ * `SQLiteEncryptedKey_Debug`. This is a key which is used in debug mode to encrypt the local SQLite database which has sensetive user information.
+ * `SQLiteEncryptedKey`. This is a key to which only I have access which is used to encrypt the local SQLite database which has sensetive user information. This is used in desktop releases.
 
 ### Web Client
 N/A
