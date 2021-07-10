@@ -18,7 +18,7 @@ namespace PVScan.API.Tests.Controllers
         public async Task Can_Send_Scanned_Barcode()
         {
             // Arrange
-            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context), null);
             controller.ControllerContext = _mockControlerContext;
 
             _context.UserInfos.Add(new UserInfo()
@@ -61,7 +61,7 @@ namespace PVScan.API.Tests.Controllers
         public async Task Can_Gain_Experience_From_Scanned_Barcode()
         {
             // Arrange
-            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context), null);
             controller.ControllerContext = _mockControlerContext;
 
             var userInfo = new UserInfo()
@@ -92,7 +92,7 @@ namespace PVScan.API.Tests.Controllers
             mockCalc.Setup(c => c.GetExperienceForBarcode(It.IsAny<UserInfo>())).Returns(15);
             mockCalc.Setup(c => c.GetRequiredLevelExperience(It.IsAny<int>())).Returns(10);
 
-            BarcodesController controller = new BarcodesController(_context, mockCalc.Object);
+            BarcodesController controller = new BarcodesController(_context, mockCalc.Object, null);
             controller.ControllerContext = _mockControlerContext;
 
             var userInfo = new UserInfo()
@@ -124,7 +124,7 @@ namespace PVScan.API.Tests.Controllers
             mockCalc.Setup(c => c.GetExperienceForBarcode(It.IsAny<UserInfo>())).Returns(57);
             mockCalc.Setup(c => c.GetRequiredLevelExperience(It.IsAny<int>())).Returns(10);
 
-            BarcodesController controller = new BarcodesController(_context, mockCalc.Object);
+            BarcodesController controller = new BarcodesController(_context, mockCalc.Object, null);
             controller.ControllerContext = _mockControlerContext;
 
             var userInfo = new UserInfo()
@@ -155,7 +155,7 @@ namespace PVScan.API.Tests.Controllers
             mockCalc.Setup(c => c.GetExperienceForBarcode(It.IsAny<UserInfo>())).Returns(57);
             mockCalc.Setup(c => c.GetRequiredLevelExperience(It.IsAny<int>())).Returns(10);
 
-            BarcodesController controller = new BarcodesController(_context, mockCalc.Object);
+            BarcodesController controller = new BarcodesController(_context, mockCalc.Object, null);
             controller.ControllerContext = _mockControlerContext;
 
             var userInfo = new UserInfo()
@@ -182,7 +182,7 @@ namespace PVScan.API.Tests.Controllers
         public async Task Can_Update_Existing_Barcode()
         {
             // Arrange
-            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context), null);
             controller.ControllerContext = _mockControlerContext;
 
             var barcodeGUID = Guid.NewGuid().ToString();
@@ -229,7 +229,7 @@ namespace PVScan.API.Tests.Controllers
         public async Task Can_Not_Update_Non_Existing_Barcode()
         {
             // Arrange
-            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context), null);
             controller.ControllerContext = _mockControlerContext;
 
             var barcodeGUID = Guid.NewGuid().ToString();
@@ -254,7 +254,7 @@ namespace PVScan.API.Tests.Controllers
         public async Task Can_Delete_Existing_Barcode()
         {
             // Arrange
-            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context), null);
             controller.ControllerContext = _mockControlerContext;
 
             var barcodeGUID = Guid.NewGuid().ToString();
@@ -295,7 +295,7 @@ namespace PVScan.API.Tests.Controllers
         public async Task Can_Not_Delete_Non_Existing_Barcode()
         {
             // Arrange
-            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context));
+            BarcodesController controller = new BarcodesController(_context, new ExperienceCalculator(_context), null);
             controller.ControllerContext = _mockControlerContext;
 
             var barcodeGUID = Guid.NewGuid().ToString();
