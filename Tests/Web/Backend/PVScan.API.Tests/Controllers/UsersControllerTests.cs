@@ -15,7 +15,7 @@ namespace PVScan.API.Tests.Controllers
         public async Task Can_Get_Current_User_Info()
         {
             // Arrange
-            UsersController controller = new UsersController(_context);
+            UsersController controller = new UsersController(_context, null);
             controller.ControllerContext = _mockControlerContext;
 
             _context.UserInfos.Add(new UserInfo()
@@ -38,7 +38,7 @@ namespace PVScan.API.Tests.Controllers
         public async Task Can_Change_Current_User_Info()
         {
             // Arrange
-            UsersController controller = new UsersController(_context);
+            UsersController controller = new UsersController(_context, null);
             controller.ControllerContext = _mockControlerContext;
 
             _context.UserInfos.Add(new UserInfo()
