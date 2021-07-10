@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace PVScan.Desktop.WPF.Services
 {
+    // Had to wrap all cals to DbContext in Task.Run because otherwise the calls are blocking :(
     public class SQLiteEncryptedPersistentKVP : IPersistentKVP
     {
         readonly SQLiteEncryptedDbContext _context;
