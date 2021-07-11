@@ -24,14 +24,22 @@ namespace PVScan.Core.Services
             // For batch deletions..
             _context.Barcodes.Remove(barcode);
 
-            await _context.SaveChangesAsync();
+            await Task.Run(async () =>
+            {
+                await _context.SaveChangesAsync();
+            });
         }
 
         public async Task<Barcode> FindByGUID(string GUID)
         {
-            var result = _context.Barcodes.Where(b => b.GUID == GUID).FirstOrDefault();
+            return await Task.Run(async () =>
+            {
+                var result = await _context.Barcodes
+                    .Where(b => b.GUID == GUID)
+                    .FirstOrDefaultAsync();
 
-            return result;
+                return result;
+            });
         }
 
         public async Task<IEnumerable<Barcode>> GetAll()
@@ -75,7 +83,11 @@ namespace PVScan.Core.Services
             }
 
             _context.Barcodes.Add(barcode);
-            await _context.SaveChangesAsync();
+
+            await Task.Run(async () =>
+            {
+                await _context.SaveChangesAsync();
+            });
 
             return barcode;
         }
@@ -109,7 +121,10 @@ namespace PVScan.Core.Services
             }
 
             _context.Barcodes.Update(barcode);
-            await _context.SaveChangesAsync();
+            await Task.Run(async () =>
+            {
+                await _context.SaveChangesAsync();
+            });
         }
     }
 }
