@@ -51,7 +51,7 @@ WPF client uses secrets. I use [dotnet user-secrets](https://docs.microsoft.com/
 For now there are the following secrects:
  * `MapBoxKey`. This is an API key for MapBox. While this application is in development you'll have to get your own MapBox API key.
  * `SQLiteEncryptedKey_Debug`. This is a key which is used in debug mode to encrypt the local SQLite database which has sensetive user information.
- * `SQLiteEncryptedKey`. This is a key to which only I have access which is used to encrypt the local SQLite database which has sensetive user information. This is used in desktop releases.
+ * `SQLiteEncryptedKey`. This is a key to which only I have access which is used to encrypt the local SQLite database which has sensetive user information. This is used in desktop Squirrel releases.
 
 In order to set the secrets use `dotnet user-secrets set [SECRET_NAME] [SECRET_VALUE]` in the directory of WPF project.
 
