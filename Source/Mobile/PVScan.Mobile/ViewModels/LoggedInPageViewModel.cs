@@ -157,6 +157,11 @@ namespace PVScan.Mobile.ViewModels
 
         public async Task Initialize()
         {
+            if (IsInitializing || IsUpdatingUserInfo)
+            {
+                return;
+            }
+
             IsUpdatingUserInfo = true;
             IsInitializing = true;
 
