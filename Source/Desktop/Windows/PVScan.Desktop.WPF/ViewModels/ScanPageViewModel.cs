@@ -113,11 +113,11 @@ namespace PVScan.Desktop.WPF.ViewModels
                 await BarcodeHub.Scanned(req);
             });
 
-            FakeBarcodeCommand = new Command(() =>
+            FakeBarcodeCommand = new Command(async () =>
             {
-                for (int i = 0; i < 200; ++i)
+                for (int i = 0; i < 20000; ++i)
                 {
-                    GenerateRandomBarcode();
+                    await GenerateRandomBarcode();
                 }
                 LastScanResult = new Result("Test", null, null, BarcodeFormat.QR_CODE);
 
@@ -135,7 +135,7 @@ namespace PVScan.Desktop.WPF.ViewModels
             capture.Stop();
         }
 
-        private void GenerateRandomBarcode()
+        private async Task GenerateRandomBarcode()
         {
             Array values = Enum.GetValues(typeof(BarcodeFormat)).OfType<BarcodeFormat>().Where(f => { return (int)f <= 2048; }).ToArray();
             Random random = new Random();
@@ -146,8 +146,8 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             Coordinate randomCoord = new Coordinate()
             {
-                Latitude = (random.NextDouble() * 180) - 90,
-                Longitude = (random.NextDouble() * 180) - 90,
+                Longitude = -180 + (random.NextDouble() * 360),
+                Latitude = -90 + (random.NextDouble() * 180),
             };
 
             var b = new Barcode()
@@ -158,7 +158,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                 Text = Guid.NewGuid().ToString(),
             };
 
-            BarcodesRepository.Save(b);
+            await BarcodesRepository.Save(b);
         }
 
         private void VideoCapture_ImageGrabbed()
