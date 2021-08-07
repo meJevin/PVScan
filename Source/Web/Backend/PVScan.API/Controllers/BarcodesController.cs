@@ -295,7 +295,7 @@ namespace PVScan.API.Controllers
 
                 if (barcodeFromDB == null)
                 {
-                    return NotFound();
+                    continue;
                 }
 
                 if (bar.Latitude.HasValue && bar.Longitude.HasValue)
