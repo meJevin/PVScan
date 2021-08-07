@@ -276,6 +276,7 @@ namespace PVScan.Mobile.ViewModels
             }
         }
 
+        // TODO: rewrite this :(
         private async Task AddBarcodesToUI(List<Barcode> barcode)
         {
             var filtered = barcode;
@@ -347,9 +348,11 @@ namespace PVScan.Mobile.ViewModels
 
                     if (resultIndex > Barcodes.Count - 1) resultIndex = Barcodes.Count - 1;
                     if (resultIndex < 0) resultIndex = 0;
+
                     Barcodes.Insert(resultIndex, b);
                     int lastPagedIndex = BarcodesPaged.Count;
-                    if (resultIndex <= lastPagedIndex)
+                    if (resultIndex <= lastPagedIndex &&
+                        BarcodesPaged.Count < (PageSize * PageCount))
                     {
                         BarcodesPaged.Insert(resultIndex, b);
                     }
@@ -370,8 +373,7 @@ namespace PVScan.Mobile.ViewModels
 
                     if (Device.RuntimePlatform == Device.iOS)
                     {
-                        BarcodesPaged.RemoveAt(indxPaged);
-                        BarcodesPaged.Insert(indxPaged, barcode);
+                        BarcodesPaged[indxPaged] = barcode;
                     }
                     else
                     {
@@ -386,8 +388,7 @@ namespace PVScan.Mobile.ViewModels
 
                     if (Device.RuntimePlatform == Device.iOS)
                     {
-                        Barcodes.RemoveAt(indx);
-                        Barcodes.Insert(indx, barcode);
+                        BarcodesPaged[indx] = barcode;
                     }
                     else
                     {

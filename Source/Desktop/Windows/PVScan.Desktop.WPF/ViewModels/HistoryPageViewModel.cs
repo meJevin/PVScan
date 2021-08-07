@@ -210,6 +210,7 @@ namespace PVScan.Desktop.WPF.ViewModels
                 new HistoryPageBarcodesCollectionChanged() { Args = e });
         }
 
+        // TODO: rewrite this :(
         private async Task AddBarcodesToUI(List<Barcode> toAdd)
         {
             var filtered = toAdd;
@@ -234,7 +235,6 @@ namespace PVScan.Desktop.WPF.ViewModels
                 {
                     merged.Add(b);
                 }
-
 
                 var mergedSorted = (await SorterService.Sort(merged, CurrentSorting)).ToList();
 
@@ -280,9 +280,13 @@ namespace PVScan.Desktop.WPF.ViewModels
                         resultIndex = Barcodes.Count - 1;
                     }
 
+                    if (resultIndex > Barcodes.Count - 1) resultIndex = Barcodes.Count - 1;
+                    if (resultIndex < 0) resultIndex = 0;
+
                     Barcodes.Insert(resultIndex, b);
                     int lastPagedIndex = BarcodesPaged.Count;
-                    if (resultIndex <= lastPagedIndex)
+                    if (resultIndex <= lastPagedIndex &&
+                        BarcodesPaged.Count < (PageSize * PageCount))
                     {
                         BarcodesPaged.Insert(resultIndex, b);
                     }
