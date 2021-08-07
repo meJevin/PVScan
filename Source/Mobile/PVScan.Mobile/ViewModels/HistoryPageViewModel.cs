@@ -345,6 +345,8 @@ namespace PVScan.Mobile.ViewModels
                         resultIndex = Barcodes.Count - 1;
                     }
 
+                    if (resultIndex > Barcodes.Count - 1) resultIndex = Barcodes.Count - 1;
+                    if (resultIndex < 0) resultIndex = 0;
                     Barcodes.Insert(resultIndex, b);
                     int lastPagedIndex = BarcodesPaged.Count;
                     if (resultIndex <= lastPagedIndex)
@@ -365,15 +367,33 @@ namespace PVScan.Mobile.ViewModels
                 if (bPaged != null)
                 {
                     var indxPaged = BarcodesPaged.IndexOf(bPaged);
-                    BarcodesPaged[indxPaged] = null;
-                    BarcodesPaged[indxPaged] = barcode;
+
+                    if (Device.RuntimePlatform == Device.iOS)
+                    {
+                        BarcodesPaged.RemoveAt(indxPaged);
+                        BarcodesPaged.Insert(indxPaged, barcode);
+                    }
+                    else
+                    {
+                        BarcodesPaged[indxPaged] = null;
+                        BarcodesPaged[indxPaged] = barcode;
+                    }
                 }
 
                 if (b != null)
                 {
                     var indx = Barcodes.IndexOf(b);
-                    Barcodes[indx] = null;
-                    Barcodes[indx] = barcode;
+
+                    if (Device.RuntimePlatform == Device.iOS)
+                    {
+                        Barcodes.RemoveAt(indx);
+                        Barcodes.Insert(indx, barcode);
+                    }
+                    else
+                    {
+                        Barcodes[indx] = null;
+                        Barcodes[indx] = barcode;
+                    }
                 }
             }
         }
