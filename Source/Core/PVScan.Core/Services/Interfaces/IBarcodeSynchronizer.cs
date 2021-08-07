@@ -1,4 +1,5 @@
 ﻿using PVScan.Core.Models;
+using PVScan.Core.Models.API;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,11 @@ namespace PVScan.Core.Services.Interfaces
 {
     public interface IBarcodeSynchronizer
     {
-        event EventHandler SynchorinizedLocally;
+        event EventHandler Started;
+        event EventHandler<SynchronizeResponse> Finished;
+
+        bool IsSynchronizing { get; }
+
         Task Synchronize(); 
     }
 }

@@ -33,6 +33,7 @@ namespace PVScan.Core.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Barcode>().OwnsOne(b => b.ScanLocation);
+            modelBuilder.Entity<Barcode>().HasIndex(b => b.GUID).IsUnique();
         }
 
         public DbSet<Barcode> Barcodes { get; set; }

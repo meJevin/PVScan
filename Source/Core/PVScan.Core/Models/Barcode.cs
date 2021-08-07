@@ -23,8 +23,8 @@ namespace PVScan.Core.Models
             string input = "";
             input += barcode.Format.ToString() + " ";
             input += barcode.Text.ToString() + " ";
-            input += barcode.ScanLocation?.Latitude?.ToString() + " ";
-            input += barcode.ScanLocation?.Longitude?.ToString() + " ";
+            input += barcode.ScanLocation?.Latitude?.ToString().Replace(",", ".") + " ";
+            input += barcode.ScanLocation?.Longitude?.ToString().Replace(",", ".") + " ";
             input += barcode.ScanTime.Ticks.ToString() + " ";
             input += barcode.Favorite.ToString() + " ";
             input += barcode.GUID?.ToString() + " ";

@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using PVScan.API.Controllers.Base;
 using PVScan.API.Hubs;
 using PVScan.API.Services.Interfaces;
-using PVScan.API.ViewModels.Barcodes;
-using PVScan.API.ViewModels.Synchronizer;
-using PVScan.API.ViewModels.Users;
+using PVScan.Domain.DTO.Barcodes;
+using PVScan.Domain.DTO.Synchronizer;
+using PVScan.Domain.DTO.Users;
 using PVScan.Database;
 using PVScan.Domain.Entities;
 using System;
@@ -36,7 +36,9 @@ namespace PVScan.API.Controllers
         public async Task<IActionResult> Synchronize(SynchronizeRequest req)
         {
             // Todo: This will be really slow with large amounts of barcodes
-            var serverBarcodes = _context.Barcodes.ToList();
+            var serverBarcodes = await _context.Barcodes
+                .Where(b => b.UserId == UserId)
+                .ToListAsync();
 
             var toUpdateLocaly = serverBarcodes
                 .Where(b => req.LocalBarcodeInfos

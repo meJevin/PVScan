@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PVScan.API.ViewModels.Barcodes
+namespace PVScan.Domain.DTO.Barcodes
 {
-    public class DeletedResponse
+    public class UpdatedResponse
     {
     }
 }

@@ -1,11 +1,11 @@
-﻿using PVScan.API.ViewModels.Barcodes;
+﻿using PVScan.Domain.DTO.Barcodes;
 using PVScan.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PVScan.API.ViewModels.Synchronizer
+namespace PVScan.Domain.DTO.Synchronizer
 {
     public class SynchronizeResponse
     {

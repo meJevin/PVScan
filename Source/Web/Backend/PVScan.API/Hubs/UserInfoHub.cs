@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using PVScan.API.ViewModels.Barcodes;
-using PVScan.API.ViewModels.Users;
+using PVScan.Domain.DTO.Barcodes;
+using PVScan.Domain.DTO.Users;
 using PVScan.Domain.Entities;
 using System;
 using System.Collections.Generic;

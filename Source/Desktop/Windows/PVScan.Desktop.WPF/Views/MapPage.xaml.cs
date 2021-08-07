@@ -27,8 +27,6 @@ namespace PVScan.Desktop.WPF.Views
     /// </summary>
     public partial class MapPage : ContentControl
     {
-        Dictionary<string, Barcode> BarcodeMarkers = new Dictionary<string, Barcode>();
-
         MapPageViewModel VM;
 
         public event EventHandler<Barcode> BarcodeSelected;
@@ -56,6 +54,20 @@ namespace PVScan.Desktop.WPF.Views
                     Map.FlyTo(new GeoLocation(loc.Latitude.Value, loc.Longitude.Value), 12);
                 });
 
+            // When we localy specify a location
+            MessagingCenter.Subscribe(this, nameof(LocationSpecifiedMessage),
+                async (MapPageViewModel vm, LocationSpecifiedMessage args) =>
+                {
+                    await AddPoint(args.Barcode);
+                });
+
+            // When location is specified for a barcode remotely
+            MessagingCenter.Subscribe(this, nameof(LocationSpecifiedMessage),
+                async (HistoryPageViewModel vm, LocationSpecifiedMessage args) =>
+                {
+                    await AddPoint(args.Barcode);
+                });
+
             LocationSpecificationContainer.IsHitTestVisible = false;
             _ = LocationSpecificationContainer.FadeTo(0, Animations.DefaultDuration);
         }
@@ -77,67 +89,95 @@ namespace PVScan.Desktop.WPF.Views
             }
         }
 
-        private void Barcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private async void Barcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 foreach (Barcode b in e.NewItems)
                 {
-                    AddMarker(b);
+                    await AddPoint(b);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 foreach (Barcode b in e.OldItems)
                 {
-                    RemoveMarker(b.GUID);
+                    await RemoveMarker(b.GUID);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                ClearMarkers();
+                await ClearMarkers();
             }
         }
 
-        private void AddMarker(Barcode b)
+        private async Task AddPoints(IEnumerable<Barcode> barcodes)
+        {
+            List<MapboxPoint> toAdd = new List<MapboxPoint>();
+
+            foreach (var b in barcodes)
+            {
+                if (b.ScanLocation == null)
+                {
+                    continue;
+                }
+
+                toAdd.Add(new MapboxPoint()
+                {
+                    GUID = b.GUID,
+                    Latitude = b.ScanLocation.Latitude.Value,
+                    Longitude = b.ScanLocation.Longitude.Value,
+                    Properties =
+                    new
+                    {
+                    },
+                });
+            }
+
+            await Map.AddPoints(toAdd);
+        }
+
+        private async Task AddPoint(Barcode b)
         {
             if (b.ScanLocation == null)
             {
                 return;
             }
 
-            Map.AddMarker(new GeoLocation(b.ScanLocation.Latitude.Value, b.ScanLocation.Longitude.Value), b.GUID);
-            BarcodeMarkers.Add(b.GUID, b);
+
+            await Map.AddPoint(new MapboxPoint()
+            {
+                GUID = b.GUID,
+                Latitude = b.ScanLocation.Latitude.Value,
+                Longitude = b.ScanLocation.Longitude.Value,
+                Properties =
+                new
+                {
+                },
+            });
         }
 
-        private void RemoveMarker(string guid)
+        private async Task RemoveMarker(string guid)
         {
-            Map.RemoveMarker(guid);
-            BarcodeMarkers.Remove(guid);
+            await Map.RemovePoint(guid);
         }
 
-        private void ClearMarkers()
+        private async Task ClearMarkers()
         {
-            Map.ClearMarkers();
-            BarcodeMarkers.Clear();
+            await Map.ClearPoints();
         }
 
         private async void Map_Ready(object sender, EventArgs e)
         {
-            Map.Invoke.SetStyle("mapbox://styles/mapbox/dark-v10");
-
             await VM.Initialize();
 
             VM.Barcodes.CollectionChanged += Barcodes_CollectionChanged;
-            foreach (Barcode b in VM.Barcodes)
-            {
-                AddMarker(b);
-            }
+            await AddPoints(VM.Barcodes);
         }
 
-        private void Map_MarkerClicked(object sender, string e)
+        private void Map_PointClicked(object sender, string e)
         {
-            BarcodeSelected?.Invoke(this, BarcodeMarkers[e]);
+            BarcodeSelected?.Invoke(this, VM.Barcodes.FirstOrDefault(b => b.GUID == e));
         }
 
         private void Map_MouseDown(object sender, EventArgs e)

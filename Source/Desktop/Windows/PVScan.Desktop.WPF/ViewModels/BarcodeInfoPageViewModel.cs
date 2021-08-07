@@ -5,6 +5,7 @@ using PVScan.Desktop.WPF.ViewModels.Messages.Barcodes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,6 @@ namespace PVScan.Desktop.WPF.ViewModels
                     if (SelectedBarcode == args.Barcode)
                     {
                         SelectedBarcode = null;
-                        await Task.Delay(5);
                         SelectedBarcode = args.Barcode;
                     }
                 });
@@ -42,7 +42,94 @@ namespace PVScan.Desktop.WPF.ViewModels
             });
 
             BarcodeHub.OnUpdated += BarcodeHub_OnUpdated;
+            BarcodeHub.OnUpdatedMultple += BarcodeHub_OnUpdatedMultple;
+            
             BarcodeHub.OnDeleted += BarcodeHub_OnDeleted;
+            BarcodeHub.OnDeletedMultiple += BarcodeHub_OnDeletedMultiple;
+        }
+        
+        private async void BarcodeHub_OnUpdated(object sender, UpdatedBarcodeRequest req)
+        {
+            if (SelectedBarcode == null ||
+                req.GUID != SelectedBarcode.GUID)
+            {
+                return;
+            }
+
+            var localBarcode = await BarcodesRepository.FindByGUID(req.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            if (req.Longitude.HasValue && req.Latitude.HasValue)
+            {
+                localBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = req.Latitude,
+                    Longitude = req.Longitude,
+                };
+            }
+            localBarcode.Favorite = req.Favorite;
+
+            SelectedBarcode = null;
+            SelectedBarcode = localBarcode;
+        }
+        private async void BarcodeHub_OnUpdatedMultple(object sender, List<UpdatedBarcodeRequest> e)
+        {
+            if (SelectedBarcode == null) return;
+
+            var found = e.FirstOrDefault(d => d.GUID == SelectedBarcode.GUID);
+
+            if (found == null)
+            {
+                return;
+            }
+
+            var localBarcode = await BarcodesRepository.FindByGUID(found.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            if (found.Longitude.HasValue && found.Latitude.HasValue)
+            {
+                localBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = found.Latitude,
+                    Longitude = found.Longitude,
+                };
+            }
+            localBarcode.Favorite = found.Favorite;
+
+            SelectedBarcode = null;
+            SelectedBarcode = localBarcode;
+        }
+
+        private async void BarcodeHub_OnDeletedMultiple(object sender, List<DeletedBarcodeRequest> e)
+        {
+            if (SelectedBarcode == null) return;
+
+            var found = e.FirstOrDefault(d => d.GUID == SelectedBarcode.GUID);
+
+            if (SelectedBarcode == null ||
+                found == null)
+            {
+                return;
+            }
+
+            var localBarcode = await BarcodesRepository.FindByGUID(found.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            SelectedBarcode = null;
+
+            Closed?.Invoke(this, new EventArgs());
         }
 
         private async void BarcodeHub_OnDeleted(object sender, DeletedBarcodeRequest e)
@@ -71,26 +158,6 @@ namespace PVScan.Desktop.WPF.ViewModels
             {
                 SwitchOnMapButton();
             }
-        }
-
-        private async void BarcodeHub_OnUpdated(object sender, UpdatedBarcodeRequest req)
-        {
-            if (SelectedBarcode == null || 
-                req.GUID != SelectedBarcode.GUID)
-            {
-                return;
-            }
-
-            var localBarcode = await BarcodesRepository.FindByGUID(req.GUID);
-
-            if (localBarcode == null)
-            {
-                return;
-            }
-
-            SelectedBarcode = null;
-            await Task.Delay(5);
-            SelectedBarcode = localBarcode;
         }
 
         private void SwitchOnMapButton()

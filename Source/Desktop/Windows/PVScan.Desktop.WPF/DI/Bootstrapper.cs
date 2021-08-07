@@ -37,22 +37,9 @@ namespace PVScan.Desktop.WPF.DI
         {
             ContainerBuilder = new ContainerBuilder();
 
-            // DbContext from EF Core
-            ContainerBuilder.Register(ctx =>
-            {
-                var optionsBuilder = new DbContextOptionsBuilder<PVScanDbContext>();
-
-                optionsBuilder.UseSqlite(
-                    $"Filename={DataAccess.DatabasePath}",
-                    sqliteOptions =>
-                    {
-                        var migrationsAssembly = typeof(PVScanDbContext).GetTypeInfo().Assembly.GetName().Name;
-                    });
-
-                return new PVScanDbContext(optionsBuilder.Options);
-            })
-                .AsSelf()
-                .InstancePerLifetimeScope();
+            ContainerBuilder.RegisterType<PVScanDbContextFactory>()
+                .As<IPVScanDbContextFactory>()
+                .SingleInstance();
 
             ContainerBuilder.Register(ctx =>
             {
@@ -135,6 +122,15 @@ namespace PVScan.Desktop.WPF.DI
             ContainerBuilder.RegisterType<PVScanAPI>()
                 .As<IPVScanAPI>()
                 .InstancePerLifetimeScope();
+
+            //// API Barcodes HUB facade for main thread calls
+            //ContainerBuilder.Register(ctx =>
+            //{
+            //    var barcodeHub = new APIBarcodeHub(ctx.Resolve<IIdentityService>());
+            //    return new APIBarcodeHubFacadeWPF(barcodeHub);
+            //})
+            //    .As<IAPIBarcodeHub>()
+            //    .SingleInstance();
 
             // API Barcodes HUB
             ContainerBuilder.RegisterType<APIBarcodeHub>()

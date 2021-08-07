@@ -19,8 +19,11 @@
     </ContentControl.Resources>
     
     <Grid x:Name="MainContainer">
-        <mapbox:Map Name="Map" Center="{Binding CenterLocation, Mode=TwoWay}" Zoom="{Binding Zoom, Mode=TwoWay}"
-                    MarkerClicked="Map_MarkerClicked"
+        <mapbox:Map Name="Map" 
+                    Center="{Binding CenterLocation, Mode=TwoWay}" 
+                    Zoom="{Binding Zoom, Mode=TwoWay}"
+                    MapStyle="mapbox://styles/mapbox/dark-v10"
+                    PointClicked="Map_PointClicked"
                     MapMouseDown="Map_MouseDown"
                     MapMouseUp="Map_MouseUp">
         </mapbox:Map>

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PVScan.Core.DAL;
 
 namespace PVScan.Core.Migrations
 {
     [DbContext(typeof(PVScanDbContext))]
-    partial class PVScanMobileDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210807123620_BarcodeIndexAdded_GUID")]
+    partial class BarcodeIndexAdded_GUID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
