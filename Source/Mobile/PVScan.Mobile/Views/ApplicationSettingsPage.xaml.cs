@@ -53,7 +53,7 @@ namespace PVScan.Mobile.Views
         }
 
         #region DEBUG STUFF
-        private void GenerateBarcode()
+        private Barcode GenerateBarcode()
         {
             Array values = Enum.GetValues(typeof(BarcodeFormat)).OfType<BarcodeFormat>().Where(f => { return (int)f <= 2048; }).ToArray();
             Random random = new Random();
@@ -76,28 +76,36 @@ namespace PVScan.Mobile.Views
                 Text = Guid.NewGuid().ToString(),
             };
 
-            BarcodesRepository.Save(b);
+            return b;
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private async void Button_Clicked(object sender, EventArgs e)
         {
-            GenerateBarcode();
+            BarcodesRepository.Save(GenerateBarcode());
         }
 
-        private void Button_Clicked_1(object sender, EventArgs e)
+        private async void Button_Clicked_1(object sender, EventArgs e)
         {
+            List<Barcode> gen = new List<Barcode>();
+
             for (int i = 0; i < 10; ++i)
             {
-                GenerateBarcode();
+                gen.Add(GenerateBarcode());
             }
+
+            await BarcodesRepository.Save(gen);
         }
 
-        private void Button_Clicked_2(object sender, EventArgs e)
+        private async void Button_Clicked_2(object sender, EventArgs e)
         {
+            List<Barcode> gen = new List<Barcode>();
+
             for (int i = 0; i < 100; ++i)
             {
-                GenerateBarcode();
+                gen.Add(GenerateBarcode());
             }
+
+            await BarcodesRepository.Save(gen);
         }
         #endregion
     }
