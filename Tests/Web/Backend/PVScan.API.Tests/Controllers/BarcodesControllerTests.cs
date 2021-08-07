@@ -3,7 +3,7 @@ using Moq;
 using PVScan.API.Controllers;
 using PVScan.API.Services;
 using PVScan.API.Services.Interfaces;
-using PVScan.API.ViewModels.Barcodes;
+using PVScan.Domain.DTO.Barcodes;
 using PVScan.Domain.Entities;
 using System;
 using System.Linq;

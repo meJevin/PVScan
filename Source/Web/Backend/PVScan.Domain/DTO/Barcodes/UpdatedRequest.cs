@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PVScan.API.ViewModels.Barcodes
+namespace PVScan.Domain.DTO.Barcodes
 {
     // We can only update barcode location, favorite
     // I.e. it was unavailable and user specified it

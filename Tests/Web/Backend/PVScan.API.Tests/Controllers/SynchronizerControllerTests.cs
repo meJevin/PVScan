@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PVScan.API.Controllers;
-using PVScan.API.ViewModels.Synchronizer;
+using PVScan.Domain.DTO.Synchronizer;
 using PVScan.Domain.Entities;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PVScan.API.Controllers;
-using PVScan.API.ViewModels.Users;
+using PVScan.Domain.DTO.Users;
 using PVScan.Domain.Entities;
 using System;
 using System.Threading.Tasks;

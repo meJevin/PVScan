@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PVScan.API.Controllers.Base;
 using PVScan.API.Hubs;
-using PVScan.API.ViewModels.Users;
+using PVScan.Domain.DTO.Users;
 using PVScan.Database;
 using PVScan.Domain.Entities;
 using System;
