@@ -139,6 +139,119 @@ namespace PVScan.API.Controllers
         }
 
         [HttpPost]
+        [Route("scanned-multiple")]
+        public async Task<IActionResult> ScannedMuliple(List<ScannedRequest> data)
+        {
+            // Create barcode
+            foreach (var b in data)
+            {
+                var barcodeScanned = new Barcode()
+                {
+                    Format = b.Format,
+                    ScanLocation = null,
+                    Text = b.Text,
+                    UserId = UserId,
+                    ScanTime = b.ScanTime,
+                    Favorite = false,
+                    GUID = b.GUID,
+                    Hash = b.Hash,
+                    LastUpdateTime = b.LastTimeUpdated,
+                };
+
+                if (b.Latitude.HasValue && b.Longitude.HasValue)
+                {
+                    barcodeScanned.ScanLocation = new Coordinate()
+                    {
+                        Latitude = b.Latitude.Value,
+                        Longitude = b.Longitude.Value
+                    };
+                }
+
+                await _context.Barcodes.AddAsync(barcodeScanned);
+            }
+
+            // Add it to DB
+            await _context.SaveChangesAsync();
+
+            // Calculate experience added
+            var userInfo = await _context.UserInfos
+                .Where(u => u.UserId == UserId)
+                .FirstOrDefaultAsync();
+
+            double totalExpGained = 0;
+            int lvlsGained = 0;
+            for (int i = 0; i < data.Count; ++i)
+            {
+                var experienceGained = _expCalc.GetExperienceForBarcode(userInfo);
+
+                // Add it to user info and check for levelup
+                userInfo.Experience += experienceGained;
+
+                var experienceNextLevel = _expCalc.GetRequiredLevelExperience(userInfo.Level);
+                double expLeft = userInfo.Experience;
+                while (expLeft >= experienceNextLevel)
+                {
+                    // Level up
+                    expLeft -= experienceNextLevel;
+
+                    ++userInfo.Level;
+                    ++lvlsGained;
+
+                    experienceNextLevel = _expCalc.GetRequiredLevelExperience(userInfo.Level);
+                }
+                userInfo.Experience = expLeft;
+
+                totalExpGained += experienceGained;
+            }
+
+            await _context.SaveChangesAsync();
+
+            var userScannedBarcodes = await _context.Barcodes
+                .Where(b => b.UserId == UserId)
+                .CountAsync();
+
+            var userScannedBarcodeFormats = await _context.Barcodes
+                .Select(b => b.Format)
+                .Distinct()
+                .CountAsync();
+
+            userInfo.BarcodesScanned = userScannedBarcodes;
+            userInfo.BarcodeFormatsScanned = userScannedBarcodeFormats;
+
+            _context.UserInfos.Update(userInfo);
+            await _context.SaveChangesAsync();
+
+            if (_userInfoHub != null)
+            {
+                await _userInfoHub.Clients
+                    .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    .SendAsync("Changed", new CurrentResponse()
+                    {
+                        BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
+                        BarcodesScanned = userInfo.BarcodesScanned,
+                        Experience = userInfo.Experience,
+                        IGLink = userInfo.IGLink,
+                        Level = userInfo.Level,
+                        VKLink = userInfo.VKLink,
+                    });
+            }
+
+            // Form response and send back
+            ScannedResponse response = new ScannedResponse()
+            {
+                ExperienceGained = totalExpGained,
+                LevelsGained = lvlsGained,
+                UserExperience = userInfo.Experience,
+                UserLevel = userInfo.Level,
+                UserBarcodesScanned = userScannedBarcodes,
+                UserBarcodeFormatsScanned = userScannedBarcodeFormats,
+            };
+
+            return Ok(response);
+        }
+
+
+        [HttpPost]
         [Route("updated")]
         public async Task<IActionResult> Updated(UpdatedRequest data)
         {
@@ -171,6 +284,42 @@ namespace PVScan.API.Controllers
         }
 
         [HttpPost]
+        [Route("updated-multiple")]
+        public async Task<IActionResult> Updated(List<UpdatedRequest> data)
+        {
+            foreach (var bar in data)
+            {
+                var barcodeFromDB = _context.Barcodes
+                    .Where(b => b.UserId == UserId && b.GUID == bar.GUID)
+                    .FirstOrDefault();
+
+                if (barcodeFromDB == null)
+                {
+                    return NotFound();
+                }
+
+                if (bar.Latitude.HasValue && bar.Longitude.HasValue)
+                {
+                    barcodeFromDB.ScanLocation = new Coordinate()
+                    {
+                        Latitude = bar.Latitude.Value,
+                        Longitude = bar.Longitude.Value
+                    };
+                }
+
+                barcodeFromDB.Favorite = bar.Favorite;
+                barcodeFromDB.LastUpdateTime = bar.LastTimeUpdated;
+                barcodeFromDB.Hash = Barcode.HashOf(barcodeFromDB);
+
+                _context.Barcodes.Update(barcodeFromDB);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new UpdatedResponse() { });
+        }
+
+        [HttpPost]
         [Route("deleted")]
         public async Task<IActionResult> Deleted(DeletedRequest data)
         {
@@ -188,6 +337,63 @@ namespace PVScan.API.Controllers
             }
 
             _context.Barcodes.Remove(barcodeFromDB);
+            await _context.SaveChangesAsync();
+
+            var userScannedBarcodes = await _context.Barcodes
+                .Where(b => b.UserId == UserId)
+                .CountAsync();
+
+            var userScannedBarcodeFormats = await _context.Barcodes
+                .Select(b => b.Format)
+                .Distinct()
+                .CountAsync();
+
+            userInfo.BarcodesScanned = userScannedBarcodes;
+            userInfo.BarcodeFormatsScanned = userScannedBarcodeFormats;
+
+            _context.UserInfos.Update(userInfo);
+            await _context.SaveChangesAsync();
+
+            if (_userInfoHub != null)
+            {
+                await _userInfoHub.Clients
+                    .Groups(User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    .SendAsync("Changed", new CurrentResponse()
+                    {
+                        BarcodeFormatsScanned = userInfo.BarcodeFormatsScanned,
+                        BarcodesScanned = userInfo.BarcodesScanned,
+                        Experience = userInfo.Experience,
+                        IGLink = userInfo.IGLink,
+                        Level = userInfo.Level,
+                        VKLink = userInfo.VKLink,
+                    });
+            }
+
+            return Ok(new DeletedResponse() { });
+        }
+
+        [HttpPost]
+        [Route("deleted-multiple")]
+        public async Task<IActionResult> DeletedMultiple (List<DeletedRequest> data)
+        {
+            var userInfo = await _context.UserInfos
+                .Where(u => u.UserId == UserId)
+                .FirstOrDefaultAsync();
+
+            foreach (var bar in data)
+            {
+                var barcodeFromDB = _context.Barcodes
+                    .Where(b => b.UserId == UserId && b.GUID == bar.GUID)
+                    .FirstOrDefault();
+
+                if (barcodeFromDB == null || userInfo == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Barcodes.Remove(barcodeFromDB);
+            }
+
             await _context.SaveChangesAsync();
 
             var userScannedBarcodes = await _context.Barcodes

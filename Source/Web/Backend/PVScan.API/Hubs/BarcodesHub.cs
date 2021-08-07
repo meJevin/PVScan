@@ -17,6 +17,13 @@ namespace PVScan.API.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, Context.UserIdentifier);
         }
 
+        public async Task ScannedMultiple(List<ScannedRequest> reqs)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.UserIdentifier);
+            await Clients.Group(Context.UserIdentifier).SendAsync("ScannedMultiple", reqs);
+            await Groups.AddToGroupAsync(Context.ConnectionId, Context.UserIdentifier);
+        }
+
         public async Task Deleted(DeletedRequest req)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.UserIdentifier);
@@ -24,10 +31,23 @@ namespace PVScan.API.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, Context.UserIdentifier);
         }
 
+        public async Task DeletedMultiple(List<DeletedRequest> reqs)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.UserIdentifier);
+            await Clients.Group(Context.UserIdentifier).SendAsync("DeletedMultiple", reqs);
+            await Groups.AddToGroupAsync(Context.ConnectionId, Context.UserIdentifier);
+        }
+
         public async Task Updated(UpdatedRequest req)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.UserIdentifier);
             await Clients.Group(Context.UserIdentifier).SendAsync("Updated", req);
+            await Groups.AddToGroupAsync(Context.ConnectionId, Context.UserIdentifier);
+        }
+        public async Task UpdatedMultiple(List<UpdatedRequest> reqs)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.UserIdentifier);
+            await Clients.Group(Context.UserIdentifier).SendAsync("UpdatedMultiple", reqs);
             await Groups.AddToGroupAsync(Context.ConnectionId, Context.UserIdentifier);
         }
 
