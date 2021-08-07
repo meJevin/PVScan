@@ -56,10 +56,13 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             LoadNextPage = new Command(async () =>
             {
-                var newBarcodes = Barcodes.Skip(PageCount * PageSize).Take(PageSize);
+                IsLoading = true;
+
+                var newBarcodes = Barcodes.Skip(BarcodesPaged.Count).Take(PageSize);
 
                 if (newBarcodes.Count() == 0)
                 {
+                    IsLoading = false;
                     return;
                 }
 
@@ -69,6 +72,8 @@ namespace PVScan.Desktop.WPF.ViewModels
                 }
 
                 ++PageCount;
+
+                IsLoading = false;
             });
 
             SearchCommand = new Command(async () =>
@@ -356,6 +361,11 @@ namespace PVScan.Desktop.WPF.ViewModels
                 {
                     Barcodes.Remove(b);
                 }
+            }
+
+            if (BarcodesPaged.Count == 0)
+            {
+                LoadNextPage.Execute(null);
             }
         }
 
