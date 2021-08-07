@@ -269,6 +269,11 @@ namespace PVScan.Mobile.ViewModels
             {
                 await AddBarcodesToUI(e.ToAddLocaly.ToList());
             }
+
+            if (e.ToUpdateLocaly.Count() > 0)
+            {
+                await UpdateBarcodesInUI(e.ToUpdateLocaly.ToList());
+            }
         }
 
         private async Task AddBarcodesToUI(List<Barcode> barcode)
