@@ -92,6 +92,18 @@ namespace PVScan.Desktop.WPF.ViewModels
                     {
                         Barcodes.Clear();
                     }
+                    else if (args.Args.Action == NotifyCollectionChangedAction.Replace)
+                    {
+                        if (args.Args.NewItems.Count == 1 && args.Args.NewItems[0] != null)
+                        {
+                            var toReplace = Barcodes.FirstOrDefault(b => b.GUID == (args.Args.NewItems[0] as Barcode).GUID);
+                            Barcodes[Barcodes.IndexOf(toReplace)] = args.Args.NewItems[0] as Barcode;
+                        }
+                    }
+                    else if (args.Args.Action == NotifyCollectionChangedAction.Move)
+                    {
+
+                    }
                 });
         }
 
