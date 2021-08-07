@@ -167,7 +167,7 @@ namespace PVScan.Desktop.WPF.ViewModels
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
                 {
-                    await BarcodeScanned(args);
+                    await AddBarcodesToUI(new List<Barcode> { args.ScannedBarcode });
                 });
 
             MessagingCenter.Subscribe(this, nameof(FilterAppliedMessage),
@@ -224,12 +224,16 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             _ = LoadBarcodesFromDB();
 
-            Synchronizer.SynchorinizedLocally += Synchronizer_SynchorinizedLocally;
+            Synchronizer.Synchronized += Synchronizer_Synchronized;
         }
 
-        private void Synchronizer_SynchorinizedLocally(object sender, EventArgs e)
+        private async void Synchronizer_Synchronized(object sender, SynchronizeResponse e)
         {
-            _ = LoadBarcodesFromDB();
+            // Update Barcodes, BarcodesPaged
+            if (e.ToAddLocaly.Count() > 0)
+            {
+                await AddBarcodesToUI(e.ToAddLocaly.ToList());
+            }
         }
 
         private void Barcodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -239,39 +243,82 @@ namespace PVScan.Desktop.WPF.ViewModels
                 new HistoryPageBarcodesCollectionChanged() { Args = e });
         }
 
-        private async Task BarcodeScanned(BarcodeScannedMessage args)
+        private async Task AddBarcodesToUI(List<Barcode> barcode)
         {
-            var tempEnumerable = new List<Barcode>() { args.ScannedBarcode };
-
+            var filtered = barcode;
             if (CurrentFilter != null)
             {
-                tempEnumerable = FilterService
-                                    .Filter(tempEnumerable, CurrentFilter)
+                filtered = FilterService
+                                    .Filter(filtered, CurrentFilter)
                                     .ToList();
             }
 
             if (!String.IsNullOrEmpty(Search))
             {
-                tempEnumerable = FilterService
-                                    .Search(tempEnumerable, Search)
+                filtered = FilterService
+                                    .Search(filtered, Search)
                                     .ToList();
             }
 
-            var result = tempEnumerable.FirstOrDefault();
-            if (result != null)
+            if (filtered.Any())
             {
-                var tempList = Barcodes.ToList();
-                tempList.Add(result);
-
-                var newListSorted = (await SorterService.Sort(tempList, CurrentSorting)).ToList();
-
-                var insertedIndex = newListSorted.IndexOf(result);
-
-                Barcodes.Insert(insertedIndex, result);
-                int lastPagedIndex = BarcodesPaged.Count;
-                if (insertedIndex <= lastPagedIndex)
+                var merged = Barcodes.ToList();
+                foreach (var b in filtered)
                 {
-                    BarcodesPaged.Insert(insertedIndex, result);
+                    merged.Add(b);
+                }
+
+
+                var mergedSorted = (await SorterService.Sort(merged, CurrentSorting)).ToList();
+
+                foreach (var b in filtered)
+                {
+                    var mergedIndex = mergedSorted.IndexOf(b);
+
+                    var lowerBarcodeIndex = mergedIndex + 1;
+                    while (lowerBarcodeIndex < mergedSorted.Count - 1)
+                    {
+                        var foundInOriginal = Barcodes.FirstOrDefault(b => b.GUID == mergedSorted[lowerBarcodeIndex].GUID);
+                        if (foundInOriginal != null)
+                        {
+                            lowerBarcodeIndex = Barcodes.IndexOf(foundInOriginal);
+                            break;
+                        }
+
+                        ++lowerBarcodeIndex;
+                    }
+
+                    var upperBarcodeIndex = mergedIndex - 1;
+                    while (upperBarcodeIndex > 0)
+                    {
+                        var foundInOriginal = Barcodes.FirstOrDefault(b => b.GUID == mergedSorted[upperBarcodeIndex].GUID);
+                        if (foundInOriginal != null)
+                        {
+                            upperBarcodeIndex = Barcodes.IndexOf(foundInOriginal);
+                            break;
+                        }
+
+                        --upperBarcodeIndex;
+                    }
+
+                    var resultIndex = lowerBarcodeIndex;
+                    if (upperBarcodeIndex < 0)
+                    {
+                        // Very top
+                        resultIndex = 0;
+                    }
+                    else if (lowerBarcodeIndex > mergedSorted.Count - 1)
+                    {
+                        // Very bottom
+                        resultIndex = Barcodes.Count - 1;
+                    }
+
+                    Barcodes.Insert(resultIndex, b);
+                    int lastPagedIndex = BarcodesPaged.Count;
+                    if (resultIndex <= lastPagedIndex)
+                    {
+                        BarcodesPaged.Insert(resultIndex, b);
+                    }
                 }
             }
         }
@@ -371,10 +418,7 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             newBarcode = await BarcodesRepository.Save(newBarcode);
 
-            await Application.Current.Dispatcher.InvokeAsync(async () =>
-            {
-                await BarcodeScanned(new BarcodeScannedMessage() { ScannedBarcode = newBarcode });
-            });
+            await AddBarcodesToUI(new List<Barcode> { newBarcode });
         }
 
         private async void BarcodeHub_OnUpdatedMultiple(object sender, List<UpdatedBarcodeRequest> e)
@@ -495,14 +539,7 @@ namespace PVScan.Desktop.WPF.ViewModels
             }
 
             await BarcodesRepository.Save(toSave);
-
-            await Application.Current.Dispatcher.InvokeAsync(async () =>
-            {
-                foreach (var b in toSave)
-                {
-                    await BarcodeScanned(new BarcodeScannedMessage() { ScannedBarcode = b });
-                }
-            });
+            await AddBarcodesToUI(toSave);
         }
 
         public async Task LoadBarcodesFromDB()
