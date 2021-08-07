@@ -132,6 +132,11 @@ namespace PVScan.Mobile.ViewModels
             {
                 IsRefreshing = true;
 
+                if (IdentityService.AccessToken == null)
+                {
+                    await IdentityService.Initialize();
+                }
+
                 await Initialize();
 
                 IsRefreshing = false;
