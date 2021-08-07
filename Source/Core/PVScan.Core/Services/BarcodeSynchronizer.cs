@@ -29,7 +29,7 @@ namespace PVScan.Core.Services
             BarcodeHub = barcodeHub;
         }
 
-        public event EventHandler SynchorinizedLocally;
+        public event EventHandler<SynchronizeResponse> Synchronized;
 
         public async Task Synchronize()
         {
@@ -156,10 +156,7 @@ namespace PVScan.Core.Services
 
             _isSyncing = false;
 
-            if (result.ToAddLocaly.Count() > 0 || result.ToUpdateLocaly.Count() > 0)
-            {
-                SynchorinizedLocally?.Invoke(this, new EventArgs());
-            }
+            Synchronized?.Invoke(this, result);
         }
     }
 }
