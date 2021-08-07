@@ -391,7 +391,7 @@ namespace PVScan.Mobile.ViewModels
 
                     if (Device.RuntimePlatform == Device.iOS)
                     {
-                        BarcodesPaged[indx] = barcode;
+                        Barcodes[indx] = barcode;
                     }
                     else
                     {
