@@ -17,6 +17,9 @@ namespace PVScan.Core.Services
         public event EventHandler<ScannedBarcodeRequest> OnScanned;
         public event EventHandler<DeletedBarcodeRequest> OnDeleted;
         public event EventHandler<UpdatedBarcodeRequest> OnUpdated;
+        public event EventHandler<List<ScannedBarcodeRequest>> OnScannedMultiple;
+        public event EventHandler<List<DeletedBarcodeRequest>> OnDeletedMultiple;
+        public event EventHandler<List<UpdatedBarcodeRequest>> OnUpdatedMultple;
 
         private HubConnection connection;
 
@@ -72,6 +75,18 @@ namespace PVScan.Core.Services
             connection.On<UpdatedBarcodeRequest>("Updated", (req) =>
             {
                 OnUpdated?.Invoke(this, req);
+            });
+            connection.On<List<ScannedBarcodeRequest>>("Scanned", (req) =>
+            {
+                OnScannedMultiple?.Invoke(this, req);
+            });
+            connection.On<List<DeletedBarcodeRequest>>("Deleted", (req) =>
+            {
+                OnDeletedMultiple?.Invoke(this, req);
+            });
+            connection.On<List<UpdatedBarcodeRequest>>("Updated", (req) =>
+            {
+                OnUpdatedMultple?.Invoke(this, req);
             });
 
             connection.Closed += Connection_Closed;
@@ -148,6 +163,36 @@ namespace PVScan.Core.Services
 
             // Todo: this could be Invoke
             await connection.SendAsync("Updated", req);
+        }
+
+        public async Task ScannedMultiple(List<ScannedBarcodeRequest> reqs)
+        {
+            if (connection.State != HubConnectionState.Connected)
+            {
+                return;
+            }
+
+            await connection.SendAsync("ScannedMultiple", reqs);
+        }
+
+        public async Task DeletedMultiple(List<DeletedBarcodeRequest> reqs)
+        {
+            if (connection.State != HubConnectionState.Connected)
+            {
+                return;
+            }
+
+            await connection.SendAsync("DeletedMultple", reqs);
+        }
+
+        public async Task UpdatedMultiple(List<UpdatedBarcodeRequest> reqs)
+        {
+            if (connection.State != HubConnectionState.Connected)
+            {
+                return;
+            }
+
+            await connection.SendAsync("UpdatedMultiple", reqs);
         }
     }
 }
