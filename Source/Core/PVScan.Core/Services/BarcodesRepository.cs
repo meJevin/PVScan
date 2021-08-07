@@ -24,77 +24,82 @@ namespace PVScan.Core.Services
             // For batch deletions..
             _context.Barcodes.Remove(barcode);
 
-            await Task.Run(async () =>
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Delete(IEnumerable<Barcode> barcodes)
+        {
+            foreach (var b in barcodes)
             {
-                await _context.SaveChangesAsync();
-            });
+                _context.Barcodes.Remove(b);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Barcode> FindByGUID(string GUID)
         {
-            return await Task.Run(async () =>
-            {
-                var result = await _context.Barcodes
-                    .Where(b => b.GUID == GUID)
-                    .FirstOrDefaultAsync();
+            var result = await _context.Barcodes
+                .Where(b => b.GUID == GUID)
+                .FirstOrDefaultAsync();
 
-                return result;
-            });
+            return result;
+        }
+
+        public async Task<IEnumerable<Barcode>> FindByGUID(IEnumerable<string> GUIDs)
+        {
+            var found = await _context.Barcodes
+                    .Where(b => GUIDs.Contains(b.GUID))
+                    .ToListAsync();
+
+            return found;
         }
 
         public async Task<IEnumerable<Barcode>> GetAll()
         {
-            return _context.Barcodes.AsQueryable();
+            var ret = await _context.Barcodes.ToListAsync();
+
+            return ret;
         }
 
         public async Task<Barcode> Save(Barcode barcode)
         {
-            if (string.IsNullOrEmpty(barcode.GUID))
-            {
-                barcode.GUID = Guid.NewGuid().ToString();
-            }
+            SoftSave(barcode);
 
-            barcode.Hash = Barcode.HashOf(barcode);
-            barcode.LastUpdateTime = DateTime.UtcNow;
-
-            // Todo: these truncations probably don't belong in the repository
-
-            // Precision up to milliseconds
-            var lastUpdateMillisec = barcode.LastUpdateTime.Millisecond;
-            var scanTimeMillisec = barcode.ScanTime.Millisecond;
-
-            barcode.LastUpdateTime
-                = barcode.LastUpdateTime.AddTicks(-(barcode.LastUpdateTime.Ticks % TimeSpan.TicksPerSecond));
-            barcode.ScanTime
-                = barcode.ScanTime.AddTicks(-(barcode.ScanTime.Ticks % TimeSpan.TicksPerSecond));
-
-            barcode.LastUpdateTime
-                = barcode.LastUpdateTime.Add(TimeSpan.FromMilliseconds(lastUpdateMillisec));
-            barcode.ScanTime
-                = barcode.ScanTime.Add(TimeSpan.FromMilliseconds(scanTimeMillisec));
-
-            // Keep 6 decimal places on location
-            if (barcode.ScanLocation != null)
-            {
-                barcode.ScanLocation.Latitude 
-                    = Math.Truncate(barcode.ScanLocation.Latitude.Value * 1e6) / 1e6;
-                barcode.ScanLocation.Longitude
-                    = Math.Truncate(barcode.ScanLocation.Longitude.Value * 1e6) / 1e6;
-            }
-
-            _context.Barcodes.Add(barcode);
-
-            await Task.Run(async () =>
-            {
-                await _context.SaveChangesAsync();
-            });
+            await _context.SaveChangesAsync();
 
             return barcode;
         }
 
+        public async Task Save(IEnumerable<Barcode> barcodes)
+        {
+            foreach (var b in barcodes)
+            {
+                SoftSave(b);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task Update(Barcode barcode)
         {
-            barcode.Hash = Barcode.HashOf(barcode);
+            SoftUpdate(barcode);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Update(IEnumerable<Barcode> barcodes)
+        {
+            foreach (var b in barcodes)
+            {
+                SoftUpdate(b);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        private void SoftUpdate(Barcode barcode)
+        {
             barcode.LastUpdateTime = DateTime.UtcNow;
 
             // Precision up to milliseconds
@@ -120,11 +125,48 @@ namespace PVScan.Core.Services
                     = Math.Truncate(barcode.ScanLocation.Longitude.Value * 1e6) / 1e6;
             }
 
+            barcode.Hash = Barcode.HashOf(barcode);
             _context.Barcodes.Update(barcode);
-            await Task.Run(async () =>
+        }
+
+        private Barcode SoftSave(Barcode barcode)
+        {
+            if (string.IsNullOrEmpty(barcode.GUID))
             {
-                await _context.SaveChangesAsync();
-            });
+                barcode.GUID = Guid.NewGuid().ToString();
+            }
+
+            barcode.LastUpdateTime = DateTime.UtcNow;
+
+            // Todo: these truncations probably don't belong in the repository
+
+            // Precision up to milliseconds
+            var lastUpdateMillisec = barcode.LastUpdateTime.Millisecond;
+            var scanTimeMillisec = barcode.ScanTime.Millisecond;
+
+            barcode.LastUpdateTime
+                = barcode.LastUpdateTime.AddTicks(-(barcode.LastUpdateTime.Ticks % TimeSpan.TicksPerSecond));
+            barcode.ScanTime
+                = barcode.ScanTime.AddTicks(-(barcode.ScanTime.Ticks % TimeSpan.TicksPerSecond));
+
+            barcode.LastUpdateTime
+                = barcode.LastUpdateTime.Add(TimeSpan.FromMilliseconds(lastUpdateMillisec));
+            barcode.ScanTime
+                = barcode.ScanTime.Add(TimeSpan.FromMilliseconds(scanTimeMillisec));
+
+            // Keep 6 decimal places on location
+            if (barcode.ScanLocation != null)
+            {
+                barcode.ScanLocation.Latitude
+                    = Math.Truncate(barcode.ScanLocation.Latitude.Value * 1e6) / 1e6;
+                barcode.ScanLocation.Longitude
+                    = Math.Truncate(barcode.ScanLocation.Longitude.Value * 1e6) / 1e6;
+            }
+
+            barcode.Hash = Barcode.HashOf(barcode);
+            _context.Barcodes.Add(barcode);
+
+            return barcode;
         }
     }
 }
