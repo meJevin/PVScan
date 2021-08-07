@@ -54,6 +54,12 @@ namespace PVScan.Desktop.WPF.Views
                     Map.FlyTo(new GeoLocation(loc.Latitude.Value, loc.Longitude.Value), 12);
                 });
 
+            MessagingCenter.Subscribe(this, nameof(LocationSpecifiedMessage),
+                async (MapPageViewModel vm, LocationSpecifiedMessage args) =>
+                {
+                    await AddPoint(args.Barcode);
+                });
+
             LocationSpecificationContainer.IsHitTestVisible = false;
             _ = LocationSpecificationContainer.FadeTo(0, Animations.DefaultDuration);
         }
