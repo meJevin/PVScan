@@ -36,8 +36,9 @@ namespace PVScan.API.Controllers
         public async Task<IActionResult> Synchronize(SynchronizeRequest req)
         {
             // Todo: This will be really slow with large amounts of barcodes
-            var serverBarcodes = _context.Barcodes.ToList();
-
+            var serverBarcodes = _context.Barcodes
+                .Where(b => b.UserId == UserId)
+                .ToList();
             var toUpdateLocaly = serverBarcodes
                 .Where(b => req.LocalBarcodeInfos
                     .Any(item => item.GUID == b.GUID && item.Hash != b.Hash && item.LastTimeUpdated < b.LastUpdateTime));
