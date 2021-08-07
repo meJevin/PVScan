@@ -54,8 +54,16 @@ namespace PVScan.Desktop.WPF.Views
                     Map.FlyTo(new GeoLocation(loc.Latitude.Value, loc.Longitude.Value), 12);
                 });
 
+            // When we localy specify a location
             MessagingCenter.Subscribe(this, nameof(LocationSpecifiedMessage),
                 async (MapPageViewModel vm, LocationSpecifiedMessage args) =>
+                {
+                    await AddPoint(args.Barcode);
+                });
+
+            // When location is specified for a barcode remotely
+            MessagingCenter.Subscribe(this, nameof(LocationSpecifiedMessage),
+                async (HistoryPageViewModel vm, LocationSpecifiedMessage args) =>
                 {
                     await AddPoint(args.Barcode);
                 });

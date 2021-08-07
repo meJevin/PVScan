@@ -285,10 +285,13 @@ namespace PVScan.Desktop.WPF.ViewModels
 
                     Barcodes.Insert(resultIndex, b);
                     int lastPagedIndex = BarcodesPaged.Count;
-                    if (resultIndex <= lastPagedIndex &&
-                        BarcodesPaged.Count < (PageSize * PageCount))
+                    if (resultIndex <= lastPagedIndex)
                     {
                         BarcodesPaged.Insert(resultIndex, b);
+                        if (BarcodesPaged.Count > (PageSize * PageCount))
+                        {
+                            BarcodesPaged.RemoveAt(BarcodesPaged.Count - 1);
+                        }
                     }
                 }
             }
@@ -301,6 +304,27 @@ namespace PVScan.Desktop.WPF.ViewModels
                 var bPaged = BarcodesPaged.FirstOrDefault(b => b.GUID == barcode.GUID);
                 var b = Barcodes.FirstOrDefault(b => b.GUID == barcode.GUID);
 
+                bool locationSpecified = false;
+
+                if (b != null)
+                {
+                    var indx = Barcodes.IndexOf(b);
+
+                    // Check if location was specified
+                    if (Barcodes[indx].ScanLocation != null)
+                    {
+                        locationSpecified = false;
+                    }
+                    else if (Barcodes[indx].ScanLocation == null &&
+                        barcode.ScanLocation != null)
+                    {
+                        locationSpecified = true;
+                    }
+
+                    Barcodes[indx] = null;
+                    Barcodes[indx] = barcode;
+                }
+
                 if (bPaged != null)
                 {
                     var indxPaged = BarcodesPaged.IndexOf(bPaged);
@@ -308,11 +332,10 @@ namespace PVScan.Desktop.WPF.ViewModels
                     BarcodesPaged[indxPaged] = barcode;
                 }
 
-                if (b != null)
+                if (locationSpecified)
                 {
-                    var indx = Barcodes.IndexOf(b);
-                    Barcodes[indx] = null;
-                    Barcodes[indx] = barcode;
+                    MessagingCenter.Send(this, nameof(LocationSpecifiedMessage),
+                        new LocationSpecifiedMessage() { Barcode = barcode });
                 }
             }
         }
@@ -357,7 +380,10 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             await BarcodesRepository.Update(barcode);
 
-            await UpdateBarcodesInUI(new List<Barcode> { barcode });
+            await App.Current.Dispatcher.Invoke(async () =>
+            {
+                await UpdateBarcodesInUI(new List<Barcode> { barcode });
+            });
         }
 
         private async void BarcodeHub_OnDeleted(object sender, DeletedBarcodeRequest req)
@@ -370,7 +396,11 @@ namespace PVScan.Desktop.WPF.ViewModels
             }
 
             await BarcodesRepository.Delete(barcode);
-            await DeleteBarcodesFromUI(new List<Barcode> { barcode });
+
+            await App.Current.Dispatcher.Invoke(async () =>
+            {
+                await DeleteBarcodesFromUI(new List<Barcode> { barcode });
+            });
         }
 
         private async void BarcodeHub_OnScanned(object sender, ScannedBarcodeRequest b)
@@ -398,7 +428,10 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             newBarcode = await BarcodesRepository.Save(newBarcode);
 
-            await AddBarcodesToUI(new List<Barcode> { newBarcode });
+            await App.Current.Dispatcher.Invoke(async () =>
+            {
+                await AddBarcodesToUI(new List<Barcode> { newBarcode });
+            });
         }
 
         private async void BarcodeHub_OnUpdatedMultiple(object sender, List<UpdatedBarcodeRequest> e)
@@ -427,7 +460,11 @@ namespace PVScan.Desktop.WPF.ViewModels
             }
 
             await BarcodesRepository.Update(toUpdate);
-            await UpdateBarcodesInUI(toUpdate);
+
+            await App.Current.Dispatcher.Invoke(async () =>
+            {
+                await UpdateBarcodesInUI(toUpdate);
+            });
         }
 
         private async void BarcodeHub_OnDeletedMultiple(object sender, List<DeletedBarcodeRequest> e)
@@ -446,7 +483,11 @@ namespace PVScan.Desktop.WPF.ViewModels
             }
 
             await BarcodesRepository.Delete(toDelete);
-            await DeleteBarcodesFromUI(toDelete);
+
+            await App.Current.Dispatcher.Invoke(async () =>
+            {
+                await DeleteBarcodesFromUI(toDelete);
+            });
         }
 
         private async void BarcodeHub_OnScannedMultiple(object sender, List<ScannedBarcodeRequest> e)
@@ -479,7 +520,11 @@ namespace PVScan.Desktop.WPF.ViewModels
             }
 
             await BarcodesRepository.Save(toSave);
-            await AddBarcodesToUI(toSave);
+
+            await App.Current.Dispatcher.Invoke(async () =>
+            {
+                await AddBarcodesToUI(toSave);
+            });
         }
 
         public async Task LoadBarcodesFromDB()
