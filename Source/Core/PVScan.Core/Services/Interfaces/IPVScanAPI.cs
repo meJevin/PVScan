@@ -13,8 +13,11 @@ namespace PVScan.Core.Services.Interfaces
         Task<ChangeUserInfoResponse> ChangeUserInfo(ChangeUserInfoRequest req);
 
         Task<ScannedBarcodeResponse> ScannedBarcode(ScannedBarcodeRequest req);
+        Task<ScannedBarcodeResponse> ScannedBarcodeMultiple(List<ScannedBarcodeRequest> reqs);
         Task<UpdatedBarcodeResponse> UpdatedBarcode(UpdatedBarcodeRequest req);
+        Task<UpdatedBarcodeResponse> UpdatedBarcodeMultiple(List<UpdatedBarcodeRequest> reqs);
         Task<DeletedBarcodeRequest> DeletedBarcode(DeletedBarcodeRequest req);
+        Task<DeletedBarcodeRequest> DeletedBarcodeMultiple(List<DeletedBarcodeRequest> reqs);
 
         Task<SynchronizeResponse> Synchronize(SynchronizeRequest req);
     }

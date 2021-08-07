@@ -87,7 +87,6 @@ namespace PVScan.Core.Services
             }
         }
 
-
         public async Task<ScannedBarcodeResponse> ScannedBarcode(ScannedBarcodeRequest req)
         {
             if (IdentityService.AccessToken == null)
@@ -218,6 +217,111 @@ namespace PVScan.Core.Services
 
                 var responseText = await apiResponse.Content.ReadAsStringAsync();
                 var responseObject = JsonConvert.DeserializeObject<SynchronizeResponse>(responseText);
+
+                return responseObject;
+            }
+            catch
+            {
+                // Could also throw a meaningful exception :)
+                return null;
+            }
+        }
+
+        public async Task<ScannedBarcodeResponse> ScannedBarcodeMultiple(List<ScannedBarcodeRequest> reqs)
+        {
+            if (IdentityService.AccessToken == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
+
+                var contentToSend = new StringContent(JsonConvert.SerializeObject(reqs), Encoding.UTF8, "application/json");
+
+                var apiResponse = await httpClient
+                    .PostAsync("api/v1/barcodes/scanned-multiple", contentToSend)
+                    .WithTimeout(DataAccess.WebRequestTimeout);
+
+                if (!apiResponse.IsSuccessStatusCode)
+                {
+                    // Could also throw an exception :)
+                    return null;
+                }
+
+                var responseText = await apiResponse.Content.ReadAsStringAsync();
+                var responseObject = JsonConvert.DeserializeObject<ScannedBarcodeResponse>(responseText);
+
+                return responseObject;
+            }
+            catch
+            {
+                // Could also throw a meaningful exception :)
+                return null;
+            }
+        }
+
+        public async Task<UpdatedBarcodeResponse> UpdatedBarcodeMultiple(List<UpdatedBarcodeRequest> reqs)
+        {
+            if (IdentityService.AccessToken == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
+
+                var contentToSend = new StringContent(JsonConvert.SerializeObject(reqs), Encoding.UTF8, "application/json");
+
+                var apiResponse = await httpClient
+                    .PostAsync("api/v1/barcodes/updated", contentToSend)
+                    .WithTimeout(DataAccess.WebRequestTimeout);
+
+                if (!apiResponse.IsSuccessStatusCode)
+                {
+                    // Could also throw an exception :)
+                    return null;
+                }
+
+                var responseText = await apiResponse.Content.ReadAsStringAsync();
+                var responseObject = JsonConvert.DeserializeObject<UpdatedBarcodeResponse>(responseText);
+
+                return responseObject;
+            }
+            catch
+            {
+                // Could also throw a meaningful exception :)
+                return null;
+            }
+        }
+
+        public async Task<DeletedBarcodeRequest> DeletedBarcodeMultiple(List<DeletedBarcodeRequest> reqs)
+        {
+            if (IdentityService.AccessToken == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                HttpClient httpClient = HttpClientFactory.ForAPI(IdentityService.AccessToken);
+
+                var contentToSend = new StringContent(JsonConvert.SerializeObject(reqs), Encoding.UTF8, "application/json");
+
+                var apiResponse = await httpClient
+                    .PostAsync("api/v1/barcodes/deleted", contentToSend)
+                    .WithTimeout(DataAccess.WebRequestTimeout);
+
+                if (!apiResponse.IsSuccessStatusCode)
+                {
+                    // Could also throw an exception :)
+                    return null;
+                }
+
+                var responseText = await apiResponse.Content.ReadAsStringAsync();
+                var responseObject = JsonConvert.DeserializeObject<DeletedBarcodeRequest>(responseText);
 
                 return responseObject;
             }
