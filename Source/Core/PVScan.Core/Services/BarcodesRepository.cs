@@ -12,34 +12,36 @@ namespace PVScan.Core.Services
 {
     public class BarcodesRepository : IBarcodesRepository
     {
-        readonly PVScanDbContext _context;
+        readonly IPVScanDbContextFactory ContextFactory;
+        readonly PVScanDbContext SharedContext;
 
-        public BarcodesRepository(PVScanDbContext ctx)
+        public BarcodesRepository(IPVScanDbContextFactory fac)
         {
-            _context = ctx;
+            ContextFactory = fac;
+            SharedContext = fac.Get();
         }
 
         public async Task Delete(Barcode barcode)
         {
             // For batch deletions..
-            _context.Barcodes.Remove(barcode);
+            SharedContext.Barcodes.Remove(barcode);
 
-            await _context.SaveChangesAsync();
+            await SharedContext.SaveChangesAsync();
         }
 
         public async Task Delete(IEnumerable<Barcode> barcodes)
         {
             foreach (var b in barcodes)
             {
-                _context.Barcodes.Remove(b);
+                SharedContext.Barcodes.Remove(b);
             }
 
-            await _context.SaveChangesAsync();
+            await SharedContext.SaveChangesAsync();
         }
 
         public async Task<Barcode> FindByGUID(string GUID)
         {
-            var result = await _context.Barcodes
+            var result = await SharedContext.Barcodes
                 .Where(b => b.GUID == GUID)
                 .FirstOrDefaultAsync();
 
@@ -48,7 +50,7 @@ namespace PVScan.Core.Services
 
         public async Task<IEnumerable<Barcode>> FindByGUID(IEnumerable<string> GUIDs)
         {
-            var found = await _context.Barcodes
+            var found = await SharedContext.Barcodes
                     .Where(b => GUIDs.Contains(b.GUID))
                     .ToListAsync();
 
@@ -57,8 +59,8 @@ namespace PVScan.Core.Services
 
         public async Task<IEnumerable<Barcode>> GetAll()
         {
-            var ret = await _context.Barcodes.ToListAsync();
-
+            var ret = await SharedContext.Barcodes.ToListAsync();
+            SharedContext.ChangeTracker.Clear();
             return ret;
         }
 
@@ -66,7 +68,7 @@ namespace PVScan.Core.Services
         {
             SoftSave(barcode);
 
-            await _context.SaveChangesAsync();
+            await SharedContext.SaveChangesAsync();
 
             return barcode;
         }
@@ -78,14 +80,14 @@ namespace PVScan.Core.Services
                 SoftSave(b);
             }
 
-            await _context.SaveChangesAsync();
+            await SharedContext.SaveChangesAsync();
         }
 
         public async Task Update(Barcode barcode)
         {
             SoftUpdate(barcode);
 
-            await _context.SaveChangesAsync();
+            await SharedContext.SaveChangesAsync();
         }
 
         public async Task Update(IEnumerable<Barcode> barcodes)
@@ -95,7 +97,7 @@ namespace PVScan.Core.Services
                 SoftUpdate(b);
             }
 
-            await _context.SaveChangesAsync();
+            await SharedContext.SaveChangesAsync();
         }
 
         private void SoftUpdate(Barcode barcode)
@@ -125,8 +127,10 @@ namespace PVScan.Core.Services
                     = Math.Truncate(barcode.ScanLocation.Longitude.Value * 1e6) / 1e6;
             }
 
+            SharedContext.ChangeTracker.Clear();
+
             barcode.Hash = Barcode.HashOf(barcode);
-            _context.Barcodes.Update(barcode);
+            SharedContext.Barcodes.Update(barcode);
         }
 
         private Barcode SoftSave(Barcode barcode)
@@ -164,7 +168,7 @@ namespace PVScan.Core.Services
             }
 
             barcode.Hash = Barcode.HashOf(barcode);
-            _context.Barcodes.Add(barcode);
+            SharedContext.Barcodes.Add(barcode);
 
             return barcode;
         }
