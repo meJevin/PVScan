@@ -8,6 +8,7 @@ using Xamarin.Forms;
 
 namespace PVScan.Mobile.ViewModels
 {
+    // VM NOT USED
     public class MainPageViewModel : BaseViewModel
     {
         readonly IBarcodeSynchronizer Synchronizer;
