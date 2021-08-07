@@ -164,8 +164,17 @@ namespace PVScan.Mobile.ViewModels
                 return;
             }
 
+            if (req.Longitude.HasValue && req.Latitude.HasValue)
+            {
+                localBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = req.Latitude,
+                    Longitude = req.Longitude,
+                };
+            }
+            localBarcode.Favorite = req.Favorite;
+
             SelectedBarcode = null;
-            await Task.Delay(5);
             SelectedBarcode = localBarcode;
         }
 
@@ -187,8 +196,17 @@ namespace PVScan.Mobile.ViewModels
                 return;
             }
 
+            if (found.Longitude.HasValue && found.Latitude.HasValue)
+            {
+                localBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = found.Latitude,
+                    Longitude = found.Longitude,
+                };
+            }
+            localBarcode.Favorite = found.Favorite;
+
             SelectedBarcode = null;
-            await Task.Delay(5);
             SelectedBarcode = localBarcode;
         }
 
@@ -198,12 +216,12 @@ namespace PVScan.Mobile.ViewModels
 
             var found = e.FirstOrDefault(d => d.GUID == SelectedBarcode.GUID);
 
-            if (found == null)
+            if (SelectedBarcode == null ||
+                found == null)
             {
                 return;
             }
 
-            // Why is this here?
             var localBarcode = await BarcodesRepository.FindByGUID(found.GUID);
 
             if (localBarcode == null)
@@ -224,7 +242,6 @@ namespace PVScan.Mobile.ViewModels
                 return;
             }
 
-            // Why is this here?
             var localBarcode = await BarcodesRepository.FindByGUID(e.GUID);
 
             if (localBarcode == null)

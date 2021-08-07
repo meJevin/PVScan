@@ -32,7 +32,6 @@ namespace PVScan.Desktop.WPF.ViewModels
                     if (SelectedBarcode == args.Barcode)
                     {
                         SelectedBarcode = null;
-                        await Task.Delay(5);
                         SelectedBarcode = args.Barcode;
                     }
                 });
@@ -64,8 +63,17 @@ namespace PVScan.Desktop.WPF.ViewModels
                 return;
             }
 
+            if (req.Longitude.HasValue && req.Latitude.HasValue)
+            {
+                localBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = req.Latitude,
+                    Longitude = req.Longitude,
+                };
+            }
+            localBarcode.Favorite = req.Favorite;
+
             SelectedBarcode = null;
-            await Task.Delay(5);
             SelectedBarcode = localBarcode;
         }
         private async void BarcodeHub_OnUpdatedMultple(object sender, List<UpdatedBarcodeRequest> e)
@@ -86,8 +94,17 @@ namespace PVScan.Desktop.WPF.ViewModels
                 return;
             }
 
+            if (found.Longitude.HasValue && found.Latitude.HasValue)
+            {
+                localBarcode.ScanLocation = new Coordinate()
+                {
+                    Latitude = found.Latitude,
+                    Longitude = found.Longitude,
+                };
+            }
+            localBarcode.Favorite = found.Favorite;
+
             SelectedBarcode = null;
-            await Task.Delay(5);
             SelectedBarcode = localBarcode;
         }
 
