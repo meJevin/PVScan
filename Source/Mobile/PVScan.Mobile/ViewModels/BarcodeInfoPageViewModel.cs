@@ -11,6 +11,9 @@ using Xamarin.Forms.Svg;
 using PVScan.Mobile.Services.Interfaces;
 using PVScan.Core;
 using PVScan.Core.Models.API;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PVScan.Mobile.ViewModels
 {
@@ -134,12 +137,83 @@ namespace PVScan.Mobile.ViewModels
                 //await PopupMessageService.ShowMessage("Saved barcode image to gallery");
             });
 
+            BarcodeHub.OnUpdated += BarcodeHub_OnUpdated;
+            BarcodeHub.OnUpdatedMultple += BarcodeHub_OnUpdatedMultple;
+
             BarcodeHub.OnDeleted += BarcodeHub_OnDeleted;
+            BarcodeHub.OnDeletedMultiple += BarcodeHub_OnDeletedMultiple;
 
             CloseCommand = new Command(() =>
             {
                 Closed?.Invoke(this, new EventArgs());
             });
+        }
+        
+        private async void BarcodeHub_OnUpdated(object sender, UpdatedBarcodeRequest req)
+        {
+            if (SelectedBarcode == null ||
+                req.GUID != SelectedBarcode.GUID)
+            {
+                return;
+            }
+
+            var localBarcode = await BarcodesRepository.FindByGUID(req.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            SelectedBarcode = null;
+            await Task.Delay(5);
+            SelectedBarcode = localBarcode;
+        }
+
+        private async void BarcodeHub_OnUpdatedMultple(object sender, List<UpdatedBarcodeRequest> e)
+        {
+            if (SelectedBarcode == null) return;
+
+            var found = e.FirstOrDefault(d => d.GUID == SelectedBarcode.GUID);
+
+            if (found == null)
+            {
+                return;
+            }
+
+            var localBarcode = await BarcodesRepository.FindByGUID(found.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            SelectedBarcode = null;
+            await Task.Delay(5);
+            SelectedBarcode = localBarcode;
+        }
+
+        private async void BarcodeHub_OnDeletedMultiple(object sender, List<DeletedBarcodeRequest> e)
+        {
+            if (SelectedBarcode == null) return;
+
+            var found = e.FirstOrDefault(d => d.GUID == SelectedBarcode.GUID);
+
+            if (found == null)
+            {
+                return;
+            }
+
+            // Why is this here?
+            var localBarcode = await BarcodesRepository.FindByGUID(found.GUID);
+
+            if (localBarcode == null)
+            {
+                return;
+            }
+
+            SelectedBarcode = null;
+
+            Closed?.Invoke(this, new EventArgs());
         }
 
         private async void BarcodeHub_OnDeleted(object sender, DeletedBarcodeRequest e)
@@ -150,6 +224,7 @@ namespace PVScan.Mobile.ViewModels
                 return;
             }
 
+            // Why is this here?
             var localBarcode = await BarcodesRepository.FindByGUID(e.GUID);
 
             if (localBarcode == null)

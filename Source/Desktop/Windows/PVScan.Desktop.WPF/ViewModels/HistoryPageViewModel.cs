@@ -46,9 +46,13 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             SelectedBarcodes = new ObservableCollection<Barcode>();
 
+            BarcodeHub.OnScanned += BarcodeHub_OnScanned;
             BarcodeHub.OnDeleted += BarcodeHub_OnDeleted;
             BarcodeHub.OnUpdated += BarcodeHub_OnUpdated;
-            BarcodeHub.OnScanned += BarcodeHub_OnScanned;
+
+            BarcodeHub.OnScannedMultiple += BarcodeHub_OnScannedMultiple;
+            BarcodeHub.OnDeletedMultiple += BarcodeHub_OnDeletedMultiple;
+            BarcodeHub.OnUpdatedMultple += BarcodeHub_OnUpdatedMultiple;
 
             LoadNextPage = new Command(async () =>
             {
@@ -128,44 +132,34 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             DeleteSelectedBarcodesCommand = new Command(async () =>
             {
-                var selectedGUIDS = new List<string>();
-
-                foreach (var b in SelectedBarcodes)
+                var sb = SelectedBarcodes.Select(b => b).ToList();
+                var toDeleteOnServer = new List<DeletedBarcodeRequest>();
+                foreach (var b in sb)
                 {
-                    selectedGUIDS.Add(b.GUID);
-                }
-
-                foreach (var guid in selectedGUIDS)
-                {
-                    var barcode = Barcodes.FirstOrDefault(b => { if (b == null) return false; return b.GUID == guid; });
-
-                    await barcodesRepository.Delete(barcode);
+                    Barcodes.Remove(b);
+                    BarcodesPaged.Remove(b);
 
                     MessagingCenter.Send(this, nameof(BarcodeDeletedMessage),
-                        new BarcodeDeletedMessage() { DeletedBarcode = barcode });
+                        new BarcodeDeletedMessage() { DeletedBarcode = b });
 
-                    if (Barcodes.Contains(barcode))
+                    toDeleteOnServer.Add(new DeletedBarcodeRequest()
                     {
-                        Barcodes.Remove(barcode);
-                    }
-
-                    if (BarcodesPaged.Contains(barcode))
-                    {
-                        BarcodesPaged.Remove(barcode);
-                    }
-
-                    var req = new DeletedBarcodeRequest()
-                    {
-                        GUID = barcode.GUID,
-                    };
-
-                    if (await PVScanAPI.DeletedBarcode(req) != null)
-                    {
-                        await BarcodeHub.Deleted(req);
-                    }
+                        GUID = b.GUID,
+                    });
                 }
 
                 SelectedBarcodes.Clear();
+
+                foreach (var b in sb)
+                {
+                    await barcodesRepository.Delete(b);
+                }
+
+                // Todo: Possibly BarcodesHub wants to go into the PVSCanAPI?
+                if (await PVScanAPI.DeletedBarcodeMultiple(toDeleteOnServer) != null)
+                {
+                    await BarcodeHub.DeletedMultiple(toDeleteOnServer);
+                }
             });
 
             Barcodes.CollectionChanged += Barcodes_CollectionChanged;
@@ -284,40 +278,42 @@ namespace PVScan.Desktop.WPF.ViewModels
 
         private async void BarcodeHub_OnUpdated(object sender, UpdatedBarcodeRequest req)
         {
-            var localBarcode = await BarcodesRepository.FindByGUID(req.GUID);
+            var barcode = await BarcodesRepository.FindByGUID(req.GUID);
 
-            if (localBarcode == null)
+            if (barcode == null)
             {
                 return;
             }
 
             if (req.Longitude.HasValue && req.Latitude.HasValue)
             {
-                localBarcode.ScanLocation = new Coordinate()
+                barcode.ScanLocation = new Coordinate()
                 {
                     Latitude = req.Latitude,
                     Longitude = req.Longitude,
                 };
             }
-            localBarcode.Favorite = req.Favorite;
+            barcode.Favorite = req.Favorite;
 
-            await BarcodesRepository.Update(localBarcode);
+            await BarcodesRepository.Update(barcode);
 
             await Application.Current.Dispatcher.InvokeAsync(async () =>
             {
-                var indxPaged = BarcodesPaged.IndexOf(localBarcode);
-                var indxTotal = Barcodes.IndexOf(localBarcode);
+                var bPaged = BarcodesPaged.FirstOrDefault(b => b.GUID == barcode.GUID);
+                var b = Barcodes.FirstOrDefault(b => b.GUID == barcode.GUID);
 
-                if (indxPaged != -1)
+                if (bPaged != null)
                 {
+                    var indxPaged = BarcodesPaged.IndexOf(bPaged);
                     BarcodesPaged.RemoveAt(indxPaged);
-                    BarcodesPaged.Insert(indxPaged, localBarcode);
+                    BarcodesPaged.Insert(indxPaged, barcode);
                 }
 
-                if (indxTotal != -1)
+                if (b != null)
                 {
-                    Barcodes.RemoveAt(indxTotal);
-                    Barcodes.Insert(indxTotal, localBarcode);
+                    var indx = Barcodes.IndexOf(b);
+                    Barcodes.RemoveAt(indx);
+                    Barcodes.Insert(indx, barcode);
                 }
             });
         }
@@ -335,14 +331,17 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             await Application.Current.Dispatcher.InvokeAsync(async () =>
             {
-                if (BarcodesPaged.Contains(barcode))
+                var bPaged = BarcodesPaged.FirstOrDefault(b => b.GUID == barcode.GUID);
+                var b = Barcodes.FirstOrDefault(b => b.GUID == barcode.GUID);
+
+                if (bPaged != null)
                 {
-                    BarcodesPaged.Remove(barcode);
+                    BarcodesPaged.Remove(bPaged);
                 }
 
-                if (Barcodes.Contains(barcode))
+                if (b != null)
                 {
-                    Barcodes.Remove(barcode);
+                    Barcodes.Remove(b);
                 }
             });
         }
@@ -375,6 +374,134 @@ namespace PVScan.Desktop.WPF.ViewModels
             await Application.Current.Dispatcher.InvokeAsync(async () =>
             {
                 await BarcodeScanned(new BarcodeScannedMessage() { ScannedBarcode = newBarcode });
+            });
+        }
+
+        private async void BarcodeHub_OnUpdatedMultiple(object sender, List<UpdatedBarcodeRequest> e)
+        {
+            List<Barcode> toUpdate = new List<Barcode>();
+            foreach (var req in e)
+            {
+                var localBarcode = await BarcodesRepository.FindByGUID(req.GUID);
+
+                if (localBarcode == null)
+                {
+                    continue;
+                }
+
+                if (req.Longitude.HasValue && req.Latitude.HasValue)
+                {
+                    localBarcode.ScanLocation = new Coordinate()
+                    {
+                        Latitude = req.Latitude,
+                        Longitude = req.Longitude,
+                    };
+                }
+                localBarcode.Favorite = req.Favorite;
+
+                toUpdate.Add(localBarcode);
+            }
+
+            await BarcodesRepository.Update(toUpdate);
+
+            await Application.Current.Dispatcher.InvokeAsync(async () =>
+            {
+                foreach (var barcode in toUpdate)
+                {
+                    var bPaged = BarcodesPaged.FirstOrDefault(b => b.GUID == barcode.GUID);
+                    var b = Barcodes.FirstOrDefault(b => b.GUID == barcode.GUID);
+
+                    if (bPaged != null)
+                    {
+                        var indxPaged = BarcodesPaged.IndexOf(bPaged);
+                        BarcodesPaged.RemoveAt(indxPaged);
+                        BarcodesPaged.Insert(indxPaged, bPaged);
+                    }
+
+                    if (b != null)
+                    {
+                        var indx = Barcodes.IndexOf(b);
+                        Barcodes.RemoveAt(indx);
+                        Barcodes.Insert(indx, b);
+                    }
+                }
+            });
+        }
+
+        private async void BarcodeHub_OnDeletedMultiple(object sender, List<DeletedBarcodeRequest> e)
+        {
+            List<Barcode> toDelete = new List<Barcode>();
+            foreach (var req in e)
+            {
+                Barcode barcode = await BarcodesRepository.FindByGUID(req.GUID);
+
+                if (barcode == null)
+                {
+                    continue;
+                }
+
+                toDelete.Add(barcode);
+            }
+
+            await BarcodesRepository.Delete(toDelete);
+
+            await Application.Current.Dispatcher.InvokeAsync(async () =>
+            {
+                foreach (var barcode in toDelete)
+                {
+                    var bPaged = BarcodesPaged.FirstOrDefault(b => b.GUID == barcode.GUID);
+                    var b = Barcodes.FirstOrDefault(b => b.GUID == barcode.GUID);
+
+                    if (bPaged != null)
+                    {
+                        BarcodesPaged.Remove(bPaged);
+                    }
+
+                    if (b != null)
+                    {
+                        Barcodes.Remove(b);
+                    }
+                }
+            });
+        }
+
+        private async void BarcodeHub_OnScannedMultiple(object sender, List<ScannedBarcodeRequest> e)
+        {
+            var toSave = new List<Barcode>();
+            foreach (var b in e)
+            {
+                Barcode newBarcode = new Barcode()
+                {
+                    Favorite = b.Favorite,
+                    Format = b.Format,
+                    GUID = b.GUID,
+                    Hash = b.Hash,
+                    ScanLocation = null,
+                    ScanTime = b.ScanTime,
+                    Text = b.Text,
+                    LastUpdateTime = b.LastTimeUpdated,
+                };
+
+                if (b.Latitude.HasValue && b.Longitude.HasValue)
+                {
+                    newBarcode.ScanLocation = new Coordinate()
+                    {
+                        Latitude = b.Latitude,
+                        Longitude = b.Longitude
+                    };
+                }
+
+                toSave.Add(newBarcode);
+            }
+
+            await BarcodesRepository.Save(toSave);
+
+            await Application.Current.Dispatcher.InvokeAsync(async () =>
+            {
+                foreach (var b in toSave)
+                {
+                    await BarcodeScanned(new BarcodeScannedMessage() { ScannedBarcode = b });
+                }
             });
         }
 
