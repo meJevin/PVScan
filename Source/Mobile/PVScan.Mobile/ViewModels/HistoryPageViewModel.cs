@@ -351,10 +351,13 @@ namespace PVScan.Mobile.ViewModels
 
                     Barcodes.Insert(resultIndex, b);
                     int lastPagedIndex = BarcodesPaged.Count;
-                    if (resultIndex <= lastPagedIndex &&
-                        BarcodesPaged.Count < (PageSize * PageCount))
+                    if (resultIndex <= lastPagedIndex)
                     {
                         BarcodesPaged.Insert(resultIndex, b);
+                        if (BarcodesPaged.Count > (PageSize * PageCount))
+                        {
+                            BarcodesPaged.RemoveAt(BarcodesPaged.Count - 1);
+                        }
                     }
                 }
             }
