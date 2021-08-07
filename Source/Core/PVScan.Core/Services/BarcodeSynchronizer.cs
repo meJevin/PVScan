@@ -1,4 +1,6 @@
-﻿using PVScan.Core.Models.API;
+﻿using PVScan.Core.DAL;
+using PVScan.Core.Models;
+using PVScan.Core.Models.API;
 using PVScan.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,106 +16,144 @@ namespace PVScan.Core.Services
         readonly IBarcodesRepository BarcodesRepository;
         readonly IPVScanAPI API;
         readonly IAPIBarcodeHub BarcodeHub;
+        readonly IPVScanDbContextFactory ContextFactory;
+
+        private bool _isSyncing = false;
 
         public BarcodeSynchronizer(
             IBarcodesRepository barcodesRepository,
             IPVScanAPI api,
-            IAPIBarcodeHub barcodeHub)
+            IAPIBarcodeHub barcodeHub,
+            IPVScanDbContextFactory fac)
         {
             BarcodesRepository = barcodesRepository;
             API = api;
             BarcodeHub = barcodeHub;
+            ContextFactory = fac;
         }
 
         public event EventHandler SynchorinizedLocally;
 
         public async Task Synchronize()
         {
-            var barcodesGUIDsAndHashes = (await BarcodesRepository.GetAll())
+            if (_isSyncing) return;
+
+            _isSyncing = true;
+
+            var localBarcodes = (await BarcodesRepository.GetAll())
+                .ToDictionary(b => b.GUID);
+
+            using var ctx = ContextFactory.Get();
+            ctx.ChangeTracker.Clear();
+
+            var badLocalHashes = new List<Barcode>();
+            foreach (var b in localBarcodes)
+            {
+                var hash = Barcode.HashOf(b.Value);
+
+                if (b.Value.Hash != hash)
+                {
+                    badLocalHashes.Add(b.Value);
+                }
+            }
+
+            await BarcodesRepository.Update(badLocalHashes);
+
+            var localBarcodeInfos = localBarcodes
+                .OrderBy(i => i.Value.Id)
+                .ToList()
                 .Select(b => new LocalBarcodeInfo
                 {
-                    GUID = b.GUID,
-                    LocalId = b.Id,
-                    Hash = b.Hash,
-                    LastTimeUpdated = b.LastUpdateTime,
-                })
-                .OrderBy(i => i.LocalId);
+                    GUID = b.Value.GUID,
+                    LocalId = b.Value.Id,
+                    Hash = b.Value.Hash,
+                    LastTimeUpdated = b.Value.LastUpdateTime,
+                });
 
             var result = await API.Synchronize(new SynchronizeRequest()
             {
-                LocalBarcodeInfos = barcodesGUIDsAndHashes
+                LocalBarcodeInfos = localBarcodeInfos
             });
 
             if (result == null)
             {
+                _isSyncing = false;
                 return;
             }
 
-            foreach (var add in result.ToAddLocaly)
+            await BarcodesRepository.Save(result.ToAddLocaly);
+
+            var localUpd = new List<Barcode>();
+            foreach (var b in result.ToUpdateLocaly)
             {
-                await BarcodesRepository.Save(add);
+                if(localBarcodes.TryGetValue(b.GUID, out var found))
+                {
+                    localUpd.Add(b);
+                }
             }
+            await BarcodesRepository.Update(localUpd);
 
-            foreach (var update in result.ToUpdateLocaly)
+            var scanReqs = new List<ScannedBarcodeRequest>();
+            foreach (var guid in result.ToAddToServer)
             {
-                var dbBarcode = await BarcodesRepository.FindByGUID(update.GUID);
+                if (!localBarcodes.TryGetValue(guid, out var addToServer))
+                {
+                    continue;
+                }
 
-                dbBarcode.Favorite = update.Favorite;
-                dbBarcode.Format = update.Format;
-                dbBarcode.ScanLocation = update.ScanLocation;
-                dbBarcode.ScanTime = update.ScanTime;
-                dbBarcode.Text = update.Text;
-                await BarcodesRepository.Update(dbBarcode);
-            }
-
-            foreach (var addToserver in result.ToAddToServer)
-            {
                 // Send to server as scanned API
-                var b = await BarcodesRepository.FindByGUID(addToserver);
-
                 var req = new ScannedBarcodeRequest()
                 {
-                    Favorite = b.Favorite,
-                    Format = b.Format,
-                    GUID = b.GUID,
-                    Hash = b.Hash,
-                    ScanTime = b.ScanTime,
-                    Text = b.Text,
-                    LastTimeUpdated = b.LastUpdateTime,
+                    Favorite = addToServer.Favorite,
+                    Format = addToServer.Format,
+                    GUID = addToServer.GUID,
+                    Hash = addToServer.Hash,
+                    ScanTime = addToServer.ScanTime,
+                    Text = addToServer.Text,
+                    LastTimeUpdated = addToServer.LastUpdateTime,
                 };
 
-                if (b.ScanLocation != null)
+                if (addToServer.ScanLocation != null)
                 {
-                    req.Latitude = b.ScanLocation.Latitude.Value;
-                    req.Longitude = b.ScanLocation.Longitude.Value;
+                    req.Latitude = addToServer.ScanLocation.Latitude.Value;
+                    req.Longitude = addToServer.ScanLocation.Longitude.Value;
                 }
 
-                await API.ScannedBarcode(req);
-                await BarcodeHub.Scanned(req);
+                scanReqs.Add(req);
             }
 
-
-            foreach (var updateOnServer in result.ToUpdateOnServer)
+            var updReqs = new List<UpdatedBarcodeRequest>();
+            foreach (var guid in result.ToUpdateOnServer)
             {
-                // Send to server as scanned API
-                var b = await BarcodesRepository.FindByGUID(updateOnServer);
+                if (!localBarcodes.TryGetValue(guid, out var updateOnServer))
+                {
+                    continue;
+                }
 
+                // Send to server as scanned API
                 var req = new UpdatedBarcodeRequest()
                 {
-                    Favorite = b.Favorite,
-                    GUID = b.GUID,
-                    LastTimeUpdated = b.LastUpdateTime,
+                    Favorite = updateOnServer.Favorite,
+                    GUID = updateOnServer.GUID,
+                    LastTimeUpdated = updateOnServer.LastUpdateTime,
                 };
 
-                if (b.ScanLocation != null)
+                if (updateOnServer.ScanLocation != null)
                 {
-                    req.Latitude = b.ScanLocation.Latitude.Value;
-                    req.Longitude = b.ScanLocation.Longitude.Value;
+                    req.Latitude = updateOnServer.ScanLocation.Latitude.Value;
+                    req.Longitude = updateOnServer.ScanLocation.Longitude.Value;
                 }
 
-                await API.UpdatedBarcode(req);
-                await BarcodeHub.Updated(req);
+                updReqs.Add(req);
             }
+
+            await API.UpdatedBarcodeMultiple(updReqs);
+            await BarcodeHub.UpdatedMultiple(updReqs);
+
+            await API.ScannedBarcodeMultiple(scanReqs);
+            await BarcodeHub.ScannedMultiple(scanReqs);
+
+            _isSyncing = false;
 
             if (result.ToAddLocaly.Count() != 0 || result.ToUpdateLocaly.Count() != 0)
             {
