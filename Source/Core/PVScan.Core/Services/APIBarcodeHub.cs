@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Connections;
 using System.Net.Http;
 using PVScan.Core;
+using System.Threading;
 
 namespace PVScan.Core.Services
 {
@@ -76,15 +77,15 @@ namespace PVScan.Core.Services
             {
                 OnUpdated?.Invoke(this, req);
             });
-            connection.On<List<ScannedBarcodeRequest>>("Scanned", (req) =>
+            connection.On<List<ScannedBarcodeRequest>>("ScannedMultiple", (req) =>
             {
                 OnScannedMultiple?.Invoke(this, req);
             });
-            connection.On<List<DeletedBarcodeRequest>>("Deleted", (req) =>
+            connection.On<List<DeletedBarcodeRequest>>("DeletedMultiple", (req) =>
             {
                 OnDeletedMultiple?.Invoke(this, req);
             });
-            connection.On<List<UpdatedBarcodeRequest>>("Updated", (req) =>
+            connection.On<List<UpdatedBarcodeRequest>>("UpdatedMultiple", (req) =>
             {
                 OnUpdatedMultple?.Invoke(this, req);
             });
@@ -182,7 +183,7 @@ namespace PVScan.Core.Services
                 return;
             }
 
-            await connection.SendAsync("DeletedMultple", reqs);
+            await connection.SendAsync("DeletedMultiple", reqs);
         }
 
         public async Task UpdatedMultiple(List<UpdatedBarcodeRequest> reqs)
