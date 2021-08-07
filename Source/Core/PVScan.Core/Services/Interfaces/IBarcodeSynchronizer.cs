@@ -9,7 +9,11 @@ namespace PVScan.Core.Services.Interfaces
 {
     public interface IBarcodeSynchronizer
     {
-        event EventHandler<SynchronizeResponse> Synchronized;
+        event EventHandler Started;
+        event EventHandler<SynchronizeResponse> Finished;
+
+        bool IsSynchronizing { get; }
+
         Task Synchronize(); 
     }
 }

@@ -17,8 +17,6 @@ namespace PVScan.Core.Services
         readonly IPVScanAPI API;
         readonly IAPIBarcodeHub BarcodeHub;
 
-        private bool _isSyncing = false;
-
         public BarcodeSynchronizer(
             IBarcodesRepository barcodesRepository,
             IPVScanAPI api,
@@ -29,13 +27,16 @@ namespace PVScan.Core.Services
             BarcodeHub = barcodeHub;
         }
 
-        public event EventHandler<SynchronizeResponse> Synchronized;
+        public event EventHandler Started;
+        public event EventHandler<SynchronizeResponse> Finished;
+        public bool IsSynchronizing { get; private set; }
 
         public async Task Synchronize()
         {
-            if (_isSyncing) return;
+            if (IsSynchronizing) return;
 
-            _isSyncing = true;
+            Started?.Invoke(this, new EventArgs());
+            IsSynchronizing = true;
 
             var localBarcodes = (await BarcodesRepository.GetAll())
                 .ToDictionary(b => b.GUID);
@@ -71,7 +72,7 @@ namespace PVScan.Core.Services
 
             if (result == null)
             {
-                _isSyncing = false;
+                IsSynchronizing = false;
                 return;
             }
 
@@ -154,9 +155,8 @@ namespace PVScan.Core.Services
                 await BarcodeHub.ScannedMultiple(scanReqs);
             }
 
-            _isSyncing = false;
-
-            Synchronized?.Invoke(this, result);
+            IsSynchronizing = false;
+            Finished?.Invoke(this, result);
         }
     }
 }

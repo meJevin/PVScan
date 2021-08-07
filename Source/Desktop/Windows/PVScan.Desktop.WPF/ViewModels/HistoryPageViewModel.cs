@@ -186,10 +186,10 @@ namespace PVScan.Desktop.WPF.ViewModels
 
             _ = LoadBarcodesFromDB();
 
-            Synchronizer.Synchronized += Synchronizer_Synchronized;
+            Synchronizer.Finished += Synchronizer_Finished;
         }
 
-        private async void Synchronizer_Synchronized(object sender, SynchronizeResponse e)
+        private async void Synchronizer_Finished(object sender, SynchronizeResponse e)
         {
             if (e.ToAddLocaly.Count() > 0)
             {

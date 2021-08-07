@@ -259,10 +259,10 @@ namespace PVScan.Mobile.ViewModels
                     await UpdateBarcodesInUI(new List<Barcode> { args.UpdatedBarcode });
                 });
 
-            Synchronizer.Synchronized += Synchronizer_Synchronized;
+            Synchronizer.Finished += Synchronizer_Finished;
         }
 
-        private async void Synchronizer_Synchronized(object sender, SynchronizeResponse e)
+        private async void Synchronizer_Finished(object sender, SynchronizeResponse e)
         {
             // Update Barcodes, BarcodesPaged
             if (e.ToAddLocaly.Count() > 0)
