@@ -40,7 +40,7 @@ namespace PVScan.Desktop.WPF.ViewModels
             InitDefaultFilter();
 
             // Todo: this is not really good to be honest
-            ResetFilter().GetAwaiter().GetResult();
+            _ = ResetFilter();
 
             ApplyFilterCommand = new Command(() =>
             {

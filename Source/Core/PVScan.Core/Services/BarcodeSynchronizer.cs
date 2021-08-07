@@ -16,20 +16,17 @@ namespace PVScan.Core.Services
         readonly IBarcodesRepository BarcodesRepository;
         readonly IPVScanAPI API;
         readonly IAPIBarcodeHub BarcodeHub;
-        readonly IPVScanDbContextFactory ContextFactory;
 
         private bool _isSyncing = false;
 
         public BarcodeSynchronizer(
             IBarcodesRepository barcodesRepository,
             IPVScanAPI api,
-            IAPIBarcodeHub barcodeHub,
-            IPVScanDbContextFactory fac)
+            IAPIBarcodeHub barcodeHub)
         {
             BarcodesRepository = barcodesRepository;
             API = api;
             BarcodeHub = barcodeHub;
-            ContextFactory = fac;
         }
 
         public event EventHandler SynchorinizedLocally;
@@ -91,9 +88,6 @@ namespace PVScan.Core.Services
 
             await BarcodesRepository.Update(localUpd);
 
-            using var ctx = ContextFactory.Get();
-            ctx.ChangeTracker.Clear();
-
             var scanReqs = new List<ScannedBarcodeRequest>();
             foreach (var guid in result.ToAddToServer)
             {
@@ -148,15 +142,21 @@ namespace PVScan.Core.Services
                 updReqs.Add(req);
             }
 
-            await API.UpdatedBarcodeMultiple(updReqs);
-            await BarcodeHub.UpdatedMultiple(updReqs);
+            if (updReqs.Count != 0)
+            {
+                await API.UpdatedBarcodeMultiple(updReqs);
+                await BarcodeHub.UpdatedMultiple(updReqs);
+            }
 
-            await API.ScannedBarcodeMultiple(scanReqs);
-            await BarcodeHub.ScannedMultiple(scanReqs);
+            if (scanReqs.Count != 0)
+            {
+                await API.ScannedBarcodeMultiple(scanReqs);
+                await BarcodeHub.ScannedMultiple(scanReqs);
+            }
 
             _isSyncing = false;
 
-            if (result.ToAddLocaly.Count() != 0 || result.ToUpdateLocaly.Count() != 0)
+            if (result.ToAddLocaly.Count() > 0 || result.ToUpdateLocaly.Count() > 0)
             {
                 SynchorinizedLocally?.Invoke(this, new EventArgs());
             }

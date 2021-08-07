@@ -25,6 +25,7 @@ namespace PVScan.Core.Services.Interfaces
         Task Update(Barcode barcode);
         Task Update(IEnumerable<Barcode> barcodes);
 
+        // Find
         Task<Barcode> FindByGUID(string GUID);
         Task<IEnumerable<Barcode>> FindByGUID(IEnumerable<string> GUIDs);
     }

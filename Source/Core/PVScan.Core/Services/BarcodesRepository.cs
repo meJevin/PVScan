@@ -13,94 +13,133 @@ namespace PVScan.Core.Services
     public class BarcodesRepository : IBarcodesRepository
     {
         readonly IPVScanDbContextFactory ContextFactory;
-        readonly PVScanDbContext SharedContext;
 
         public BarcodesRepository(IPVScanDbContextFactory fac)
         {
             ContextFactory = fac;
-            SharedContext = fac.Get();
         }
 
         public async Task Delete(Barcode barcode)
         {
-            // For batch deletions..
-            SharedContext.Barcodes.Remove(barcode);
+            await Task.Run(async () =>
+            {
+                using var ctx = ContextFactory.Get();
+                ctx.Barcodes.Remove(barcode);
 
-            await SharedContext.SaveChangesAsync();
+                await ctx.SaveChangesAsync();
+            });
         }
 
         public async Task Delete(IEnumerable<Barcode> barcodes)
         {
-            foreach (var b in barcodes)
+            await Task.Run(async () =>
             {
-                SharedContext.Barcodes.Remove(b);
-            }
+                using var ctx = ContextFactory.Get();
 
-            await SharedContext.SaveChangesAsync();
+                foreach (var b in barcodes)
+                {
+                    ctx.Barcodes.Remove(b);
+                }
+
+                await ctx.SaveChangesAsync();
+            });
         }
 
         public async Task<Barcode> FindByGUID(string GUID)
         {
-            var result = await SharedContext.Barcodes
-                .Where(b => b.GUID == GUID)
-                .FirstOrDefaultAsync();
+            return await Task.Run(async () =>
+            {
+                using var ctx = ContextFactory.Get();
 
-            return result;
+                var result = await ctx.Barcodes
+                    .Where(b => b.GUID == GUID)
+                    .FirstOrDefaultAsync();
+
+                return result;
+            });
         }
 
         public async Task<IEnumerable<Barcode>> FindByGUID(IEnumerable<string> GUIDs)
         {
-            var found = await SharedContext.Barcodes
-                    .Where(b => GUIDs.Contains(b.GUID))
-                    .ToListAsync();
+            return await Task.Run(async () =>
+            {
+                using var ctx = ContextFactory.Get();
 
-            return found;
+                var found = await ctx.Barcodes
+                        .Where(b => GUIDs.Contains(b.GUID))
+                        .ToListAsync();
+
+                return found;
+            });
         }
 
         public async Task<IEnumerable<Barcode>> GetAll()
         {
-            var ret = await SharedContext.Barcodes.ToListAsync();
-            SharedContext.ChangeTracker.Clear();
-            return ret;
+            return await Task.Run(async () =>
+            {
+                using var ctx = ContextFactory.Get();
+
+                return await ctx.Barcodes.ToListAsync();
+            });
         }
 
         public async Task<Barcode> Save(Barcode barcode)
         {
-            SoftSave(barcode);
+            return await Task.Run(async () =>
+            {
+                using var ctx = ContextFactory.Get();
 
-            await SharedContext.SaveChangesAsync();
+                SaveBarcode(barcode, ctx);
 
-            return barcode;
+                await ctx.SaveChangesAsync();
+
+                return barcode;
+            });
         }
 
         public async Task Save(IEnumerable<Barcode> barcodes)
         {
-            foreach (var b in barcodes)
+            await Task.Run(async () =>
             {
-                SoftSave(b);
-            }
+                using var ctx = ContextFactory.Get();
 
-            await SharedContext.SaveChangesAsync();
+                foreach (var b in barcodes)
+                {
+                    SaveBarcode(b, ctx);
+                }
+
+                await ctx.SaveChangesAsync();
+            });
         }
 
         public async Task Update(Barcode barcode)
         {
-            SoftUpdate(barcode);
+            await Task.Run(async () =>
+            {
+                using var ctx = ContextFactory.Get();
 
-            await SharedContext.SaveChangesAsync();
+                UpdateBarcode(barcode, ctx);
+
+                await ctx.SaveChangesAsync();
+            });
         }
 
         public async Task Update(IEnumerable<Barcode> barcodes)
         {
-            foreach (var b in barcodes)
+            await Task.Run(async () =>
             {
-                SoftUpdate(b);
-            }
+                using var ctx = ContextFactory.Get();
 
-            await SharedContext.SaveChangesAsync();
+                foreach (var b in barcodes)
+                {
+                    UpdateBarcode(b, ctx);
+                }
+
+                await ctx.SaveChangesAsync();
+            });
         }
 
-        private void SoftUpdate(Barcode barcode)
+        private void UpdateBarcode(Barcode barcode, PVScanDbContext context)
         {
             barcode.LastUpdateTime = DateTime.UtcNow;
 
@@ -128,10 +167,9 @@ namespace PVScan.Core.Services
             }
 
             barcode.Hash = Barcode.HashOf(barcode);
-            SharedContext.Barcodes.Update(barcode);
+            context.Barcodes.Update(barcode);
         }
-
-        private Barcode SoftSave(Barcode barcode)
+        private Barcode SaveBarcode(Barcode barcode, PVScanDbContext context)
         {
             if (string.IsNullOrEmpty(barcode.GUID))
             {
@@ -166,7 +204,7 @@ namespace PVScan.Core.Services
             }
 
             barcode.Hash = Barcode.HashOf(barcode);
-            SharedContext.Barcodes.Add(barcode);
+            context.Barcodes.Add(barcode);
 
             return barcode;
         }
