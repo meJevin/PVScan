@@ -276,7 +276,7 @@ namespace PVScan.Core.Services
                 var contentToSend = new StringContent(JsonConvert.SerializeObject(reqs), Encoding.UTF8, "application/json");
 
                 var apiResponse = await httpClient
-                    .PostAsync("api/v1/barcodes/updated", contentToSend)
+                    .PostAsync("api/v1/barcodes/updated-multiple", contentToSend)
                     .WithTimeout(DataAccess.WebRequestTimeout);
 
                 if (!apiResponse.IsSuccessStatusCode)
@@ -311,7 +311,7 @@ namespace PVScan.Core.Services
                 var contentToSend = new StringContent(JsonConvert.SerializeObject(reqs), Encoding.UTF8, "application/json");
 
                 var apiResponse = await httpClient
-                    .PostAsync("api/v1/barcodes/deleted", contentToSend)
+                    .PostAsync("api/v1/barcodes/deleted-multiple", contentToSend)
                     .WithTimeout(DataAccess.WebRequestTimeout);
 
                 if (!apiResponse.IsSuccessStatusCode)
