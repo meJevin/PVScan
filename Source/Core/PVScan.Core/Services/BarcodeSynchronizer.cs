@@ -43,9 +43,6 @@ namespace PVScan.Core.Services
             var localBarcodes = (await BarcodesRepository.GetAll())
                 .ToDictionary(b => b.GUID);
 
-            using var ctx = ContextFactory.Get();
-            ctx.ChangeTracker.Clear();
-
             var badLocalHashes = new List<Barcode>();
             foreach (var b in localBarcodes)
             {
@@ -91,7 +88,11 @@ namespace PVScan.Core.Services
                     localUpd.Add(b);
                 }
             }
+
             await BarcodesRepository.Update(localUpd);
+
+            using var ctx = ContextFactory.Get();
+            ctx.ChangeTracker.Clear();
 
             var scanReqs = new List<ScannedBarcodeRequest>();
             foreach (var guid in result.ToAddToServer)

@@ -127,8 +127,6 @@ namespace PVScan.Core.Services
                     = Math.Truncate(barcode.ScanLocation.Longitude.Value * 1e6) / 1e6;
             }
 
-            SharedContext.ChangeTracker.Clear();
-
             barcode.Hash = Barcode.HashOf(barcode);
             SharedContext.Barcodes.Update(barcode);
         }
