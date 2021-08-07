@@ -34,22 +34,9 @@ namespace PVScan.Mobile
         {
             ContainerBuilder = new ContainerBuilder();
 
-            // DbContext from EF Core
-            ContainerBuilder.Register(ctx =>
-            {
-                var optionsBuilder = new DbContextOptionsBuilder<PVScanDbContext>();
-
-                optionsBuilder.UseSqlite(
-                    $"Filename={DataAccess.DatabasePath}",
-                    sqliteOptions =>
-                    {
-                        var migrationsAssembly = typeof(PVScanDbContext).GetTypeInfo().Assembly.GetName().Name;
-                    });
-
-                return new PVScanDbContext(optionsBuilder.Options);
-            })
-                .AsSelf()
-                .InstancePerLifetimeScope();
+            ContainerBuilder.RegisterType<PVScanDbContextFactory>()
+                .As<IPVScanDbContextFactory>()
+                .SingleInstance();
 
             // IdentityService singleton
             ContainerBuilder.RegisterType<IdentityService>()
@@ -104,12 +91,21 @@ namespace PVScan.Mobile
                 .As<IPVScanAPI>()
                 .InstancePerLifetimeScope();
 
+            //// API Barcodes HUB Xamarin facade for main thread calls
+            //ContainerBuilder.Register(ctx =>
+            //{
+            //    var barcodeHub = new APIBarcodeHub(ctx.Resolve<IIdentityService>());
+            //    return new XamarinAPIBarcodeHubFacade(barcodeHub);
+            //})
+            //    .As<IAPIBarcodeHub>()
+            //    .SingleInstance();
+            
             // API Barcodes HUB
             ContainerBuilder.RegisterType<APIBarcodeHub>()
                 .As<IAPIBarcodeHub>()
                 .SingleInstance();
 
-            // API User Info HUB
+            // API User Info HUB Xamarin facade
             ContainerBuilder.RegisterType<APIUserInfoHub>()
                 .As<IAPIUserInfoHub>()
                 .SingleInstance();
