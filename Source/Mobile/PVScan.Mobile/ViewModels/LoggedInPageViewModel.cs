@@ -196,11 +196,6 @@ namespace PVScan.Mobile.ViewModels
                 Username = user.Username,
             };
 
-            if (IdentityService.AccessToken != null)
-            {
-                await Synchronizer.Synchronize();
-            }
-
             IsInitializing = false;
             IsUpdatingUserInfo = false;
         }

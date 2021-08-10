@@ -1,4 +1,5 @@
-﻿using PVScan.Mobile.Styles;
+﻿using Autofac;
+using PVScan.Mobile.Styles;
 using PVScan.Mobile.ViewModels;
 using PVScan.Mobile.ViewModels.Messages.Scanning;
 using System;
@@ -17,12 +18,15 @@ namespace PVScan.Mobile.Views
     public partial class MainPage : ContentPage
     {
         TabViewItem _currentTabView = null;
+        MainPageViewModel VM = null;
 
         public MainPage()
         {
             InitializeSafeArea();
             InitializeComponent();
 
+            using var scope = Resolver.Container.BeginLifetimeScope();
+            VM = scope.Resolve<MainPageViewModel>();
 
             MessagingCenter.Subscribe(this, nameof(BarcodeScannedMessage),
                 async (ScanPageViewModel vm, BarcodeScannedMessage args) =>
@@ -167,6 +171,8 @@ namespace PVScan.Mobile.Views
 
             await HistoryPage.Initialize();
             await ProfilePage.Initialize();
+
+            VM.LoadedCommand.Execute(null);
 
             this.Appearing -= ContentPage_Appearing;
         }

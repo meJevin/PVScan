@@ -8,7 +8,9 @@ using Xamarin.Forms;
 
 namespace PVScan.Mobile.ViewModels
 {
-    // VM NOT USED
+    // This VM is used a little fucky. Because I don't want to propogate this Binding Context
+    // I set it manually in MainPage.xaml.cs and I don't bindind to anything acutally
+    // I just call ICommands from wherever I please
     public class MainPageViewModel : BaseViewModel
     {
         readonly IBarcodeSynchronizer Synchronizer;
