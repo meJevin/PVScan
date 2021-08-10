@@ -279,13 +279,13 @@ namespace PVScan.Desktop.WPF.ViewModels
                         // Very top
                         resultIndex = 0;
                     }
-                    else if (lowerBarcodeIndex > mergedSorted.Count - 1)
+                    else if (lowerBarcodeIndex >= mergedSorted.Count)
                     {
                         // Very bottom
-                        resultIndex = Barcodes.Count - 1;
+                        resultIndex = Barcodes.Count;
                     }
 
-                    if (resultIndex > Barcodes.Count - 1) resultIndex = Barcodes.Count - 1;
+                    if (resultIndex > Barcodes.Count) resultIndex = Barcodes.Count;
                     if (resultIndex < 0) resultIndex = 0;
 
                     Barcodes.Insert(resultIndex, b);

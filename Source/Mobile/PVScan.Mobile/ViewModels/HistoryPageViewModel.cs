@@ -343,10 +343,10 @@ namespace PVScan.Mobile.ViewModels
                     else if (lowerBarcodeIndex > mergedSorted.Count - 1)
                     {
                         // Very bottom
-                        resultIndex = Barcodes.Count - 1;
+                        resultIndex = Barcodes.Count;
                     }
 
-                    if (resultIndex > Barcodes.Count - 1) resultIndex = Barcodes.Count - 1;
+                    if (resultIndex > Barcodes.Count) resultIndex = Barcodes.Count;
                     if (resultIndex < 0) resultIndex = 0;
 
                     Barcodes.Insert(resultIndex, b);
