@@ -21,7 +21,7 @@ Web client is implemented via React (TypeScript)
 Desktop client is implemented via WPF (C#)
 
 ## Back-end
-Spports an optional creation of user profile to sync barcodes across devices. Implemented via ASP.NET (C#)
+Supports an optional creation of user profile to sync barcodes across devices. Implemented via ASP.NET (C#)
 
 ### Authorization server
 IdentityServer 4 is used on authorization server to provide OAuth + OpenIDConnect support. This is where you register, login, logout.
