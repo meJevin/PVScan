@@ -1,0 +1,22 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: gray;
+}
+
+.map_or_scanning {
+    flex-grow: 1;
+    background-color: red;
+}
