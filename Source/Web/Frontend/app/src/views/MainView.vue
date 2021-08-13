@@ -4,6 +4,7 @@
         @mouseup="handleMouseUp">
 
         <history-component :panelWidth="historyWidth"
+        :isBeingDragged="isDraggingHistory"
         @start-splitter-drag="handleHistoryStartDragging"
         @stop-splitter-drag="handleHistoryStopDragging"/>
 
@@ -12,7 +13,10 @@
             <map-component/>
         </div>
 
-        <profile-component/>
+        <profile-component :panelWidth="profileWidth"
+        :isBeingDragged="isDraggingProfile"
+        @start-splitter-drag="handleProfileStartDragging"
+        @stop-splitter-drag="handleProfileStopDragging"/>
     </div>
 </template>
 
@@ -33,21 +37,9 @@ import ScanningComponent from "../components/ScanningComponent.vue";
 })
 export default class MainView extends Vue {
 
-//#region History Component Splitter Drag
-    private minHistoryWidth = 200;
-    private maxHistoryWidth = 600;
-    isDraggingHistory: boolean = false;
-    historyWidth: number = 350;
+
+//#region Dragging
     private lastMouseX: number = -1;
-
-    handleHistoryStartDragging(mouseX: number) {
-        this.isDraggingHistory = true;
-        this.lastMouseX = mouseX;
-    }
-
-    handleHistoryStopDragging() {
-        this.isDraggingHistory = false;
-    }
 
     handleMouseMoveMain(e: MouseEvent) {
         if (this.isDraggingHistory) {
@@ -60,12 +52,55 @@ export default class MainView extends Vue {
                 this.lastMouseX = e.clientX;
             }
         }
+        
+        if (this.isDraggingProfile) {
+            const delta = e.clientX - this.lastMouseX;
+
+            const resultWidth = this.profileWidth - delta;
+            if (resultWidth >= this.minProfileWidth &&
+                resultWidth <= this.maxProfileWidth) {
+                this.profileWidth -= delta;
+                this.lastMouseX = e.clientX;
+            }
+        }
     }
 
     handleMouseUp(e: MouseEvent) {
         if (this.isDraggingHistory) {
             this.isDraggingHistory = false;
         }
+
+        if (this.isDraggingProfile) {
+            this.isDraggingProfile = false;
+        }
+    }
+
+    private minProfileWidth = 200;
+    private maxProfileWidth = 600;
+
+    isDraggingProfile: boolean = false;
+    profileWidth: number = 350;
+
+    handleProfileStartDragging(mouseX: number) {
+        this.isDraggingProfile = true;
+        this.lastMouseX = mouseX;
+    }
+
+    handleProfileStopDragging() {
+        this.isDraggingProfile = false;
+    }
+    private minHistoryWidth = 200;
+    private maxHistoryWidth = 600;
+    isDraggingHistory: boolean = false;
+    historyWidth: number = 350;
+
+    handleHistoryStartDragging(mouseX: number) {
+        this.isDraggingHistory = true;
+        this.lastMouseX = mouseX;
+    }
+
+    handleHistoryStopDragging() {
+        this.isDraggingHistory = false;
     }
 //#endregion
 }

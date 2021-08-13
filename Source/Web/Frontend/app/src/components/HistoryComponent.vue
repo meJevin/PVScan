@@ -48,10 +48,12 @@ export default class HistoryComponent extends Vue {
     }
 
     .splitter {
-        width: 5px;
+        width: 10px;
         height: 100%;
-        background-color: transparent;
         cursor: ew-resize;
+        background-color: transparent;
+        z-index: 1000;
+        transform: translateX(5px);
     }
 }
 </style>
