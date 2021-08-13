@@ -1,6 +1,6 @@
 <template>
     <div class="profile"
-         :style="{ width: PanelWidth }">
+         :style="{ width: PanelWidth, transform: PanelTransform }">
         <div class="splitter"
             v-on:mousedown="handleSplitterMouseDown">
 
@@ -24,6 +24,9 @@ export default class ProfileComponent extends Vue {
     @Prop({default: false})
     isBeingDragged: boolean = false;
 
+    @Prop({default: false})
+    isBeingShown: boolean = false;
+
     handleSplitterMouseDown(e: MouseEvent) {
         if (!this.isBeingDragged) {
             this.$emit("start-splitter-drag", e.clientX);
@@ -32,6 +35,15 @@ export default class ProfileComponent extends Vue {
 
     get PanelWidth(): string {
         return this.panelWidth + "px";
+    }
+
+    get PanelTransform(): string {
+
+        if (this.isBeingShown) {
+            return "translateX(0px)";
+        }
+
+        return `translateX(${this.panelWidth}px)`;
     }
 }
 </script>

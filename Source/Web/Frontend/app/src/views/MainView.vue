@@ -11,12 +11,15 @@
         <div class="map_or_scanning">
             <scanning-component/>
             <map-component/>
+
+        <button @click="toggleProfilePage">Show profile</button>
         </div>
 
         <profile-component :panelWidth="profileWidth"
         :isBeingDragged="isDraggingProfile"
         @start-splitter-drag="handleProfileStartDragging"
-        @stop-splitter-drag="handleProfileStopDragging"/>
+        @stop-splitter-drag="handleProfileStopDragging"
+        :isBeingShown="profilePageVisible"/>
     </div>
 </template>
 
@@ -37,7 +40,11 @@ import ScanningComponent from "../components/ScanningComponent.vue";
 })
 export default class MainView extends Vue {
 
+    profilePageVisible: boolean = false;
 
+    toggleProfilePage() {
+        this.profilePageVisible = !this.profilePageVisible;
+    }
 //#region Dragging
     private lastMouseX: number = -1;
 
