@@ -24,3 +24,8 @@ body {
     flex-grow: 1;
     background-color: red;
 }
+
+input {
+    border: none;
+    padding: 4px;
+}
