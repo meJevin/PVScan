@@ -3,8 +3,8 @@
         @mousemove="handleMouseMoveMain"
         @mouseup="handleMouseUp">
 
-        <history-component :panelWidth="historyWidth"
-        :isBeingDragged="isDraggingHistory"
+        <history-component :panelWidth="HistoryWidth"
+        :isBeingDragged="IsDraggingHistory"
         @start-splitter-drag="handleHistoryStartDragging"
         @stop-splitter-drag="handleHistoryStopDragging"/>
 
@@ -24,11 +24,11 @@
 
         </div>
 
-        <profile-component :panelWidth="profileWidth"
-        :isBeingDragged="isDraggingProfile"
+        <profile-component :panelWidth="ProfileWidth"
+        :isBeingDragged="IsDraggingProfile"
         @start-splitter-drag="handleProfileStartDragging"
         @stop-splitter-drag="handleProfileStopDragging"
-        :isBeingShown="profilePageVisible"/>
+        :isBeingShown="ProfilePageVisible"/>
     </div>
 </template>
 
@@ -38,6 +38,8 @@ import HistoryComponent from "../components/HistoryComponent.vue";
 import MapComponent from "../components/MapComponent.vue";
 import ProfileComponent from "../components/ProfileComponent.vue";
 import ScanningComponent from "../components/ScanningComponent.vue";
+
+import UIStateModule from "../store/modules/UIStateModule";
 
 @Component({
     components: {
@@ -49,14 +51,8 @@ import ScanningComponent from "../components/ScanningComponent.vue";
 })
 export default class MainView extends Vue {
 
-    profilePageVisible: boolean = false;
-
-    toggleProfilePage() {
-        this.profilePageVisible = !this.profilePageVisible;
-    }
-
     get ProfilePageOverlayOpacity(): number {
-        if (this.profilePageVisible) {
+        if (UIStateModule.UIState.MainView.profilePageVisible) {
             return 0.75;
         }
 
@@ -64,77 +60,60 @@ export default class MainView extends Vue {
     }
 
     get ProfilePageOverlayPointerEvents(): string {
-        if (this.profilePageVisible) {
+        if (UIStateModule.UIState.MainView.profilePageVisible) {
             return "all";
         }
 
         return "none";
     }
-//#region Dragging
-    private lastMouseX: number = -1;
+
+    get HistoryWidth(): number {
+        return UIStateModule.UIState.MainView.historyWidth;
+    }
+
+    get IsDraggingHistory(): boolean {
+        return UIStateModule.UIState.MainView.isDraggingHistory;
+    }
+
+    get ProfileWidth(): number {
+        return UIStateModule.UIState.MainView.profileWidth;
+    }
+
+    get IsDraggingProfile(): boolean {
+        return UIStateModule.UIState.MainView.isDraggingProfile;
+    }
+
+    get ProfilePageVisible(): boolean {
+        return UIStateModule.UIState.MainView.profilePageVisible;
+    }
+
+    toggleProfilePage() {
+        UIStateModule.ToggleProfilePage();
+    }
 
     handleMouseMoveMain(e: MouseEvent) {
-        if (this.isDraggingHistory) {
-            const delta = e.clientX - this.lastMouseX;
-
-            const resultWidth = this.historyWidth + delta;
-            if (resultWidth >= this.minHistoryWidth &&
-                resultWidth <= this.maxHistoryWidth) {
-                this.historyWidth += delta;
-                this.lastMouseX = e.clientX;
-            }
-        }
-        
-        if (this.isDraggingProfile) {
-            const delta = e.clientX - this.lastMouseX;
-
-            const resultWidth = this.profileWidth - delta;
-            if (resultWidth >= this.minProfileWidth &&
-                resultWidth <= this.maxProfileWidth) {
-                this.profileWidth -= delta;
-                this.lastMouseX = e.clientX;
-            }
-        }
+        UIStateModule.HandleMouseMoveMain(e);
     }
 
     handleMouseUp(e: MouseEvent) {
-        if (this.isDraggingHistory) {
-            this.isDraggingHistory = false;
-        }
-
-        if (this.isDraggingProfile) {
-            this.isDraggingProfile = false;
-        }
+        UIStateModule.HandleMouseUp(e);
     }
 
-    private minProfileWidth = 200;
-    private maxProfileWidth = 600;
-
-    isDraggingProfile: boolean = false;
-    profileWidth: number = 350;
-
     handleProfileStartDragging(mouseX: number) {
-        this.isDraggingProfile = true;
-        this.lastMouseX = mouseX;
+        UIStateModule.HandleProfileStartDragging(mouseX);
     }
 
     handleProfileStopDragging() {
-        this.isDraggingProfile = false;
+        UIStateModule.HandleProfileStopDragging();
     }
-    private minHistoryWidth = 200;
-    private maxHistoryWidth = 600;
-    isDraggingHistory: boolean = false;
-    historyWidth: number = 350;
 
     handleHistoryStartDragging(mouseX: number) {
-        this.isDraggingHistory = true;
-        this.lastMouseX = mouseX;
+        UIStateModule.HandleHistoryStartDragging(mouseX);
     }
 
     handleHistoryStopDragging() {
-        this.isDraggingHistory = false;
+        UIStateModule.HandleHistoryStopDragging();
     }
-//#endregion
 }
 </script>
 
