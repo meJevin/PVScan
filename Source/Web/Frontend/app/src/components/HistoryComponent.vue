@@ -64,17 +64,22 @@ export default class HistoryComponent extends Vue {
 <style lang="less" scoped>
 .history {
     height: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
 
     .content {
-        flex-grow: 1;
-        padding-left: 12px;
+        grid-row: 1;
+        grid-column-start: 1;
+        grid-column-end: 3;
         padding-top: 12px;
         display: flex;
         flex-direction: column;
     }
 
     .splitter {
+        grid-row: 1;
+        grid-column: 2;
         width: 10px;
         height: 100%;
         cursor: ew-resize;

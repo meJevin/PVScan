@@ -1,6 +1,6 @@
 <template>
     <div class="barcode-list-item" v-if="barcode != null">
-        <h4>{{barcode.Text}}</h4>
+        <p>{{barcode.Text}}</p>
     </div>
 </template>
 
@@ -27,5 +27,10 @@ export default class HistoryComponent extends Vue {
 .barcode-list-item {
     height: 40px;
     background-color: pink;
+    
+    p {
+        padding: 0;
+        margin: 0;
+    }
 }
 </style>

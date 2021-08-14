@@ -54,15 +54,22 @@ export default class ProfileComponent extends Vue {
     right: 0px;
     background-color: aqua;
     height: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
 
     transition: transform 0.25s ease-out;
 
     .content {
+        grid-row: 1;
+        grid-column-start: 1;
+        grid-column-end: 3;
         flex-grow: 1;
     }
 
     .splitter {
+        grid-row: 1;
+        grid-column: 1;
         width: 10px;
         height: 100%;
         cursor: ew-resize;
