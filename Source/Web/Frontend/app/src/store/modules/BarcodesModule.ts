@@ -63,6 +63,25 @@ export class BarcodesModule extends VuexModule {
             LastUpdateTime: new Date(2000, 5, 5),
         },
     ];
+
+    @Mutation
+    SetBarcodeFavorite([barcode, newVal]: [Barcode, boolean]) {
+        barcode.Favorite = newVal;
+    }
+
+    @Action
+    async ToggleBarcodeFavorite(barcode: Barcode) {
+        let foundBarcode = this.Barcodes.find(b => b == barcode);
+
+        if (!foundBarcode) return;
+
+        if (foundBarcode.Favorite) {
+            this.SetBarcodeFavorite([foundBarcode, false]);
+        }
+        else {
+            this.SetBarcodeFavorite([foundBarcode, true]);
+        }
+    }
 }
 
 const BarcodesModuleExported = getModule(BarcodesModule);

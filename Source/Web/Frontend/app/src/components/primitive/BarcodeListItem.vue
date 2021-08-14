@@ -5,7 +5,8 @@
             <p>{{BarcodeDate}}</p>
         </div>
 
-        <div class="favorite-container">
+        <div class="favorite-container"
+            @click="FavoriteClicked">
             <font-awesome-icon icon="heart" color="white"
             :style="{ opacity: FavoriteIconOpacity }"/>
         </div>
@@ -18,6 +19,8 @@ import Barcode from "../../models/Barcode";
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import moment from "moment";
+
+import BarcodesModule from "../../store/modules/BarcodesModule";
 
 @Component({
     components: {
@@ -41,6 +44,9 @@ export default class HistoryComponent extends Vue {
         return moment(this.barcode.ScanTime).format('DD/MM/YYYY HH:MM:SS');
     }
 
+    FavoriteClicked() {
+        BarcodesModule.ToggleBarcodeFavorite(this.barcode);
+    }
 }
 </script>
 
