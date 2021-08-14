@@ -3,71 +3,24 @@ import store from '@/store';
 import Barcode from "@/models/Barcode";
 import BarcodeFormat from "zxing-typescript/src/core/BarcodeFormat";
 
+import IndexedDbBarcodeRepository from '@/services/IndexedDbBarcodeRepository';
+
 @Module({dynamic: true, name: "Barcodes", store: store})
 export class BarcodesModule extends VuexModule {
 
-    Barcodes: Barcode[] = [
-        {
-            Id: 0,
-            BarcodeFormat: 0,
-            Text: "Something 1",
-            ScanLocation: {
-                Latitude: 29,
-                Longitude: 30,
-            },
-            ScanTime: new Date(2000, 0, 1),
-            Favorite: false,
-            Hash: "hash1",
-            GUID: "guid1",
-            LastUpdateTime: new Date(2000, 5, 5),
-        },
-        {
-            Id: 1,
-            BarcodeFormat: 11,
-            Text: "Something 2",
-            ScanLocation: {
-                Latitude: 29,
-                Longitude: 30,
-            },
-            ScanTime: new Date(2000, 0, 1),
-            Favorite: true,
-            Hash: "hash2",
-            GUID: "guid2",
-            LastUpdateTime: new Date(2000, 5, 5),
-        },
-        {
-            Id: 2,
-            BarcodeFormat: 11,
-            Text: "Something 3",
-            ScanLocation: {
-                Latitude: 29,
-                Longitude: 30,
-            },
-            ScanTime: new Date(2000, 0, 1),
-            Favorite: false,
-            Hash: "hash3",
-            GUID: "guid3",
-            LastUpdateTime: new Date(2000, 5, 5),
-        },
-        {
-            Id: 3,
-            BarcodeFormat: 10,
-            Text: "Something 4",
-            ScanLocation: {
-                Latitude: 29,
-                Longitude: 30,
-            },
-            ScanTime: new Date(2000, 0, 1),
-            Favorite: false,
-            Hash: "hash4",
-            GUID: "guid4",
-            LastUpdateTime: new Date(2000, 5, 5),
-        },
-    ];
+
+    private readonly repo = new IndexedDbBarcodeRepository();
+
+    Barcodes: Barcode[] = [];
 
     @Mutation
     SetBarcodeFavorite([barcode, newVal]: [Barcode, boolean]) {
         barcode.Favorite = newVal;
+    }
+
+    @Mutation
+    SetBarcodes(barcodes: Barcode[]) {
+        this.Barcodes = barcodes;
     }
 
     @Action
@@ -82,6 +35,15 @@ export class BarcodesModule extends VuexModule {
         else {
             this.SetBarcodeFavorite([foundBarcode, true]);
         }
+
+        await this.repo.Update([barcode]);
+    }
+
+    @Action
+    async Initialize() {
+        await this.repo.Initialize();
+
+        this.SetBarcodes(await this.repo.GetAll());
     }
 }
 
