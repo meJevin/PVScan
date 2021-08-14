@@ -87,11 +87,15 @@ export default class HistoryComponent extends Vue {
         BarcodesModule.ToggleBarcodeFavorite(this.barcode);
     }
 
-    HandleListItemClick() {
+    HandleListItemClick(e: MouseEvent) {
         if (UIStateModule.UIState.MainView.isEditingHistoryList) {
-            this.isSelected = !this.isSelected;
+            if (e.shiftKey) {
+                BarcodesModule.SelectBarcodesShiftClick(this.barcode);
 
-            if (this.isSelected) {
+                return;
+            }
+
+            if (!this.isSelected) {
                 BarcodesModule.SelectBarcode(this.barcode);
             }
             else {
@@ -104,18 +108,27 @@ export default class HistoryComponent extends Vue {
         this.$store.subscribe((mutation, state) => {
             if (mutation.type === "ToggleHistoryListEdit") {
                 if(!UIStateModule.UIState.MainView.isEditingHistoryList) {
-                    const wasSelected = this.isSelected;
-                    this.isSelected = false;
-
-                    if (wasSelected)
+                    if (this.isSelected)
                         BarcodesModule.DeselectBarcode(this.barcode);
                 }
             }
             
             if (mutation.type === "ClearSelectedBarcodes") {
                 if (this.isSelected) {
-                    this.isSelected = false;
+                    BarcodesModule.DeselectBarcode(this.barcode);
                 }
+            }
+
+            if (mutation.type === "SelectBarcode" && 
+                (mutation.payload as Barcode) == this.barcode) 
+            {
+                this.isSelected = true;
+            }
+
+            if (mutation.type === "DeselectBarcode" && 
+                (mutation.payload as Barcode) == this.barcode) 
+            {
+                this.isSelected = false;
             }
         });
     }

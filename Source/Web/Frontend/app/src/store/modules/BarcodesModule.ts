@@ -11,6 +11,8 @@ export class BarcodesModule extends VuexModule {
 
     private readonly repo = new IndexedDbBarcodeRepository();
 
+    private lastIndexSelected: number = -1;
+
     Barcodes: Barcode[] = [];
     SelectedBarcodes: Barcode[] = [];
 
@@ -27,6 +29,7 @@ export class BarcodesModule extends VuexModule {
     @Mutation
     SelectBarcode(barcode: Barcode) {
         this.SelectedBarcodes.push(barcode);
+        this.lastIndexSelected = this.Barcodes.indexOf(barcode);
     }
 
     @Mutation
@@ -39,9 +42,44 @@ export class BarcodesModule extends VuexModule {
         this.Barcodes = this.Barcodes.filter(b => barcodes.indexOf(b) == -1);
     }
 
+    @Action
+    async AddBarcodes(barcodes: Barcode[]) {
+        barcodes.forEach(b => {
+            this.Barcodes.push(b);
+        });
+
+        await this.repo.Save(barcodes);
+    }
+
     @Mutation
     ClearSelectedBarcodes() {
         this.SelectedBarcodes = [];
+        this.lastIndexSelected = -1;
+    }
+
+    @Action
+    async SelectBarcodesShiftClick(barcode: Barcode) {
+        const indexOfCurrSelected = this.Barcodes.indexOf(barcode);
+
+        let fromIndex = -1;
+        let toIndex = -1;
+
+        if (this.lastIndexSelected <= indexOfCurrSelected) {
+            fromIndex = this.lastIndexSelected;
+            toIndex = indexOfCurrSelected;
+        }
+        else {
+            fromIndex = indexOfCurrSelected;
+            toIndex = this.lastIndexSelected;
+        }
+
+        if (fromIndex >= 0 && fromIndex <= this.Barcodes.length - 1 &&
+            toIndex >= 0 && toIndex <= this.Barcodes.length - 1) 
+        {
+            for (let i = fromIndex; i <= toIndex; ++i) {
+                this.SelectBarcode(this.Barcodes[i]);
+            }
+        }
     }
 
     @Action
