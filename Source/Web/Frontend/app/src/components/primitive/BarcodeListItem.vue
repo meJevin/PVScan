@@ -90,6 +90,13 @@ export default class HistoryComponent extends Vue {
     HandleListItemClick() {
         if (UIStateModule.UIState.MainView.isEditingHistoryList) {
             this.isSelected = !this.isSelected;
+
+            if (this.isSelected) {
+                BarcodesModule.SelectBarcode(this.barcode);
+            }
+            else {
+                BarcodesModule.DeselectBarcode(this.barcode);
+            }
         }
     }
 
@@ -97,9 +104,19 @@ export default class HistoryComponent extends Vue {
         this.$store.subscribe((mutation, state) => {
             if (mutation.type === "ToggleHistoryListEdit") {
                 if(!UIStateModule.UIState.MainView.isEditingHistoryList) {
+                    const wasSelected = this.isSelected;
+                    this.isSelected = false;
+
+                    if (wasSelected)
+                        BarcodesModule.DeselectBarcode(this.barcode);
+                }
+            }
+            
+            if (mutation.type === "ClearSelectedBarcodes") {
+                if (this.isSelected) {
                     this.isSelected = false;
                 }
-            } 
+            }
         });
     }
 }

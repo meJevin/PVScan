@@ -79,15 +79,16 @@ export default class HistoryComponent extends Vue {
         return UIStateModule.UIState.MainView.isEditingHistoryList;
     }
 
-    handleEditButtonClick() {
+    async handleEditButtonClick() {
         UIStateModule.ToggleHistoryListEdit();
     }
 
-    handleDoneButtonClick() {
+    async handleDoneButtonClick() {
         UIStateModule.ToggleHistoryListEdit();
     }
 
-    handleDeleteButtonClick() {
+    async handleDeleteButtonClick() {
+        await BarcodesModule.DeleteSelectedBarcodes();
         UIStateModule.ToggleHistoryListEdit();
     }
 }
