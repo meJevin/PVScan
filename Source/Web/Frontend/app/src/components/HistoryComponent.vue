@@ -3,9 +3,9 @@
          :style="{ width: PanelWidth }">
         <div class="content">
             <div class="search-bar">
-                <font-awesome-icon icon="search" color="black"/>
+                <font-awesome-icon icon="search" color="rgb(163, 163, 163)"/>
                 <input type="text" placeholder="Search">
-                <font-awesome-icon icon="filter" color="black"/>
+                <font-awesome-icon icon="filter" color="rgb(163, 163, 163)"/>
             </div>
 
             <div class="barcodes-list">
@@ -67,12 +67,12 @@ export default class HistoryComponent extends Vue {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
+    background-color: rgb(46,46,46);
 
     .content {
         grid-row: 1;
         grid-column-start: 1;
         grid-column-end: 3;
-        padding-top: 12px;
         display: flex;
         flex-direction: column;
     }
@@ -92,8 +92,10 @@ export default class HistoryComponent extends Vue {
         background-color: white;
         display: flex;
         align-items: center;
-        padding: 8px 14px;
-        border-radius: 12px;
+        padding: 4px 14px;
+        border-radius: 6px;
+
+        margin: 12px;
 
         input {
             flex-grow: 1;

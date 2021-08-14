@@ -1,6 +1,14 @@
 <template>
     <div class="barcode-list-item" v-if="barcode != null">
-        <p>{{barcode.Text}}</p>
+        <div class="main-info">
+            <p>{{barcode.Text}}</p>
+            <p>{{BarcodeDate}}</p>
+        </div>
+
+        <div class="favorite-container">
+            <font-awesome-icon icon="heart" color="white"
+            :style="{ opacity: FavoriteIconOpacity }"/>
+        </div>
     </div>
 </template>
 
@@ -9,6 +17,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import Barcode from "../../models/Barcode";
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import moment from "moment";
 
 @Component({
     components: {
@@ -17,17 +26,36 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 })
 export default class HistoryComponent extends Vue {
 
-    @Prop({ default: null })
-    barcode: Barcode;
+    @Prop({required: true})
+    barcode!: Barcode;
+
+    get FavoriteIconOpacity(): number {
+        if (this.barcode.Favorite) {
+            return 1;
+        }
+
+        return 0.5;
+    }
+
+    get BarcodeDate(): string {
+        return moment(this.barcode.ScanTime).format('DD/MM/YYYY HH:MM:SS');
+    }
 
 }
 </script>
 
 <style lang="less">
 .barcode-list-item {
-    height: 40px;
-    background-color: pink;
+    padding: 8px;
+    background-color: red;
+    color: white;
+    display: flex;
+    align-items: center;
     
+    .main-info {
+        flex-grow: 1;
+    }
+
     p {
         padding: 0;
         margin: 0;

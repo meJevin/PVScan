@@ -29,7 +29,7 @@ export class BarcodesModule extends VuexModule {
                 Longitude: 30,
             },
             ScanTime: new Date(2000, 0, 1),
-            Favorite: false,
+            Favorite: true,
             Hash: "hash2",
             GUID: "guid2",
             LastUpdateTime: new Date(2000, 5, 5),
