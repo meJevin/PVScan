@@ -106,6 +106,7 @@ export default class HistoryComponent extends Vue {
     }
 
     .barcodes-list {
+        overflow: auto;
     }
 }
 </style>

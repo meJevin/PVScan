@@ -46,7 +46,7 @@ export default class HistoryComponent extends Vue {
 
 <style lang="less">
 .barcode-list-item {
-    padding: 8px;
+    padding: 8px 14px;
     background-color: transparent;
     color: white;
     display: flex;
