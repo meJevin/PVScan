@@ -106,7 +106,7 @@ export default class HistoryComponent extends Vue {
             transform: translateX(45px);
         }
 
-        transition: all 0.25s ease-in;
+        transition: all 0.25s ease-out;
     }
 }
 </style>
