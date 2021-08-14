@@ -1,15 +1,25 @@
 <template>
-    <div class="barcode-list-item" v-if="barcode != null">
+    <div class="barcode-list-item" v-if="barcode != null"
+        @click="HandleListItemClick">
         <div class="main-info">
             <p>{{barcode.Text}}</p>
             <span :style="{ opacity: 0.5 }"> {{BarcodeDate}} </span>
             <span>, {{BarcodeFormat}}</span>
         </div>
 
-        <div :class="FavoriteContainerClass"
+        <div class="right-container">
+            <div 
+            :style="{ opacity: FavoriteIconOpacity }"
+            id="fav-icon" :class="FavoriteIconClass"
             @click="FavoriteClicked">
-            <font-awesome-icon icon="heart" color="white"
-            :style="{ opacity: FavoriteIconOpacity }"/>
+                <font-awesome-icon icon="heart" color="white"/>
+            </div>
+
+            <div
+                id="check-icon"
+                :style="{ opacity: CheckIconOpacity }"> 
+                <font-awesome-icon icon="check" color="white"/>
+            </div>
         </div>
     </div>
 </template>
@@ -35,6 +45,8 @@ export default class HistoryComponent extends Vue {
     @Prop({required: true})
     barcode!: Barcode;
 
+    isSelected: boolean = false;
+
     get FavoriteIconOpacity(): number {
         if (this.barcode.Favorite) {
             return 1;
@@ -55,16 +67,40 @@ export default class HistoryComponent extends Vue {
         return UIStateModule.UIState.MainView.isEditingHistoryList;
     }
 
-    get FavoriteContainerClass(): string {
-        let result = 'favorite-container';
+    get FavoriteIconClass(): string {
+        if (UIStateModule.UIState.MainView.isEditingHistoryList) {
+            return "hidden";
+        }
 
-        if (this.IsEditing) result += " hidden" 
+        return "";
+    }
 
-        return result;
+    get CheckIconOpacity(): number {
+        if (this.isSelected) {
+            return 1;
+        }
+
+        return 0;
     }
 
     FavoriteClicked() {
         BarcodesModule.ToggleBarcodeFavorite(this.barcode);
+    }
+
+    HandleListItemClick() {
+        if (UIStateModule.UIState.MainView.isEditingHistoryList) {
+            this.isSelected = !this.isSelected;
+        }
+    }
+
+    async mounted() {
+        this.$store.subscribe((mutation, state) => {
+            if (mutation.type === "ToggleHistoryListEdit") {
+                if(!UIStateModule.UIState.MainView.isEditingHistoryList) {
+                    this.isSelected = false;
+                }
+            } 
+        });
     }
 }
 </script>
@@ -98,15 +134,30 @@ export default class HistoryComponent extends Vue {
         font-size: 13px;
     }
 
-    .favorite-container {
-        cursor: pointer;
-        margin: 0 6px;
+    .right-container {
+        position: relative;
 
-        &.hidden {
-            transform: translateX(45px);
+        #fav-icon {
+            cursor: pointer;
+
+            &.hidden {
+                transform: translateX(45px);
+            }
+
+            transition: all 0.25s ease-out;
         }
 
-        transition: all 0.25s ease-out;
+        #check-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            transition: all 0.25s ease-out;
+
+            pointer-events: none;
+        }
+
+        margin: 0 6px;
     }
 }
 </style>
