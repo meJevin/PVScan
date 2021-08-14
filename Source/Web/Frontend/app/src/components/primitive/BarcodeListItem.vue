@@ -129,6 +129,7 @@ export default class HistoryComponent extends Vue {
     color: white;
     display: flex;
     align-items: center;
+    user-select: none;
     
     .main-info {
         flex-grow: 1;
