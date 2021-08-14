@@ -8,6 +8,11 @@
                 <font-awesome-icon icon="filter" color="rgb(163, 163, 163)"/>
             </div>
 
+            <div class="buttons-bar">
+                <button class="primary-btn">Edit</button>
+                <button class="primary-btn">Delete</button>
+            </div>
+
             <div class="barcodes-list">
                 <barcode-list-item :barcode="barcode" v-for="barcode in Barcodes" :key="barcode.Id"/>
             </div>
@@ -107,6 +112,13 @@ export default class HistoryComponent extends Vue {
 
     .barcodes-list {
         overflow: auto;
+    }
+
+    .buttons-bar {
+        margin: 4px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 }
 </style>
