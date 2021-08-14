@@ -1,6 +1,7 @@
 import {Action, getModule, Module, Mutation, VuexModule} from "vuex-module-decorators";
 import store from '@/store';
 import Barcode from "@/models/Barcode";
+import BarcodeFormat from "zxing-typescript/src/core/BarcodeFormat";
 
 @Module({dynamic: true, name: "Barcodes", store: store})
 export class BarcodesModule extends VuexModule {
@@ -8,7 +9,7 @@ export class BarcodesModule extends VuexModule {
     Barcodes: Barcode[] = [
         {
             Id: 0,
-            BarcodeFormat: 24,
+            BarcodeFormat: 0,
             Text: "Something 1",
             ScanLocation: {
                 Latitude: 29,
@@ -22,7 +23,7 @@ export class BarcodesModule extends VuexModule {
         },
         {
             Id: 1,
-            BarcodeFormat: 24,
+            BarcodeFormat: 11,
             Text: "Something 2",
             ScanLocation: {
                 Latitude: 29,
@@ -36,7 +37,7 @@ export class BarcodesModule extends VuexModule {
         },
         {
             Id: 2,
-            BarcodeFormat: 24,
+            BarcodeFormat: 11,
             Text: "Something 3",
             ScanLocation: {
                 Latitude: 29,
@@ -50,7 +51,7 @@ export class BarcodesModule extends VuexModule {
         },
         {
             Id: 3,
-            BarcodeFormat: 24,
+            BarcodeFormat: 10,
             Text: "Something 4",
             ScanLocation: {
                 Latitude: 29,

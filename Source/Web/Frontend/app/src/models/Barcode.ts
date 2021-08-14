@@ -1,4 +1,5 @@
 import Coordinate from "./Coordinate";
+import BarcodeFormat from "zxing-typescript/src/core/BarcodeFormat";
 
 export function HashOf(barcode: Barcode): string {
     let input = "";
