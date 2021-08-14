@@ -56,7 +56,7 @@ export default class ProfileComponent extends Vue {
     height: 100%;
     display: flex;
 
-    transition: transform 0.45s ease-in-out;
+    transition: transform 0.25s ease-out;
 
     .content {
         flex-grow: 1;

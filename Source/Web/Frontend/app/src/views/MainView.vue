@@ -11,8 +11,6 @@
         <div class="map_or_scanning">
             <scanning-component/>
             <map-component/>
-
-            <button @click="toggleProfilePage">Show profile</button>
         </div>
 
         <div id="profilePageOverlay"
@@ -21,7 +19,11 @@
                 'pointer-events': ProfilePageOverlayPointerEvents,
              }"
              @click="toggleProfilePage">
+        </div>
 
+        <div class="toggle-profile-button"
+            @click="toggleProfilePage">
+            <font-awesome-icon icon="bars" size="2x" color="white"/>
         </div>
 
         <profile-component :panelWidth="ProfileWidth"
@@ -39,6 +41,8 @@ import MapComponent from "../components/MapComponent.vue";
 import ProfileComponent from "../components/ProfileComponent.vue";
 import ScanningComponent from "../components/ScanningComponent.vue";
 
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 import UIStateModule from "../store/modules/UIStateModule";
 
 @Component({
@@ -46,7 +50,8 @@ import UIStateModule from "../store/modules/UIStateModule";
         HistoryComponent,
         MapComponent,
         ProfileComponent,
-        ScanningComponent
+        ScanningComponent,
+        FontAwesomeIcon
     },
 })
 export default class MainView extends Vue {
@@ -123,6 +128,14 @@ export default class MainView extends Vue {
     width: 100vw;
     height: 100vh;
     background-color: black;
-    transition: opacity 0.45s ease-in-out;
+    transition: opacity 0.25s ease-out;
+}
+
+.toggle-profile-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 20px;
+    cursor: pointer;
 }
 </style>
