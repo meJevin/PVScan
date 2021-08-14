@@ -70,6 +70,8 @@ export default class HistoryComponent extends Vue {
         flex-grow: 1;
         padding-left: 12px;
         padding-top: 12px;
+        display: flex;
+        flex-direction: column;
     }
 
     .splitter {
@@ -93,6 +95,11 @@ export default class HistoryComponent extends Vue {
             margin: 0px 6px;
             outline: none;
         }
+    }
+
+    .barcodes-list {
+        overflow: auto;
+        height: 100%;
     }
 }
 </style>
