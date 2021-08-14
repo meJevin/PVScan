@@ -47,7 +47,7 @@ export default class HistoryComponent extends Vue {
 <style lang="less">
 .barcode-list-item {
     padding: 8px;
-    background-color: red;
+    background-color: transparent;
     color: white;
     display: flex;
     align-items: center;
@@ -56,9 +56,20 @@ export default class HistoryComponent extends Vue {
         flex-grow: 1;
     }
 
+    &:hover {
+        background-color: rgb(121, 121, 121);
+    }
+
+    transition: all 0.25s ease-in;
+
     p {
         padding: 0;
         margin: 0;
+    }
+
+    .favorite-container {
+        cursor: pointer;
+        margin: 0 2px;
     }
 }
 </style>
