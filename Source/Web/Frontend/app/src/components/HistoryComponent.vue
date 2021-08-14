@@ -75,6 +75,7 @@ export default class HistoryComponent extends Vue {
         grid-column-end: 3;
         display: flex;
         flex-direction: column;
+        overflow: auto;
     }
 
     .splitter {
@@ -105,8 +106,6 @@ export default class HistoryComponent extends Vue {
     }
 
     .barcodes-list {
-        overflow: auto;
-        height: 100%;
     }
 }
 </style>
