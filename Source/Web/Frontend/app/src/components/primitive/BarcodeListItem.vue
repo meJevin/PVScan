@@ -2,7 +2,7 @@
     <div class="barcode-list-item" v-if="barcode != null">
         <div class="main-info">
             <p>{{barcode.Text}}</p>
-            <span> {{BarcodeDate}} </span>
+            <span :style="{ opacity: 0.5 }"> {{BarcodeDate}} </span>
             <span>, {{BarcodeFormat}}</span>
         </div>
 
@@ -17,12 +17,12 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Barcode from "../../models/Barcode";
+import {BarcodeFormatToString} from "../../models/Utils";
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import moment from "moment";
 
 import BarcodesModule from "../../store/modules/BarcodesModule";
-import BarcodeFormat from "zxing-typescript/src/core/BarcodeFormat";
 
 @Component({
     components: {
@@ -47,17 +47,7 @@ export default class HistoryComponent extends Vue {
     }
 
     get BarcodeFormat(): string {
-        if (this.barcode.BarcodeFormat == 0) {
-            return "AZTEC";
-        }
-        else if (this.barcode.BarcodeFormat == 11) {
-            return "QR Code";
-        }
-        else if (this.barcode.BarcodeFormat == 10) {
-            return "PDF-417";
-        }
-
-        return "?";
+        return BarcodeFormatToString(this.barcode);
     }
 
     FavoriteClicked() {
@@ -87,7 +77,8 @@ export default class HistoryComponent extends Vue {
     p {
         padding: 0;
         margin: 0;
-        font-size: 16px;
+        margin-bottom: 4px;
+        font-size: 15px;
     }
     
     span {
