@@ -9,7 +9,7 @@
             </div>
 
             <div class="barcodes-list">
-                
+                <barcode-list-item :barcode="barcode" v-for="barcode in Barcodes" :key="barcode.Id"/>
             </div>
         </div>
 
@@ -23,11 +23,18 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
+import BarcodeListItem from "./primitive/BarcodeListItem.vue";
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Barcode from "../models/Barcode";
+
+import BarcodesModule from "../store/modules/BarcodesModule";
+
 
 @Component({
     components: {
         FontAwesomeIcon,
+        BarcodeListItem,
     }
 })
 export default class HistoryComponent extends Vue {
@@ -48,6 +55,9 @@ export default class HistoryComponent extends Vue {
         return this.panelWidth + "px";
     }
 
+    get Barcodes(): Barcode[] {
+        return BarcodesModule.Barcodes;
+    }
 }
 </script>
 
