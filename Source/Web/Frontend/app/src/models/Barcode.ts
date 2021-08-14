@@ -1,7 +1,7 @@
 import Coordinate from "./Coordinate";
 
 export default interface Barcode {
-    Id: number;
+    Id?: number | undefined;
     BarcodeFormat: number; // Later convert to something more mnemonic
     Text: string;
     ScanLocation: Coordinate;
