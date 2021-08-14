@@ -1,30 +1,52 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono");
 
 body {
-    padding: 0;
-    margin: 0;
-    font-family: "Roboto", sans-serif;
-    overflow: hidden;
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  overflow: hidden;
+
+  scrollbar-width: 130px;
 }
 
 #app {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
 }
 
 .main {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    background-color: rgb(38,38,38);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: rgb(38, 38, 38);
 }
 
 .map_or_scanning {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 input {
-    border: none;
-    padding: 4px;
+  border: none;
+  padding: 4px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
 }

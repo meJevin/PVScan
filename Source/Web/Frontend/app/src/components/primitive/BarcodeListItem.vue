@@ -69,7 +69,7 @@ export default class HistoryComponent extends Vue {
 
     .favorite-container {
         cursor: pointer;
-        margin: 0 2px;
+        margin: 0 6px;
     }
 }
 </style>

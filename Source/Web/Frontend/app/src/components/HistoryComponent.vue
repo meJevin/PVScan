@@ -75,7 +75,7 @@ export default class HistoryComponent extends Vue {
         grid-column-end: 3;
         display: flex;
         flex-direction: column;
-        overflow: auto;
+        overflow: overlay;
     }
 
     .splitter {
