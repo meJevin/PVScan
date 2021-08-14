@@ -17,6 +17,8 @@ interface MainViewUIState {
 
     profileWidth: number;
     historyWidth: number;
+
+    isEditingHistoryList: boolean;
 }
 
 interface UIState {
@@ -35,7 +37,9 @@ export class UIStateModule extends VuexModule {
             isDraggingHistory: false,
         
             profileWidth: 350,
-            historyWidth: 350,
+            historyWidth: 450,
+
+            isEditingHistoryList: false,
         }
     }
 
@@ -100,6 +104,11 @@ export class UIStateModule extends VuexModule {
     @Mutation
     ToggleProfilePage() {
         this.UIState.MainView.profilePageVisible = !this.UIState.MainView.profilePageVisible;
+    }
+
+    @Mutation
+    ToggleHistoryListEdit() {
+        this.UIState.MainView.isEditingHistoryList = !this.UIState.MainView.isEditingHistoryList;
     }
 }
 

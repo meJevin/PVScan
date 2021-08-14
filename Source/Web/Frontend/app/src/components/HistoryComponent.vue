@@ -9,8 +9,18 @@
             </div>
 
             <div class="buttons-bar">
-                <button class="primary-btn">Edit</button>
-                <button class="primary-btn">Delete</button>
+                <button class="primary-btn" v-if="!IsEditingHistoryList"
+                        @click="handleEditButtonClick">
+                    Edit
+                </button>
+                <button class="primary-btn" v-if="IsEditingHistoryList"
+                        @click="handleDoneButtonClick">
+                    Done
+                </button>
+                <button class="primary-btn" v-if="IsEditingHistoryList"
+                        @click="handleDeleteButtonClick">
+                    Delete
+                </button>
             </div>
 
             <div class="barcodes-list">
@@ -34,6 +44,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Barcode from "../models/Barcode";
 
 import BarcodesModule from "../store/modules/BarcodesModule";
+import UIStateModule from "../store/modules/UIStateModule";
 
 
 @Component({
@@ -44,8 +55,8 @@ import BarcodesModule from "../store/modules/BarcodesModule";
 })
 export default class HistoryComponent extends Vue {
 
-    @Prop({ default: 350 })
-    panelWidth: number = 350;
+    @Prop({ default: 450 })
+    panelWidth: number = 450;
 
     @Prop({default: false})
     isBeingDragged: boolean = false;
@@ -62,6 +73,22 @@ export default class HistoryComponent extends Vue {
 
     get Barcodes(): Barcode[] {
         return BarcodesModule.Barcodes;
+    }
+
+    get IsEditingHistoryList(): boolean {
+        return UIStateModule.UIState.MainView.isEditingHistoryList;
+    }
+
+    handleEditButtonClick() {
+        UIStateModule.ToggleHistoryListEdit();
+    }
+
+    handleDoneButtonClick() {
+        UIStateModule.ToggleHistoryListEdit();
+    }
+
+    handleDeleteButtonClick() {
+        UIStateModule.ToggleHistoryListEdit();
     }
 }
 </script>

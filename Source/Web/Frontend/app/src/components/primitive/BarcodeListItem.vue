@@ -6,7 +6,7 @@
             <span>, {{BarcodeFormat}}</span>
         </div>
 
-        <div class="favorite-container"
+        <div :class="FavoriteContainerClass"
             @click="FavoriteClicked">
             <font-awesome-icon icon="heart" color="white"
             :style="{ opacity: FavoriteIconOpacity }"/>
@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import moment from "moment";
 
 import BarcodesModule from "../../store/modules/BarcodesModule";
+import UIStateModule from "../../store/modules/UIStateModule";
 
 @Component({
     components: {
@@ -48,6 +49,18 @@ export default class HistoryComponent extends Vue {
 
     get BarcodeFormat(): string {
         return BarcodeFormatToString(this.barcode);
+    }
+
+    get IsEditing(): boolean {
+        return UIStateModule.UIState.MainView.isEditingHistoryList;
+    }
+
+    get FavoriteContainerClass(): string {
+        let result = 'favorite-container';
+
+        if (this.IsEditing) result += " hidden" 
+
+        return result;
     }
 
     FavoriteClicked() {
@@ -88,6 +101,12 @@ export default class HistoryComponent extends Vue {
     .favorite-container {
         cursor: pointer;
         margin: 0 6px;
+
+        &.hidden {
+            transform: translateX(45px);
+        }
+
+        transition: all 0.25s ease-in;
     }
 }
 </style>
