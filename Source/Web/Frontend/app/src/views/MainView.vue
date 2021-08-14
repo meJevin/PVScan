@@ -12,7 +12,16 @@
             <scanning-component/>
             <map-component/>
 
-        <button @click="toggleProfilePage">Show profile</button>
+            <button @click="toggleProfilePage">Show profile</button>
+        </div>
+
+        <div id="profilePageOverlay"
+             :style="{ 
+                opacity: ProfilePageOverlayOpacity,
+                'pointer-events': ProfilePageOverlayPointerEvents,
+             }"
+             @click="toggleProfilePage">
+
         </div>
 
         <profile-component :panelWidth="profileWidth"
@@ -44,6 +53,22 @@ export default class MainView extends Vue {
 
     toggleProfilePage() {
         this.profilePageVisible = !this.profilePageVisible;
+    }
+
+    get ProfilePageOverlayOpacity(): number {
+        if (this.profilePageVisible) {
+            return 0.75;
+        }
+
+        return 0;
+    }
+
+    get ProfilePageOverlayPointerEvents(): string {
+        if (this.profilePageVisible) {
+            return "all";
+        }
+
+        return "none";
     }
 //#region Dragging
     private lastMouseX: number = -1;
@@ -112,3 +137,13 @@ export default class MainView extends Vue {
 //#endregion
 }
 </script>
+
+<style lang="less" scoped>
+#profilePageOverlay {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    transition: opacity 0.45s ease-in-out;
+}
+</style>
