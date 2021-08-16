@@ -44,61 +44,85 @@ export class UIStateModule extends VuexModule {
     }
 
     @Mutation
-    HandleMouseMoveMain(e: MouseEvent) {
-        if (this.UIState.MainView.isDraggingHistory) {
-            const delta = e.clientX - this.UIState.MainView.lastMouseX;
+    SetHistoryWidth(newWidth: number) {
+        this.UIState.MainView.historyWidth = newWidth;
+    }
 
+    @Mutation
+    SetProfileWidth(newWidth: number) {
+        this.UIState.MainView.profileWidth = newWidth;
+    }
+
+    @Mutation
+    SetLastMouseX(newX: number) {
+        this.UIState.MainView.lastMouseX = newX;
+    }
+
+    @Mutation
+    SetIsDraggingHistory(newVal: boolean) {
+        this.UIState.MainView.isDraggingHistory = newVal;
+    }
+
+    @Mutation
+    SetIsDraggingProfile(newVal: boolean) {
+        this.UIState.MainView.isDraggingProfile = newVal;
+    }
+
+    @Action
+    async HandleMouseMoveMain(e: MouseEvent) {
+        const delta = e.clientX - this.UIState.MainView.lastMouseX;
+
+        if (this.UIState.MainView.isDraggingHistory) {
             const resultWidth = this.UIState.MainView.historyWidth + delta;
+
             if (resultWidth >= MIN_HISTORY_WIDTH &&
                 resultWidth <= MAX_HISTORY_WIDTH) {
-                this.UIState.MainView.historyWidth += delta;
-                this.UIState.MainView.lastMouseX = e.clientX;
+                this.SetHistoryWidth(resultWidth);
+                this.SetLastMouseX(e.clientX);
             }
         }
-        
-        if (this.UIState.MainView.isDraggingProfile) {
-            const delta = e.clientX - this.UIState.MainView.lastMouseX;
-
+        else if (this.UIState.MainView.isDraggingProfile) {
             const resultWidth = this.UIState.MainView.profileWidth - delta;
+
             if (resultWidth >= MIN_PROFILE_WIDTH &&
                 resultWidth <= MAX_PROFILE_WIDTH) {
-                this.UIState.MainView.profileWidth -= delta;
-                this.UIState.MainView.lastMouseX = e.clientX;
+                this.SetProfileWidth(resultWidth);
+                this.SetLastMouseX(e.clientX);
             }
         }
     }
 
-    @Mutation
-    HandleMouseUp(e: MouseEvent) {
+    @Action
+    async HandleMouseUp(e: MouseEvent) {
         if (this.UIState.MainView.isDraggingHistory) {
-            this.UIState.MainView.isDraggingHistory = false;
+            this.SetIsDraggingHistory(false);
         }
 
         if (this.UIState.MainView.isDraggingProfile) {
-            this.UIState.MainView.isDraggingProfile = false;
+            this.SetIsDraggingProfile(false);
         }
     }
 
-    @Mutation
-    HandleProfileStartDragging(mouseX: number) {
-        this.UIState.MainView.isDraggingProfile = true;
-        this.UIState.MainView.lastMouseX = mouseX;
+    @Action
+    async HandleProfileStartDragging(mouseX: number) {
+        this.SetIsDraggingProfile(true);
+        this.SetLastMouseX(mouseX);
     }
 
-    @Mutation
-    HandleProfileStopDragging() {
-        this.UIState.MainView.isDraggingProfile = false;
+    @Action
+    async HandleProfileStopDragging() {
+        this.SetIsDraggingProfile(false);
     }
 
-    @Mutation
-    HandleHistoryStartDragging(mouseX: number) {
-        this.UIState.MainView.isDraggingHistory = true;
-        this.UIState.MainView.lastMouseX = mouseX;
+    @Action
+    async HandleHistoryStartDragging(mouseX: number) {
+        this.SetIsDraggingHistory(true);
+        this.SetLastMouseX(mouseX);
     }
 
-    @Mutation
-    HandleHistoryStopDragging() {
-        this.UIState.MainView.isDraggingHistory = false;
+    @Action
+    async HandleHistoryStopDragging() {
+        this.SetIsDraggingHistory(false);
     }
 
     @Mutation

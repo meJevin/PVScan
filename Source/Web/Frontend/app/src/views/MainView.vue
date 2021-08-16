@@ -97,7 +97,10 @@ export default class MainView extends Vue {
     }
 
     handleMouseMoveMain(e: MouseEvent) {
-        UIStateModule.HandleMouseMoveMain(e);
+        if (UIStateModule.UIState.MainView.isDraggingProfile ||
+            UIStateModule.UIState.MainView.isDraggingHistory) {
+                UIStateModule.HandleMouseMoveMain(e);
+        }
     }
 
     handleMouseUp(e: MouseEvent) {
