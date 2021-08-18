@@ -2,7 +2,8 @@
     <div class="profile"
          :style="{ width: PanelWidth, transform: PanelTransform }">
         <div class="splitter"
-            v-on:mousedown="handleSplitterMouseDown">
+            v-on:mousedown="handleSplitterMouseDown"
+            v-show="isBeingShown">
 
         </div>
 
@@ -38,7 +39,6 @@ export default class ProfileComponent extends Vue {
     }
 
     get PanelTransform(): string {
-
         if (this.isBeingShown) {
             return "translateX(0px)";
         }
