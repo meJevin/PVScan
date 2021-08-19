@@ -1,37 +1,51 @@
 <template>
-    <div class="history"
-         :style="{ width: PanelWidth }">
+    <div class="history" :style="{ width: PanelWidth }">
         <div class="content">
             <div class="search-bar">
-                <font-awesome-icon icon="search" color="rgb(163, 163, 163)"/>
-                <input type="text" placeholder="Search">
-                <font-awesome-icon icon="filter" color="rgb(163, 163, 163)"/>
+                <font-awesome-icon icon="search" color="rgb(163, 163, 163)" />
+                <input type="text" placeholder="Search" />
+                <font-awesome-icon icon="filter" color="rgb(163, 163, 163)" />
             </div>
 
             <div class="buttons-bar">
-                <button class="primary-btn" v-if="!IsEditingHistoryList"
-                        @click="handleEditButtonClick">
+                <button
+                    class="primary-btn"
+                    v-if="!IsEditingHistoryList"
+                    @click="handleEditButtonClick"
+                >
                     Edit
                 </button>
-                <button class="primary-btn" v-if="IsEditingHistoryList"
-                        @click="handleDoneButtonClick">
+                <button
+                    class="primary-btn"
+                    v-if="IsEditingHistoryList"
+                    @click="handleDoneButtonClick"
+                >
                     Done
                 </button>
-                <button class="primary-btn" v-if="IsEditingHistoryList"
-                        @click="handleDeleteButtonClick">
+                <button
+                    class="primary-btn"
+                    v-if="IsEditingHistoryList"
+                    @click="handleDeleteButtonClick"
+                >
                     Delete
                 </button>
             </div>
 
-            <div class="barcodes-list">
-                <barcode-list-item :barcode="barcode" v-for="barcode in Barcodes" :key="barcode.Id"/>
-            </div>
+            <virtual-list
+                class="barcodes-list"
+                :data-sources="Barcodes"
+                :data-key="
+                    (b) => {
+                        return b.GUID;
+                    }
+                "
+                :data-component="barcodeItem"
+                :estimate-size="55"
+            >
+            </virtual-list>
         </div>
 
-        <div class="splitter" 
-            v-on:mousedown="handleSplitterMouseDown"
-            >
-        </div>
+        <div class="splitter" v-on:mousedown="handleSplitterMouseDown"></div>
     </div>
 </template>
 
@@ -39,28 +53,32 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 import BarcodeListItem from "./primitive/BarcodeListItem.vue";
+import VirtualList from "vue-virtual-scroll-list";
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Barcode from "../models/Barcode";
 
 import BarcodesModule from "../store/modules/BarcodesModule";
 import UIStateModule from "../store/modules/UIStateModule";
 
-
 @Component({
     components: {
         FontAwesomeIcon,
         BarcodeListItem,
-    }
+        VirtualList,
+    },
 })
 export default class HistoryComponent extends Vue {
-
     @Prop({ default: 450 })
     panelWidth: number = 450;
 
-    @Prop({default: false})
+    @Prop({ default: false })
     isBeingDragged: boolean = false;
-    
+
+    get barcodeItem() {
+        return BarcodeListItem;
+    }
+
     handleSplitterMouseDown(e: MouseEvent) {
         if (!this.isBeingDragged) {
             this.$emit("start-splitter-drag", e.clientX);
@@ -100,7 +118,7 @@ export default class HistoryComponent extends Vue {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    background-color: rgb(46,46,46);
+    background-color: rgb(46, 46, 46);
 
     .content {
         grid-row: 1;
@@ -114,12 +132,12 @@ export default class HistoryComponent extends Vue {
     .splitter {
         grid-row: 1;
         grid-column: 2;
-        width: 10px;
+        width: 6px;
         height: 100%;
         cursor: ew-resize;
         background-color: transparent;
         z-index: 1000;
-        transform: translateX(5px);
+        transform: translateX(3px);
     }
 
     .search-bar {
@@ -141,6 +159,7 @@ export default class HistoryComponent extends Vue {
     .barcodes-list {
         overflow: auto;
         overflow-x: hidden;
+        overflow-y: overlay;
     }
 
     .buttons-bar {

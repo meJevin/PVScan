@@ -132,6 +132,7 @@ export default class MainView extends Vue {
     height: 100vh;
     background-color: black;
     transition: opacity 0.25s ease-out;
+    z-index: 1001;
 }
 
 .toggle-profile-button {
