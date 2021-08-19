@@ -1,8 +1,8 @@
 <template>
-    <div class="barcode-list-item" v-if="barcode != null"
+    <div class="barcode-list-item" v-if="source != null"
         @click="HandleListItemClick">
         <div class="main-info">
-            <p>{{barcode.Text}}</p>
+            <p>{{source.Text}}</p>
             <span :style="{ opacity: 0.5 }"> {{BarcodeDate}} </span>
             <span>, {{BarcodeFormat}}</span>
         </div>
@@ -42,13 +42,18 @@ import UIStateModule from "../../store/modules/UIStateModule";
 })
 export default class HistoryComponent extends Vue {
 
-    @Prop({required: true})
-    barcode!: Barcode;
+    @Prop()
+    index: number;
 
-    isSelected: boolean = false;
+    @Prop()
+    source: Barcode;
+
+    get IsSelected(): boolean {
+        return (BarcodesModule.SelectedBarcodes.findIndex(b => b == this.source) != -1);
+    }
 
     get FavoriteIconOpacity(): number {
-        if (this.barcode.Favorite) {
+        if (this.source.Favorite) {
             return 1;
         }
 
@@ -56,11 +61,11 @@ export default class HistoryComponent extends Vue {
     }
 
     get BarcodeDate(): string {
-        return moment(this.barcode.ScanTime).format('DD/MM/YYYY HH:MM:SS');
+        return moment(this.source.ScanTime).format('DD/MM/YYYY HH:MM:SS');
     }
 
     get BarcodeFormat(): string {
-        return BarcodeFormatToString(this.barcode);
+        return BarcodeFormatToString(this.source);
     }
 
     get IsEditing(): boolean {
@@ -76,7 +81,7 @@ export default class HistoryComponent extends Vue {
     }
 
     get CheckIconOpacity(): number {
-        if (this.isSelected) {
+        if (this.IsSelected) {
             return 1;
         }
 
@@ -84,22 +89,22 @@ export default class HistoryComponent extends Vue {
     }
 
     FavoriteClicked() {
-        BarcodesModule.ToggleBarcodeFavorite(this.barcode);
+        BarcodesModule.ToggleBarcodeFavorite(this.source);
     }
 
     HandleListItemClick(e: MouseEvent) {
         if (UIStateModule.UIState.MainView.isEditingHistoryList) {
             if (e.shiftKey) {
-                BarcodesModule.SelectBarcodesShiftClick(this.barcode);
+                BarcodesModule.SelectBarcodesShiftClick(this.source);
 
                 return;
             }
 
-            if (!this.isSelected) {
-                BarcodesModule.SelectBarcode(this.barcode);
+            if (!this.IsSelected) {
+                BarcodesModule.SelectBarcode(this.source);
             }
             else {
-                BarcodesModule.DeselectBarcode(this.barcode);
+                BarcodesModule.DeselectBarcode(this.source);
             }
         }
     }
@@ -108,27 +113,15 @@ export default class HistoryComponent extends Vue {
         this.$store.subscribe((mutation, state) => {
             if (mutation.type === "ToggleHistoryListEdit") {
                 if(!UIStateModule.UIState.MainView.isEditingHistoryList) {
-                    if (this.isSelected)
-                        BarcodesModule.DeselectBarcode(this.barcode);
+                    if (this.IsSelected)
+                        BarcodesModule.DeselectBarcode(this.source);
                 }
             }
             
             if (mutation.type === "ClearSelectedBarcodes") {
-                if (this.isSelected) {
-                    BarcodesModule.DeselectBarcode(this.barcode);
+                if (this.IsSelected) {
+                    BarcodesModule.DeselectBarcode(this.source);
                 }
-            }
-
-            if (mutation.type === "SelectBarcode" && 
-                (mutation.payload as Barcode) == this.barcode) 
-            {
-                this.isSelected = true;
-            }
-
-            if (mutation.type === "DeselectBarcode" && 
-                (mutation.payload as Barcode) == this.barcode) 
-            {
-                this.isSelected = false;
             }
         });
     }

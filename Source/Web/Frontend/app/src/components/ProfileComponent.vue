@@ -57,6 +57,7 @@ export default class ProfileComponent extends Vue {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
+    z-index: 1001;
 
     transition: transform 0.25s ease-out;
 
@@ -70,11 +71,11 @@ export default class ProfileComponent extends Vue {
     .splitter {
         grid-row: 1;
         grid-column: 1;
-        width: 10px;
+        width: 6px;
         height: 100%;
         cursor: ew-resize;
         background-color: transparent;
-        transform: translateX(-5px);
+        transform: translateX(-3px);
     }
 }
 </style>
