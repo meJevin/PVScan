@@ -25,6 +25,11 @@ interface UIState {
     MainView: MainViewUIState;
 }
 
+class UIStateConstants {
+    public static HistoryWidthKey: string = "HistoryWidth";
+    public static ProfileWidthKey: string = "ProfileWidth";
+}
+
 @Module({dynamic: true, name: "UIState", store: store})
 export class UIStateModule extends VuexModule {
     UIState: UIState = {
@@ -46,11 +51,15 @@ export class UIStateModule extends VuexModule {
     @Mutation
     SetHistoryWidth(newWidth: number) {
         this.UIState.MainView.historyWidth = newWidth;
+        localStorage.setItem(UIStateConstants.HistoryWidthKey,
+            this.UIState.MainView.historyWidth.toString());
     }
 
     @Mutation
     SetProfileWidth(newWidth: number) {
         this.UIState.MainView.profileWidth = newWidth;
+        localStorage.setItem(UIStateConstants.ProfileWidthKey,
+            this.UIState.MainView.historyWidth.toString());
     }
 
     @Mutation
@@ -123,6 +132,20 @@ export class UIStateModule extends VuexModule {
     @Action
     async HandleHistoryStopDragging() {
         this.SetIsDraggingHistory(false);
+    }
+
+    @Action
+    async Initialize() {
+        let historyWidth = localStorage.getItem(UIStateConstants.HistoryWidthKey);
+        let profileWidth = localStorage.getItem(UIStateConstants.ProfileWidthKey);
+
+        if (historyWidth != null) {
+            this.SetHistoryWidth(parseInt(historyWidth));
+        }
+
+        if (profileWidth != null) {
+            this.SetProfileWidth(parseInt(profileWidth));
+        }
     }
 
     @Mutation
