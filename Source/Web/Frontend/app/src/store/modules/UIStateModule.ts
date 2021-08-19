@@ -1,11 +1,11 @@
 import {Action, getModule, Module, Mutation, VuexModule} from "vuex-module-decorators";
 import store from '@/store';
 
-const MIN_PROFILE_WIDTH = 200;
+const MIN_PROFILE_WIDTH = 300;
 const MAX_PROFILE_WIDTH = 600;
 
-const MIN_HISTORY_WIDTH = 200;
-const MAX_HISTORY_WIDTH = 600;
+const MIN_HISTORY_WIDTH = 300;
+const MAX_HISTORY_WIDTH = 800;
 
 interface MainViewUIState {
     profilePageVisible: boolean;
