@@ -103,6 +103,7 @@ export default class HistoryComponent extends Vue {
 
     async handleDoneButtonClick() {
         UIStateModule.ToggleHistoryListEdit();
+        BarcodesModule.ClearSelectedBarcodes(); 
     }
 
     async handleDeleteButtonClick() {
