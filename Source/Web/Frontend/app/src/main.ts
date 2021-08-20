@@ -6,10 +6,10 @@ import store from './store';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 
-import BarcodesModule from "@/store/modules/BarcodesModule";
-import UIStateModule from "@/store/modules/UIStateModule";
-
 import Barcode from "@/models/Barcode";
+
+import BarcodesModule from "./store/modules/BarcodesModule";
+import UIStateModule from "./store/modules/UIStateModule";
 
 library.add(fas)
 
@@ -21,12 +21,14 @@ new Vue({
   router,
   store,
   render: (h) => h(App),
-  async mounted() {
-      await UIStateModule.Initialize();
-      await BarcodesModule.Initialize();
+  async created() {
+    console.log("app created");
+        
+    await UIStateModule.InitializeUI();
+    await BarcodesModule.InitializeBarcodes();
 
     //   let barcodes: Barcode[] = [];
-      
+
     //   for (let i = 0; i < 1000; ++i) {
     //       barcodes.push({
     //           BarcodeFormat: 10,
@@ -44,5 +46,8 @@ new Vue({
     //   }
 
     //   await BarcodesModule.AddBarcodes(barcodes);
+  },
+  async mounted() {
+      console.log("app mounted");
   }
 }).$mount('#app');

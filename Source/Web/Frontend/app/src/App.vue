@@ -1,22 +1,29 @@
 <template>
-  <div id="app" :style="{'user-select': UserSelect}">
-    <router-view/>
-  </div>
+    <div id="app" :style="{ 'user-select': UserSelect }">
+        <router-view />
+    </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+
+import BarcodesModule from "./store/modules/BarcodesModule";
 import UIStateModule from "./store/modules/UIStateModule";
 
 @Component
 export default class App extends Vue {
     get UserSelect(): string {
-        if (UIStateModule.UIState.MainView.isDraggingProfile ||
-            UIStateModule.UIState.MainView.isDraggingHistory) {
-                return "none";    
-            }
+        if (
+            UIStateModule.UIState.MainView.isDraggingProfile ||
+            UIStateModule.UIState.MainView.isDraggingHistory
+        ) {
+            return "none";
+        }
 
         return "unset";
+    }
+
+    async created() {
     }
 }
 </script>

@@ -20,13 +20,13 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 export default class ProfileComponent extends Vue {
 
     @Prop({ default: 350 })
-    panelWidth: number = 350;
+    panelWidth: number;
 
     @Prop({default: false})
-    isBeingDragged: boolean = false;
+    isBeingDragged: boolean;
 
     @Prop({default: false})
-    isBeingShown: boolean = false;
+    isBeingShown: boolean;
 
     handleSplitterMouseDown(e: MouseEvent) {
         if (!this.isBeingDragged) {

@@ -135,7 +135,7 @@ export class UIStateModule extends VuexModule {
     }
 
     @Action
-    async Initialize() {
+    async InitializeUI() {
         let historyWidth = localStorage.getItem(UIStateConstants.HistoryWidthKey);
         let profileWidth = localStorage.getItem(UIStateConstants.ProfileWidthKey);
 

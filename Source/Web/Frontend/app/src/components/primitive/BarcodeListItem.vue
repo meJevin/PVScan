@@ -53,8 +53,6 @@ export default class HistoryComponent extends Vue {
     }
 
     get FavoriteIconOpacity(): number {
-        console.log(this.source);
-        
         if (this.source.Favorite) {
             return 1;
         }

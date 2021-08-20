@@ -11,7 +11,11 @@ export class BarcodesModule extends VuexModule {
 
     private LastSelectedIndex: number = -1;
 
+    CurrentPage: number = 0;
+    BarcodesPerPage: number = 25;
+
     Barcodes: Barcode[] = [];
+    BarcodesPaged: Barcode[] = [];
     SelectedBarcodes: Barcode[] = [];
 
     @Mutation
@@ -38,6 +42,16 @@ export class BarcodesModule extends VuexModule {
     @Mutation
     DeleteBarcodes(barcodes: Barcode[]) {
         this.Barcodes = this.Barcodes.filter(b => barcodes.indexOf(b) == -1);
+    }
+
+    @Mutation
+    AddPagedBarcode(barcode: Barcode) {
+        this.BarcodesPaged.push(barcode);
+    }
+
+    @Mutation
+    SetCurrentPage(newVal: number) {
+        this.CurrentPage = newVal;
     }
 
     @Action
@@ -106,10 +120,27 @@ export class BarcodesModule extends VuexModule {
     }
 
     @Action
-    async Initialize() {
+    async InitializeBarcodes() {
         await this.BarcodeRepository.Initialize();
 
         this.SetBarcodes(await this.BarcodeRepository.GetAll());
+        await this.LoadNextPage();
+    }
+
+    @Action
+    async LoadNextPage() {
+        const fromIndx = this.CurrentPage * this.BarcodesPerPage;
+        const toIndx = (this.CurrentPage + 1) * this.BarcodesPerPage;
+
+        console.log(fromIndx, toIndx);
+
+        if (toIndx - fromIndx <= 0) { return; }
+
+        for (let i = fromIndx; i < toIndx && i < this.Barcodes.length; ++i) {
+            this.AddPagedBarcode(this.Barcodes[i]);
+        }
+
+        this.SetCurrentPage(this.CurrentPage + 1);
     }
 }
 

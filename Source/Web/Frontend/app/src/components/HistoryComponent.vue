@@ -33,14 +33,15 @@
 
             <virtual-list
                 class="barcodes-list"
-                :data-sources="Barcodes"
+                :data-sources="BarcodesPaged"
                 :data-key="
                     (b) => {
                         return b.GUID;
                     }
                 "
-                :data-component="barcodeItem"
+                :data-component="BarcodeItem"
                 :estimate-size="55"
+                @tobottom="LoadNextPage"
             >
             </virtual-list>
         </div>
@@ -70,19 +71,13 @@ import UIStateModule from "../store/modules/UIStateModule";
 })
 export default class HistoryComponent extends Vue {
     @Prop({ default: 450 })
-    panelWidth: number = 450;
+    panelWidth: number;
 
     @Prop({ default: false })
-    isBeingDragged: boolean = false;
+    isBeingDragged: boolean;
 
-    get barcodeItem() {
-        return BarcodeListItem;
-    }
-
-    handleSplitterMouseDown(e: MouseEvent) {
-        if (!this.isBeingDragged) {
-            this.$emit("start-splitter-drag", e.clientX);
-        }
+    async LoadNextPage() {
+        await BarcodesModule.LoadNextPage();
     }
 
     get PanelWidth(): string {
@@ -93,8 +88,16 @@ export default class HistoryComponent extends Vue {
         return BarcodesModule.Barcodes;
     }
 
+    get BarcodesPaged(): Barcode[] {
+        return BarcodesModule.BarcodesPaged;
+    }
+
     get IsEditingHistoryList(): boolean {
         return UIStateModule.UIState.MainView.isEditingHistoryList;
+    }
+
+    get BarcodeItem() {
+        return BarcodeListItem;
     }
 
     async handleEditButtonClick() {
@@ -109,6 +112,12 @@ export default class HistoryComponent extends Vue {
     async handleDeleteButtonClick() {
         await BarcodesModule.DeleteSelectedBarcodes();
         UIStateModule.ToggleHistoryListEdit();
+    }
+
+    async handleSplitterMouseDown(e: MouseEvent) {
+        if (!this.isBeingDragged) {
+            this.$emit("start-splitter-drag", e.clientX);
+        }
     }
 }
 </script>
