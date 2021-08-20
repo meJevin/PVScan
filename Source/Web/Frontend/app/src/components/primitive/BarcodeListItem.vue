@@ -53,6 +53,8 @@ export default class HistoryComponent extends Vue {
     }
 
     get FavoriteIconOpacity(): number {
+        console.log(this.source);
+        
         if (this.source.Favorite) {
             return 1;
         }
@@ -107,23 +109,6 @@ export default class HistoryComponent extends Vue {
                 BarcodesModule.DeselectBarcode(this.source);
             }
         }
-    }
-
-    async mounted() {
-        this.$store.subscribe((mutation, state) => {
-            if (mutation.type === "ToggleHistoryListEdit") {
-                if(!UIStateModule.UIState.MainView.isEditingHistoryList) {
-                    if (this.IsSelected)
-                        BarcodesModule.DeselectBarcode(this.source);
-                }
-            }
-            
-            if (mutation.type === "ClearSelectedBarcodes") {
-                if (this.IsSelected) {
-                    BarcodesModule.DeselectBarcode(this.source);
-                }
-            }
-        });
     }
 }
 </script>
