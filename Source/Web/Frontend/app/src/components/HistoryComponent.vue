@@ -213,11 +213,13 @@ export default class HistoryComponent extends Vue {
         .sorting-button {
             flex-grow: 2;
             margin-left: 40px;
+            max-width: 300px;
         }
 
         .filter-button {
             flex-grow: 1;
             margin-right: 40px;
+            max-width: 150px;
         }
 
         button {
