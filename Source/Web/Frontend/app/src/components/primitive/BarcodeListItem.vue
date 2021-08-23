@@ -108,23 +108,6 @@ export default class HistoryComponent extends Vue {
             }
         }
     }
-
-    async mounted() {
-        this.$store.subscribe((mutation, state) => {
-            if (mutation.type === "ToggleHistoryListEdit") {
-                if(!UIStateModule.UIState.MainView.isEditingHistoryList) {
-                    if (this.IsSelected)
-                        BarcodesModule.DeselectBarcode(this.source);
-                }
-            }
-            
-            if (mutation.type === "ClearSelectedBarcodes") {
-                if (this.IsSelected) {
-                    BarcodesModule.DeselectBarcode(this.source);
-                }
-            }
-        });
-    }
 }
 </script>
 
