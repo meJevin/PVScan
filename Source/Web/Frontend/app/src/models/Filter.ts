@@ -12,13 +12,13 @@ export interface Filter {
     BarcodeFormats?: number[];
 }
 
-export function IsDefaultFilter(filter: Filter): boolean {
+export function IsEmptyFilter(filter: Filter): boolean {
     return (!filter.BarcodeFormats &&
             !filter.FromDate &&
             !filter.LastType &&
             !filter.ToDate);
 }
 
-export function DefaultFilter(): Filter {
+export function EmptyFilter(): Filter {
     return {};
 }

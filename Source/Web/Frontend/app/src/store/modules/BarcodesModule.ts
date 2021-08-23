@@ -3,11 +3,17 @@ import store from '@/store';
 import Barcode from "@/models/Barcode";
 import BarcodeFormat from "zxing-typescript/src/core/BarcodeFormat";
 
+import {Filter, EmptyFilter, IsEmptyFilter,LastTimeType} from "@/models/Filter";
+import {DefaultSorting,IsDefaultSorting,Sorting,SortingField} from "@/models/Sorting";
+
+import SortingService from "@/services/SortingService";
+
 import IndexedDbBarcodeRepository from '@/services/IndexedDbBarcodeRepository';
 
 @Module({dynamic: true, name: "Barcodes", store: store})
 export class BarcodesModule extends VuexModule {
     private readonly BarcodeRepository = new IndexedDbBarcodeRepository();
+    private readonly SortingService = new SortingService();
 
     private LastSelectedIndex: number = -1;
 
@@ -17,6 +23,9 @@ export class BarcodesModule extends VuexModule {
     Barcodes: Barcode[] = [];
     BarcodesPaged: Barcode[] = [];
     SelectedBarcodes: Barcode[] = [];
+
+    CurrentFilter: Filter = EmptyFilter();
+    CurrentSorting: Sorting = DefaultSorting();
 
     @Mutation
     SetBarcodeFavorite([barcode, newVal]: [Barcode, boolean]) {
@@ -123,8 +132,18 @@ export class BarcodesModule extends VuexModule {
     async InitializeBarcodes() {
         await this.BarcodeRepository.Initialize();
 
-        this.SetBarcodes(await this.BarcodeRepository.GetAll());
+        await this.LoadBarcodesFromDB();
+
         await this.LoadNextPage();
+    }
+
+    @Action 
+    async LoadBarcodesFromDB() {
+        let barcodesFromDB = await this.BarcodeRepository.GetAll();
+
+        barcodesFromDB = this.SortingService.Sort(barcodesFromDB, this.CurrentSorting);
+
+        this.SetBarcodes(barcodesFromDB);
     }
 
     @Action
