@@ -73,7 +73,20 @@ button {
     font-family: "Roboto", sans-serif;
     border-radius: 6px;
     cursor: pointer;
-    transition: transform 0.05s ease-in-out;
+    transition: opacity 0.2s ease-out;
+}
+
+button.visible {
+    opacity: 1;
+}
+
+button.hidden {
+    opacity: 0;
+}
+
+button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 button.primary-button {

@@ -9,19 +9,20 @@
 
             <div class="buttons-bar">
                 <button
-                    v-if="!IsEditingHistoryList"
+                    :class="[!IsEditingHistoryList ? 'visible' : 'hidden']"
                     @click="handleEditButtonClick"
                 >
                     Edit
                 </button>
                 <button
-                    v-if="IsEditingHistoryList"
+                    :class="[IsEditingHistoryList ? 'visible' : 'hidden']"
+                    style="position: absolute; left: 0px"
                     @click="handleDoneButtonClick"
                 >
                     Done
                 </button>
                 <button
-                    v-if="IsEditingHistoryList"
+                    :class="DeleteButtonClass"
                     @click="handleDeleteButtonClick"
                 >
                     Delete
@@ -80,6 +81,20 @@ export default class HistoryComponent extends Vue {
 
     async LoadNextPage() {
         await BarcodesModule.LoadNextPage();
+    }
+
+    get DeleteButtonClass(): string {
+        let result = "visible";
+
+        if (!this.IsEditingHistoryList) {
+            return "hidden";
+        }
+
+        if (BarcodesModule.SelectedBarcodes.length <= 0) {
+            result += " disabled";
+        }
+        
+        return result;
     }
 
     get PanelWidth(): string {
@@ -180,6 +195,7 @@ export default class HistoryComponent extends Vue {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        position: relative;
     }
 
     .sorting-filter-buttons-container {
