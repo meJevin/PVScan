@@ -15,7 +15,7 @@ This application also allows users to create an optional profile via its backend
 Mobile clients (iOS & Anroid) are implemented via Xamarin.Forms (C#)
 
 ### Web Client
-Web client is implemented via React (TypeScript)
+Web client is implemented via VueJS (TypeScript)
 
 ### Desktop Client
 Desktop client is implemented via WPF (C#)
