@@ -9,21 +9,18 @@
 
             <div class="buttons-bar">
                 <button
-                    class="primary-btn"
                     v-if="!IsEditingHistoryList"
                     @click="handleEditButtonClick"
                 >
                     Edit
                 </button>
                 <button
-                    class="primary-btn"
                     v-if="IsEditingHistoryList"
                     @click="handleDoneButtonClick"
                 >
                     Done
                 </button>
                 <button
-                    class="primary-btn"
                     v-if="IsEditingHistoryList"
                     @click="handleDeleteButtonClick"
                 >
@@ -44,6 +41,11 @@
                 @tobottom="LoadNextPage"
             >
             </virtual-list>
+
+            <div class="sorting-filter-buttons-container">
+                <button class="sorting-button primary-button">Sorting</button>
+                <button class="filter-button primary-button">Filter</button>
+            </div>
         </div>
 
         <div class="splitter" v-on:mousedown="handleSplitterMouseDown"></div>
@@ -137,6 +139,7 @@ export default class HistoryComponent extends Vue {
         display: flex;
         flex-direction: column;
         overflow: overlay;
+        position: relative;
     }
 
     .splitter {
@@ -177,6 +180,34 @@ export default class HistoryComponent extends Vue {
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+
+    .sorting-filter-buttons-container {
+        position: absolute;
+        pointer-events: none;
+        width: 100%;
+        // background-color: rgba(0,0,0,0.25);
+        bottom: 0px;
+        display: flex;
+        align-content: space-around;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .sorting-button {
+            flex-grow: 2;
+            margin-left: 40px;
+        }
+
+        .filter-button {
+            flex-grow: 1;
+            margin-right: 40px;
+        }
+
+        button {
+            margin: 20px 10px;
+            pointer-events: all;
+        }
     }
 }
 </style>

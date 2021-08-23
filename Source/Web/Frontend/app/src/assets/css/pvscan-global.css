@@ -64,3 +64,19 @@ input {
   border-bottom-width: 0px;
   background-clip: padding-box;
 }
+
+button {
+    padding: 6px 10px;
+    min-width: 75px;
+    border: none;
+    color: black;
+    font-family: "Roboto", sans-serif;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.05s ease-in-out;
+}
+
+button.primary-button {
+    background-color: orangered;
+    color: white;
+}
