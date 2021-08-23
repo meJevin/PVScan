@@ -1,5 +1,5 @@
 export enum LastTimeType {
-    Day,
+    Day = 1,
     Week,
     Month,
     Year,
