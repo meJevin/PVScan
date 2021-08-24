@@ -56,7 +56,7 @@ For now there are the following secrects:
 In order to set the secrets use `dotnet user-secrets set [SECRET_NAME] [SECRET_VALUE]` in the directory of WPF project.
 
 ### Web Client
-N/A
+Install npm, Vue CLI, then `run npm i` in the following directory: `Source/Web/Frontend/app`. After that run `npm run serve` to run app in development mode.
 
 ### Mobile Client
 There are no special configurations that have to be done in the Xamarin.Forms client aside from having an Apple Developer account to build and run this app on your iOS device.
