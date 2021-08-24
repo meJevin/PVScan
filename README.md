@@ -39,9 +39,9 @@ Both `Source` and `Tests` folders have subfolders which are named after the plat
 
 `Source/Mobile/Mobile.sln` solution file is meant for Xamarin.Forms development for iOS and Android; open this solution file in order to start working on mobile client.
 
-`Source/Web/Web.sln` soltuion file is meant for back-end development with ASP.NET; open this soltion file in order to start working on back-end.
+`Source/Web/Web.sln` soltuion file is meant for back-end development with ASP.NET; open this solution file in order to start working on back-end.
 
-`Source/Desktop/Windows/Desktop.Windows.sln` soltion file is meant for WPF development for Windows; open this soltion file in order to start working on Windows Desktop client.
+`Source/Desktop/Windows/Desktop.Windows.sln` soltuion file is meant for WPF development for Windows; open this solution file in order to start working on Windows Desktop client.
 
 ## Configuring your enviroment
 
@@ -65,4 +65,4 @@ There are no special configurations that have to be done in the Xamarin.Forms cl
 There are two parts to the back-end, as I've described above. Both of them share the same MySQL database. So, you'll need MySQL Server installed on your machine in order to run the back-end.
 
 ## Running tests
-Web, Dekstop.Windows, and Mobile soltion files are preconfigured to include the appropriate test projects and tests can be run directly from them for the appropriate platform. 
+Web, Dekstop.Windows, and Mobile solution files are preconfigured to include the appropriate test projects and tests can be run directly from them for the appropriate platform. 
