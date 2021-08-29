@@ -150,6 +150,7 @@ namespace PVScan.Desktop.WPF.Views
                 }
                 else
                 {
+                    LoadedBarcodesListView.SelectedItem = null;
                     LoadedBarcodesListView.SelectionMode = SelectionMode.Single;
 
                     _ = StartEditButton.FadeTo(1, Animations.DefaultDuration);
