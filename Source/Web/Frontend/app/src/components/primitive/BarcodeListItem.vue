@@ -65,7 +65,7 @@ export default class HistoryComponent extends Vue {
     }
 
     get BarcodeFormat(): string {
-        return BarcodeFormatToString(this.source);
+        return BarcodeFormatToString(this.source.BarcodeFormat);
     }
 
     get IsEditing(): boolean {

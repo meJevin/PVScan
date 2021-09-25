@@ -57,7 +57,7 @@ export default class ProfileComponent extends Vue {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    z-index: 1001;
+    z-index: 3000;
 
     transition: transform 0.25s ease-out;
 

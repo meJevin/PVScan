@@ -64,3 +64,41 @@ input {
   border-bottom-width: 0px;
   background-clip: padding-box;
 }
+
+button {
+    padding: 6px 10px;
+    min-width: 75px;
+    border: none;
+    color: black;
+    font-family: "Roboto", sans-serif;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s ease-out;
+}
+
+button.visible {
+    opacity: 1;
+}
+
+button.hidden {
+    opacity: 0;
+}
+
+button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+button.primary-button {
+    background-color: orangered;
+    color: white;
+}
+
+button.medium {
+    height: 36px;
+    font-size: 16px;
+}
+
+.flex-shrink-0 {
+    flex-shrink: 0;
+}

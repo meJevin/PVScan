@@ -4,7 +4,7 @@ import store from '@/store';
 const MIN_PROFILE_WIDTH = 300;
 const MAX_PROFILE_WIDTH = 600;
 
-const MIN_HISTORY_WIDTH = 300;
+const MIN_HISTORY_WIDTH = 350;
 const MAX_HISTORY_WIDTH = 800;
 
 interface MainViewUIState {
