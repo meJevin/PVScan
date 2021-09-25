@@ -3,7 +3,8 @@ import { Filter, IsEmptyFilter, LastTimeType } from "@/models/Filter";
 import IFilterService from "./interfaces/IFilterService";
 
 export default class FilterService implements IFilterService {
-    Filter(barcodes: Barcode[], filter: Filter): Barcode[] {
+    async Filter(barcodes: Barcode[], filter: Filter): Promise<Barcode[]> {
+        console.log("?");
         if (IsEmptyFilter(filter)) {
             return barcodes;
         }
@@ -39,22 +40,26 @@ export default class FilterService implements IFilterService {
             dateFrom = filter.FromDate;
             dateTo = filter.ToDate;
         }
+        
+        return new Promise<Barcode[]>((resolve, reject) => {
+            let filteredBarcodes = barcodes.filter(b => {
+                // Filter by formats
+                if (filter.BarcodeFormats && filter.BarcodeFormats.length > 0) {
+                    if (filter.BarcodeFormats.indexOf(b.BarcodeFormat) == -1) {
+                        return false;
+                    }
+                }
 
-        let filteredBarcodes = barcodes.filter(b => {
-            // Filter by formats
-            if (filter.BarcodeFormats && filter.BarcodeFormats.length > 0) {
-                if (filter.BarcodeFormats.indexOf(b.BarcodeFormat) == -1) {
+                // Filter by date
+                if (!(b.ScanTime >= dateFrom && b.ScanTime <= dateTo)) {
                     return false;
                 }
-            }
 
-            // Filter by date
-            if (!(b.ScanTime >= dateFrom && b.ScanTime <= dateTo)) {
-                return false;
-            }
+                return true;
+            });
+
+            resolve(filteredBarcodes);
         });
-
-        return [];
     }
 
 }

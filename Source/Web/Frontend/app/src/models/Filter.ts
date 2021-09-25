@@ -1,3 +1,5 @@
+import { BarcodeFormat } from "./Barcode";
+
 export enum LastTimeType {
     Day = 1,
     Week,
@@ -9,7 +11,7 @@ export interface Filter {
     FromDate?: Date;
     ToDate?: Date;
     LastType?: LastTimeType;
-    BarcodeFormats?: number[];
+    BarcodeFormats?: BarcodeFormat[];
 }
 
 export function IsEmptyFilter(filter: Filter): boolean {

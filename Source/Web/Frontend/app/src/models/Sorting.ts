@@ -6,18 +6,22 @@ export enum SortingField {
 }
 
 export interface Sorting {
-    Filed: SortingField;
+    Field: SortingField;
     Descending: boolean;
 }
 
 export function IsDefaultSorting(sorting: Sorting): boolean {
     return (sorting.Descending &&
-            sorting.Filed == SortingField.Date);
+            sorting.Field == SortingField.Date);
 }
 
 export function DefaultSorting(): Sorting {
     return {
         Descending: true,
-        Filed: SortingField.Date,
+        Field: SortingField.Date,
     };
+}
+
+export function SortingFieldToString(sf: SortingField): string {
+    return SortingField[sf];
 }

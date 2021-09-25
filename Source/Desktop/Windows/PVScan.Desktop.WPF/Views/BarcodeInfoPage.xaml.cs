@@ -93,7 +93,8 @@ namespace PVScan.Desktop.WPF.Views
 
         private void VM_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(VM.SelectedBarcodeHasLocation))
+            if (e.PropertyName == nameof(VM.SelectedBarcodeHasLocation) || 
+                e.PropertyName == nameof(VM.SelectedBarcode))
             {
                 if (VM.SelectedBarcodeHasLocation)
                 {

@@ -24,28 +24,30 @@ export default class SortingService implements ISortingService {
         return 0;
     }
 
-    Sort(barcodes: Barcode[], sorting: Sorting): Barcode[] {
-        if (sorting.Filed == SortingField.None) {
+    async Sort(barcodes: Barcode[], sorting: Sorting): Promise<Barcode[]> {
+        if (sorting.Field == SortingField.None) {
             return barcodes;
         }
 
         let sortedBarcodes = barcodes.map(b => b);
         let compareFunc = sorting.Descending ? this.compareDesc : this.compareAsc;
 
-        sortedBarcodes.sort((bFirst, bSecond) => {
-            if (sorting.Filed == SortingField.Date) {
-                return compareFunc(bFirst.ScanTime, bSecond.ScanTime);
-            }
-            else if (sorting.Filed == SortingField.Text) {
-                return compareFunc(bFirst.Text, bSecond.Text);
-            }
-            else if (sorting.Filed == SortingField.Format) {
-                return compareFunc(bFirst.BarcodeFormat, bSecond.BarcodeFormat);
-            }
+        return new Promise<Barcode[]>((resolve, reject) => {
+            sortedBarcodes.sort((bFirst, bSecond) => {
+                if (sorting.Field == SortingField.Date) {
+                    return compareFunc(bFirst.ScanTime, bSecond.ScanTime);
+                }
+                else if (sorting.Field == SortingField.Text) {
+                    return compareFunc(bFirst.Text, bSecond.Text);
+                }
+                else if (sorting.Field == SortingField.Format) {
+                    return compareFunc(bFirst.BarcodeFormat, bSecond.BarcodeFormat);
+                }
 
-            return 0;
+                return 0;
+            });
+
+            resolve(sortedBarcodes);
         });
-
-        return sortedBarcodes;
     }
 }
