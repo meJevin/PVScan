@@ -15,13 +15,13 @@ This application also allows users to create an optional profile via its backend
 Mobile clients (iOS & Anroid) are implemented via Xamarin.Forms (C#)
 
 ### Web Client
-Web client is implemented via React (TypeScript)
+Web client is implemented via VueJS (TypeScript)
 
 ### Desktop Client
 Desktop client is implemented via WPF (C#)
 
 ## Back-end
-Spports an optional creation of user profile to sync barcodes across devices. Implemented via ASP.NET (C#)
+Supports an optional creation of user profile to sync barcodes across devices. Implemented via ASP.NET (C#)
 
 ### Authorization server
 IdentityServer 4 is used on authorization server to provide OAuth + OpenIDConnect support. This is where you register, login, logout.
@@ -39,9 +39,9 @@ Both `Source` and `Tests` folders have subfolders which are named after the plat
 
 `Source/Mobile/Mobile.sln` solution file is meant for Xamarin.Forms development for iOS and Android; open this solution file in order to start working on mobile client.
 
-`Source/Web/Web.sln` soltuion file is meant for back-end development with ASP.NET; open this soltion file in order to start working on back-end.
+`Source/Web/Web.sln` soltuion file is meant for back-end development with ASP.NET; open this solution file in order to start working on back-end.
 
-`Source/Desktop/Windows/Desktop.Windows.sln` soltion file is meant for WPF development for Windows; open this soltion file in order to start working on Windows Desktop client.
+`Source/Desktop/Windows/Desktop.Windows.sln` soltuion file is meant for WPF development for Windows; open this solution file in order to start working on Windows Desktop client.
 
 ## Configuring your enviroment
 
@@ -56,7 +56,7 @@ For now there are the following secrects:
 In order to set the secrets use `dotnet user-secrets set [SECRET_NAME] [SECRET_VALUE]` in the directory of WPF project.
 
 ### Web Client
-N/A
+Install npm, Vue CLI, then `run npm i` in the following directory: `Source/Web/Frontend/app`. After that run `npm run serve` to run app in development mode.
 
 ### Mobile Client
 There are no special configurations that have to be done in the Xamarin.Forms client aside from having an Apple Developer account to build and run this app on your iOS device.
@@ -65,4 +65,4 @@ There are no special configurations that have to be done in the Xamarin.Forms cl
 There are two parts to the back-end, as I've described above. Both of them share the same MySQL database. So, you'll need MySQL Server installed on your machine in order to run the back-end.
 
 ## Running tests
-Web, Dekstop.Windows, and Mobile soltion files are preconfigured to include the appropriate test projects and tests can be run directly from them for the appropriate platform. 
+Web, Dekstop.Windows, and Mobile solution files are preconfigured to include the appropriate test projects and tests can be run directly from them for the appropriate platform. 
