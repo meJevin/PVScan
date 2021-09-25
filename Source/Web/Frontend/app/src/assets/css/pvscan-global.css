@@ -22,10 +22,6 @@ body {
   background-color: rgb(38, 38, 38);
 }
 
-.map_or_scanning {
-  flex-grow: 1;
-}
-
 input {
   border: none;
   padding: 4px;

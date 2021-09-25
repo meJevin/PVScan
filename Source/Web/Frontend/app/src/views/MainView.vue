@@ -8,9 +8,14 @@
         @start-splitter-drag="handleHistoryStartDragging"
         @stop-splitter-drag="handleHistoryStopDragging"/>
 
-        <div class="map_or_scanning">
-            <scanning-component/>
-            <map-component/>
+        <div class="map-and-scanning-container">
+            <div class="map-container">
+                <map-component/>
+            </div>
+
+            <div class="scanning-container">
+                <scanning-component/>
+            </div>
         </div>
 
         <div id="profilePageOverlay"
@@ -141,5 +146,20 @@ export default class MainView extends Vue {
     top: 0;
     margin: 20px;
     cursor: pointer;
+}
+
+.map-and-scanning-container {
+  flex-grow: 1;
+}
+
+.map-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.scanning-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 </style>
