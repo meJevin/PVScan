@@ -23,8 +23,19 @@ body {
 }
 
 input {
-  border: none;
-  padding: 4px;
+    border: none;
+	padding: 4px;
+	padding-bottom: 0;
+    background: none;
+    border-bottom: 1px solid rgb(136, 136, 136);
+    height: 36px;
+    font-size: 16px;
+    color: white;
+}
+
+input:focus-visible {
+    outline: none;
+    border-bottom: 1px solid orangered;
 }
 
 /* width */

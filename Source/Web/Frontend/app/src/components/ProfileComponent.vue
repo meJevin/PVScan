@@ -8,15 +8,28 @@
         </div>
 
         <div class="content">
-            <h1>Profile Component</h1>
+            <div class="login-container">
+                <login-component/>
+            </div>
+            <!-- <div class="sign-up-container">
+
+            </div>
+            <div class="logged-in-container">
+
+            </div> -->
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import LoginComponent from "./LoginComponent.vue";
 
-@Component
+@Component({
+    components: {
+        LoginComponent: LoginComponent
+    }
+})
 export default class ProfileComponent extends Vue {
 
     @Prop({ default: 350 })
@@ -52,12 +65,13 @@ export default class ProfileComponent extends Vue {
 .profile {
     position: absolute;
     right: 0px;
-    background-color: aqua;
+    background-color: rgb(46, 46, 46);
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     z-index: 3000;
+    color: white;
 
     transition: transform 0.25s ease-out;
 
@@ -66,6 +80,27 @@ export default class ProfileComponent extends Vue {
         grid-column-start: 1;
         grid-column-end: 3;
         flex-grow: 1;
+
+        .login-container {
+            display: flex;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .sign-up-container {
+            display: flex;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .logged-in-container {
+            display: flex;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
     }
 
     .splitter {

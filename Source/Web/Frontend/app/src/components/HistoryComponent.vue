@@ -3,7 +3,7 @@
         <div class="content">
             <div class="search-bar">
                 <font-awesome-icon icon="search" color="rgb(163, 163, 163)" />
-                <input type="text" placeholder="Search" />
+                <input type="text" placeholder="Search" class="search-input"/>
                 <font-awesome-icon icon="filter" color="rgb(163, 163, 163)" />
             </div>
 
@@ -411,5 +411,12 @@ export default class HistoryComponent extends Vue {
     justify-content: center;
     width: 100%;
     height: 100%;
+}
+
+.search-input {
+    border: none;
+    color: black;
+    padding: 4px;
+    height: auto;
 }
 </style>
