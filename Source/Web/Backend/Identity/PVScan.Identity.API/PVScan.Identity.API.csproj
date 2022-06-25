@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+	<PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="3.0.0" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.20.0" />
+	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\PVScan.Shared\PVScan.Shared.csproj" />
+    <ProjectReference Include="..\PVScan.Identity.API.Contract\PVScan.Identity.API.Contract.csproj" />
+    <ProjectReference Include="..\PVScan.Identity.Application\PVScan.Identity.Application.csproj" />
+    <ProjectReference Include="..\PVScan.Identity.Infrastructure\PVScan.Identity.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
