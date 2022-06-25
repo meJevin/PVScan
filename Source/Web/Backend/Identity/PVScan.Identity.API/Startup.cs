@@ -9,6 +9,7 @@ using PVScan.Identity.Application.DI;
 using PVScan.Identity.Infrastructure.DI;
 using PVScan.Shared;
 using PVScan.Shared.DI;
+using PVScan.Shared.Middleware;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -31,10 +32,14 @@ namespace PVScan.Identity.API
             services.AddIdentityInfrastructure(Configuration);
             services.AddIdentityApplication(Configuration);
 
+            services.AddSharedServices(Configuration);
             services.AddSharedSettings(Configuration);
 
             services
-                .AddControllers()
+                .AddControllers(options =>
+                {
+                    options.AddBaseResponsePopulationFilter();
+                })
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;

@@ -16,6 +16,8 @@ namespace PVScan.Identity.Application.DI
             var assembly = typeof(DependencyRegistration).Assembly;
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserSessionService, UserSessionService>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 
             services.AddMediatR(assembly);
             services.AddValidatorsFromAssembly(assembly);

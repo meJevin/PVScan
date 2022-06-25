@@ -1,4 +1,5 @@
 ﻿using PVScan.API.Contract.Shared;
+using PVScan.Identity.API.Contract.Responses.Token;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace PVScan.Identity.API.Contract.Responses.User
 {
     public class UserRegisterResponse : BaseResponse<UserRegisterResponse>
     {
-        public string? AccessToken { get; set; }
-        public string? RefreshToken { get; set; }
+        public TokenResponse? AccessToken { get; set; }
+        public TokenResponse? RefreshToken { get; set; }
     }
 }

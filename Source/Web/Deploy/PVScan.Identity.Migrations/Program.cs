@@ -50,9 +50,7 @@ namespace PVSCan.Identity.Migrations
                     return;
                 }
 
-                var databaseCreated = await sc.Database.EnsureCreatedAsync();
-
-                if (!databaseCreated)
+                if (sc.Database.GetPendingMigrations().Any())
                 {
                     await sc.Database.MigrateAsync();
                 }

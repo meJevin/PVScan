@@ -18,13 +18,34 @@ namespace PVScan.Identity.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly SignInManager<User> _signInManager;
+        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IUserSessionService _userSessionService;
 
         public UserService(
-            IUserRepository userRepository, 
-            SignInManager<User> signInManager)
+            IUserRepository userRepository,
+            SignInManager<User> signInManager,
+            IRefreshTokenService refreshTokenService, 
+            IUserSessionService userSessionService)
         {
             _userRepository = userRepository;
             _signInManager = signInManager;
+            _refreshTokenService = refreshTokenService;
+            _userSessionService = userSessionService;
+        }
+
+        public async Task<DomainResult> Logout(LogoutData data)
+        {
+            if (!string.IsNullOrEmpty(data.RefreshToken))
+            {
+                await _refreshTokenService.RevokeByValue(data.RefreshToken, new("Logout"));
+            }
+
+            if (data.CurrentSession is not null)
+            {
+                await _userSessionService.TerminateSession(data.CurrentSession);
+            }
+
+            return new DomainResult(HttpStatusCode.OK);
         }
 
         public async Task<(User? User, DomainResult Result)> LoginWithUsernameAndPassword(LoginUsernameAndPasswordData data)
@@ -36,9 +57,9 @@ namespace PVScan.Identity.Application.Services
                 return (null, new DomainResult(HttpStatusCode.NotFound, $"Could not find user with username {data.Username}"));
             }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(found, data.Password, true);
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(found, data.Password, true);
 
-            if (!result.Succeeded)
+            if (!signInResult.Succeeded)
             {
                 return (null, new DomainResult(HttpStatusCode.Forbidden, $"Password is not correct"));
             }
@@ -48,7 +69,7 @@ namespace PVScan.Identity.Application.Services
 
         public async Task<(User? User, DomainResult Result)> RegisterNewAsync(RegisterNewUserData data)
         {
-            var newUser = new User { UserName = data.Username, Email = data.Email };
+            var newUser = new User { Id = Guid.NewGuid(), UserName = data.Username, Email = data.Email };
 
             var creationResult = await _userRepository.CreateWithPassword(newUser, data.Password);
 
@@ -56,6 +77,13 @@ namespace PVScan.Identity.Application.Services
             {
                 return new(null, new DomainResult(HttpStatusCode.BadRequest, 
                     String.Join(", ", creationResult.Errors.Select(a => a.Description))));
+            }
+
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(newUser, data.Password, true);
+
+            if (!signInResult.Succeeded)
+            {
+                return (null, new DomainResult(HttpStatusCode.Forbidden, $"Password is not correct"));
             }
 
             return new(newUser, new DomainResult(HttpStatusCode.OK));

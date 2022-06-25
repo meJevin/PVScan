@@ -12,7 +12,7 @@ namespace PVScan.Identity.Domain.Entities
         public string Token { get; set; }
         public DateTime Expires { get; set; }
         public DateTime Created { get; set; }
-        public string CreatedByIp { get; set; }
+        public string? CreatedByIp { get; set; }
         public DateTime? Revoked { get; set; }
         public string? RevokedByIp { get; set; }
         public string? ReplacedByToken { get; set; }
@@ -23,7 +23,7 @@ namespace PVScan.Identity.Domain.Entities
         public RefreshToken(
             Guid id, string token,
             DateTime expires, DateTime created,
-            string createdByIp, DateTime? revoked = null,
+            string? createdByIp = null, DateTime? revoked = null,
             string? revokedByIp = null, string? replacedByToken = null,
             string? reasonRevoked = null, Guid? userSessionId = null)
         {

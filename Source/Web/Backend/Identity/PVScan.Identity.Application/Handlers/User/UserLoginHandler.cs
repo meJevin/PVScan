@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using PVScan.Identity.API.Contract.Requests.User;
+using PVScan.Identity.API.Contract.Responses.Token;
 using PVScan.Identity.API.Contract.Responses.User;
 using PVScan.Identity.Application.Services.Interfaces;
+using PVScan.Identity.Infrastructure.Data.Repositories.Interfaces;
 using PVScan.Identity.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
@@ -15,13 +17,16 @@ namespace PVScan.Identity.Application.Handlers.User
     {
         private readonly IUserService _userService;
         private readonly IJwtTokenFactory _jwtTokenFactory;
+        private readonly IUserSessionService _userSessionService;
 
         public UserLoginHandler(
             IUserService userService,
-            IJwtTokenFactory jwtTokenFactory)
+            IJwtTokenFactory jwtTokenFactory, 
+            IUserSessionService userSessionService)
         {
             _userService = userService;
             _jwtTokenFactory = jwtTokenFactory;
+            _userSessionService = userSessionService;
         }
 
         public async Task<UserLoginResponse> Handle(
@@ -38,10 +43,14 @@ namespace PVScan.Identity.Application.Handlers.User
             var accessToken = await _jwtTokenFactory.GenerateAccessTokenAsync(new AccessTokenGenerationData(user));
             var refreshToken = await _jwtTokenFactory.GenerateRefreshTokenAsync(new RefreshTokenGenerationData());
 
+            var remoteIp = request.HttpContext?.Connection.RemoteIpAddress?.ToString();
+
+            await _userSessionService.StartNewSession(new(user, refreshToken, remoteIp));
+
             return new UserLoginResponse
             {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken.Token,
+                AccessToken = new TokenResponse(accessToken.Token, accessToken.Expires),
+                RefreshToken = new TokenResponse(refreshToken.Token, refreshToken.Expires),
             };
         }
     }

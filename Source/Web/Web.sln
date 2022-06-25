@@ -25,19 +25,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVScan.Barcodes.API.Contrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVScan.Barcodes.API", "Backend\Barcodes\PVScan.Barcodes.API\PVScan.Barcodes.API.csproj", "{676E1301-2FBD-4FB4-903D-16C448A25D69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Identity.Infrastructure", "Backend\Identity\PVScan.Identity.Infrastructure\PVScan.Identity.Infrastructure.csproj", "{A438EC07-8FCD-45DE-9315-679E9BF9A528}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVScan.Identity.Infrastructure", "Backend\Identity\PVScan.Identity.Infrastructure\PVScan.Identity.Infrastructure.csproj", "{A438EC07-8FCD-45DE-9315-679E9BF9A528}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Identity.API.Contract", "Backend\Identity\PVScan.Identity.API.Contract\PVScan.Identity.API.Contract.csproj", "{B4E5B54A-9309-437E-BCEE-2AF0D74F2E85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVScan.Identity.API.Contract", "Backend\Identity\PVScan.Identity.API.Contract\PVScan.Identity.API.Contract.csproj", "{B4E5B54A-9309-437E-BCEE-2AF0D74F2E85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Identity.API", "Backend\Identity\PVScan.Identity.API\PVScan.Identity.API.csproj", "{631A9DA5-6946-4948-A58E-96266DA3C8E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVScan.Identity.API", "Backend\Identity\PVScan.Identity.API\PVScan.Identity.API.csproj", "{631A9DA5-6946-4948-A58E-96266DA3C8E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Identity.Application", "Backend\Identity\PVScan.Identity.Application\PVScan.Identity.Application.csproj", "{7946E63C-0BE1-4114-B2E0-A6300813FA82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVScan.Identity.Application", "Backend\Identity\PVScan.Identity.Application\PVScan.Identity.Application.csproj", "{7946E63C-0BE1-4114-B2E0-A6300813FA82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.API.Contract.Shared", "Backend\Shared\PVScan.API.Contract.Shared\PVScan.API.Contract.Shared.csproj", "{BAD5045B-8BAB-4EAF-8457-FD0E222632BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVScan.API.Contract.Shared", "Backend\Shared\PVScan.API.Contract.Shared\PVScan.API.Contract.Shared.csproj", "{BAD5045B-8BAB-4EAF-8457-FD0E222632BA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{8BAB3611-8FF2-42FF-B970-C995F86E179C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Identity.Migrations", "Deploy\PVScan.Identity.Migrations\PVScan.Identity.Migrations.csproj", "{A25BDB72-73E1-4673-BC7D-1DEA5FB6E7A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVScan.Identity.Migrations", "Deploy\PVScan.Identity.Migrations\PVScan.Identity.Migrations.csproj", "{A25BDB72-73E1-4673-BC7D-1DEA5FB6E7A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVScan.Barcodes.Application", "Backend\Barcodes\PVScan.Barcodes.Application\PVScan.Barcodes.Application.csproj", "{9FAD479A-9D1D-4280-9FF8-B2C038F30CC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,22 +47,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DABC744D-44FF-4E0C-9DC0-1EC851A604F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DABC744D-44FF-4E0C-9DC0-1EC851A604F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DABC744D-44FF-4E0C-9DC0-1EC851A604F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DABC744D-44FF-4E0C-9DC0-1EC851A604F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49557616-3014-41A4-A89A-94D2A84CAC81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49557616-3014-41A4-A89A-94D2A84CAC81}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49557616-3014-41A4-A89A-94D2A84CAC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49557616-3014-41A4-A89A-94D2A84CAC81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4DA12B8B-D6E4-4104-9EFD-512F08FCB1EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DA12B8B-D6E4-4104-9EFD-512F08FCB1EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DA12B8B-D6E4-4104-9EFD-512F08FCB1EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DA12B8B-D6E4-4104-9EFD-512F08FCB1EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D815F7CB-C105-497F-B075-39754F950045}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D815F7CB-C105-497F-B075-39754F950045}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D815F7CB-C105-497F-B075-39754F950045}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D815F7CB-C105-497F-B075-39754F950045}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B2287E33-F276-448A-8C62-465E9DFB3261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2287E33-F276-448A-8C62-465E9DFB3261}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2287E33-F276-448A-8C62-465E9DFB3261}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -109,15 +95,15 @@ Global
 		{A25BDB72-73E1-4673-BC7D-1DEA5FB6E7A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A25BDB72-73E1-4673-BC7D-1DEA5FB6E7A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A25BDB72-73E1-4673-BC7D-1DEA5FB6E7A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FAD479A-9D1D-4280-9FF8-B2C038F30CC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FAD479A-9D1D-4280-9FF8-B2C038F30CC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FAD479A-9D1D-4280-9FF8-B2C038F30CC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FAD479A-9D1D-4280-9FF8-B2C038F30CC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{DABC744D-44FF-4E0C-9DC0-1EC851A604F8} = {98C28454-8E5F-42AE-9711-400DBC7B0C67}
-		{49557616-3014-41A4-A89A-94D2A84CAC81} = {98C28454-8E5F-42AE-9711-400DBC7B0C67}
-		{4DA12B8B-D6E4-4104-9EFD-512F08FCB1EA} = {98C28454-8E5F-42AE-9711-400DBC7B0C67}
-		{D815F7CB-C105-497F-B075-39754F950045} = {98C28454-8E5F-42AE-9711-400DBC7B0C67}
 		{6595FCB8-934B-4342-BA97-B2098C95F6C4} = {27FF5E2F-4DE2-48B7-A634-12991564F2A7}
 		{B2E86E90-2638-4EFE-9BA0-312385C29066} = {27FF5E2F-4DE2-48B7-A634-12991564F2A7}
 		{CC20576B-BAD9-4887-A968-2C739EBBC832} = {27FF5E2F-4DE2-48B7-A634-12991564F2A7}
@@ -133,6 +119,7 @@ Global
 		{7946E63C-0BE1-4114-B2E0-A6300813FA82} = {6595FCB8-934B-4342-BA97-B2098C95F6C4}
 		{BAD5045B-8BAB-4EAF-8457-FD0E222632BA} = {CC20576B-BAD9-4887-A968-2C739EBBC832}
 		{A25BDB72-73E1-4673-BC7D-1DEA5FB6E7A5} = {8BAB3611-8FF2-42FF-B970-C995F86E179C}
+		{9FAD479A-9D1D-4280-9FF8-B2C038F30CC0} = {B2E86E90-2638-4EFE-9BA0-312385C29066}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EE3A555-8C5A-4145-8746-17BA49DD45AF}

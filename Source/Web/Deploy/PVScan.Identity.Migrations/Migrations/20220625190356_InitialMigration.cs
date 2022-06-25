@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace PVScan.Identity.Migrations.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,45 +22,6 @@ namespace PVScan.Identity.Migrations.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserInfos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    BarcodesScanned = table.Column<int>(type: "integer", nullable: false),
-                    BarcodeFormatsScanned = table.Column<int>(type: "integer", nullable: false),
-                    Experience = table.Column<double>(type: "double precision", nullable: false),
-                    Level = table.Column<int>(type: "integer", nullable: false),
-                    VKLink = table.Column<string>(type: "text", nullable: true),
-                    IGLink = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserInfos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -87,10 +48,25 @@ namespace PVScan.Identity.Migrations.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_UserInfos_UserInfoId",
-                        column: x => x.UserInfoId,
-                        principalTable: "UserInfos",
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -181,6 +157,30 @@ namespace PVScan.Identity.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserInfos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BarcodesScanned = table.Column<int>(type: "integer", nullable: false),
+                    BarcodeFormatsScanned = table.Column<int>(type: "integer", nullable: false),
+                    Experience = table.Column<double>(type: "double precision", nullable: false),
+                    Level = table.Column<int>(type: "integer", nullable: false),
+                    VKLink = table.Column<string>(type: "text", nullable: true),
+                    IGLink = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserInfos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserInfos_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserSessions",
                 columns: table => new
                 {
@@ -207,7 +207,7 @@ namespace PVScan.Identity.Migrations.Migrations
                     Token = table.Column<string>(type: "text", nullable: false),
                     Expires = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedByIp = table.Column<string>(type: "text", nullable: false),
+                    CreatedByIp = table.Column<string>(type: "text", nullable: true),
                     Revoked = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     RevokedByIp = table.Column<string>(type: "text", nullable: true),
                     ReplacedByToken = table.Column<string>(type: "text", nullable: true),
@@ -256,12 +256,6 @@ namespace PVScan.Identity.Migrations.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_UserInfoId",
-                table: "AspNetUsers",
-                column: "UserInfoId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -271,6 +265,12 @@ namespace PVScan.Identity.Migrations.Migrations
                 name: "IX_RefreshTokens_UserSessionId",
                 table: "RefreshTokens",
                 column: "UserSessionId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserInfos_UserId",
+                table: "UserInfos",
+                column: "UserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -300,6 +300,9 @@ namespace PVScan.Identity.Migrations.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
+                name: "UserInfos");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -307,9 +310,6 @@ namespace PVScan.Identity.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "UserInfos");
         }
     }
 }

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PVScan.Shared.Services;
+using PVScan.Shared.Middleware;
 
 namespace PVScan.Shared.DI
 {
@@ -44,7 +45,14 @@ namespace PVScan.Shared.DI
             services.Configure<PostgresSettings>(configuration.GetSection(nameof(PostgresSettings)));
 
             // Shared identity settings
-            services.Configure<SharedIdentitySettings>(configuration.GetSection(nameof(SharedIdentitySettings))); 
+            services.Configure<SharedIdentitySettings>(configuration.GetSection(nameof(SharedIdentitySettings)));
+
+            return services;
+        }
+
+        public static IServiceCollection AddSharedServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddTransient<PopulateBaseResponseFilter>();
 
             return services;
         }
@@ -111,6 +119,11 @@ namespace PVScan.Shared.DI
             });
 
             return services;
+        }
+
+        public static void AddBaseResponsePopulationFilter(this MvcOptions options)
+        {
+            options.Filters.AddService<PopulateBaseResponseFilter>();
         }
 
         private static IList<(Type ImplementationType, Type InterfaceType)> GetImplementedRepositories(this Assembly assembly)

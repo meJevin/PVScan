@@ -162,7 +162,6 @@ namespace PVScan.Identity.Migrations.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedByIp")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Expires")
@@ -260,9 +259,6 @@ namespace PVScan.Identity.Migrations.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("UserInfoId")
-                        .IsUnique();
-
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -294,6 +290,9 @@ namespace PVScan.Identity.Migrations.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("UserInfos");
                 });
@@ -377,15 +376,15 @@ namespace PVScan.Identity.Migrations.Migrations
                     b.Navigation("UserSession");
                 });
 
-            modelBuilder.Entity("PVScan.Identity.Domain.Entities.User", b =>
+            modelBuilder.Entity("PVScan.Identity.Domain.Entities.UserInfo", b =>
                 {
-                    b.HasOne("PVScan.Identity.Domain.Entities.UserInfo", "Info")
-                        .WithOne("User")
-                        .HasForeignKey("PVScan.Identity.Domain.Entities.User", "UserInfoId")
+                    b.HasOne("PVScan.Identity.Domain.Entities.User", "User")
+                        .WithOne("Info")
+                        .HasForeignKey("PVScan.Identity.Domain.Entities.UserInfo", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Info");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PVScan.Identity.Domain.Entities.UserSession", b =>
@@ -401,12 +400,9 @@ namespace PVScan.Identity.Migrations.Migrations
 
             modelBuilder.Entity("PVScan.Identity.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Sessions");
-                });
+                    b.Navigation("Info");
 
-            modelBuilder.Entity("PVScan.Identity.Domain.Entities.UserInfo", b =>
-                {
-                    b.Navigation("User");
+                    b.Navigation("Sessions");
                 });
 
             modelBuilder.Entity("PVScan.Identity.Domain.Entities.UserSession", b =>

@@ -43,7 +43,7 @@ namespace PVScan.Identity.Infrastructure.Data
             builder
                 .HasOne(a => a.Info)
                 .WithOne(a => a.User)
-                .HasForeignKey<User>(a => a.UserInfoId);
+                .HasForeignKey<UserInfo>(a => a.UserId);
 
             builder
                 .HasMany(a => a.Sessions)

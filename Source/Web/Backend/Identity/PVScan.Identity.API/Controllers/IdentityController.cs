@@ -10,6 +10,7 @@ namespace PVScan.Identity.API.Controllers
     [ApiController]
     [Route("v{version:apiVersion}")]
     [ApiVersion("1.0")]
+    [Authorize]
     public class IdentityController : BaseApiController
     {
         private readonly IMediator _mediator;
@@ -49,12 +50,33 @@ namespace PVScan.Identity.API.Controllers
             return Created(result);
         }
 
-        [HttpGet]
-        [Authorize]
-        [Route("secret")]
-        public async Task<IActionResult> Secret()
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("refresh-token")]
+        public async Task<IActionResult> RefreshToken(UserRefreshTokenRequest request)
         {
-            return Ok("Wow!");
+            var result = await _mediator.Send(request);
+
+            if (!result.Success)
+            {
+                return HandleError(result.ToDomainError());
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Logout(UserLogoutRequest request)
+        {
+            var result = await _mediator.Send(request);
+
+            if (!result.Success)
+            {
+                return HandleError(result.ToDomainError());
+            }
+
+            return Ok(result);
         }
     }
 }

@@ -38,11 +38,12 @@ namespace PVScan.Identity.Infrastructure.Services
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-        public Task<string> GenerateAccessTokenAsync(AccessTokenGenerationData data)
+        public Task<AccessTokenGenerationResult> GenerateAccessTokenAsync(AccessTokenGenerationData data)
         {
             EnsurePrivateKey();
 
             var now = DateTime.UtcNow;
+            var expires = now.Add(_identitySettings.AccessTokenLifetime);
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -50,8 +51,9 @@ namespace PVScan.Identity.Infrastructure.Services
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, data.User.Id.ToString()),
+                new Claim("user_id", data.User.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, JsonSerializer.Serialize(now)),
+                new Claim(JwtRegisteredClaimNames.Exp, JsonSerializer.Serialize(expires)),
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -59,14 +61,15 @@ namespace PVScan.Identity.Infrastructure.Services
                 SigningCredentials = signingCredentials,
                 Subject = new ClaimsIdentity(claims),
                 NotBefore = now,
-                Expires = now.Add(_identitySettings.AccessTokenLifetime),
+                Expires = expires,
                 Audience = _sharedIdentitySettings.Audience,
                 Issuer = _sharedIdentitySettings.Issuer,
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenValue = tokenHandler.WriteToken(token);
 
-            return Task.FromResult(tokenHandler.WriteToken(token));
+            return Task.FromResult(new AccessTokenGenerationResult(tokenValue, expires));
         }
 
         private void EnsurePrivateKey()
@@ -92,6 +95,7 @@ namespace PVScan.Identity.Infrastructure.Services
                 expires, now, data.FromIp);
 
             await refreshTokenRepository.AddAsync(toAdd);
+            await refreshTokenRepository.CommitAsync();
 
             return toAdd;
         }

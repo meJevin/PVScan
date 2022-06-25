@@ -14,35 +14,27 @@ namespace PVScan.Identity.Infrastructure.Data.Repositories
         : EntityFrameworkRepository<User, PVScanIdentityDbContext>, IUserRepository
     {
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
         private readonly IUserInfoRepository _userInfoRepository;
 
         public UserRepository(
             PVScanIdentityDbContext dbContext,
             UserManager<User> userManager,
-            SignInManager<User> signInManager, 
             IUserInfoRepository userInfoRepository)
             : base(dbContext)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _userInfoRepository = userInfoRepository;
         }
 
         public async Task<IdentityResult> CreateWithPassword(User user, string password)
         {
-            var userInfo = new UserInfo { Id = Guid.NewGuid(), User = user };
+            var userInfo = new UserInfo { Id = Guid.NewGuid(), UserId = user.Id, User = user };
             await _userInfoRepository.AddAsync(userInfo);
 
             user.Info = userInfo;
             user.UserInfoId = userInfo.Id;
 
             var result = await _userManager.CreateAsync(user, password);
-
-            if (result.Succeeded)
-            {
-                var signInResult = await _signInManager.PasswordSignInAsync(user, password, true, true);
-            }
 
             return result;
         }
